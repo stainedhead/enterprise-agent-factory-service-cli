@@ -32,3 +32,17 @@ go.work.sum
 # Editor/IDE
 # .idea/
 # .vscode/
+
+# Build output
+/bin/
+/dist/
+
+# Env / secrets (the CLI's own config dir is never committed)
+.env
+.env.*
+.afs/
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
