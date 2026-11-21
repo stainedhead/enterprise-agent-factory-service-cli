@@ -137,6 +137,9 @@ func Run(inv *cli.Invocation, words []string) int {
 	switch {
 	case len(ws) == 0:
 		rootHelp(w, inv.Reg)
+	case len(ws) == 1 && isLocalService(inv.Reg, ws[0]):
+		c, _ := inv.Reg.Lookup(ws[0], "")
+		operationHelp(w, c)
 	case len(ws) == 1:
 		if len(inv.Reg.Commands(ws[0])) == 0 {
 			_, _ = fmt.Fprintf(inv.Env.Stderr, "afs: error: argument service: Invalid choice: %q\n", ws[0])
@@ -145,6 +148,9 @@ func Run(inv *cli.Invocation, words []string) int {
 		serviceHelp(w, inv.Reg, ws[0])
 	default:
 		c, ok := inv.Reg.Lookup(ws[0], ws[1])
+		if !ok && isLocalService(inv.Reg, ws[0]) {
+			c, ok = inv.Reg.Lookup(ws[0], "")
+		}
 		if !ok {
 			_, _ = fmt.Fprintf(inv.Env.Stderr, "afs: error: argument operation: Invalid choice: %q for service %s\n", ws[1], ws[0])
 			return cli.ExitUsage
@@ -152,4 +158,10 @@ func Run(inv *cli.Invocation, words []string) int {
 		operationHelp(w, c)
 	}
 	return cli.ExitOK
+}
+
+// isLocalService reports whether a service is itself one local command (configure, completion).
+func isLocalService(reg *cli.Registry, service string) bool {
+	c, ok := reg.Lookup(service, "")
+	return ok && c.Local != nil
 }

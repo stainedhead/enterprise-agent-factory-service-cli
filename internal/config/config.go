@@ -19,6 +19,8 @@ type Overrides struct {
 	Profile     string
 	EndpointURL string
 	Output      string
+	// AllowMissing accepts an explicit profile that has no section yet (afs configure creates it).
+	AllowMissing bool
 }
 
 // Settings are the resolved settings of one invocation.
@@ -83,7 +85,7 @@ func Resolve(ov Overrides, s Source) (Settings, error) {
 		return st, fmt.Errorf("reading %s: %w", st.ConfigPath, err)
 	}
 	sec := ConfigSection(name)
-	if explicit && name != "default" && !f.HasSection(sec) {
+	if explicit && name != "default" && !ov.AllowMissing && !f.HasSection(sec) {
 		return st, fmt.Errorf("The config profile (%s) could not be found", name) //nolint:staticcheck // AWS CLI wording
 	}
 	get := func(k string) string { v, _ := f.Get(sec, k); return v }

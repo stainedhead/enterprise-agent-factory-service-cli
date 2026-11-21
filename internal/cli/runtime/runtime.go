@@ -30,12 +30,30 @@ func Source(env *cli.Env) config.Source { return config.Source{Getenv: env.Geten
 
 // Settings resolves the settings of an invocation (exit 255 on error).
 func Settings(env *cli.Env, g cli.Globals) (config.Settings, error) {
-	return config.Resolve(config.Overrides{Profile: g.Profile, EndpointURL: g.EndpointURL, Output: g.Output}, Source(env))
+	return settings(env, g, false)
+}
+
+// LenientSettings is Settings for commands that create a profile: an unknown profile is accepted.
+func LenientSettings(env *cli.Env, g cli.Globals) (config.Settings, error) {
+	return settings(env, g, true)
+}
+
+func settings(env *cli.Env, g cli.Globals, lenient bool) (config.Settings, error) {
+	return config.Resolve(config.Overrides{Profile: g.Profile, EndpointURL: g.EndpointURL, Output: g.Output, AllowMissing: lenient}, Source(env))
 }
 
 // New resolves settings and builds a client. noAuth sends no credential.
 func New(env *cli.Env, g cli.Globals, noAuth bool) (*Session, error) {
-	st, err := Settings(env, g)
+	return open(env, g, noAuth, false)
+}
+
+// NewLenient is New for commands that create a profile (afs configure sso, afs sso login).
+func NewLenient(env *cli.Env, g cli.Globals, noAuth bool) (*Session, error) {
+	return open(env, g, noAuth, true)
+}
+
+func open(env *cli.Env, g cli.Globals, noAuth, lenient bool) (*Session, error) {
+	st, err := settings(env, g, lenient)
 	if err != nil {
 		return nil, err
 	}
