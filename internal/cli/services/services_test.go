@@ -62,7 +62,6 @@ func TestCommandTableMatchesSnapshot(t *testing.T) {
 
 // D-C4: every operation at or below CurrentMilestone has an example and table columns.
 func TestDoneUpToCurrentMilestone(t *testing.T) {
-	t.Skip("enabled by M0-X1")
 	reg, err := services.NewRegistry()
 	if err != nil {
 		t.Fatal(err)

@@ -59,11 +59,11 @@ func teamsPages(mu *sync.Mutex, queries *[]string) http.HandlerFunc {
 		mu.Unlock()
 		start := 0
 		if tk := r.URL.Query().Get("nextToken"); tk != "" {
-			fmt.Sscanf(tk, "o%d", &start)
+			_, _ = fmt.Sscanf(tk, "o%d", &start)
 		}
 		n := 10
 		if v := r.URL.Query().Get("maxResults"); v != "" {
-			fmt.Sscan(v, &n)
+			_, _ = fmt.Sscan(v, &n)
 		}
 		end := min(start+n, 25)
 		var items []string
@@ -374,4 +374,11 @@ func TestReplayedNotice(t *testing.T) {
 	if !strings.Contains(r.out, "team_1") || !strings.Contains(r.errOut, "stored response") {
 		t.Fatalf("%+v", r)
 	}
+}
+
+func newServer(t *testing.T, h http.HandlerFunc) string {
+	t.Helper()
+	srv := httptest.NewServer(h)
+	t.Cleanup(srv.Close)
+	return srv.URL
 }

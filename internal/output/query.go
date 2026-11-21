@@ -86,7 +86,7 @@ func normalizeLiterals(expr string) string {
 		case '\'':
 			// a raw string literal: copy through the closing quote
 			j := i + 1
-			for j < len(expr) && !(expr[j] == '\'' && expr[j-1] != '\\') {
+			for j < len(expr) && (expr[j] != '\'' || expr[j-1] == '\\') {
 				j++
 			}
 			if j >= len(expr) {
@@ -96,7 +96,7 @@ func normalizeLiterals(expr string) string {
 			i = j
 		case '"':
 			j := i + 1
-			for j < len(expr) && !(expr[j] == '"' && expr[j-1] != '\\') {
+			for j < len(expr) && (expr[j] != '"' || expr[j-1] == '\\') {
 				j++
 			}
 			if j >= len(expr) {
@@ -106,7 +106,7 @@ func normalizeLiterals(expr string) string {
 			i = j
 		case '`':
 			j := i + 1
-			for j < len(expr) && !(expr[j] == '`' && expr[j-1] != '\\') {
+			for j < len(expr) && (expr[j] != '`' || expr[j-1] == '\\') {
 				j++
 			}
 			if j >= len(expr) {

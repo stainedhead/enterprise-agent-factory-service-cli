@@ -13,6 +13,7 @@ import (
 
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/services"
+	clisso "github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/sso"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/sso"
 )
 
@@ -83,7 +84,7 @@ func TestConfigureWritesProfile0600(t *testing.T) {
 		t.Fatalf("%+v", r)
 	}
 	p := filepath.Join(home, ".afs", "config")
-	b, err := os.ReadFile(p)
+	b, err := os.ReadFile(p) //nolint:gosec // test file
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -113,7 +114,7 @@ func TestConfigureSSOListsProvidersAndWritesKeys(t *testing.T) {
 	if r.code != 0 || !strings.Contains(r.err, "1) A") {
 		t.Fatalf("%+v", r)
 	}
-	b, _ := os.ReadFile(filepath.Join(home, ".afs", "config"))
+	b, _ := os.ReadFile(filepath.Join(home, ".afs", "config")) //nolint:gosec // test file
 	for _, want := range []string{"sso_provider_id = idp_2", "sso_issuer = https://b", "sso_client_id = cb"} {
 		if !strings.Contains(string(b), want) {
 			t.Errorf("missing %q in\n%s", want, b)
@@ -162,5 +163,88 @@ func TestLogoutDeletesCacheThenNextCommandExit255(t *testing.T) {
 	}
 	if r := afs(t, t.TempDir(), vars, "", "sso", "logout"); r.code != 0 || !strings.Contains(r.out, "no single sign-on") {
 		t.Fatalf("no sso: %+v", r)
+	}
+}
+
+// A fake server that is both the API and the identity provider (device flow).
+func idpServer(t *testing.T) *httptest.Server {
+	t.Helper()
+	var srv *httptest.Server
+	srv = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch r.URL.Path {
+		case "/v1/identity-providers":
+			_, _ = w.Write([]byte(`{"items":[{"id":"idp_1","kind":"okta","name":"Okta","issuerUrl":"` + srv.URL + `","cliClientId":"cli1","isDefault":true}]}`))
+		case "/.well-known/openid-configuration":
+			_, _ = w.Write([]byte(`{"device_authorization_endpoint":"` + srv.URL + `/device","token_endpoint":"` + srv.URL + `/token"}`))
+		case "/device":
+			_, _ = w.Write([]byte(`{"device_code":"dc","user_code":"ABCD-1234","verification_uri":"https://v.example.com","expires_in":600,"interval":1}`))
+		case "/token":
+			_, _ = w.Write([]byte(`{"access_token":"access-xyz","refresh_token":"refresh-xyz","expires_in":3600,"token_type":"Bearer"}`))
+		case "/v1/me":
+			if r.Header.Get("Authorization") != "Bearer access-xyz" {
+				w.WriteHeader(401)
+				_, _ = w.Write([]byte(`{"code":"Unauthenticated","message":"no","requestId":"r"}`))
+				return
+			}
+			_, _ = w.Write([]byte(`{"principal":{"id":"usr_1","type":"user"},"serviceAdmin":false,"securityOperator":false,"teams":[]}`))
+		}
+	}))
+	t.Cleanup(srv.Close)
+	return srv
+}
+
+func TestSSOLoginThenCommandUsesCachedToken(t *testing.T) {
+	srv := idpServer(t)
+	home := t.TempDir()
+	vars := map[string]string{"AFS_ENDPOINT_URL": srv.URL}
+	r := afs(t, home, vars, "", "sso", "login", "--profile", "dev")
+	if r.code != 0 || !strings.Contains(r.err, "ABCD-1234") || !strings.Contains(r.out, "Signed in") {
+		t.Fatalf("login: %+v", r)
+	}
+	if strings.Contains(r.out+r.err, "access-xyz") || strings.Contains(r.out+r.err, "refresh-xyz") {
+		t.Fatal("a token reached the terminal")
+	}
+	cfg, _ := os.ReadFile(filepath.Join(home, ".afs", "config")) //nolint:gosec // test file
+	if !strings.Contains(string(cfg), "sso_client_id = cli1") {
+		t.Fatalf("login did not write the profile keys:\n%s", cfg)
+	}
+	r = afs(t, home, vars, "", "sso", "get-caller-identity", "--profile", "dev")
+	if r.code != 0 || !strings.Contains(r.out, "usr_1") {
+		t.Fatalf("after login: %+v", r)
+	}
+	r = afs(t, home, vars, "", "sso", "login", "--profile", "dev") // second login: keys already present
+	if r.code != 0 {
+		t.Fatalf("relogin: %+v", r)
+	}
+}
+
+func TestSSOLoginFailures(t *testing.T) {
+	none := fakeAPI(t, `{"items":[]}`)
+	if r := afs(t, t.TempDir(), map[string]string{"AFS_ENDPOINT_URL": none.URL}, "", "sso", "login"); r.code != 255 {
+		t.Fatalf("no providers: %+v", r)
+	}
+	two := fakeAPI(t, `{"items":[{"id":"a","issuerUrl":"https://a"},{"id":"b","issuerUrl":"https://b"}]}`)
+	if r := afs(t, t.TempDir(), map[string]string{"AFS_ENDPOINT_URL": two.URL}, "", "sso", "login"); r.code != 255 || !strings.Contains(r.err, "configure sso") {
+		t.Fatalf("ambiguous: %+v", r)
+	}
+	if r := afs(t, t.TempDir(), map[string]string{}, "", "sso", "login"); r.code != 255 {
+		t.Fatalf("no endpoint: %+v", r)
+	}
+}
+
+func TestPick(t *testing.T) {
+	ps := []clisso.Provider{{ID: "a"}, {ID: "b", IsDefault: true}}
+	if p, err := clisso.Pick(ps, "a"); err != nil || p.ID != "a" {
+		t.Error("by id")
+	}
+	if p, err := clisso.Pick(ps, ""); err != nil || p.ID != "b" {
+		t.Error("default")
+	}
+	if _, err := clisso.Pick(ps, "zzz"); err == nil {
+		t.Error("unknown id")
+	}
+	if _, err := clisso.Pick(nil, ""); err == nil {
+		t.Error("none")
 	}
 }

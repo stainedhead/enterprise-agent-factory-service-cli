@@ -41,11 +41,11 @@ tidy:
 vuln:
 	go run golang.org/x/vuln/cmd/govulncheck@$(GOVULNCHECK_VERSION) ./...
 
-# Coverage gate: internal/... (generated files excluded) must stay at or above 90%.
+# Coverage gate: internal/... (generated files and the golden test helper excluded) must stay at or above 90%.
 COVER_MIN ?= 90
 cover:
-	@go test -coverprofile=cover.out ./internal/... >/dev/null
-	@grep -v -e '_gen.go' -e '/gen/' cover.out > cover.filtered.out
+	@go test -coverpkg=./internal/... -coverprofile=cover.out ./internal/... >/dev/null
+	@grep -v -e '_gen.go' -e '/gen/' -e '/internal/golden/' cover.out > cover.filtered.out
 	@total=$$(go tool cover -func=cover.filtered.out | awk '/^total:/ {gsub("%","",$$3); print $$3}'); \
 	  echo "internal/... coverage: $$total% (minimum $(COVER_MIN)%)"; \
 	  awk -v t="$$total" -v m="$(COVER_MIN)" 'BEGIN { exit !(t+0 >= m+0) }' || { echo "coverage below $(COVER_MIN)%"; exit 1; }

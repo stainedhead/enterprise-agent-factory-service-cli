@@ -498,7 +498,7 @@ func TestDefaultsAreWired(t *testing.T) {
 	if r := c.cfg.Rand(); r < 0 || r >= 1 {
 		t.Errorf("rand = %v", r)
 	}
-	if NewIdempotencyKey() == NewIdempotencyKey() {
+	if NewIdempotencyKey() == NewIdempotencyKey() { //nolint:staticcheck // two calls must differ
 		t.Error("keys equal")
 	}
 }

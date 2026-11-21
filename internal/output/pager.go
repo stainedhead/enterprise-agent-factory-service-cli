@@ -1,6 +1,7 @@
 package output
 
 import (
+	"context"
 	"io"
 	"os/exec"
 	"strings"
@@ -66,7 +67,7 @@ func startProcess(command string, out io.Writer) (io.WriteCloser, func() error, 
 	if len(fields) == 0 {
 		return nil, nil, io.ErrClosedPipe
 	}
-	c := exec.Command(fields[0], fields[1:]...) //nolint:gosec // the user's own pager command
+	c := exec.CommandContext(context.Background(), fields[0], fields[1:]...) //nolint:gosec // the user's own pager command
 	c.Stdout = out
 	in, err := c.StdinPipe()
 	if err != nil {

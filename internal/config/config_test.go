@@ -130,7 +130,7 @@ func TestWriteKeepsOtherProfilesAnd0600(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	b, _ := os.ReadFile(path)
+	b, _ := os.ReadFile(path) //nolint:gosec // test file
 	got := string(b)
 	for _, want := range []string{"# my comment", "[default]\nendpoint_url = https://d.example", "[profile other]\noutput = table", "[profile new]\nendpoint_url = https://n.example\noutput = yaml"} {
 		if !strings.Contains(got, want) {
@@ -147,7 +147,7 @@ func TestWriteKeepsOtherProfilesAnd0600(t *testing.T) {
 	if _, err := WriteProfile(s, "default", map[string]string{"endpoint_url": "https://changed"}, []string{"endpoint_url"}); err != nil {
 		t.Fatal(err)
 	}
-	b, _ = os.ReadFile(path)
+	b, _ = os.ReadFile(path) //nolint:gosec // test file
 	if !strings.Contains(string(b), "[default]\nendpoint_url = https://changed\n") || !strings.Contains(string(b), "[profile other]") {
 		t.Errorf("update lost data:\n%s", b)
 	}

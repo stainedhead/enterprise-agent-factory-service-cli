@@ -206,7 +206,7 @@ func TestLoginVerificationURIComplete(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case "/.well-known/openid-configuration":
-			_, _ = fmt.Fprintf(w, `{"device_authorization_endpoint":"http://%s/device","token_endpoint":"http://%s/token"}`, r.Host, r.Host)
+			_, _ = fmt.Fprintf(w, `{"device_authorization_endpoint":"http://%s/device","token_endpoint":"http://%s/token"}`, r.Host, r.Host) //nolint:gosec // test server echoing its own host
 		case "/device":
 			_, _ = w.Write([]byte(`{"device_code":"d","user_code":"U","verification_uri":"https://v","verification_uri_complete":"https://v?c=U"}`))
 		default:

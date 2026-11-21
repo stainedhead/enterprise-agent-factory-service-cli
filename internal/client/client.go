@@ -224,7 +224,7 @@ func (c *Client) once(ctx context.Context, req *Request, key string, cred Creden
 	}
 	if len(data) > 0 {
 		want, got := mediaType(accept), mediaType(resp.Header.Get("Content-Type"))
-		if got != want && !(want == "application/json" && strings.HasSuffix(got, "+json")) {
+		if got != want && (want != "application/json" || !strings.HasSuffix(got, "+json")) {
 			return nil, attemptFailure{err: fmt.Errorf("%w: wanted %s, got %q", ErrUnexpectedMediaType, want, got), sent: true}
 		}
 	}

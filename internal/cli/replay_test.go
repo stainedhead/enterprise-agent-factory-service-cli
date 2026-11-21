@@ -345,7 +345,7 @@ func TestContractReplayAllOperations(t *testing.T) {
 func TestReplayValidatorRejectsBadRequest(t *testing.T) {
 	rp := newReplay(t)
 	item, _ := rp.model.Model.Paths.PathItems.Get("/v1/teams")
-	req, _ := http.NewRequest("POST", "https://afs.example.com/v1/teams", strings.NewReader(`{"slug":5}`))
+	req, _ := http.NewRequestWithContext(context.Background(), "POST", "https://afs.example.com/v1/teams", strings.NewReader(`{"slug":5}`))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer x")
 	if ok, _ := rp.val.ValidateHttpRequestWithPathItem(req, item, "/v1/teams"); ok {

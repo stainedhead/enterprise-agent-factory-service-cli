@@ -67,7 +67,7 @@ func (c *Cache) Load(issuer, clientID string) (*Token, error) {
 
 // Save writes the token with mode 0600, atomically.
 func (c *Cache) Save(t *Token) error {
-	b, err := json.MarshalIndent(t, "", "  ")
+	b, err := json.MarshalIndent(t, "", "  ") //nolint:gosec // the cache file holds the token by design and is written 0600
 	if err != nil {
 		return err
 	}

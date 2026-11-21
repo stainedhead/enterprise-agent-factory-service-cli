@@ -50,7 +50,7 @@ func rootHelp(w io.Writer, reg *cli.Registry) {
 
 func globals(w io.Writer) {
 	for _, g := range cli.GlobalHelp() {
-		_, _ = fmt.Fprintf(w, "       %-22s %s\n", g[0], g[1])
+		_, _ = fmt.Fprintf(w, "       %-24s %s\n", g[0], g[1])
 	}
 }
 

@@ -132,7 +132,6 @@ func (p *pages) fetchJSON(ctx context.Context) ([]byte, *client.Response, error)
 			items = items[:remaining]
 			outToken = encodeToken(token{T: pageToken, S: printed + len(items)})
 			all = append(all, items...)
-			remaining = 0
 			break
 		}
 		all = append(all, items...)

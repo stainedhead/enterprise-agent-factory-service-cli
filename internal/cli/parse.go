@@ -51,6 +51,9 @@ func usageErr(format string, a ...any) *UsageError {
 // It returns the command (nil for help, version or when only a service is given).
 func (r *Registry) Parse(args []string) (*Parsed, *Command, error) {
 	p := &Parsed{Values: map[string][]string{}}
+	if len(args) > 1 && args[0] == "help" && !strings.HasPrefix(args[1], "-") {
+		args = append(append([]string{}, args[1:]...), "help") // "afs help <service> [<operation>]"
+	}
 	// Phase 1: find the service and operation words; before them only global options may appear.
 	var consumed [2]int
 	words := 0
