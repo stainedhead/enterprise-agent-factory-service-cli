@@ -17,9 +17,9 @@
    `feat/cli-feature-complete`.
 2. **One stream, one worktree, one branch:** `git worktree add ../afs-cli-<stream> -b
    feat/cli-feature-complete--<stream>` from the integration branch. Tasks inside a stream run in order.
-3. **Owns is exclusive.** A stream edits only the paths on its `Owns` line (tests sit next to code and
-   are included), plus golden files under its own packages' `testdata/`. Anything else is a request to
-   the orchestrator.
+3. **Owns is exclusive.** A stream edits only the paths on its `Owns` line. Owning `x.go` includes
+   `x_test.go` and golden files under `testdata/x/` of the same package, so two streams in one package
+   never share a test or golden file. Anything else is a request to the orchestrator.
 4. **Never edited by streams:** `specs/**` (status.md, tasks.md, implementation-notes.md, the dashboard),
    `Makefile`, `.github/workflows/**`, `api/**`, `internal/spec/**`, `internal/client/gen/**`,
    `internal/cli/milestones.go`, `internal/cli/services/services.go`, `README.md`, `docs/**`. These
@@ -33,8 +33,10 @@
    it, e.g. `// CLI-US-6.1`.
 7. **No real network:** `httptest.Server` for `afs-api` and IdPs; injected clock, dialer, stdin, TTY,
    `HOME`. Story criteria are cited as `CLI-US-n.k` = story n, bullet k (PRD §4), `5.1-<area>` = PRD §5.1.
-8. **Service registration** goes through the stream's own files calling `reg.Register(cli.Override{…})`
-   from the package's `Register` function; several files may register parts of one operation (D-C32).
+8. **Service registration** never edits a shared file: each owned file adds its registrations with
+   `func init() { registrations = append(registrations, registerX) }`, and the package's `register.go`
+   (written once by M0-K5) applies them in file-name order. Several files may register parts of one
+   operation (D-C32).
 
 Estimates: S ≤ 2 h, M ≤ 4 h, L ≤ 8 h of focused work.
 
@@ -92,14 +94,14 @@ interfaces with fakes and does not wait for T, C or O.
 - **Depends:** K4
 - **Covers:** D-C4, D-C32, CLI-14 (example rule scaffold)
 - **Red:** `TestEveryOperationHasMilestone` (Appendix A, all 180); `TestDoneUpToCurrentMilestone` (every operation at or below `CurrentMilestone` has ≥ 1 example and table columns; `CurrentMilestone = M0`, so `GetMe` and `ListSignInProviders` are listed as pending until S4 — the test is red until S4 lands, by design, and K5 ships it skipped with `t.Skip("enabled by M0-X1")`); `TestOverrideConflicts` (two `Columns` for one operation → error)
-- **Done when:** every service package exists and is imported once from `services.go`; registration merge rules implemented
+- **Done when:** every service package exists and is imported once from `services.go`; each package's `register.go` applies its `registrations` slice (rule 8); registration merge rules implemented
 - **Est:** M
 
 ### M0-T1 — Request building, response capture, API errors
 - **Owns:** `internal/client/{client,request,errors,version}.go` + tests
 - **Depends:** K5
 - **Covers:** CLI-8 (decode), NFR observability (`User-Agent`), NFR compatibility, D-C11, D-C13
-- **Red:** `TestPathEscapingPerSegment` (`host/owner/repo` values), `TestUserAgent` (`afs-cli/<v> (<os>/<arch>)`), `TestAcceptHeaders` (json, `text/csv`, `application/yaml`), `TestAPIErrorDecode` (envelope → `Code`, `Message`, `RequestID`, `Details`; non-JSON 5xx → `InternalError` with status), `TestContractVersionNoticeOncePerProcess` (newer minor → one stderr notice; same/older → none; different major → notice)
+- **Red:** `TestPathEscapingPerSegment` (`host/owner/repo` values), `TestUserAgent` (`afs-cli/<v> (<os>/<arch>)`), `TestAcceptHeaders` (json, `text/csv`, `application/yaml`), `TestAPIErrorDecode` (envelope → `Code`, `Message`, `RequestID`, `Details`; non-JSON 5xx → `InternalError` with status), `TestContractVersionNoticeOncePerProcess` (newer minor → one stderr notice; same/older → none; different major → notice); `TestUnexpectedMediaType255`
 - **Est:** M
 
 ### M0-T2 — Retries and idempotency keys
@@ -126,8 +128,8 @@ interfaces with fakes and does not wait for T, C or O.
 ### M0-C1 — Config and credentials files, precedence
 - **Owns:** `internal/config/` + tests
 - **Depends:** K5
-- **Covers:** CLI-3 (files, keys, precedence), 5.1-configuration bullets 1–3, D-C10, D-C15
-- **Red:** `TestPrecedenceEndpointURL` (option > `AFS_ENDPOINT_URL` > profile > default); `TestAFSProfileSelectsProfile`; `TestTeamIDDefaultsPathOnly`; `TestDefaultOutputJSON`; `TestWriteKeepsOtherProfilesAnd0600`; `TestConfigAndCredentialsFileEnvOverrides`
+- **Covers:** CLI-3 (files, keys, precedence), 5.1-configuration bullets 1–3, D-C10, D-C15, D-C33, D-C35
+- **Red:** `TestPrecedenceEndpointURL` (option > `AFS_ENDPOINT_URL` > profile > default); `TestAFSProfileSelectsProfile`; `TestTeamIDDefaultsPathOnly`; `TestDefaultOutputJSON`; `TestWriteKeepsOtherProfilesAnd0600`; `TestConfigAndCredentialsFileEnvOverrides`; `TestHTTPEndpointOnlyLoopback`; `TestUnknownProfile255`; `TestInvalidOutputFromEnvOrProfile255`
 - **Est:** M
 
 ### M0-C2 — Credential chain and file modes
@@ -183,14 +185,14 @@ interfaces with fakes and does not wait for T, C or O.
 - **Owns:** `internal/output/{table,text,color,golden}.go` + tests, `internal/output/testdata/`
 - **Depends:** O1
 - **Covers:** CLI-6, NFR accessibility, 5.1-global-options (`--color on|off|auto`)
-- **Red:** golden table/text for a fixture; `TestTableFitsIn80Columns` (truncation marker); `TestColorAutoOffWhenNotTTY`; `TestNoColorEnv`; `TestGenericColumnsFallback` (scalar top-level fields when an operation has no `Columns`); golden helper with `-update`
+- **Red:** golden table/text for a fixture; `TestTableFitsIn80Columns` (truncation marker); `TestColorAutoOffWhenNotTTY`; `TestNoColorEnv`; `TestGenericColumnsFallback` (scalar top-level fields when an operation has no `Columns`); `TestEmptyListRendering` (table header only, text nothing); golden helper with `-update`
 - **Est:** M
 
 ### M0-O4 — `csv` passthrough and pager
 - **Owns:** `internal/output/{csv,pager}.go` + tests
 - **Depends:** O1
 - **Covers:** CLI-6 (csv body unchanged, one header row), 5.1-global-options (`--no-cli-pager`), D-C22
-- **Red:** `TestCSVPagesKeepOneHeader`; `TestCSVBytesUnchanged`; `TestPagerOnlyOnTTY`; `TestNoCLIPager`; `TestEmptyAFSPagerDisables`
+- **Red:** `TestCSVPagesKeepOneHeader`; `TestCSVBytesUnchanged`; `TestCSVStreamsPageByPage`; `TestPagerOnlyOnTTY`; `TestNoCLIPager`; `TestEmptyAFSPagerDisables`
 - **Est:** S
 
 ### M0-E1 — Option derivation, input JSON, skeletons
@@ -275,7 +277,7 @@ called **"command done"** and is not repeated per task.
 - **Owns:** `api/`, `internal/spec/`, `internal/client/gen/` (orchestrator)
 - **Depends:** M0-X2
 - **Covers:** D-C1 sync policy
-- **Done when:** snapshot re-synced to the `-restapi` branch head (or release tag if merged); if the sha256 changed: regenerate, full suite green, operation diff recorded in implementation-notes.md
+- **Done when:** snapshot re-synced to the `-restapi` branch head (or release tag if merged); if the sha256 changed: regenerate, full suite green, operation diff recorded in implementation-notes.md. An operation added by `-restapi` is mapped in `internal/cli/milestones.go` and Appendix A to the current or a later milestone (and given a stream) before streams start; a renamed or removed one updates its override in the owning stream's first task
 - **Est:** S
 
 ### M1-A1 — `list-teams`, `describe-team`, `get-team-status`
@@ -564,7 +566,7 @@ called **"command done"** and is not repeated per task.
 
 | PRD | Tasks |
 |---|---|
-| CLI-1 | M0-K2, K4, K5, E1, E7; every service task |
+| CLI-1 | M0-K2, K4, K5, E1, E7, S4; M1-A1..A4, B1, C1, D1, D2; M2-A1..A5, B2, B3, C1, C2, D1, D2; M3-A1, A2, B2, C1, C2, D1, D2; M4-A1, B1, B2, C1..C3, D1, D2, E1..E4; M5-A1..A5, C2, D1; M6-A2, A3, C1, D1, D2 (Appendix A lists each operation's stream) |
 | CLI-2 | M0-K4, E1, O3, O4, T3, X1 |
 | CLI-3 | M0-C1, S4, M4-F1 |
 | CLI-4 | M0-S1, S2, S3, S4 |
@@ -573,7 +575,7 @@ called **"command done"** and is not repeated per task.
 | CLI-7 | M0-E2 |
 | CLI-8 | M0-K4, T1, E5 |
 | CLI-9 | M2-B1, M2-B2 |
-| CLI-10 | M0-E3; M1-A3, M1-B1, M2-A3, M2-C1, M3-A1, M4-C1 |
+| CLI-10 | M0-E3; M1-A3, M1-A4, M1-B1, M2-A3, M2-A5, M2-C1, M3-A1, M4-C1, M5-A4, M6-A3 |
 | CLI-11 | M0-T2 |
 | CLI-12 | M0-E4; M1-A2, M2-A2, M5-A3 |
 | CLI-13 | M3-B1, M3-B2, M3-A2 |

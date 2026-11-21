@@ -135,7 +135,7 @@ GET …&nextToken=n2          → 200 body3 (no header)            → write bod
 
 ## 7. Architectural decisions
 
-The full decision list (D-C1..D-C32) is in `implementation-notes.md`. Repository ADRs to write in
+The full decision list (D-C1..D-C35) is in `implementation-notes.md`. Repository ADRs to write in
 `docs/architectural-decision-record.md` during implementation:
 
 - ADR-002 (accept): client generated from a pinned snapshot; snapshot + checksum + regeneration check.
