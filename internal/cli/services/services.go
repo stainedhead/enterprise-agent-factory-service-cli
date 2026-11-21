@@ -11,6 +11,8 @@ import (
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/budgets"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/completion"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/configure"
+	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/exec"
+	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/help"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/members"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/models"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/pools"
@@ -19,6 +21,7 @@ import (
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/sso"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/swarmtemplates"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/teams"
+	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/wait"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/workorders"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/spec"
 )
@@ -39,6 +42,10 @@ func Register(r *cli.Registry) {
 func NewRegistry() (*cli.Registry, error) {
 	r := cli.NewRegistry(spec.All())
 	Register(r)
+	r.Exec, r.Help = exec.Run, help.Run
+	for id := range wait.Table {
+		r.AddOptions(id, exec.WaitOptions()...)
+	}
 	if err := r.Finalize(); err != nil {
 		return nil, err
 	}
