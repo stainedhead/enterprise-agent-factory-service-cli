@@ -105,18 +105,18 @@ func (d *doc) resolve(n *yaml.Node) (*yaml.Node, string) {
 }
 
 type schema struct {
-	Type     string
-	Nullable bool
-	Enum     []string
-	Min, Max *string
-	MinLen   *string
-	MaxLen   *string
-	Pattern  string
-	Items    *schema
-	Ref      string
+	Type                string
+	Nullable            bool
+	Enum                []string
+	Min, Max            *string
+	MinLen              *string
+	MaxLen              *string
+	Pattern             string
+	Items               *schema
+	Ref                 string
 	WriteOnly, ReadOnly bool
-	Example  string
-	Desc     string
+	Example             string
+	Desc                string
 }
 
 func (d *doc) schemaOf(n *yaml.Node) schema {
@@ -258,6 +258,13 @@ func (d *doc) emitOp(b *bytes.Buffer, o opInfo) error {
 	}
 	// parameters
 	var params []string
+	pathNames := map[string]bool{}
+	for _, pn := range get(n, "parameters").Content {
+		r, _ := d.resolve(pn)
+		if str(get(r, "in")) == "path" {
+			pathNames[str(get(r, "name"))] = true
+		}
+	}
 	ifMatch, idem, hasMax, hasNext := "None", false, false, false
 	if get(n, "parameters") == nil {
 		return fmt.Errorf("no parameters")
@@ -285,6 +292,10 @@ func (d *doc) emitOp(b *bytes.Buffer, o opInfo) error {
 			continue
 		case in == "query" && name == "nextToken":
 			hasNext = true
+			continue
+		}
+		if in == "query" && pathNames[name] {
+			// A filter that repeats a path parameter (report operations) is redundant: the path wins.
 			continue
 		}
 		s := d.schemaOf(get(r, "schema"))

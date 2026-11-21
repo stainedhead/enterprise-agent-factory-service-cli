@@ -1,0 +1,83 @@
+package services_test
+
+import (
+	"strings"
+	"testing"
+
+	"gopkg.in/yaml.v3"
+
+	"github.com/stainedhead/enterprise-agent-factory-service-cli/api"
+	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli"
+	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/services"
+)
+
+// CLI-US-7: the command table and the OpenAPI snapshot agree in both directions, and names
+// equal the x-afs-cli value of each operation.
+func TestCommandTableMatchesSnapshot(t *testing.T) {
+	var doc struct {
+		Paths map[string]map[string]struct {
+			OperationID string `yaml:"operationId"`
+			CLI         string `yaml:"x-afs-cli"`
+		} `yaml:"paths"`
+	}
+	if err := yaml.Unmarshal(api.OpenAPI, &doc); err != nil {
+		t.Fatal(err)
+	}
+	reg, err := services.NewRegistry()
+	if err != nil {
+		t.Fatal(err)
+	}
+	wantCmd := map[string]string{} // operationId -> "service name"
+	for _, item := range doc.Paths {
+		for _, op := range item {
+			if op.OperationID == "GetHealth" || op.OperationID == "GetReadiness" {
+				continue
+			}
+			wantCmd[op.OperationID] = op.CLI
+		}
+	}
+	if len(wantCmd) != 180 {
+		t.Fatalf("snapshot has %d CLI operations", len(wantCmd))
+	}
+	for id, name := range wantCmd {
+		c := reg.ByOp(id)
+		if c == nil {
+			t.Errorf("operation %s has no command", id)
+			continue
+		}
+		if c.Key() != name {
+			t.Errorf("%s: command %q, contract says %q", id, c.Key(), name)
+		}
+	}
+	local := map[string]bool{"configure": true, "configure sso": true, "sso login": true, "sso logout": true, "completion": true}
+	for _, c := range reg.All() {
+		if c.Op == nil && !local[c.Key()] {
+			t.Errorf("command %q has no operation", c.Key())
+		}
+		if c.Op != nil && wantCmd[c.Op.ID] == "" {
+			t.Errorf("command %q maps to unknown operation", c.Key())
+		}
+	}
+}
+
+// D-C4: every operation at or below CurrentMilestone has an example and table columns.
+func TestDoneUpToCurrentMilestone(t *testing.T) {
+	t.Skip("enabled by M0-X1")
+	reg, err := services.NewRegistry()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if p := reg.Pending(); len(p) > 0 {
+		t.Errorf("pending operations: %s", strings.Join(p, ", "))
+	}
+	for _, c := range reg.All() {
+		if c.Op == nil || cli.MilestoneOf(c.Op.ID) > cli.CurrentMilestone {
+			continue
+		}
+		for _, ex := range c.Examples {
+			if !strings.HasPrefix(ex.Command, "afs ") {
+				t.Errorf("%s: example %q must start with afs", c.Key(), ex.Command)
+			}
+		}
+	}
+}

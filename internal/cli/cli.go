@@ -1,57 +1,54 @@
+// Package cli is the afs command line: registry, parsing, global options and dispatch.
+// Execution of API commands is wired in by internal/cli/services (generic executor in
+// internal/cli/exec); local commands live in their service packages.
 package cli
 
 import (
+	"context"
+	"errors"
 	"fmt"
-	"io"
 
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/buildinfo"
 )
 
-// Exit codes follow the AWS CLI: 0 success, 252 usage error, 254 service error, 255 other.
-const (
-	ExitOK      = 0
-	ExitUsage   = 252
-	ExitService = 254
-	ExitOther   = 255
-)
-
-// Services lists the top-level afs services (solution design section 11).
-var Services = []string{
-	"configure", "sso", "teams", "agents", "members", "identities", "secrets", "budgets",
-	"usage", "logs", "notifications", "api-keys", "audit", "work-orders", "models", "admin",
-}
-
-const usage = `usage: afs [options] <service> <operation> [parameters]
-
-To see help text, you can run:
-  afs help
-  afs <service> help
-  afs <service> <operation> help
-`
-
 // Run executes the CLI with args (excluding the program name) and returns the process exit code.
-func Run(args []string, stdout, stderr io.Writer) int {
+func Run(ctx context.Context, args []string, env *Env, reg *Registry) int {
 	if len(args) == 0 {
-		printf(stderr, "%s", usage)
+		printf(env, "%s", rootUsage)
 		return ExitUsage
 	}
-	switch args[0] {
-	case "--version", "version":
-		printf(stdout, "%s\n", buildinfo.String("afs"))
-		return ExitOK
-	case "help", "--help", "-h":
-		printf(stdout, "%s", usage)
-		printf(stdout, "\nAvailable services:\n")
-		for _, s := range Services {
-			printf(stdout, "  - %s\n", s)
+	p, cmd, err := reg.Parse(args)
+	if err != nil {
+		var ue *UsageError
+		if errors.As(err, &ue) {
+			printf2(env, "%s\nafs: error: %s\n", ue.Usage, ue.Msg)
+			return ExitUsage
 		}
+		printf2(env, "afs: error: %v\n", err)
+		return ExitOther
+	}
+	if p.G.Version {
+		_, _ = fmt.Fprintln(env.Stdout, buildinfo.Line())
 		return ExitOK
 	}
-	printf(stderr, "%s\nafs: error: argument service: Invalid choice: %q\n", usage, args[0])
-	return ExitUsage
+	inv := &Invocation{Env: env, Cmd: cmd, P: p, Reg: reg}
+	if p.Help || cmd == nil {
+		if reg.Help == nil {
+			_, _ = fmt.Fprint(env.Stdout, rootUsage)
+			return ExitOK
+		}
+		return reg.Help(inv, p.Words)
+	}
+	if cmd.Local != nil {
+		return cmd.Local(ctx, inv)
+	}
+	if reg.Exec == nil {
+		printf2(env, "afs: error: no executor wired\n")
+		return ExitOther
+	}
+	return reg.Exec(ctx, inv)
 }
 
-// printf writes to a terminal stream; a failed write to stdout/stderr has no useful recovery.
-func printf(w io.Writer, format string, a ...any) {
-	_, _ = fmt.Fprintf(w, format, a...)
-}
+func printf(env *Env, format string, a ...any) { _, _ = fmt.Fprintf(env.Stdout, format, a...) }
+
+func printf2(env *Env, format string, a ...any) { _, _ = fmt.Fprintf(env.Stderr, format, a...) }

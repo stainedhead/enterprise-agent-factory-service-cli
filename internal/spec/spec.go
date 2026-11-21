@@ -29,11 +29,11 @@ type Operation struct {
 	CSV        bool     // x-afs-csv
 	Params     []Param  // path and query (maxResults/nextToken excluded; If-Match, Idempotency-Key, X-Request-Id excluded)
 	IfMatch    IfMatchMode
-	Idempotent bool    // takes Idempotency-Key (every POST)
-	Body       *Body   // nil when no request body
-	Paginated  bool    // takes maxResults and nextToken
-	ResultKey  string  // "items" | "rows" | "" for paginated operations
-	Success    []int   // 2xx codes
+	Idempotent bool     // takes Idempotency-Key (every POST)
+	Body       *Body    // nil when no request body
+	Paginated  bool     // takes maxResults and nextToken
+	ResultKey  string   // "items" | "rows" | "" for paginated operations
+	Success    []int    // 2xx codes
 	Produces   []string // media types of the success responses
 }
 

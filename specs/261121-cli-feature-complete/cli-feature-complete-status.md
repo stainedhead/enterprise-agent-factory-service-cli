@@ -14,7 +14,7 @@
 |------|------|--------|-------|-----|---------------|
 | 1  | Create Spec from PRD            | ✅ Complete | 2026-11-21T22:01:20Z | 2026-11-21T22:11:44Z | 10 |
 | 2  | Review Spec                     | ✅ Complete | 2026-11-21T22:11:44Z | 2026-11-21T22:13:33Z | 1 |
-| 3  | Implement Product               | ⬜ Pending | — | — | — |
+| 3  | Implement Product               | 🔄 In Progress | 2026-11-21T22:30:00Z | — | — |
 | 4  | Documentation and User Docs     | ⬜ Pending | — | — | — |
 | 5  | Code and Design Review          | ⬜ Pending | — | — | — |
 | 6  | Prepare Review PRD              | ⬜ Pending | — | — | — |
@@ -31,3 +31,4 @@
 
 - Steps 1–2 run by a sub-agent; stopped after Step 2 as instructed. Steps 3–14 (implementation) are run by later agents from `tasks.md`.
 - Review verdict: Implementation-ready after fixes (see `status.md` §"Spec review").
+- Step 3: M0 in progress (M0-K1..K5 done); see `status.md` M0 task log.
