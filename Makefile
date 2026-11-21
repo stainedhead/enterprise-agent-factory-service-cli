@@ -72,20 +72,23 @@ contract-sync:
 	$(MAKE) generate
 
 OAPI_CODEGEN_VERSION ?= v2.8.2
+# oapi-codegen needs a newer toolchain than the base one; use the module's.
+GOTOOLCHAIN_PIN ?= $(shell go env GOVERSION)
 
 generate:
 	go run ./tools/afsgen -in api/openapi.yaml -out internal/spec/operations_gen.go
-	go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@$(OAPI_CODEGEN_VERSION) -config internal/client/gen/oapi-codegen.yaml api/openapi.yaml
+	GOTOOLCHAIN=$(GOTOOLCHAIN_PIN) go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@$(OAPI_CODEGEN_VERSION) -config internal/client/gen/oapi-codegen.yaml api/openapi.yaml
 	gofmt -w internal/spec/operations_gen.go internal/client/gen/types.gen.go
 
 # Regenerate into a temp dir and compare with the committed files.
 generate-check:
 	@d=$$(mktemp -d); \
 	go run ./tools/afsgen -in api/openapi.yaml -out $$d/operations_gen.go && \
-	go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@$(OAPI_CODEGEN_VERSION) -config internal/client/gen/oapi-codegen.yaml -o $$d/types.gen.go api/openapi.yaml && \
+	sed "s#^output:.*#output: $$d/types.gen.go#" internal/client/gen/oapi-codegen.yaml > $$d/cfg.yaml && \
+	GOTOOLCHAIN=$(GOTOOLCHAIN_PIN) go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@$(OAPI_CODEGEN_VERSION) -config $$d/cfg.yaml api/openapi.yaml && \
 	gofmt -w $$d/operations_gen.go $$d/types.gen.go && \
 	diff -q $$d/operations_gen.go internal/spec/operations_gen.go && diff -q $$d/types.gen.go internal/client/gen/types.gen.go; \
-	rc=$$?; rm -f $$d/*.go; rmdir $$d; exit $$rc
+	rc=$$?; rm -f $$d/*.go $$d/cfg.yaml; rmdir $$d; exit $$rc
 
 docs:
 	go run ./tools/docgen

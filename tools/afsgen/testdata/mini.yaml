@@ -1,0 +1,90 @@
+openapi: 3.1.0
+info: {title: mini, version: 9.8.7}
+paths:
+  /v1/things:
+    get:
+      operationId: ListThings
+      summary: List things
+      parameters:
+        - {in: query, name: kind, schema: {type: string, enum: [a, b]}}
+        - {$ref: '#/components/parameters/MaxResults'}
+        - {$ref: '#/components/parameters/NextToken'}
+        - {$ref: '#/components/parameters/XRequestId'}
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/ThingList'}
+            text/csv:
+              schema: {type: string}
+      x-afs-cli: things list-things
+      x-afs-csv: true
+      x-afs-permission: things:read
+      x-afs-priority: P0
+      x-afs-scope: team
+    post:
+      operationId: CreateThing
+      parameters:
+        - {$ref: '#/components/parameters/IdempotencyKey'}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/CreateThingRequest'}
+      responses:
+        "201": {description: ok}
+        "202": {description: ok}
+      x-afs-cli: things create-thing
+      x-afs-csv: false
+      x-afs-permission: things:write
+      x-afs-priority: P1
+      x-afs-scope: team
+  /v1/things/{thingId}:
+    parameters: []
+    put:
+      operationId: PutThing
+      parameters:
+        - {in: path, name: thingId, required: true, schema: {type: string}}
+        - {$ref: '#/components/parameters/IfMatchPut'}
+      responses: {"204": {description: gone}}
+      x-afs-cli: things put-thing
+      x-afs-csv: false
+      x-afs-permission: things:write
+      x-afs-priority: P2
+      x-afs-scope: team
+    delete:
+      operationId: DeleteThing
+      parameters:
+        - {in: path, name: thingId, required: true, schema: {type: string}}
+        - {$ref: '#/components/parameters/IfMatch'}
+      responses: {"204": {description: gone}}
+      x-afs-cli: none (not a CLI operation)
+      x-afs-csv: false
+      x-afs-permission: things:write
+      x-afs-priority: P2
+      x-afs-scope: team
+components:
+  parameters:
+    MaxResults: {in: query, name: maxResults, schema: {type: integer, minimum: 1, maximum: 100}}
+    NextToken: {in: query, name: nextToken, schema: {type: string}}
+    XRequestId: {in: header, name: X-Request-Id, schema: {type: string}}
+    IdempotencyKey: {in: header, name: Idempotency-Key, schema: {type: string}}
+    IfMatch: {in: header, name: If-Match, required: true, schema: {type: string}}
+    IfMatchPut: {in: header, name: If-Match, required: false, schema: {type: string}}
+  schemas:
+    Money: {type: string, pattern: '^[0-9.]+$'}
+    ThingList:
+      type: object
+      properties:
+        rows: {type: array, items: {type: object}}
+    CreateThingRequest:
+      type: object
+      required: [name]
+      properties:
+        amount: {$ref: '#/components/schemas/Money'}
+        count: {type: integer, minimum: 0, maximum: 5}
+        name: {type: string, minLength: 1, maxLength: 9}
+        note: {type: [string, "null"]}
+        tags: {type: array, items: {type: string}}
+        value: {description: any json}
