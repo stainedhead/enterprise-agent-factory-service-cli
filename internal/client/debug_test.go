@@ -3,19 +3,16 @@ package client
 import (
 	"bytes"
 	"context"
-	"flag"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"strings"
 	"testing"
 	"time"
 
+	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/golden"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/redact"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/spec"
 )
-
-var update = flag.Bool("update", false, "rewrite golden files")
 
 // CLI-US-3.4: the debug log names the credential source, redacts Authorization and body fields.
 func TestDebugLogGolden(t *testing.T) {
@@ -41,19 +38,7 @@ func TestDebugLogGolden(t *testing.T) {
 			t.Fatalf("debug log leaks %q:\n%s", leak, got)
 		}
 	}
-	golden := "testdata/debug.golden"
-	if *update {
-		if err := os.WriteFile(golden, []byte(got), 0o644); err != nil { //nolint:gosec // test fixture
-			t.Fatal(err)
-		}
-	}
-	want, err := os.ReadFile(golden)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if got != string(want) {
-		t.Errorf("debug log differs from %s:\n%s", golden, got)
-	}
+	golden.Check(t, "debug.golden", got)
 }
 
 func TestDebugOffWritesNothingAndTruncates(t *testing.T) {

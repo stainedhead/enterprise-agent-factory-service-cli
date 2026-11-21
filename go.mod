@@ -11,5 +11,7 @@ require (
 
 require (
 	github.com/google/uuid v1.6.0 // indirect
+	github.com/jmespath-community/go-jmespath v1.1.1 // indirect
 	github.com/oklog/ulid/v2 v2.1.2 // indirect
+	golang.org/x/exp v0.0.0-20230314191032-db074128a8ec // indirect
 )
