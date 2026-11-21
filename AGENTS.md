@@ -117,7 +117,7 @@ make build           # bin/afs, CGO_ENABLED=0
 
 ## Agent workflow
 
-1. **Understand:** the PRD, solution design §11, `api/openapi.yaml` in `-restapi`, and the active spec.
+1. **Understand:** this repository's PRD (`enterprise-agent-factory-service-cli-PRD.md`), the shared contracts in the root's `docs/contracts/`, the root PRD, solution design §11, `api/openapi.yaml` in `-restapi`, and the active spec.
 2. **Plan:** the operations, flags and outputs affected.
 3. **Red → Green → Refactor.**
 4. **Quality gate:** `make gate`.
