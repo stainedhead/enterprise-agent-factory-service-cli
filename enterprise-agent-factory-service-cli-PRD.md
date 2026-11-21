@@ -4,7 +4,7 @@
 |---|---|
 | **Status** | Draft for review, feature-complete scope (2026-11-21); revised after `review-prd` |
 | **Author** | J (Enterprise Architecture), drafted with Claude |
-| **Parent** | [Root PRD](https://github.com/stainedhead/enterprise-agent-factory-service/blob/main/enterprise-agent-factory-service-initial-PRD.md) (stories US-1..US-18; IF-2; decisions D23–D46); solution design §11 |
+| **Parent** | [Root PRD](https://github.com/stainedhead/enterprise-agent-factory-service/blob/main/enterprise-agent-factory-service-initial-PRD.md) (stories US-1..US-24; IF-2; decisions D23–D56); solution design §11 |
 | **Consumes** | [API contract](https://github.com/stainedhead/enterprise-agent-factory-service/blob/main/docs/contracts/api-contract.md) via `-restapi/api/openapi.yaml` at a release tag |
 | **Provides** | The `afs` command and its machine-readable `--output json`, which pipelines rely on |
 | **Precedence** | The API contract is the single source for operation names, CLI names, permissions and enums. Where solution design §11 differs (services `identities`, `usage`, `logs`, `notifications`; `--secret-string`; `admin export-config`), the contract wins and §11 is corrected in the root |
