@@ -1,0 +1,10 @@
+2026-11-21T12:00:00Z DEBUG auth credential source: env AFS_API_KEY
+2026-11-21T12:00:00Z DEBUG client request: POST http://HOST/v1/teams/t/api-keys operation=CreateApiKey attempt=1
+2026-11-21T12:00:00Z DEBUG client request header: Accept: application/json
+2026-11-21T12:00:00Z DEBUG client request header: Authorization: [redacted]
+2026-11-21T12:00:00Z DEBUG client request header: Content-Type: application/json
+2026-11-21T12:00:00Z DEBUG client request header: Idempotency-Key: idem-1
+2026-11-21T12:00:00Z DEBUG client request header: User-Agent: afs-cli/test (linux/amd64)
+2026-11-21T12:00:00Z DEBUG client request body: {"name":"ci","value":"[redacted]"}
+2026-11-21T12:00:00Z DEBUG client response: 201 in 80ms request-id=req_42 attempt=1
+2026-11-21T12:00:00Z DEBUG client response body: {"id":"key_1","name":"ci","secretKey":"[redacted]"}
