@@ -1,0 +1,2066 @@
+# afs admin
+
+Generated from `afs admin help`; do not edit by hand.
+
+```text
+AFS ADMIN
+
+DESCRIPTION
+       Service administration: settings, templates, tags, channels, storage and security operators.
+
+SYNOPSIS
+       afs admin <operation> [parameters]
+
+OPERATIONS
+       add-security-operator          Add security operator
+       approve-price-proposal         Approve model price proposal
+       create-api-key                 Create service API key
+       create-export                  Create export
+       create-external-system         Create catalog system
+       create-identity-provider       Create identity provider
+       create-import                  Create import
+       create-model                   Create model
+       create-model-price             Create model price
+       create-notification-channel    Create service notification channel
+       delete-agent-template          Delete agent template
+       delete-api-key                 Delete service API key
+       delete-external-system         Delete catalog system
+       delete-identity-provider       Delete identity provider
+       delete-notification-channel    Delete service notification channel
+       delete-service-tag             Delete service tag
+       delete-storage-class           Delete storage class
+       describe-export                Get export
+       describe-external-system       Get catalog system
+       describe-identity-provider     Get identity provider
+       get-settings                   Get settings
+       list-agent-templates           List admin agent templates
+       list-api-keys                  List service API keys
+       list-cost-reconciliations      List cost reconciliations
+       list-cost-tag-status           List cost tag status
+       list-exports                   List exports
+       list-external-systems          List catalog systems
+       list-identity-providers        List identity providers
+       list-model-prices              List model prices
+       list-models                    List admin models
+       list-notification-channels     List service notification channels
+       list-org-accounts              List org accounts
+       list-price-proposals           List model price proposals
+       list-security-operators        List security operators
+       list-service-tags              List service tags
+       list-storage-classes           List storage classes admin
+       put-agent-template             Put agent template
+       put-service-tag                Put service tag
+       put-setting                    Put setting
+       put-storage-class              Put storage class
+       reject-price-proposal          Reject model price proposal
+       remove-security-operator       Remove security operator
+       update-external-system         Update catalog system
+       update-identity-provider       Update identity provider
+       update-model                   Update model
+       update-notification-channel    Update service notification channel
+
+To see help text for an operation, run: afs admin <operation> help
+```
+
+## add-security-operator
+
+```text
+AFS ADMIN ADD-SECURITY-OPERATOR
+
+NAME
+       admin add-security-operator
+
+DESCRIPTION
+       Add security operator
+
+       Required permission: admin:settings
+
+SYNOPSIS
+       afs admin add-security-operator [options]
+
+OPTIONS
+       --email (string)
+       --group-name (string)
+       --identity-provider-id (string)
+       --subject-type (string) (required)
+          Possible values: user, group
+       --user-id (string)
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin add-security-operator help
+```
+
+## approve-price-proposal
+
+```text
+AFS ADMIN APPROVE-PRICE-PROPOSAL
+
+NAME
+       admin approve-price-proposal
+
+DESCRIPTION
+       Approve model price proposal
+
+       Required permission: admin:pricing
+
+SYNOPSIS
+       afs admin approve-price-proposal [options]
+
+OPTIONS
+       --proposal-id (string) (required)
+       --note (string)
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin approve-price-proposal help
+```
+
+## create-api-key
+
+```text
+AFS ADMIN CREATE-API-KEY
+
+NAME
+       admin create-api-key
+
+DESCRIPTION
+       Create service API key
+
+       Required permission: admin:settings
+
+SYNOPSIS
+       afs admin create-api-key [options]
+
+OPTIONS
+       --expires-at (string) (required)
+          At most 90 days ahead
+       --name (string) (required)
+       --role (string) (required)
+          Possible values: security_operator
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin create-api-key help
+```
+
+## create-export
+
+```text
+AFS ADMIN CREATE-EXPORT
+
+NAME
+       admin create-export
+
+DESCRIPTION
+       Create export
+
+       Required permission: admin:export
+
+SYNOPSIS
+       afs admin create-export [options]
+
+OPTIONS
+       --team-ids (list)
+          Teams to export; omit for every team
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin create-export help
+```
+
+## create-external-system
+
+```text
+AFS ADMIN CREATE-EXTERNAL-SYSTEM
+
+NAME
+       admin create-external-system
+
+DESCRIPTION
+       Create catalog system
+
+       Required permission: admin:external-systems
+
+SYNOPSIS
+       afs admin create-external-system [options]
+
+OPTIONS
+       --category (string) (required)
+          Possible values: dev_tools, collaboration, email, cloud, identity, llm, other
+       --description (string)
+       --docs-url (string)
+       --enabled (boolean)
+       --endpoints (list) (required)
+       --name (string) (required)
+       --slug (string) (required)
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin create-external-system help
+```
+
+## create-identity-provider
+
+```text
+AFS ADMIN CREATE-IDENTITY-PROVIDER
+
+NAME
+       admin create-identity-provider
+
+DESCRIPTION
+       Create identity provider
+
+       Required permission: admin:identity-providers
+
+SYNOPSIS
+       afs admin create-identity-provider [options]
+
+OPTIONS
+       --cli-client-id (string) (required)
+       --client-secret-arn (string)
+       --console-client-id (string) (required)
+       --enabled (boolean)
+       --groups-claim (string)
+       --is-default (boolean)
+       --issuer-url (string) (required)
+       --kind (string) (required)
+          Possible values: okta, entra_id
+       --name (string) (required)
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin create-identity-provider help
+```
+
+## create-import
+
+```text
+AFS ADMIN CREATE-IMPORT
+
+NAME
+       admin create-import
+
+DESCRIPTION
+       Create import
+
+       Required permission: admin:export
+
+SYNOPSIS
+       afs admin create-import [options]
+
+OPTIONS
+       --dry-run (boolean)
+          Default true: nothing is written
+       --account-map (JSON)
+          Source AWS account id → target account id
+       --bundle (JSON) (required)
+          An export bundle: {schemaVersion, sha256, teams[...]}
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin create-import help
+```
+
+## create-model
+
+```text
+AFS ADMIN CREATE-MODEL
+
+NAME
+       admin create-model
+
+DESCRIPTION
+       Create model
+
+       Required permission: admin:models
+
+SYNOPSIS
+       afs admin create-model [options]
+
+OPTIONS
+       --context-window (integer) (required)
+          Range: 1 to unbounded
+       --display-name (string) (required)
+       --enabled (boolean)
+       --id (string) (required)
+       --max-output-tokens (integer) (required)
+          Required (D28)
+          Range: 1 to unbounded
+       --provider (string) (required)
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin create-model help
+```
+
+## create-model-price
+
+```text
+AFS ADMIN CREATE-MODEL-PRICE
+
+NAME
+       admin create-model-price
+
+DESCRIPTION
+       Create model price
+
+       Required permission: admin:pricing
+
+SYNOPSIS
+       afs admin create-model-price [options]
+
+OPTIONS
+       --model-id (string) (required)
+       --cache-read-usd-per-mtok (string)
+          USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+       --cache-write-usd-per-mtok (string)
+          USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+       --effective-from (string) (required)
+          RFC 3339 UTC with Z
+       --input-usd-per-mtok (string) (required)
+          USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+       --output-usd-per-mtok (string) (required)
+          USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin create-model-price help
+```
+
+## create-notification-channel
+
+```text
+AFS ADMIN CREATE-NOTIFICATION-CHANNEL
+
+NAME
+       admin create-notification-channel
+
+DESCRIPTION
+       Create service notification channel
+
+       Required permission: admin:settings
+
+SYNOPSIS
+       afs admin create-notification-channel [options]
+
+OPTIONS
+       --config (JSON) (required)
+       --enabled (boolean)
+       --event-types (list) (required)
+       --kind (string) (required)
+          Possible values: slack, email, webhook, jira, eventbridge
+       --name (string) (required)
+       --secret-id (string)
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin create-notification-channel help
+```
+
+## delete-agent-template
+
+```text
+AFS ADMIN DELETE-AGENT-TEMPLATE
+
+NAME
+       admin delete-agent-template
+
+DESCRIPTION
+       Delete agent template
+
+       Required permission: admin:agent-templates
+
+SYNOPSIS
+       afs admin delete-agent-template [options]
+
+OPTIONS
+       --name (string) (required)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin delete-agent-template help
+```
+
+## delete-api-key
+
+```text
+AFS ADMIN DELETE-API-KEY
+
+NAME
+       admin delete-api-key
+
+DESCRIPTION
+       Delete service API key
+
+       Required permission: admin:settings
+
+SYNOPSIS
+       afs admin delete-api-key [options]
+
+OPTIONS
+       --key-id (string) (required)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin delete-api-key help
+```
+
+## delete-external-system
+
+```text
+AFS ADMIN DELETE-EXTERNAL-SYSTEM
+
+NAME
+       admin delete-external-system
+
+DESCRIPTION
+       Delete catalog system
+
+       Required permission: admin:external-systems
+
+SYNOPSIS
+       afs admin delete-external-system [options]
+
+OPTIONS
+       --system-id (string) (required)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin delete-external-system help
+```
+
+## delete-identity-provider
+
+```text
+AFS ADMIN DELETE-IDENTITY-PROVIDER
+
+NAME
+       admin delete-identity-provider
+
+DESCRIPTION
+       Delete identity provider
+
+       Required permission: admin:identity-providers
+
+SYNOPSIS
+       afs admin delete-identity-provider [options]
+
+OPTIONS
+       --id (string) (required)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin delete-identity-provider help
+```
+
+## delete-notification-channel
+
+```text
+AFS ADMIN DELETE-NOTIFICATION-CHANNEL
+
+NAME
+       admin delete-notification-channel
+
+DESCRIPTION
+       Delete service notification channel
+
+       Required permission: admin:settings
+
+SYNOPSIS
+       afs admin delete-notification-channel [options]
+
+OPTIONS
+       --id (string) (required)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin delete-notification-channel help
+```
+
+## delete-service-tag
+
+```text
+AFS ADMIN DELETE-SERVICE-TAG
+
+NAME
+       admin delete-service-tag
+
+DESCRIPTION
+       Delete service tag
+
+       Required permission: admin:service-tags
+
+SYNOPSIS
+       afs admin delete-service-tag [options]
+
+OPTIONS
+       --key (string) (required)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin delete-service-tag help
+```
+
+## delete-storage-class
+
+```text
+AFS ADMIN DELETE-STORAGE-CLASS
+
+NAME
+       admin delete-storage-class
+
+DESCRIPTION
+       Delete storage class
+
+       Required permission: admin:storage-classes
+
+SYNOPSIS
+       afs admin delete-storage-class [options]
+
+OPTIONS
+       --name (string) (required)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin delete-storage-class help
+```
+
+## describe-export
+
+```text
+AFS ADMIN DESCRIBE-EXPORT
+
+NAME
+       admin describe-export
+
+DESCRIPTION
+       Get export
+
+       Required permission: admin:export
+
+SYNOPSIS
+       afs admin describe-export [options]
+
+OPTIONS
+       --export-id (string) (required)
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin describe-export help
+```
+
+## describe-external-system
+
+```text
+AFS ADMIN DESCRIBE-EXTERNAL-SYSTEM
+
+NAME
+       admin describe-external-system
+
+DESCRIPTION
+       Get catalog system
+
+       Required permission: admin:external-systems
+
+SYNOPSIS
+       afs admin describe-external-system [options]
+
+OPTIONS
+       --system-id (string) (required)
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin describe-external-system help
+```
+
+## describe-identity-provider
+
+```text
+AFS ADMIN DESCRIBE-IDENTITY-PROVIDER
+
+NAME
+       admin describe-identity-provider
+
+DESCRIPTION
+       Get identity provider
+
+       Required permission: admin:identity-providers
+
+SYNOPSIS
+       afs admin describe-identity-provider [options]
+
+OPTIONS
+       --id (string) (required)
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin describe-identity-provider help
+```
+
+## get-settings
+
+```text
+AFS ADMIN GET-SETTINGS
+
+NAME
+       admin get-settings
+
+DESCRIPTION
+       Get settings
+
+       Required permission: admin:settings
+
+SYNOPSIS
+       afs admin get-settings [options]
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin get-settings help
+```
+
+## list-agent-templates
+
+```text
+AFS ADMIN LIST-AGENT-TEMPLATES
+
+NAME
+       admin list-agent-templates
+
+DESCRIPTION
+       List admin agent templates
+
+       Required permission: admin:agent-templates
+
+SYNOPSIS
+       afs admin list-agent-templates [options]
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin list-agent-templates help
+```
+
+## list-api-keys
+
+```text
+AFS ADMIN LIST-API-KEYS
+
+NAME
+       admin list-api-keys
+
+DESCRIPTION
+       List service API keys
+
+       Required permission: admin:settings
+
+SYNOPSIS
+       afs admin list-api-keys [options]
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin list-api-keys help
+```
+
+## list-cost-reconciliations
+
+```text
+AFS ADMIN LIST-COST-RECONCILIATIONS
+
+NAME
+       admin list-cost-reconciliations
+
+DESCRIPTION
+       List cost reconciliations
+
+       Required permission: admin:reports
+
+SYNOPSIS
+       afs admin list-cost-reconciliations [options]
+
+OPTIONS
+       --status (string)
+          Possible values: ok, over_threshold, missing_billing
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin list-cost-reconciliations help
+```
+
+## list-cost-tag-status
+
+```text
+AFS ADMIN LIST-COST-TAG-STATUS
+
+NAME
+       admin list-cost-tag-status
+
+DESCRIPTION
+       List cost tag status
+
+       Required permission: admin:cost-tag-status
+
+SYNOPSIS
+       afs admin list-cost-tag-status [options]
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin list-cost-tag-status help
+```
+
+## list-exports
+
+```text
+AFS ADMIN LIST-EXPORTS
+
+NAME
+       admin list-exports
+
+DESCRIPTION
+       List exports
+
+       Required permission: admin:export
+
+SYNOPSIS
+       afs admin list-exports [options]
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin list-exports help
+```
+
+## list-external-systems
+
+```text
+AFS ADMIN LIST-EXTERNAL-SYSTEMS
+
+NAME
+       admin list-external-systems
+
+DESCRIPTION
+       List catalog systems
+
+       Required permission: admin:external-systems
+
+SYNOPSIS
+       afs admin list-external-systems [options]
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin list-external-systems help
+```
+
+## list-identity-providers
+
+```text
+AFS ADMIN LIST-IDENTITY-PROVIDERS
+
+NAME
+       admin list-identity-providers
+
+DESCRIPTION
+       List identity providers
+
+       Required permission: admin:identity-providers
+
+SYNOPSIS
+       afs admin list-identity-providers [options]
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin list-identity-providers help
+```
+
+## list-model-prices
+
+```text
+AFS ADMIN LIST-MODEL-PRICES
+
+NAME
+       admin list-model-prices
+
+DESCRIPTION
+       List model prices
+
+       Required permission: admin:pricing
+
+SYNOPSIS
+       afs admin list-model-prices [options]
+
+OPTIONS
+       --model-id (string) (required)
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin list-model-prices help
+```
+
+## list-models
+
+```text
+AFS ADMIN LIST-MODELS
+
+NAME
+       admin list-models
+
+DESCRIPTION
+       List admin models
+
+       Required permission: admin:models
+
+SYNOPSIS
+       afs admin list-models [options]
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin list-models help
+```
+
+## list-notification-channels
+
+```text
+AFS ADMIN LIST-NOTIFICATION-CHANNELS
+
+NAME
+       admin list-notification-channels
+
+DESCRIPTION
+       List service notification channels
+
+       Required permission: admin:settings
+
+SYNOPSIS
+       afs admin list-notification-channels [options]
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin list-notification-channels help
+```
+
+## list-org-accounts
+
+```text
+AFS ADMIN LIST-ORG-ACCOUNTS
+
+NAME
+       admin list-org-accounts
+
+DESCRIPTION
+       List org accounts
+
+       Required permission: admin:accounts
+
+SYNOPSIS
+       afs admin list-org-accounts [options]
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin list-org-accounts help
+```
+
+## list-price-proposals
+
+```text
+AFS ADMIN LIST-PRICE-PROPOSALS
+
+NAME
+       admin list-price-proposals
+
+DESCRIPTION
+       List model price proposals
+
+       Required permission: admin:pricing
+
+SYNOPSIS
+       afs admin list-price-proposals [options]
+
+OPTIONS
+       --status (string)
+          Possible values: pending, approved, rejected, superseded
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin list-price-proposals help
+```
+
+## list-security-operators
+
+```text
+AFS ADMIN LIST-SECURITY-OPERATORS
+
+NAME
+       admin list-security-operators
+
+DESCRIPTION
+       List security operators
+
+       Required permission: admin:settings
+
+SYNOPSIS
+       afs admin list-security-operators [options]
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin list-security-operators help
+```
+
+## list-service-tags
+
+```text
+AFS ADMIN LIST-SERVICE-TAGS
+
+NAME
+       admin list-service-tags
+
+DESCRIPTION
+       List service tags
+
+       Required permission: admin:service-tags
+
+SYNOPSIS
+       afs admin list-service-tags [options]
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin list-service-tags help
+```
+
+## list-storage-classes
+
+```text
+AFS ADMIN LIST-STORAGE-CLASSES
+
+NAME
+       admin list-storage-classes
+
+DESCRIPTION
+       List storage classes admin
+
+       Required permission: admin:storage-classes
+
+SYNOPSIS
+       afs admin list-storage-classes [options]
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin list-storage-classes help
+```
+
+## put-agent-template
+
+```text
+AFS ADMIN PUT-AGENT-TEMPLATE
+
+NAME
+       admin put-agent-template
+
+DESCRIPTION
+       Put agent template
+
+       Required permission: admin:agent-templates
+
+SYNOPSIS
+       afs admin put-agent-template [options]
+
+OPTIONS
+       --name (string) (required)
+       --allowed-digests (list) (required)
+       --current-digest (string) (required)
+       --default-resources (JSON)
+       --description (string)
+       --enabled (boolean)
+       --harness (string) (required)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin put-agent-template help
+```
+
+## put-service-tag
+
+```text
+AFS ADMIN PUT-SERVICE-TAG
+
+NAME
+       admin put-service-tag
+
+DESCRIPTION
+       Put service tag
+
+       Required permission: admin:service-tags
+
+SYNOPSIS
+       afs admin put-service-tag [options]
+
+OPTIONS
+       --key (string) (required)
+       --allowed-values (list)
+       --default-value (string)
+       --description (string)
+       --mode (string) (required)
+          Possible values: fixed, required
+       --value (string)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin put-service-tag help
+```
+
+## put-setting
+
+```text
+AFS ADMIN PUT-SETTING
+
+NAME
+       admin put-setting
+
+DESCRIPTION
+       Put setting
+
+       Required permission: admin:settings
+
+SYNOPSIS
+       afs admin put-setting [options]
+
+OPTIONS
+       --key (string) (required)
+          Possible values: secrets.path_prefix, pricing.price_list_sync, billing.variance_alert_pct, api.idempotency_key_ttl_seconds, teams.ephemeral_max_days, work_orders.sla_warning_hours, billing.tag_activation_acknowledged, work_orders.notification_channel_id, reports.idle_cpu_millicores, egress.denied_spike_threshold, gateway.reservation_ttl_seconds, api.cors_origins
+       --value (string or JSON) (required)
+          JSON value of the setting's type
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin put-setting help
+```
+
+## put-storage-class
+
+```text
+AFS ADMIN PUT-STORAGE-CLASS
+
+NAME
+       admin put-storage-class
+
+DESCRIPTION
+       Put storage class
+
+       Required permission: admin:storage-classes
+
+SYNOPSIS
+       afs admin put-storage-class [options]
+
+OPTIONS
+       --name (string) (required)
+       --description (string)
+       --enabled (boolean)
+       --volume-type (string) (required)
+          Possible values: gp3, io2
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin put-storage-class help
+```
+
+## reject-price-proposal
+
+```text
+AFS ADMIN REJECT-PRICE-PROPOSAL
+
+NAME
+       admin reject-price-proposal
+
+DESCRIPTION
+       Reject model price proposal
+
+       Required permission: admin:pricing
+
+SYNOPSIS
+       afs admin reject-price-proposal [options]
+
+OPTIONS
+       --proposal-id (string) (required)
+       --note (string)
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin reject-price-proposal help
+```
+
+## remove-security-operator
+
+```text
+AFS ADMIN REMOVE-SECURITY-OPERATOR
+
+NAME
+       admin remove-security-operator
+
+DESCRIPTION
+       Remove security operator
+
+       Required permission: admin:settings
+
+SYNOPSIS
+       afs admin remove-security-operator [options]
+
+OPTIONS
+       --binding-id (string) (required)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin remove-security-operator help
+```
+
+## update-external-system
+
+```text
+AFS ADMIN UPDATE-EXTERNAL-SYSTEM
+
+NAME
+       admin update-external-system
+
+DESCRIPTION
+       Update catalog system
+
+       Required permission: admin:external-systems
+
+SYNOPSIS
+       afs admin update-external-system [options]
+
+OPTIONS
+       --system-id (string) (required)
+       --description (string)
+       --docs-url (string)
+       --enabled (boolean)
+          Service-level switch
+       --endpoints (list)
+       --name (string)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin update-external-system help
+```
+
+## update-identity-provider
+
+```text
+AFS ADMIN UPDATE-IDENTITY-PROVIDER
+
+NAME
+       admin update-identity-provider
+
+DESCRIPTION
+       Update identity provider
+
+       Required permission: admin:identity-providers
+
+SYNOPSIS
+       afs admin update-identity-provider [options]
+
+OPTIONS
+       --id (string) (required)
+       --cli-client-id (string)
+       --client-secret-arn (string)
+       --console-client-id (string)
+       --enabled (boolean)
+       --groups-claim (string)
+       --is-default (boolean)
+       --name (string)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin update-identity-provider help
+```
+
+## update-model
+
+```text
+AFS ADMIN UPDATE-MODEL
+
+NAME
+       admin update-model
+
+DESCRIPTION
+       Update model
+
+       Required permission: admin:models
+
+SYNOPSIS
+       afs admin update-model [options]
+
+OPTIONS
+       --model-id (string) (required)
+       --context-window (integer)
+          Range: 1 to unbounded
+       --display-name (string)
+       --enabled (boolean)
+       --max-output-tokens (integer)
+          Range: 1 to unbounded
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin update-model help
+```
+
+## update-notification-channel
+
+```text
+AFS ADMIN UPDATE-NOTIFICATION-CHANNEL
+
+NAME
+       admin update-notification-channel
+
+DESCRIPTION
+       Update service notification channel
+
+       Required permission: admin:settings
+
+SYNOPSIS
+       afs admin update-notification-channel [options]
+
+OPTIONS
+       --id (string) (required)
+       --config (JSON)
+       --enabled (boolean)
+       --event-types (list)
+       --name (string)
+       --secret-id (string)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin update-notification-channel help
+```

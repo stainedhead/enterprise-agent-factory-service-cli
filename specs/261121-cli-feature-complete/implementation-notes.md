@@ -92,7 +92,30 @@ a version (D-C8); CLI-17 `onExhaust` (D-C19); CLI-US-8 `describe-pool` worker co
 
 ## Deviations from plan
 
-None yet.
+Recorded during M0 (2026-11-21):
+
+- **Descriptors carry no examples.** `operations_gen.go` omits `Example` and `RequestExample`; the replay test reads examples from the embedded snapshot. Keeps startup under 100 ms (measured about 2 ms to first request).
+- **`DeriveOptions` lives in `internal/cli`** (not `exec/options.go`): the registry needs it at `Finalize`, and `exec` imports `cli`.
+- **Hand-rolled device grant** in `internal/sso` instead of `golang.org/x/oauth2`, so the clock and sleeper are injectable and no dependency is added.
+- **`internal/secretinput` created in M0** (minimal: `file://`, `fileb://`, `-`, never a plain argument) because `exec.Build` needs it; M2-B1 extends it with the no-echo prompt.
+- **Coverage** is computed with `-coverpkg=./internal/...` over the whole tree (so the replay and integration tests count for the packages they exercise); generated code and the `internal/golden` test helper are excluded. 90.8% at M0 exit.
+- **`sso login`** writes the resolved `sso_provider_id`, `sso_issuer` and `sso_client_id` into the profile when they are missing.
+- **Safe-update readers are derived, not tabulated.** `safeupdate.ReaderFor` finds a same-path `GET` (after dropping a trailing literal such as `/value` or `/state`) or the parent collection's list and matches the item by `id`, `name`, `key` or the path parameter name. Only `PutSetting` and `UpdateWorkOrderRepo` have no reader and send no `If-Match` unless `--if-match` is given (D-C17 read of `ListWorkOrderRepos` is still to do in M5/M6 with the composite `host/owner/repo` match). The "Applied to version N" notice of D-C8 is replaced by a stderr line before the write: `Read the current version N; sending If-Match: "N"`.
+- **`--wait` interval** is 5 s (client retry `Retry-After` is honoured by the client); the poll uses the generation of the mutation response.
+- **Pagination token** `{"t","s"}` is implemented as D-C7 says; `s` is used when a server returns more items than `maxResults`.
+- **Debug redaction** masks `secretKey` in response bodies; `exec` prints it once from the raw body (D-C25 is for M4).
+- **`afs help <service> [<operation>]`** is accepted as well as `afs <service> <operation> help` and `--help`.
+
+## Contract deltas found in M0
+
+| Id | Delta | CLI behaviour |
+|---|---|---|
+| CLI-CD-7 | `GetTeamReport` and `GetAgentReport` declare a query parameter that repeats a path parameter (`teamId`, `agentId`) | `afsgen` drops the duplicate query parameter |
+| CLI-CD-8 | `ApiKey` has no `version`, yet `DeleteApiKey` and `DeleteServiceApiKey` require `If-Match` | The CLI sends no `If-Match` unless `--if-match` is given |
+| CLI-CD-9 | `ErrorCode` has no idempotency codes; `idempotency_in_progress` and `idempotency_mismatch` are `details.reason` values of `Conflict` | Retry logic keys on `details.reason` |
+| CLI-CD-10 | `CreateReportSchedule` and `UpdateReportSchedule` have a body member named `query`, which collides with the global `--query` | The option is `--query-json` until M4-D renames it |
+
+M0 needs nothing else from `-restapi` or the root.
 
 ## Lessons learned
 

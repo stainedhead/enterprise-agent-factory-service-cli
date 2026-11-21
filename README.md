@@ -7,9 +7,13 @@ decides what each user can do.
 
 Part of [enterprise-agent-factory-service](https://github.com/stainedhead/enterprise-agent-factory-service).
 
-**Status:** scaffolded. `afs help` and `afs --version` work; service operations come next.
+**Status:** milestone M0 (foundation) done. All 180 operations of the pinned API contract are callable through
+the generic executor (`--cli-input-json`, `--generate-cli-skeleton`, pagination, safe updates with `If-Match`,
+`--wait`, retries and idempotency keys); `afs configure`, `afs configure sso`, `afs sso login`, `afs sso logout`,
+`afs sso get-caller-identity` and `afs sso list-providers` are finished. Per-service polish (examples, table
+columns, golden files) lands milestone by milestone.
 
-## Examples (target design)
+## Examples
 
 ```bash
 afs configure sso                          # issuer, client id, endpoint for a profile
@@ -23,8 +27,16 @@ afs secrets create-secret --team-id team_01J... --name github-bot-key --secret-s
 ## Build and test
 
 ```bash
-make gate     # tidy, fmt-check, vet, golangci-lint, race tests, build
+make gate     # tidy, contract-check, generate-check, fmt-check, vet, lint, race tests, coverage (90%), build
 ./bin/afs help
 ```
+
+Other targets: `make generate` (regenerate descriptors and types from `api/openapi.yaml`),
+`make contract-sync RESTAPI_REF=<ref>` (re-pin the API snapshot), `make docs` (regenerate `user-docs/reference/`).
+
+## Documentation
+
+[user-docs/](user-docs/README.md): getting started, configuration, single sign-on, credentials, output,
+pagination, errors and exit codes, troubleshooting, and the generated command reference.
 
 Contributor and agent rules: [AGENTS.md](AGENTS.md). Why this repository exists: [INTENT.md](INTENT.md).

@@ -1,0 +1,1248 @@
+# afs agents
+
+Generated from `afs agents help`; do not edit by hand.
+
+```text
+AFS AGENTS
+
+DESCRIPTION
+       Create and operate agents, their identities, configuration and external systems.
+
+SYNOPSIS
+       afs agents <operation> [parameters]
+
+OPERATIONS
+       create-agent                   Create agent
+       create-identity                Create agent identity
+       create-role-link               Create agent role link
+       create-snapshot                Create agent snapshot
+       delete-agent                   Delete agent
+       delete-config-value            Delete agent config value
+       delete-identity                Delete agent identity
+       delete-role-link               Delete agent role link
+       describe-agent                 Get agent
+       describe-role-link             Get agent role link
+       get-agent-status               Get agent status
+       list-agent-templates           List agent templates
+       list-agents                    List agents
+       list-config-values             List agent config values
+       list-external-systems          List agent external systems
+       list-identities                List agent identities
+       list-role-links                List agent role links
+       list-snapshots                 List agent snapshots
+       list-storage-classes           List storage classes
+       pause-agent                    Pause agent
+       put-config-value               Put agent config value
+       restart-agent                  Restart agent
+       resume-agent                   Resume agent
+       set-external-system-state      Set agent external system state
+       update-agent                   Update agent
+       verify-role-link               Verify agent role link
+
+To see help text for an operation, run: afs agents <operation> help
+```
+
+## create-agent
+
+```text
+AFS AGENTS CREATE-AGENT
+
+NAME
+       agents create-agent
+
+DESCRIPTION
+       Create agent
+
+       Required permission: agents:write
+
+SYNOPSIS
+       afs agents create-agent [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --description (string)
+       --iam-identity (string)
+          Possible values: team_shared, dedicated
+       --image (string) (required)
+          Container image pinned by digest
+       --model-id (string) (required)
+       --name (string) (required)
+          Immutable name (team slug, agent, pool, secret)
+       --resources (JSON)
+       --secret-bindings (JSON)
+       --template (string) (required)
+          Agent template name
+       --volume (JSON)
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+       --wait (boolean)
+          Wait until the resource is ready (or gone, for a delete).
+       --wait-timeout (duration)
+          How long --wait waits, for example 90s or 10m (default 10m).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents create-agent help
+```
+
+## create-identity
+
+```text
+AFS AGENTS CREATE-IDENTITY
+
+NAME
+       agents create-identity
+
+DESCRIPTION
+       Create agent identity
+
+       Required permission: identities:write
+
+SYNOPSIS
+       afs agents create-identity [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+       --external-ref (string) (required)
+       --kind (string) (required)
+          Possible values: github_app, external
+       --secret-id (string)
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents create-identity help
+```
+
+## create-role-link
+
+```text
+AFS AGENTS CREATE-ROLE-LINK
+
+NAME
+       agents create-role-link
+
+DESCRIPTION
+       Create agent role link
+
+       Required permission: identities:write
+
+SYNOPSIS
+       afs agents create-role-link [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+       --max-session-seconds (integer)
+          Range: 900 to 43200
+       --profile-name (string) (required)
+       --role-arn (string) (required)
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents create-role-link help
+```
+
+## create-snapshot
+
+```text
+AFS AGENTS CREATE-SNAPSHOT
+
+NAME
+       agents create-snapshot
+
+DESCRIPTION
+       Create agent snapshot
+
+       Required permission: agents:write
+
+SYNOPSIS
+       afs agents create-snapshot [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+       --description (string)
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents create-snapshot help
+```
+
+## delete-agent
+
+```text
+AFS AGENTS DELETE-AGENT
+
+NAME
+       agents delete-agent
+
+DESCRIPTION
+       Delete agent
+
+       Required permission: agents:write
+
+SYNOPSIS
+       afs agents delete-agent [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+       --wait (boolean)
+          Wait until the resource is ready (or gone, for a delete).
+       --wait-timeout (duration)
+          How long --wait waits, for example 90s or 10m (default 10m).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents delete-agent help
+```
+
+## delete-config-value
+
+```text
+AFS AGENTS DELETE-CONFIG-VALUE
+
+NAME
+       agents delete-config-value
+
+DESCRIPTION
+       Delete agent config value
+
+       Required permission: config:write
+
+SYNOPSIS
+       afs agents delete-config-value [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+       --name (string) (required)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents delete-config-value help
+```
+
+## delete-identity
+
+```text
+AFS AGENTS DELETE-IDENTITY
+
+NAME
+       agents delete-identity
+
+DESCRIPTION
+       Delete agent identity
+
+       Required permission: identities:write
+
+SYNOPSIS
+       afs agents delete-identity [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+       --identity-id (string) (required)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents delete-identity help
+```
+
+## delete-role-link
+
+```text
+AFS AGENTS DELETE-ROLE-LINK
+
+NAME
+       agents delete-role-link
+
+DESCRIPTION
+       Delete agent role link
+
+       Required permission: identities:write
+
+SYNOPSIS
+       afs agents delete-role-link [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+       --link-id (string) (required)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents delete-role-link help
+```
+
+## describe-agent
+
+```text
+AFS AGENTS DESCRIBE-AGENT
+
+NAME
+       agents describe-agent
+
+DESCRIPTION
+       Get agent
+
+       Required permission: agents:read
+
+SYNOPSIS
+       afs agents describe-agent [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents describe-agent help
+```
+
+## describe-role-link
+
+```text
+AFS AGENTS DESCRIBE-ROLE-LINK
+
+NAME
+       agents describe-role-link
+
+DESCRIPTION
+       Get agent role link
+
+       Required permission: identities:read
+
+SYNOPSIS
+       afs agents describe-role-link [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+       --link-id (string) (required)
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents describe-role-link help
+```
+
+## get-agent-status
+
+```text
+AFS AGENTS GET-AGENT-STATUS
+
+NAME
+       agents get-agent-status
+
+DESCRIPTION
+       Get agent status
+
+       Required permission: agents:read
+
+SYNOPSIS
+       afs agents get-agent-status [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents get-agent-status help
+```
+
+## list-agent-templates
+
+```text
+AFS AGENTS LIST-AGENT-TEMPLATES
+
+NAME
+       agents list-agent-templates
+
+DESCRIPTION
+       List agent templates
+
+       Required permission: models:read
+
+SYNOPSIS
+       afs agents list-agent-templates [options]
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents list-agent-templates help
+```
+
+## list-agents
+
+```text
+AFS AGENTS LIST-AGENTS
+
+NAME
+       agents list-agents
+
+DESCRIPTION
+       List agents
+
+       Required permission: agents:read
+
+SYNOPSIS
+       afs agents list-agents [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents list-agents help
+```
+
+## list-config-values
+
+```text
+AFS AGENTS LIST-CONFIG-VALUES
+
+NAME
+       agents list-config-values
+
+DESCRIPTION
+       List agent config values
+
+       Required permission: config:read
+
+SYNOPSIS
+       afs agents list-config-values [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents list-config-values help
+```
+
+## list-external-systems
+
+```text
+AFS AGENTS LIST-EXTERNAL-SYSTEMS
+
+NAME
+       agents list-external-systems
+
+DESCRIPTION
+       List agent external systems
+
+       Required permission: external-systems:read
+
+SYNOPSIS
+       afs agents list-external-systems [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents list-external-systems help
+```
+
+## list-identities
+
+```text
+AFS AGENTS LIST-IDENTITIES
+
+NAME
+       agents list-identities
+
+DESCRIPTION
+       List agent identities
+
+       Required permission: identities:read
+
+SYNOPSIS
+       afs agents list-identities [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents list-identities help
+```
+
+## list-role-links
+
+```text
+AFS AGENTS LIST-ROLE-LINKS
+
+NAME
+       agents list-role-links
+
+DESCRIPTION
+       List agent role links
+
+       Required permission: identities:read
+
+SYNOPSIS
+       afs agents list-role-links [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents list-role-links help
+```
+
+## list-snapshots
+
+```text
+AFS AGENTS LIST-SNAPSHOTS
+
+NAME
+       agents list-snapshots
+
+DESCRIPTION
+       List agent snapshots
+
+       Required permission: agents:read
+
+SYNOPSIS
+       afs agents list-snapshots [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents list-snapshots help
+```
+
+## list-storage-classes
+
+```text
+AFS AGENTS LIST-STORAGE-CLASSES
+
+NAME
+       agents list-storage-classes
+
+DESCRIPTION
+       List storage classes
+
+       Required permission: models:read
+
+SYNOPSIS
+       afs agents list-storage-classes [options]
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents list-storage-classes help
+```
+
+## pause-agent
+
+```text
+AFS AGENTS PAUSE-AGENT
+
+NAME
+       agents pause-agent
+
+DESCRIPTION
+       Pause agent
+
+       Required permission: agents:write
+
+SYNOPSIS
+       afs agents pause-agent [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+       --wait (boolean)
+          Wait until the resource is ready (or gone, for a delete).
+       --wait-timeout (duration)
+          How long --wait waits, for example 90s or 10m (default 10m).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents pause-agent help
+```
+
+## put-config-value
+
+```text
+AFS AGENTS PUT-CONFIG-VALUE
+
+NAME
+       agents put-config-value
+
+DESCRIPTION
+       Put agent config value
+
+       Required permission: config:write
+
+SYNOPSIS
+       afs agents put-config-value [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+       --name (string) (required)
+       --source (string) (required)
+          Possible values: literal, namespace
+       --value (string)
+          Required when source is literal
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents put-config-value help
+```
+
+## restart-agent
+
+```text
+AFS AGENTS RESTART-AGENT
+
+NAME
+       agents restart-agent
+
+DESCRIPTION
+       Restart agent
+
+       Required permission: agents:write
+
+SYNOPSIS
+       afs agents restart-agent [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+       --wait (boolean)
+          Wait until the resource is ready (or gone, for a delete).
+       --wait-timeout (duration)
+          How long --wait waits, for example 90s or 10m (default 10m).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents restart-agent help
+```
+
+## resume-agent
+
+```text
+AFS AGENTS RESUME-AGENT
+
+NAME
+       agents resume-agent
+
+DESCRIPTION
+       Resume agent
+
+       Required permission: agents:write
+
+SYNOPSIS
+       afs agents resume-agent [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+       --wait (boolean)
+          Wait until the resource is ready (or gone, for a delete).
+       --wait-timeout (duration)
+          How long --wait waits, for example 90s or 10m (default 10m).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents resume-agent help
+```
+
+## set-external-system-state
+
+```text
+AFS AGENTS SET-EXTERNAL-SYSTEM-STATE
+
+NAME
+       agents set-external-system-state
+
+DESCRIPTION
+       Set agent external system state
+
+       Required permission: external-systems:write
+
+SYNOPSIS
+       afs agents set-external-system-state [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+       --system-id (string) (required)
+       --enabled (boolean) (required)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents set-external-system-state help
+```
+
+## update-agent
+
+```text
+AFS AGENTS UPDATE-AGENT
+
+NAME
+       agents update-agent
+
+DESCRIPTION
+       Update agent
+
+       Required permission: agents:write
+
+SYNOPSIS
+       afs agents update-agent [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+       --description (string)
+       --iam-identity (string)
+          Possible values: team_shared, dedicated
+       --image (string)
+          Container image pinned by digest
+       --model-id (string)
+       --resources (JSON)
+       --secret-bindings (JSON)
+       --template (string)
+          Agent template name
+       --volume (JSON)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+       --wait (boolean)
+          Wait until the resource is ready (or gone, for a delete).
+       --wait-timeout (duration)
+          How long --wait waits, for example 90s or 10m (default 10m).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents update-agent help
+```
+
+## verify-role-link
+
+```text
+AFS AGENTS VERIFY-ROLE-LINK
+
+NAME
+       agents verify-role-link
+
+DESCRIPTION
+       Verify agent role link
+
+       Required permission: identities:write
+
+SYNOPSIS
+       afs agents verify-role-link [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+       --link-id (string) (required)
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs agents verify-role-link help
+```

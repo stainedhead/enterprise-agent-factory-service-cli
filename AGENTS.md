@@ -16,7 +16,7 @@ It talks only to the API in
 [enterprise-agent-factory-service-restapi](https://github.com/stainedhead/enterprise-agent-factory-service-restapi),
 whose `api/openapi.yaml` is the contract.
 
-Status: scaffolded. `afs help` and `afs --version` work; no service operation is implemented yet.
+Status: milestone M0 done (foundation and generic executor for all 180 operations). See `specs/` for the plan.
 
 ## Toolchain
 
@@ -32,13 +32,26 @@ Status: scaffolded. `afs help` and `afs --version` work; no service operation is
 ## Layout
 
 ```
-cmd/afs/                  entry point; calls cli.Run and exits with its code
-internal/cli/             command tree, global options, help, exit codes
-internal/cli/<service>/   one package per service (teams, agents, secrets, ...) as they are built
-internal/client/          API client generated from api/openapi.yaml plus auth and retry (to add)
-internal/config/          ~/.afs/config and ~/.afs/credentials, profiles, env vars (to add)
-internal/output/          json, table, text, yaml renderers and --query (to add)
-internal/sso/             OIDC device authorization flow and token cache (to add)
+cmd/afs/                  entry point; calls cli.Run and exits with its code (130 on Ctrl-C)
+api/                      pinned OpenAPI snapshot (openapi.yaml, SOURCE) and its embed
+tools/afsgen/             generates internal/spec/operations_gen.go from the snapshot
+tools/docgen/             generates user-docs/reference/ from the command table
+internal/spec/            operation descriptors (generated) and lookups
+internal/cli/             registry, parsing, global options, overrides, Run
+internal/cli/<service>/   one package per service: overrides, examples, columns, local commands
+internal/cli/services/    composition root: registers every service, wires exec and help
+internal/cli/exec/        the generic executor: build, skeleton, pagination, errors, run
+internal/cli/safeupdate/  If-Match version reads
+internal/cli/wait/        --wait polling
+internal/cli/help/        three-level help
+internal/cli/runtime/     per-invocation settings, credentials and client
+internal/client/          HTTP client: retries, idempotency, redaction, debug; gen/ holds generated types
+internal/auth/            credential chain (API key, credentials file, SSO, workload token)
+internal/config/          ~/.afs/config and ~/.afs/credentials, profiles, precedence
+internal/output/          json, yaml, table, text, csv renderers, JMESPath, pager
+internal/sso/             OIDC device flow, token cache, refresh
+internal/secretinput/     secret values from file, stdin or prompt only
+internal/redact/          header and JSON redaction
 internal/buildinfo/       version stamped by the Makefile
 docs/  user-docs/  specs/
 ```
