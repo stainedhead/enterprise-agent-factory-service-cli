@@ -4,7 +4,7 @@
 |---|---|
 | **Status** | Draft for review, feature-complete scope (2026-11-21); revised after `review-prd` |
 | **Author** | J (Enterprise Architecture), drafted with Claude |
-| **Parent** | [Root PRD](https://github.com/stainedhead/enterprise-agent-factory-service/blob/main/enterprise-agent-factory-service-initial-PRD.md) (stories US-1..US-24; IF-2; decisions D23–D56); solution design §11 |
+| **Parent** | [Root PRD](https://github.com/stainedhead/enterprise-agent-factory-service/blob/main/enterprise-agent-factory-service-initial-PRD.md) (stories US-1..US-26; IF-2; decisions D23–D57); solution design §11 |
 | **Consumes** | [API contract](https://github.com/stainedhead/enterprise-agent-factory-service/blob/main/docs/contracts/api-contract.md) via `-restapi/api/openapi.yaml` at a release tag |
 | **Provides** | The `afs` command and its machine-readable `--output json`, which pipelines rely on |
 | **Precedence** | The API contract is the single source for operation names, CLI names, permissions and enums. Where solution design §11 differs (services `identities`, `usage`, `logs`, `notifications`; `--secret-string`; `admin export-config`), the contract wins and §11 is corrected in the root |
@@ -37,10 +37,10 @@ command's priority is its operation's priority in the contract.
 |---|---|---|---|
 | CLI-1 | A command for every operation in the API contract §4, named exactly by its `CLI` column and mapping to its `operationId`; priority per operation from the contract. Commands take ids (`--agent-id agt_…`), never names, because names are unique only within a team (D25); the CLI does not resolve names | IF-2, G6 | P0 |
 | CLI-2 | Global options on every command: `--profile`, `--endpoint-url`, `--output`, `--query`, `--no-paginate`, `--max-items`, `--page-size`, `--starting-token`, `--cli-input-json`, `--generate-cli-skeleton`, `--debug`, `--no-cli-pager`, `--color on\|off\|auto`, `--cli-connect-timeout`, `--cli-read-timeout`, `--version` | IF-2 | P0 |
-| CLI-3 | `afs configure` and `afs configure sso` write `~/.afs/config` (0600). Profile keys: `endpoint_url`, `output`, `sso_provider_id`, `sso_issuer`, `sso_client_id`, `team_id` (default for `--team-id`). Precedence: option → environment (`AFS_PROFILE`, `AFS_ENDPOINT_URL`, `AFS_DEFAULT_OUTPUT`, `AFS_API_KEY`) → profile → defaults (`output json`) | IF-2 | P0 |
+| CLI-3 | Local commands that call no API operation: `afs configure`, `afs sso login`, `afs sso logout` and `afs completion bash\|zsh\|fish\|powershell` (generated from the command table). `afs configure` and `afs configure sso` write `~/.afs/config` (0600). Profile keys: `endpoint_url`, `output`, `sso_provider_id`, `sso_issuer`, `sso_client_id`, `team_id` (default for `--team-id`). Precedence: option → environment (`AFS_PROFILE`, `AFS_ENDPOINT_URL`, `AFS_DEFAULT_OUTPUT`, `AFS_API_KEY`) → profile → defaults (`output json`) | IF-2 | P0 |
 | CLI-4 | `afs sso login` (OIDC device grant against the profile's provider, chosen from `sso list-providers`), `sso logout`, `sso get-caller-identity`; token cache `~/.afs/sso/cache` (0600). A session lasts as long as the IdP's refresh token; the CLI refreshes silently when one exists. A token known to be expired locally → exit 255 without a call and the hint `Run afs sso login --profile <name>`; a server `401 Unauthenticated` → AWS-style error, exit 254, same hint (D41) | ACC-1 | P0 |
 | CLI-5 | Credential resolution, first match wins: `AFS_API_KEY` (wins even over `--profile`'s SSO token; `--debug` names the source) → the profile's `api_key` in `~/.afs/credentials` → the profile's cached SSO token → the workload token file `AFS_API_TOKEN_FILE` (default `/var/run/secrets/afs/api/token` when it exists; re-read per request, D29). A credentials file or token cache file with a mode wider than 0600 is refused with exit 255 and a `chmod 600` hint | ACC-4 | P1 |
-| CLI-6 | Output renderers: `json` exactly the API's fields, `yaml`, `table` and `text` for people, and `csv` (D39). `--query` (JMESPath) applies before rendering. `csv` asks the API for `Accept: text/csv` and writes the body unchanged; it is valid only on operations the contract marks *CSV* (else exit 252); `--query` with `csv` exits 252; auto-pagination concatenates pages keeping one header row | IF-2, RPT-1..9 | P0 |
+| CLI-6 | Output renderers: `json` exactly the API's fields, `yaml`, `table` and `text` for people, and `csv` (D39). `--query` (JMESPath) applies before rendering. `csv` asks the API for `Accept: text/csv` and writes the body unchanged; it is valid only on operations the contract marks *CSV* (else exit 252); `--query` with `csv` exits 252; auto-pagination reads each next page's token from the response header `X-Afs-Next-Token` (a CSV body has no `nextToken` field; the header is absent on the last page) and concatenates the pages keeping one header row | IF-2, RPT-1..9 | P0 |
 | CLI-7 | Auto-pagination by default; `--page-size` sets `maxResults` (1–100, else 252); `--max-items N` stops after N items and prints `NextToken`; `--starting-token` resumes; `--no-paginate` returns one page with its `nextToken` | IF-2 | P0 |
 | CLI-8 | Errors on stderr: `An error occurred (<code>) when calling the <operationId> operation: <message>`, then `Request ID: <X-Request-Id>`. Exit 0 success, 130 interrupted (Ctrl-C), 252 usage or client-side validation, 254 any API error, 255 other (network, config, local expired token, `--wait` timeout) | IF-2 | P0 |
 | CLI-9 | Secret values only from a file (`--secret-value file://…`, `fileb://…`), stdin (`-`) or a no-echo prompt; never a plain argument; never echoed, logged or in `--debug`. `--cli-input-json` for `secrets create-secret` and `secrets put-secret-value` must be `file://…`; inline JSON with a `value` field is refused with exit 252 before any call | SEC-1, SEC-2 | P0 |
@@ -52,7 +52,7 @@ command's priority is its operation's priority in the contract.
 | CLI-15 | Distribution: signed binaries for macOS (arm64, amd64), Linux (arm64, amd64), Windows (amd64); Homebrew tap; `checksums.txt` signed with cosign; `afs --version` prints `afs-cli/<version> contract/<major.minor> <go version> <os>/<arch>` | IF-2 | P1 |
 | CLI-16 | `afs teams get-kubeconfig --team-id … [--kubeconfig PATH] [--aws-profile NAME]`: the API returns the kubeconfig content (context `afs-<team-slug>`, exec credential plugin `aws eks get-token` with the role the team's IdP federates to, no token). The CLI merges it as returned into `PATH` (default: first path of `$KUBECONFIG`, else `~/.kube/config`), replacing only entries with the same names, writing atomically. `--aws-profile` adds `AWS_PROFILE=<NAME>` to the exec `env` block. A new file is created 0600; an existing file keeps its mode, with a warning when wider than 0600. `--kubeconfig -` writes the API's YAML unchanged to stdout. A missing `aws` v2 on `PATH` is a warning, not an error | ACC-5 | P2 |
 | CLI-17 | Swarm commands: `pools` service (stages, pools, scale, handoffs, pool secret bindings, configuration, external systems, role links) and `swarm-templates` service. `teams create-team --kind ephemeral` requires `--expires-at`, `--teardown-rule` and `--budget-usd` (sent as a lifetime budget with `onExhaust: block`; optional `--budget-thresholds 50 80 100`); the full object is available through `--cli-input-json` | AGT-8, TEAM-7 | P2 |
-| CLI-18 | `work-orders` service, including `--repos` shorthand `host/owner/repo=<owners>` where owners are a team id, an email or both comma-separated (`=team_…,ops@example.com`): contains `@` → `owningContact`, starts `team_` → `owningTeamId`, anything else (such as a slug) → exit 252 before any call. No slug lookup (D38); `--output csv` on `list-work-orders` | WO-1..6 | P2 |
+| CLI-18 | `work-orders` service, including `--repos` shorthand `host/owner/repo[=<owners>]`. With `=`, owners are a team id, an email or both comma-separated (`=team_…,ops@example.com`): contains `@` → `owningContact`, starts `team_` → `owningTeamId`, anything else (such as a slug) → exit 252 before any call. Without `=` (`host/owner/repo` alone) the repository is sent with no owner and `afs-api` resolves it from the teams' `AFS_OWNED_REPOS` configuration (D38); an explicit owner always wins. An ambiguous or unowned repository is the API's `ValidationError` (exit 254) with `details.ambiguousRepos` or `details.unownedRepos` printed. No slug lookup; `--output csv` on `list-work-orders` | WO-1..6 | P2 |
 
 ### 3.1 Services summary
 
@@ -62,18 +62,18 @@ table is corrected. CLI-US-7 tests the generated command table against `openapi.
 
 | Service | Operations |
 |---|---|
-| `teams` | `list-teams`, `create-team`, `describe-team`, `update-team`, `delete-team`, `suspend-team`, `resume-team`, `get-team-status`, `get-kubeconfig`; models `list-team-models`, `put-team-models`; tags `get-team-tags`, `put-team-tags`; `list-allowed-accounts`; config `list-config-values`, `put-config-value`, `delete-config-value`; external systems `list-external-systems`, `set-external-system-state`, `declare-external-system`, `update-external-system`, `delete-external-system`; log destinations `list-log-destinations`, `create-log-destination`, `update-log-destination`, `delete-log-destination`; notification channels `list-notification-channels`, `create-notification-channel`, `update-notification-channel`, `delete-notification-channel`; revisions `list-revisions`, `describe-revision`, `restore-revision` |
+| `teams` | `list-teams`, `create-team`, `describe-team`, `update-team`, `delete-team`, `suspend-team`, `resume-team`, `get-team-status`, `get-kubeconfig`, `list-team-directory`; models `list-team-models`, `put-team-models`; tags `get-team-tags`, `put-team-tags`; `list-allowed-accounts`; config `list-config-values`, `put-config-value`, `delete-config-value`; external systems `list-external-systems`, `set-external-system-state`, `declare-external-system`, `update-external-system`, `delete-external-system`; log destinations `list-log-destinations`, `create-log-destination`, `describe-log-destination`, `update-log-destination`, `delete-log-destination`; notification channels `list-notification-channels`, `create-notification-channel`, `describe-notification-channel`, `update-notification-channel`, `delete-notification-channel`, `test-notification-channel`; revisions `list-revisions`, `describe-revision`, `restore-revision` |
 | `members`, `api-keys` | `list-members`, `add-member`, `update-member`, `remove-member`; `list-api-keys`, `create-api-key`, `delete-api-key` |
-| `agents` | `list-agents`, `create-agent`, `describe-agent`, `update-agent`, `delete-agent`, `pause-agent`, `resume-agent`, `restart-agent`, `get-agent-status`, `list-snapshots`, `create-snapshot`, `list-storage-classes`; role links `list-role-links`, `create-role-link`, `describe-role-link`, `delete-role-link`, `verify-role-link`; identities `list-identities`, `create-identity`, `delete-identity`; config `list-config-values`, `put-config-value`, `delete-config-value`; external systems `list-external-systems`, `set-external-system-state` |
+| `agents` | `list-agents`, `create-agent`, `describe-agent`, `update-agent`, `delete-agent`, `pause-agent`, `resume-agent`, `restart-agent`, `get-agent-status`, `list-snapshots`, `create-snapshot`, `list-storage-classes`, `list-agent-templates`; role links `list-role-links`, `create-role-link`, `describe-role-link`, `delete-role-link`, `verify-role-link`; identities `list-identities`, `create-identity`, `delete-identity`; config `list-config-values`, `put-config-value`, `delete-config-value`; external systems `list-external-systems`, `set-external-system-state` |
 | `secrets` | `list-secrets`, `create-secret`, `describe-secret`, `update-secret`, `put-secret-value`, `rotate-secret`, `delete-secret` |
 | `budgets` | `get-budget`, `put-budget`, `get-usage`, `list-costs` |
 | `reports` | `get-team-report`, `get-agent-report`, `get-service-report`; schedules `list-report-schedules`, `create-report-schedule`, `update-report-schedule`, `delete-report-schedule` |
 | `models`, `audit` | `list-models`; `list-audit-events`, `list-service-audit-events` |
-| `admin` | settings `get-settings`, `put-setting`; identity providers `list-identity-providers`, `create-identity-provider`, `update-identity-provider`, `delete-identity-provider`; service tags `list-service-tags`, `put-service-tag`, `delete-service-tag`; models `list-models`, `create-model`, `update-model`; prices `list-model-prices`, `create-model-price`, `list-price-proposals`, `approve-price-proposal`, `reject-price-proposal`; `list-cost-reconciliations`, `list-cost-tag-status`; catalog `list-external-systems`, `create-external-system`, `update-external-system`, `delete-external-system`; storage classes `list-storage-classes`, `put-storage-class`, `delete-storage-class`; `list-org-accounts`; service-level keys `list-api-keys`, `create-api-key`, `delete-api-key`; security operators `list-security-operators`, `add-security-operator`, `remove-security-operator`; `create-export`, `describe-export`, `create-import` |
+| `admin` | settings `get-settings`, `put-setting`; identity providers `list-identity-providers`, `create-identity-provider`, `describe-identity-provider`, `update-identity-provider`, `delete-identity-provider`; service notification channels `list-notification-channels`, `create-notification-channel`, `update-notification-channel`, `delete-notification-channel`; agent templates `list-agent-templates`, `put-agent-template`, `delete-agent-template`; service tags `list-service-tags`, `put-service-tag`, `delete-service-tag`; models `list-models`, `create-model`, `update-model`; prices `list-model-prices`, `create-model-price`, `list-price-proposals`, `approve-price-proposal`, `reject-price-proposal`; `list-cost-reconciliations`, `list-cost-tag-status`; catalog `list-external-systems`, `create-external-system`, `describe-external-system`, `update-external-system`, `delete-external-system`; storage classes `list-storage-classes`, `put-storage-class`, `delete-storage-class`; `list-org-accounts`; service-level keys `list-api-keys`, `create-api-key`, `delete-api-key`; security operators `list-security-operators`, `add-security-operator`, `remove-security-operator`; `create-export`, `describe-export`, `list-exports`, `create-import` |
 | `pools` | stages `list-stages`, `create-stage`, `update-stage`, `delete-stage`; `list-pools`, `create-pool`, `describe-pool`, `update-pool`, `delete-pool`, `scale-pool`, `pause-pool`, `resume-pool`, `get-pool-status`; `list-handoffs`, `put-handoffs`; `list-secret-bindings`, `put-secret-bindings`; config `list-config-values`, `put-config-value`, `delete-config-value`; `list-external-systems`, `put-external-system`; role links `list-role-links`, `create-role-link`, `delete-role-link`, `verify-role-link` |
-| `swarm-templates` | `list-swarm-templates`, `create-swarm-template`, `describe-swarm-template`, `update-swarm-template`, `delete-swarm-template` (enable and disable: see OQ-C3) |
+| `swarm-templates` | `list-swarm-templates`, `create-swarm-template`, `describe-swarm-template`, `update-swarm-template`, `delete-swarm-template`, `enable-swarm-template`, `disable-swarm-template` |
 | `work-orders` | `list-work-orders`, `create-work-order`, `describe-work-order`, `update-work-order`, `cancel-work-order`, `list-repos`, `update-repo`, `list-team-work-orders` |
-| `sso`, `configure` | `login`, `logout`, `list-providers`, `get-caller-identity`; `configure`, `configure sso` (local only, no API operation) |
+| `sso`, `configure`, `completion` | `login`, `logout`, `list-providers`, `get-caller-identity`; `configure`, `configure sso`, `completion` (`login`, `logout`, `configure` and `completion` are local only, no API operation) |
 
 ### 3.2 Non-goals
 
@@ -122,6 +122,8 @@ secrets without the value appearing anywhere but the request body.
 - `--output json` fields equal the API's field names and nesting exactly (golden tests per operation).
 - `afs reports get-team-report --team-id team_… --kind costs --range 30d --group-by tag:project --output
   csv` sends `Accept: text/csv` and writes the API's CSV byte for byte.
+- Given a CSV response whose `X-Afs-Next-Token` header is set, the CLI sends the next request with that
+  token and stops when the header is absent [fake server with 3 pages].
 - `afs audit list-audit-events --team-id team_… --output csv` over 3 pages writes one header row and every
   row of the 3 pages.
 - `--output csv` on `agents list-agents` (not *CSV* in the contract) exits 252; `--output csv --query …`
@@ -148,7 +150,7 @@ overwrite someone else's change.
 **CLI-US-7 · Every operation has a command, and every command an operation.** *(G6)*
 - A test compares the operations in `openapi.yaml` with the generated command table and fails on any
   operation without a command (other than `GetHealth`, `GetReadiness`), on any command without an
-  operation (other than `configure`, `configure sso`, `sso login`, `sso logout` and `help`), and on any
+  operation (other than `configure`, `configure sso`, `sso login`, `sso logout`, `completion` and `help`), and on any
   command whose name differs from the contract's `CLI` column for its `operationId`.
 
 **CLI-US-8 · Run a budgeted swarm from a script.** *(US-15, US-17)* As a team-admin of an ephemeral
@@ -161,7 +163,7 @@ team, I want to create and scale pools from the command line.
 - `afs pools describe-pool --output table` shows desired, reporting, working, idle and impaired workers.
 - `afs pools create-pool` on a persistent team prints the API's `Conflict` and exits 254.
 
-**CLI-US-9 · Security tooling files work orders.** *(US-16; D38)* As a security engineer, I want my
+**CLI-US-9 · Security tooling files work orders.** *(US-16; WO-1; D38)* As a security engineer, I want my
 scanner to create a work order with a service-level key.
 - With `AFS_API_KEY` set to a security operator key, `afs work-orders create-work-order --cve-id
   CVE-2026-41873 --severity critical --sla-due-at 2026-12-01T00:00:00Z --template-id swt_… --repos
@@ -171,6 +173,11 @@ scanner to create a work order with a service-level key.
   replays the stored response.
 - `--repos github.com/payments/ledger-core=payments-factory` (a slug) exits 252 before any call, saying
   to use a team id or an email.
+- Given `--repos github.com/payments/ledger-core` with no `=`, then the request carries that repository
+  with no `owningTeamId` and no `owningContact`, and the response's `ownerSource: team_config` is printed
+  (`--output json` unchanged); an explicit `=team_…` in the same command sends the owner and wins.
+- Given the API answers `ValidationError` with `details.ambiguousRepos` or `details.unownedRepos`, then the
+  AWS-style error names the repositories and teams, says to give `=team_…` or `=email`, and exits 254.
 - A second open work order for the CVE prints the AWS-style `Conflict` error and exits 254.
 - The same key on a team command gets `AccessDenied` (exit 254).
 
@@ -206,8 +213,7 @@ owner a trust policy.
 - `afs agents describe-role-link … --query trustPolicy --output json` prints the trust policy document
   alone, ready to hand over.
 - `afs agents verify-role-link …` prints the link with `status` `verified`, or `failed` with the reason;
-  an account outside the team's allowed accounts gets `ValidationError` or `AccessDenied` from the API
-  (exit 254).
+  an account outside the team's allowed accounts gets `ValidationError` from the API (exit 254).
 
 **CLI-US-14 · Set a budget.** *(US-9)* As a team-admin, I want to set my team's budget and thresholds.
 - `afs budgets put-budget --team-id team_… --period monthly --amount-usd 100.50 --thresholds 50 80 100`
@@ -238,12 +244,47 @@ to my team's channel.
 - A service-level or another team's channel gets `ValidationError` (exit 254); a viewer gets
   `AccessDenied` (exit 254).
 
-**CLI-US-18 · Export and import configuration.** *(US-13; CFG-5)* As a service admin, I want to move an
+**CLI-US-18 · Export and import configuration.** *(US-13; CFG-5; D49)* As a service admin, I want to move an
 environment by script.
 - `afs admin create-export` prints the export with its id; `admin describe-export --export-id exp_…`
-  shows its status and, once complete, the bundle reference; the bundle holds no secret value.
-- `afs admin create-import --bundle file://bundle.json --account-map file://map.json --dry-run` sends
-  `dryRun: true`, prints the plan and changes nothing; without `--dry-run` it applies.
+  prints `sha256`, `sizeBytes` and, once complete, `downloadUrl` (valid 7 days); `admin list-exports`
+  lists exports; the bundle holds no secret value.
+- `afs admin create-import --bundle file://bundle.json --account-map file://map.json` sends
+  `?dryRun=true` unless `--no-dry-run` is given; the bundle file is the request body; with `--no-dry-run`
+  it sends `?dryRun=false` and applies.
+- A bundle file over 100 MB exits 252 before any call.
+
+**CLI-US-19 · Test a notification channel.** *(US-19; OPS-3)* As a team-admin, I want to know a channel
+delivers before I rely on it.
+- `afs teams test-notification-channel --team-id team_… --channel-id nch_…` prints the API's result; when
+  delivery fails, it prints the failure (channel status and error) and exits 254 with the AWS-style message
+  of the `TestNotificationChannel` operation.
+- `afs teams describe-notification-channel` and `describe-log-destination` print the stored configuration
+  and last delivery status, never a credential value.
+
+**CLI-US-20 · Restore a revision.** *(US-20; CFG-6)* As a team-admin, I want to see what a restore would do
+and then apply it.
+- `afs teams restore-revision --team-id team_… --revision-id … --dry-run` sends `dryRun: true`, prints the
+  plan and changes nothing; without `--dry-run` it applies.
+- A viewer running it gets `AccessDenied` (exit 254).
+
+**CLI-US-21 · Settings are validated.** *(US-21; §6.13)* As a service admin, I want a bad setting refused.
+- `afs admin put-setting --key billing.variance_alert_pct --value 150` prints
+  `An error occurred (ValidationError) when calling the PutSetting operation: <message naming the range>`
+  and exits 254.
+- A team-admin running `put-setting` gets `AccessDenied` (exit 254).
+
+**CLI-US-22 · Disable a swarm template.** *(US-22; WO-2)* As a service admin, I want to retire a template.
+- `afs swarm-templates disable-swarm-template --swarm-template-id swt_…` sends `DisableSwarmTemplate`;
+  `enable-swarm-template` reverses it; a security operator gets `AccessDenied` (exit 254).
+- `afs work-orders create-work-order … --template-id swt_…` naming the disabled template prints the API's
+  `ValidationError` and exits 254.
+
+**CLI-US-23 · Suspend and delete a team.** *(US-23; TEAM-9)* As a team-admin, I want suspend to be
+predictable and delete to be a service admin's act.
+- `afs teams suspend-team --team-id team_…` succeeds; a following write such as `agents update-agent` prints
+  `Conflict` (the team is suspended) and exits 254; `resume-team` lifts it.
+- `afs teams delete-team` by a team-admin prints `AccessDenied` and exits 254.
 
 ## 5. Non-functional requirements
 
@@ -252,7 +293,7 @@ environment by script.
 | Startup | < 100 ms to first request on a warm machine |
 | Reliability | Connect timeout 30 s and read timeout 60 s by default (`--cli-connect-timeout`, `--cli-read-timeout`; 0 = none). Retries per CLI-11. Ctrl-C cancels the in-flight request through its context and exits 130. `--wait` polls every 5 s |
 | Observability | `--debug` writes to stderr one line per event, `<RFC 3339 time> DEBUG <component> <message>`, with method, URL, status, duration, `X-Request-Id`, credential source and retry attempt. Redacted: `Authorization`, cookies, and body fields `value`, `secretKey`, `token`, `refreshToken`, `clientSecret`, `password`. Every error prints `Request ID: <X-Request-Id>`. `User-Agent: afs-cli/<version> (<os>/<arch>)` |
-| Compatibility | Works against the API contract major version it was built for; reads `X-Afs-Contract-Version` from responses and warns once per day on stderr when the server's minor is newer (OQ-C1) |
+| Compatibility | Works against the API contract major version it was built for; reads `X-Afs-Contract-Version` (full semver) from responses and prints one notice per session on stderr when the server's minor is newer (D47) |
 | Security | No token, key or secret value in stdout, stderr, logs or shell history; files written 0600. **One exception:** `api-keys create-api-key` and `admin create-api-key` print the response's `secretKey` once to stdout (the only time it exists), with `Store this key now; it cannot be shown again.` on stderr; it is redacted in `--debug` |
 | Quality | `internal/...` ≥ 90% coverage; golden files for table, text and help; every operation tested for `AccessDenied` (exit 254) |
 | Accessibility | `--color off` and `NO_COLOR` respected; table output readable at 80 columns |
@@ -293,33 +334,32 @@ environment by script.
 | `-restapi` `api/openapi.yaml` at a release tag | Generated client and the CLI-US-7 command table | Regenerated in its own PR after each contract change (contract §8) |
 | oapi-codegen | Generates `internal/client` types and operations | Pinned in `tools.go`/`go.mod` |
 | `github.com/jmespath-community/go-jmespath` | `--query` | |
-| IdP device-grant clients (Okta, Entra ID) | `sso login` | One public client per provider with the device authorization grant enabled; its issuer and client id come from `ListSignInProviders` (OQ-C2) |
+| IdP device-grant clients (Okta, Entra ID) | `sso login` | One public client per provider with the device authorization grant enabled; its issuer and `cliClientId` come from `ListSignInProviders` (D48) |
 | AWS CLI v2 on `PATH` | `aws eks get-token` in the kubeconfig exec block | Needed only by kubectl at run time |
 | Signing: cosign, Apple Developer ID with notarization, Windows Authenticode certificate | CLI-15 | Certificates held in CI secrets, never in the repository |
 | Homebrew tap repository | CLI-15 | Created before the first release; linked only once it exists |
-| `X-Afs-Contract-Version` response header | Compatibility NFR, `--version` comparison | Not yet in the API contract (OQ-C1) |
 
 ## 7. Delivery
 
 | Milestone | This repository |
 |---|---|
 | M0 | Generated client from `openapi.yaml`; config, profiles, credentials, output renderers (incl. csv), errors, retries, pagination, `--wait`, help; `sso`, `configure` |
-| M1 | `teams` (core, suspend and resume, models, `list-revisions`, `describe-revision`), `members`, `audit list-audit-events`, `admin get-settings`, `put-setting`, identity providers |
-| M2 | `agents` (core, snapshots, `list-storage-classes`, config values, external systems), `secrets`, `teams` config values and external systems, `models list-models`, `admin` catalog systems and storage classes |
-| M3 | `budgets`, `reports` (on demand), `teams` notification channels, `admin` models and prices |
-| M4 | `api-keys`, agent role links and identities, `teams list-allowed-accounts`, `restore-revision`, tags and log destinations, report schedules, `admin` service tags, price proposals, cost reconciliations, org accounts, exports and imports, `audit list-service-audit-events`; signed releases and Homebrew tap |
+| M1 | `teams` (core, suspend and resume, models, `list-revisions`, `describe-revision`), `members`, `audit list-audit-events`, `admin get-settings`, `put-setting`, identity providers (incl. `describe-identity-provider`) |
+| M2 | `agents` (core, snapshots, `list-storage-classes`, `list-agent-templates`, config values, external systems), `secrets`, `teams` config values and external systems, `models list-models`, `admin` catalog systems (incl. `describe-external-system`), storage classes and agent templates (`list-agent-templates`, `put-agent-template`, `delete-agent-template`) |
+| M3 | `budgets`, `reports` (on demand), `teams` notification channels (`list-`, `create-`, `describe-`, `update-`, `delete-` and `test-notification-channel`), `admin` models and prices |
+| M4 | `api-keys`, agent role links and identities, `teams list-allowed-accounts`, `restore-revision`, tags and log destinations (incl. `describe-log-destination`), report schedules, `admin` service notification channels, `admin` service tags, price proposals, cost reconciliations, org accounts, exports and imports (incl. `list-exports`), `audit list-service-audit-events`; `completion` (OQ-C5); signed releases and Homebrew tap |
 | M5 | `pools`, ephemeral `create-team` options, `teams get-kubeconfig`, `admin list-cost-tag-status` |
-| M6 | `work-orders` (incl. workload token credential), `swarm-templates`, `admin` service-level keys and security operators; feature complete |
+| M6 | `work-orders` (incl. workload token credential), `swarm-templates` (incl. `enable-swarm-template`, `disable-swarm-template`), `teams list-team-directory`, `admin` service-level keys and security operators; feature complete |
 
 ## 8. Open questions
 
-| # | Question | Owner | Proposal |
+| # | Question | Owner | Status or proposal |
 |---|---|---|---|
-| OQ-C1 | The API contract has no way to learn the server's contract version. Add response header `X-Afs-Contract-Version: <major.minor>` to contract §1 | root / restapi | Add the header; until then the compatibility warning is off |
-| OQ-C2 | Does `ListSignInProviders` return the device-grant client id, or is `clientId` the console's PKCE client? | root / restapi | Add `cliClientId` per provider if the clients differ |
-| OQ-C3 | `ListSwarmTemplates … DeleteSwarmTemplate` names `:enable` / `:disable` paths but no operations or CLI names | root | Contract names `EnableSwarmTemplate` / `DisableSwarmTemplate` (`enable-swarm-template` / `disable-swarm-template`) or drops the paths for `update-swarm-template --enabled`; the CLI follows |
-| OQ-C4 | `ListTeamDirectory` (D38) is not yet in the contract | root | The CLI exposes it under the contract's CLI name once added |
-| OQ-C5 | Shell completion (`afs completion bash\|zsh\|fish\|powershell`) in or out of v1 | J | In, M4, generated from the command table; a local command with no operation |
+| OQ-C1 | The API contract has no way to learn the server's contract version. Add response header `X-Afs-Contract-Version: <major.minor>` to contract §1 | root / restapi | Resolved: D47. `X-Afs-Contract-Version` is in the API contract §1 |
+| OQ-C2 | Does `ListSignInProviders` return the device-grant client id, or is `clientId` the console's PKCE client? | root / restapi | Resolved: D48. `ListSignInProviders` returns `cliClientId` |
+| OQ-C3 | `ListSwarmTemplates … DeleteSwarmTemplate` names `:enable` / `:disable` paths but no operations or CLI names | root | Resolved: the contract names `EnableSwarmTemplate` / `DisableSwarmTemplate` (`enable-swarm-template`, `disable-swarm-template`) |
+| OQ-C4 | `ListTeamDirectory` (D38) is not yet in the contract | root | Resolved: `ListTeamDirectory` is in the contract as `teams list-team-directory` (D56) |
+| OQ-C5 | Shell completion (`afs completion bash\|zsh\|fish\|powershell`) in or out of v1 | J | Resolved: accepted. `completion` is in, M4, a local command |
 | OQ-C6 | Token storage: 0600 files (current) or OS keychains (macOS Keychain, Windows Credential Manager, Secret Service) | J | Files in v1; keychain as an opt-in profile key later |
 | OQ-9 | Which IAM role the IdP federates to for viewer kubectl (affects the exec block of CLI-16) | J | From root |
 
