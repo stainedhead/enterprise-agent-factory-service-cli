@@ -420,3 +420,73 @@ func TestCSVNoPaginatePrintsNextTokenOnStderr(t *testing.T) {
 		t.Fatalf("last page: %+v", r)
 	}
 }
+
+// FR-012: a page token that repeats, and a result member that is not a list, are errors (255), not a loop or an empty list.
+func TestPaginationStopsOnRepeatedToken(t *testing.T) {
+	for name, args := range map[string][]string{
+		"json": {"teams", "list-teams"},
+		"csv":  {"budgets", "list-costs", "--team-id", "team_1", "--output", "csv"},
+	} {
+		t.Run(name, func(t *testing.T) {
+			calls := 0
+			r := run(t, func(w http.ResponseWriter, req *http.Request) {
+				calls++
+				if calls > 20 {
+					t.Error("pagination does not stop")
+					jsonReply(w, 200, `{"items":[]}`)
+					return
+				}
+				if name == "csv" {
+					w.Header().Set("Content-Type", "text/csv")
+					w.Header().Set("X-Afs-Next-Token", "same")
+					_, _ = w.Write([]byte("a,b\n1,2\n"))
+					return
+				}
+				jsonReply(w, 200, `{"items":[{"id":"team_x"}],"nextToken":"same"}`)
+			}, args...)
+			if r.code != 255 || !strings.Contains(r.errOut, "the service returned the same page token twice") || calls != 2 {
+				t.Fatalf("calls=%d %+v", calls, r)
+			}
+		})
+	}
+	// a cycle A -> B -> A is the same loop
+	calls := 0
+	r := run(t, func(w http.ResponseWriter, req *http.Request) {
+		calls++
+		next := map[string]string{"": "A", "A": "B", "B": "A"}[req.URL.Query().Get("nextToken")]
+		jsonReply(w, 200, `{"items":[],"nextToken":"`+next+`"}`)
+	}, "teams", "list-teams")
+	if r.code != 255 || calls != 3 {
+		t.Fatalf("cycle: calls=%d %+v", calls, r)
+	}
+}
+
+func TestPageWithNonListResultKeyIsAnError(t *testing.T) {
+	for _, body := range []string{`{"items":{"id":"x"}}`, `{"items":"nope"}`, `{"items":7}`} {
+		r := run(t, func(w http.ResponseWriter, _ *http.Request) { jsonReply(w, 200, body) }, "teams", "list-teams")
+		if r.code != 255 || !strings.Contains(r.errOut, `"items"`) {
+			t.Errorf("%s: %+v", body, r)
+		}
+	}
+	// null and a missing member are an empty list
+	for _, body := range []string{`{"items":null}`, `{}`} {
+		r := run(t, func(w http.ResponseWriter, _ *http.Request) { jsonReply(w, 200, body) }, "teams", "list-teams")
+		if r.code != 0 {
+			t.Errorf("%s: %+v", body, r)
+		}
+	}
+}
+
+// FR-013: a status body that cannot be decoded ends --wait with exit 255 and names the operation.
+func TestWaitUndecodableStatus255(t *testing.T) {
+	r := run(t, func(w http.ResponseWriter, req *http.Request) {
+		if req.Method == "POST" {
+			jsonReply(w, 202, `{"id":"team_1","generation":3}`)
+			return
+		}
+		jsonReply(w, 200, `["not","an","object"]`)
+	}, "teams", "resume-team", "--team-id", "team_1", "--wait")
+	if r.code != 255 || !strings.Contains(r.errOut, "GetTeamStatus") || !strings.Contains(r.errOut, "could not be decoded") {
+		t.Fatalf("%+v", r)
+	}
+}

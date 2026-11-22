@@ -99,3 +99,25 @@ Decisions local to this repository. Cross-repo decisions live in the root reposi
   macOS notarization; `osslsigncode` for Authenticode; jobs gated on their secrets.
 - Consequences: releases are verifiable with `cosign verify-blob` against the workflow identity; notarization, Authenticode
   and the tap switch on when their secrets are provisioned.
+
+## ADR-012 Service and identity-provider data is untrusted
+
+- Status: Accepted (2026-11-22, review fixes)
+- Context: the review of the feature-complete branch found that provider fields written to `~/.afs/config` could inject
+  lines into the file, that OIDC endpoints were not required to use https, and that service text reached the terminal raw.
+- Decision: every value that comes from the service or the identity provider is validated at the edge before it is stored,
+  sent or printed. `config.File.Set` refuses control characters and structural characters; provider `issuerUrl` must be an
+  https URL (loopback http allowed) and ids use a strict character set; OIDC discovery must name the configured issuer and
+  use https endpoints; `table`, `text`, error output and prompts pass through `output.Sanitize`; endpoint URLs may not carry
+  credentials. `--output json` keeps the service's bytes (ADR-005).
+- Consequences: a hostile or misconfigured service fails a command with exit 255 instead of changing local state. DEL and C1
+  characters can still pass through `--output json`.
+
+## ADR-013 Safe-update notice after the write
+
+- Status: Accepted (2026-11-22, review fixes; supersedes the wording of D-C8 as built)
+- Context: PRD CLI-10 specifies `Applied to version N; use --if-match to guard against concurrent changes.` after a
+  successful write. The build printed a different sentence before the write.
+- Decision: the CLI prints the PRD text on stderr after the write succeeds, only when it read the version itself. No notice
+  appears when the write fails or when `--if-match` is given.
+- Consequences: matches the root PRD, so no deviation is reported to the root PRD owner.

@@ -49,7 +49,13 @@ type Options struct {
 	Interval time.Duration // default 5s
 	Now      func() time.Time
 	Sleep    func(ctx context.Context, d time.Duration) error
+	// ReadTimeout lowers the cap on a poll response's Retry-After (20 s) when it is smaller; 0 = none.
+	ReadTimeout time.Duration
 }
+
+// ErrUndecodable is returned (exit 255) when a status response is not the JSON object the contract
+// describes, so a contract change cannot make --wait run silently until its timeout.
+var ErrUndecodable = errors.New("the status response could not be decoded")
 
 // ErrTimeout is returned (exit 255) when the resource is not ready in time.
 var ErrTimeout = errors.New("timed out waiting for the resource")
@@ -99,7 +105,7 @@ func Evaluate(body []byte, generation int64) (done bool, err error) {
 	dec := json.NewDecoder(strings.NewReader(string(body)))
 	dec.UseNumber()
 	if dec.Decode(&d) != nil {
-		return false, nil
+		return false, ErrUndecodable
 	}
 	phase, obs, cond := d.Phase, d.ObservedGeneration, d.Conditions
 	if d.Status != nil {
@@ -162,9 +168,10 @@ func Until(ctx context.Context, d Doer, t Target, mutation []byte, pollPath, get
 	}
 	gen := Generation(mutation)
 	deadline := o.Now().Add(o.Timeout)
+	var interval time.Duration // set by every poll: its Retry-After or o.Interval
 	for {
 		if t.Delete {
-			_, err := d.Do(ctx, client.Request{Method: "GET", Path: getPath, Operation: t.GetOp})
+			resp, err := d.Do(ctx, client.Request{Method: "GET", Path: getPath, Operation: t.GetOp})
 			var ae *client.APIError
 			if errors.As(err, &ae) && ae.Status == 404 {
 				return nil, nil
@@ -172,15 +179,20 @@ func Until(ctx context.Context, d Doer, t Target, mutation []byte, pollPath, get
 			if err != nil {
 				return nil, err
 			}
+			interval = pollInterval(resp, o)
 		} else {
 			resp, err := d.Do(ctx, client.Request{Method: "GET", Path: pollPath, Operation: t.PollOp})
 			if err != nil {
 				return nil, err
 			}
 			done, ferr := Evaluate(resp.Body, gen)
+			if errors.Is(ferr, ErrUndecodable) {
+				return nil, fmt.Errorf("%s: %w", t.PollOp, ferr)
+			}
 			if ferr != nil {
 				return nil, ferr
 			}
+			interval = pollInterval(resp, o)
 			if done {
 				if getPath == pollPath {
 					return resp.Body, nil
@@ -192,13 +204,21 @@ func Until(ctx context.Context, d Doer, t Target, mutation []byte, pollPath, get
 				return final.Body, nil
 			}
 		}
-		if !o.Now().Add(o.Interval).Before(deadline) {
+		if !o.Now().Add(interval).Before(deadline) {
 			return nil, fmt.Errorf("%w (%s)", ErrTimeout, o.Timeout)
 		}
-		if err := sleep(ctx, o.Interval); err != nil {
+		if err := sleep(ctx, interval); err != nil {
 			return nil, err
 		}
 	}
+}
+
+// pollInterval is the wait before the next poll: the response's Retry-After (capped) or the interval (D-C9).
+func pollInterval(resp *client.Response, o Options) time.Duration {
+	if ra := client.RetryAfter(resp.Header, o.Now(), o.ReadTimeout); ra > 0 {
+		return ra
+	}
+	return o.Interval
 }
 
 // Paths returns the poll and get paths of a wait target for a mutation: path parameters come

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/url"
@@ -81,6 +82,10 @@ func (p *pages) fetchJSON(ctx context.Context) ([]byte, *client.Response, error)
 			return nil, nil, &usageFail{err}
 		}
 	}
+	seen := map[string]bool{}
+	if next0 := start.T; next0 != "" {
+		seen[next0] = true
+	}
 	var all []json.RawMessage
 	var first *cli.Object
 	next := start.T
@@ -119,7 +124,9 @@ func (p *pages) fetchJSON(ctx context.Context) ([]byte, *client.Response, error)
 		}
 		var items []json.RawMessage
 		if raw, ok := obj.Get(key); ok {
-			_ = json.Unmarshal(raw, &items)
+			if err := json.Unmarshal(raw, &items); err != nil {
+				return nil, last, fmt.Errorf("the service returned a page whose %q is not a list", key)
+			}
 		}
 		pageToken := next
 		if skip > 0 {
@@ -148,6 +155,10 @@ func (p *pages) fetchJSON(ctx context.Context) ([]byte, *client.Response, error)
 		if nt == "" {
 			break
 		}
+		if seen[nt] {
+			return nil, last, errRepeatedToken
+		}
+		seen[nt] = true
 		if p.g.NoPaginate {
 			outToken = encodeToken(token{T: nt})
 			break
@@ -175,8 +186,10 @@ func (p *pages) fetchJSON(ctx context.Context) ([]byte, *client.Response, error)
 func (p *pages) fetchCSV(ctx context.Context, w *output.CSVWriter) (*client.Response, error) {
 	var last *client.Response
 	next := ""
+	seen := map[string]bool{}
 	if p.g.StartingToken != "" {
 		next = p.g.StartingToken
+		seen[next] = true
 	}
 	for {
 		q := url.Values{}
@@ -204,8 +217,15 @@ func (p *pages) fetchCSV(ctx context.Context, w *output.CSVWriter) (*client.Resp
 		if next == "" || p.g.NoPaginate {
 			return last, nil
 		}
+		if seen[next] {
+			return last, errRepeatedToken
+		}
+		seen[next] = true
 	}
 }
+
+// errRepeatedToken ends a listing whose service keeps answering with a token it already gave (FR-012).
+var errRepeatedToken = errors.New("the service returned the same page token twice")
 
 // usageFail marks an error that is a usage error (exit 252).
 type usageFail struct{ error }

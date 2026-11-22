@@ -103,6 +103,9 @@ func transport(env *cli.Env, g cli.Globals) http.RoundTripper {
 	return client.NewTransport(client.TransportOptions{ConnectTimeout: ct, DialContext: env.Dial})
 }
 
+// ReadTimeout is the --cli-read-timeout of an invocation (default client.DefaultReadTimeout).
+func ReadTimeout(g cli.Globals) time.Duration { return readTimeout(g) }
+
 func readTimeout(g cli.Globals) time.Duration {
 	if g.Set["cli-read-timeout"] {
 		return time.Duration(g.ReadTimeout) * time.Second

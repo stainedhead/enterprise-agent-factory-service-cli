@@ -94,7 +94,7 @@ func TestErrorsAndOddBodies(t *testing.T) {
 			t.Errorf("%s: %q %v", body, v, ok)
 		}
 	}
-	if !strings.Contains(Notice("5"), `If-Match: "5"`) {
+	if Notice("5") != "Applied to version 5; use --if-match to guard against concurrent changes." {
 		t.Error("notice")
 	}
 	_ = url.Values{}

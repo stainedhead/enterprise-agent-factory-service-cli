@@ -246,7 +246,8 @@ func versionOf(body []byte) (string, bool, error) {
 	return strings.TrimSpace(string(v)), true, nil
 }
 
-// Notice is the line printed to stderr when the CLI read the version itself.
+// Notice is the line printed to stderr after a successful write whose version the CLI read itself
+// (PRD CLI-10, D-R4).
 func Notice(version string) string {
-	return fmt.Sprintf("Read the current version %s; sending If-Match: \"%s\". Pass --if-match to choose a version.", version, version)
+	return fmt.Sprintf("Applied to version %s; use --if-match to guard against concurrent changes.", version)
 }

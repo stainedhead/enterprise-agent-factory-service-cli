@@ -3,6 +3,7 @@ package wait
 import (
 	"context"
 	"errors"
+	"net/http"
 	"strings"
 	"testing"
 	"time"
@@ -53,7 +54,8 @@ func TestEvaluate(t *testing.T) {
 		{`{"status":{"phase":"Pending"}}`, 0, false, ""},
 		{`{"status":{"phase":"Failed","conditions":[{"type":"X"}]}}`, 0, false, "Failed"},
 		{`{"status":{"phase":"Degraded"}}`, 0, false, "Degraded"},
-		{`not json`, 0, false, ""},
+		{`not json`, 0, false, "could not be decoded"},
+		{`[1,2]`, 0, false, "could not be decoded"},
 	}
 	for _, c := range cases {
 		done, err := Evaluate([]byte(c.body), c.gen)
@@ -130,5 +132,51 @@ func TestPathsFromRequestThenResponseID(t *testing.T) {
 	}
 	if p, _ := Paths(Target{PollOp: "Nope"}, nil, nil); p != "" {
 		t.Fatal("unknown op")
+	}
+}
+
+// FR-013: an undecodable status body ends the wait with an error that names the operation.
+func TestUndecodableStatusEndsTheWait(t *testing.T) {
+	f := &fake{replies: []any{ok(`<html>gateway</html>`)}}
+	_, err := Until(context.Background(), f, Table["UpdateTeam"], nil, "/p", "/g", opts())
+	if err == nil || errors.Is(err, ErrTimeout) || !strings.Contains(err.Error(), "GetTeamStatus") || !strings.Contains(err.Error(), "could not be decoded") {
+		t.Fatalf("%v", err)
+	}
+	if len(f.calls) != 1 {
+		t.Errorf("kept polling: %v", f.calls)
+	}
+}
+
+// FR-013 (D-C9): a poll response's Retry-After replaces the interval for the next poll, capped.
+func TestRetryAfterSetsThePollInterval(t *testing.T) {
+	withRA := func(v string) *client.Response {
+		r := ok(`{"status":{"phase":"Pending"}}`)
+		r.Header = http.Header{"Retry-After": {v}}
+		return r
+	}
+	var slept []time.Duration
+	o := opts()
+	now := time.Unix(0, 0)
+	o.Now = func() time.Time { return now }
+	o.Sleep = func(_ context.Context, d time.Duration) error { slept = append(slept, d); now = now.Add(d); return nil }
+	f := &fake{replies: []any{withRA("7"), ok(`{"status":{"phase":"Pending"}}`), withRA("86400"), ok(`{"status":{"phase":"Ready"}}`)}}
+	if _, err := Until(context.Background(), f, Table["UpdateTeam"], nil, "/p", "/p", o); err != nil {
+		t.Fatal(err)
+	}
+	want := []time.Duration{7 * time.Second, time.Second, 20 * time.Second}
+	if len(slept) != len(want) {
+		t.Fatalf("slept %v", slept)
+	}
+	for i := range want {
+		if slept[i] != want[i] {
+			t.Errorf("sleep %d = %v, want %v (all %v)", i, slept[i], want[i], slept)
+		}
+	}
+	// the read timeout lowers the cap
+	slept = nil
+	o.ReadTimeout = 3 * time.Second
+	f = &fake{replies: []any{withRA("10"), ok(`{"status":{"phase":"Ready"}}`)}}
+	if _, err := Until(context.Background(), f, Table["UpdateTeam"], nil, "/p", "/p", o); err != nil || slept[0] != 3*time.Second {
+		t.Errorf("%v %v", err, slept)
 	}
 }

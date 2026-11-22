@@ -68,6 +68,7 @@ func Run(ctx context.Context, inv *cli.Invocation) int {
 		return ReportError(env.Stderr, op.ID, st.Profile, currentVersionOn412(ctx, c, op, b.Path, err))
 	}
 
+	readVersion := "" // set when the CLI read the version itself; the notice follows the write
 	if op.IfMatch != spec.IfMatchNone && b.IfMatch == "" {
 		v, ok, err := safeupdate.Version(ctx, c, op, b.Path)
 		if err != nil {
@@ -75,7 +76,7 @@ func Run(ctx context.Context, inv *cli.Invocation) int {
 		}
 		if ok {
 			b.IfMatch = v
-			_, _ = fmt.Fprintln(env.Stderr, safeupdate.Notice(v))
+			readVersion = v
 		}
 	}
 
@@ -126,6 +127,9 @@ func Run(ctx context.Context, inv *cli.Invocation) int {
 		if err != nil {
 			return fail(err)
 		}
+		if readVersion != "" {
+			_, _ = fmt.Fprintln(env.Stderr, safeupdate.Notice(readVersion))
+		}
 		return cmd.Handle(inv, resp)
 	default:
 		resp, err = send(ctx, b.Query)
@@ -136,13 +140,16 @@ func Run(ctx context.Context, inv *cli.Invocation) int {
 	if err != nil {
 		return fail(err)
 	}
+	if readVersion != "" {
+		_, _ = fmt.Fprintln(env.Stderr, safeupdate.Notice(readVersion))
+	}
 	if resp.Replayed {
 		_, _ = fmt.Fprintln(env.Stderr, "The service answered from the stored response of an earlier request with this Idempotency-Key.")
 	}
 
 	if t, ok := wait.Table[op.ID]; ok && b.Wait {
 		poll, get := wait.Paths(t, b.Path, resp.Body)
-		final, err := wait.Until(ctx, c, t, resp.Body, poll, get, wait.Options{Timeout: b.WaitTimeout, Now: env.Now, Sleep: env.Sleep, Interval: 0})
+		final, err := wait.Until(ctx, c, t, resp.Body, poll, get, wait.Options{Timeout: b.WaitTimeout, Now: env.Now, Sleep: env.Sleep, Interval: 0, ReadTimeout: runtime.ReadTimeout(g)})
 		if err != nil {
 			if errors.Is(err, context.Canceled) {
 				_, _ = fmt.Fprintln(env.Stderr, "Interrupted while waiting: the request was sent and the change stands.")

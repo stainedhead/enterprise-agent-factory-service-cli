@@ -57,8 +57,29 @@ func TestUpdateAgentReadThenWrite(t *testing.T) {
 		}
 		clitest.Reply(w, 200, `{"id":"agt_1","version":6}`)
 	}, update...)
-	if r.Code != 0 || r.Req.Header.Get("If-Match") != `"5"` || !strings.Contains(r.Err, "version 5") {
+	if r.Code != 0 || r.Req.Header.Get("If-Match") != `"5"` || !strings.Contains(r.Err, "Applied to version 5; use --if-match to guard against concurrent changes.") {
 		t.Fatalf("%+v", r)
+	}
+}
+
+// CLI-10 (FR-016): the notice follows the write. A write that fails prints none, and an explicit
+// --if-match prints none.
+func TestSafeUpdateNoticeIsPrintedAfterTheWrite(t *testing.T) {
+	failing := func(w http.ResponseWriter, req *http.Request) {
+		if req.Method == "GET" {
+			clitest.Reply(w, 200, `{"id":"agt_1","version":5}`)
+			return
+		}
+		clitest.Reply(w, 412, `{"code":"PreconditionFailed","message":"changed","requestId":"r"}`)
+	}
+	r := clitest.Run(t, failing, update...)
+	if r.Code != 254 || strings.Contains(r.Err, "Applied to version") {
+		t.Fatalf("failed write printed the notice: %+v", r)
+	}
+	ok := func(w http.ResponseWriter, _ *http.Request) { clitest.Reply(w, 200, `{"id":"agt_1","version":6}`) }
+	r = clitest.Run(t, ok, append(append([]string{}, update...), "--if-match", "5")...)
+	if r.Code != 0 || strings.Contains(r.Err, "Applied to version") {
+		t.Fatalf("explicit if-match printed the notice: %+v", r)
 	}
 }
 

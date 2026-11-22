@@ -19,8 +19,8 @@ afs teams create-team --slug payments --display-name "Payments" --kind persisten
   final team. `Failed` or `Degraded` exits 254 with the conditions on stderr; a timeout exits 255
   (`--wait-timeout 10m`). The change stands either way.
 - `update-team`, `delete-team` and the lifecycle actions send `If-Match`. Without `--if-match`, `afs`
-  reads the current version, prints `Read the current version N; sending If-Match: "N"` on stderr and
-  sends it. With `--if-match 7` it sends exactly 7, and a stale version fails with 412 naming the current one.
+  reads the current version, sends it, and after the write succeeds prints
+  `Applied to version N; use --if-match to guard against concurrent changes.` on stderr. With `--if-match 7` it sends exactly 7, and a stale version fails with 412 naming the current one.
 - `suspend-team` makes every later write in the team fail with `Conflict`; `resume-team` lifts it.
   `delete-team` needs a platform role: a team-admin gets `AccessDenied` (exit 254).
 - `put-team-models --model-ids m1 m2` replaces the model list. The resource has no version, so no

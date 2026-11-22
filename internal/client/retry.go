@@ -85,3 +85,13 @@ func isDialError(err error) bool {
 	var op *net.OpError
 	return errors.As(err, &op) && op.Op == "dial"
 }
+
+// RetryAfter returns the delay a response asks for with Retry-After, capped at 20 s or the read timeout
+// when that is smaller. Zero means no usable header.
+func RetryAfter(h http.Header, now time.Time, readTimeout time.Duration) time.Duration {
+	d := parseRetryAfter(h, now)
+	if limit := retryAfterCap(readTimeout); d > limit {
+		return limit
+	}
+	return d
+}

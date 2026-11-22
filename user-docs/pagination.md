@@ -32,3 +32,9 @@ afs budgets list-costs --team-id team_1 --output csv --no-paginate --starting-to
 A resumed CSV run (`--starting-token`) leaves out the header row, so appending the pages yields one valid
 file. CSV tokens come from the service's `X-Afs-Next-Token` header and are not the same as the JSON
 `NextToken`; a token from one format cannot be used with the other.
+
+## Misbehaving services
+
+If the service answers with a page token it already gave (a loop), `afs` stops with exit 255 and
+`the service returned the same page token twice`. A page whose list member is not a list also exits 255,
+naming the member, instead of printing an empty result.
