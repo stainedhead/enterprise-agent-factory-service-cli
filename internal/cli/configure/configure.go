@@ -12,6 +12,7 @@ import (
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/runtime"
 	clisso "github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/sso"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/config"
+	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/output"
 )
 
 func init() {
@@ -115,7 +116,7 @@ func configureSSO(ctx context.Context, inv *cli.Invocation) int {
 			if p.IsDefault {
 				def = " (default)"
 			}
-			_, _ = fmt.Fprintf(env.Stderr, "%d) %s [%s]%s\n", i+1, p.Name, p.Kind, def)
+			_, _ = fmt.Fprintf(env.Stderr, "%d) %s [%s]%s\n", i+1, output.Sanitize(p.Name), output.Sanitize(p.Kind), def)
 		}
 		_, _ = fmt.Fprint(env.Stderr, "Choose a provider by number: ")
 		line, _ := bufio.NewReader(env.Stdin).ReadString('\n')

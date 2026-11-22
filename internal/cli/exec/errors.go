@@ -12,11 +12,13 @@ import (
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/safeupdate"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/wait"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/client"
+	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/output"
 )
 
 // ReportError prints err in the AWS style on w and returns the exit code (CLI-8):
 // 254 for an answer from the service, 130 for Ctrl-C, 255 for anything else.
 func ReportError(w io.Writer, opID, profile string, err error) int {
+	w = output.NewSanitizingWriter(w) // service-supplied text must not carry terminal escapes (FR-003)
 	if errors.Is(err, context.Canceled) {
 		return cli.ExitInterrupted
 	}

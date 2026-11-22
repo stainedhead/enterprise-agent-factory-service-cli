@@ -116,3 +116,29 @@ func TestDiscoveryAcceptsTrailingSlashIssuer(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+// FR-003: the verification URL and user code come from the identity provider and are printed raw otherwise.
+func TestDevicePromptIsSanitized(t *testing.T) {
+	var srv *httptest.Server
+	srv = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/.well-known/openid-configuration":
+			_, _ = fmt.Fprintf(w, `{"issuer":%q,"device_authorization_endpoint":"%s/device","token_endpoint":"%s/token"}`, srv.URL, srv.URL, srv.URL)
+		case "/device":
+			_, _ = w.Write([]byte(`{"device_code":"d","user_code":"AB\u001b[2JCD","verification_uri":"https://v\u001b]0;x\u0007","verification_uri_complete":"https://v?c=\u009b2J"}`))
+		default:
+			_, _ = w.Write([]byte(`{"access_token":"a"}`))
+		}
+	}))
+	defer srv.Close()
+	clk := &clock{t: time.Now()}
+	var out bytes.Buffer
+	if _, err := Login(context.Background(), loginOpts(clk, &out), srv.URL, "c"); err != nil {
+		t.Fatal(err)
+	}
+	for _, r := range out.String() {
+		if (r < 0x20 && r != '\n') || (r >= 0x7f && r <= 0x9f) {
+			t.Fatalf("control character %U in %q", r, out.String())
+		}
+	}
+}

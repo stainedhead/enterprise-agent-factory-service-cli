@@ -5,3 +5,5 @@ Decisions are recorded as D-R<n>; J authorized the whole flow, so open questions
 - D-R1 (OQ-1): control characters render as `\xNN` (`\u0085` style for C1), keeping values diagnosable.
 - D-R2 (OQ-2): `Retry-After` cap is 20 s, or the read timeout when smaller.
 - D-R4 (OQ-4): the safe-update notice follows the source PRD (after the write).
+- D-R6 (FR-001/002): provider and issuer validation lives in `config` (`ValidateIssuer`, `ValidateIdentifier`, `IsLoopbackHost`); `config.File.Set` is the single INI choke point and returns an error. An https token or device endpoint on a different host than the issuer is accepted (the PRD requires scheme and issuer equality, not same host).
+- D-R7 (FR-003): `output.Sanitize` covers `table`, `text`, error output (via a sanitizing writer in `ReportError`), the device prompt and the provider list. `json` keeps the service's bytes (ADR-005). JSON encoders escape C0 but not DEL or C1, so those two classes can still pass through `--output json`; this is the contract's stable-bytes rule and is documented in `user-docs/output.md`.

@@ -7,6 +7,8 @@ import (
 	"io"
 	"net/url"
 	"time"
+
+	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/output"
 )
 
 // Errors of the device flow; all are exit 255 (not API errors).
@@ -56,9 +58,9 @@ func Login(ctx context.Context, o LoginOptions, issuer, clientID string) (*Token
 	if uri == "" {
 		uri = dev.VerificationURI
 	}
-	_, _ = fmt.Fprintf(o.Out, "To sign in, open this URL in a browser:\n  %s\nand enter the code: %s\nWaiting for approval...\n", dev.VerificationURI, dev.UserCode)
+	_, _ = fmt.Fprintf(o.Out, "To sign in, open this URL in a browser:\n  %s\nand enter the code: %s\nWaiting for approval...\n", output.Sanitize(dev.VerificationURI), output.Sanitize(dev.UserCode))
 	if dev.VerificationURIComplete != "" {
-		_, _ = fmt.Fprintf(o.Out, "Or open this URL directly:\n  %s\n", uri)
+		_, _ = fmt.Fprintf(o.Out, "Or open this URL directly:\n  %s\n", output.Sanitize(uri))
 	}
 	interval := time.Duration(dev.Interval) * time.Second
 	if interval <= 0 {
