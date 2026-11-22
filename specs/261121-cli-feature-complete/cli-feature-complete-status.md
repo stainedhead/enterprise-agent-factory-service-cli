@@ -17,7 +17,7 @@
 | 3  | Implement Product               | ✅ Complete (M0-M6 done; M6-X2 re-pin and M6-X3 hand-offs open for J) | 2026-11-21T22:30:00Z | 2026-11-22 | — |
 | 4  | Documentation and User Docs     | ✅ Complete | 2026-11-22T00:45:02Z | 2026-11-22T00:47:19Z | 2 |
 | 5  | Code and Design Review          | ✅ Complete | 2026-11-22T00:47:19Z | 2026-11-22T00:54:52Z | 8 |
-| 6  | Prepare Review PRD              | ✅ Complete | 2026-11-22T00:54:52Z | 2026-11-22T00:55:54Z | 3 |
+| 6  | Prepare Review PRD              | ✅ Complete | 2026-11-22T00:54:52Z | 2026-11-22T00:55:54Z | 1 |
 | 7  | Archive Original Spec           | ⬜ Pending | — | — | — |
 | 8  | Spec Review Fixes               | ⬜ Pending | — | — | — |
 | 9  | Implement Review Fixes          | ⬜ Pending | — | — | — |
