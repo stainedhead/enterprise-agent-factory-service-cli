@@ -1,2 +1,2 @@
-Model       EffectiveF…  InputUsdPe…  OutputUsdP…  CacheRead  CacheWrite  Source
-anthropic…  2026-11-01…  3.00         15.00        0.30       3.75        manual
+Model                        Effect…  InputU…  Output…  CacheR…  CacheW…  Source
+anthropic.claude-sonnet-4-5  2026-1…  3.00     15.00    0.30     3.75     manual

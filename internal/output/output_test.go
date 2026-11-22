@@ -397,3 +397,26 @@ func TestGenericColumnsSpreadUsageKey(t *testing.T) {
 		t.Errorf("header %q", head)
 	}
 }
+
+// Identifiers are copied out of a table, so no id column is ever truncated, at any width; other
+// columns shrink first.
+func TestTableNeverTruncatesIDColumns(t *testing.T) {
+	const body = `{"items":[{"id":"team_01JD2Q3R4S5T6V7W8X9Y0Z0001","teamId":"team_01JD2Q3R4S5T6V7W8X9Y0Z0002","slug":"payments-platform","note":"a very long note that needs to shrink"}]}`
+	cols := []Column{{"Id", "id"}, {"TeamId", "teamId"}, {"Slug", "slug"}, {"Note", "note"}}
+	for _, w := range []int{40, 80, 120} {
+		got := render(t, body, RenderOptions{Format: "table", Options: Options{Columns: cols, Width: w}})
+		for _, id := range []string{"team_01JD2Q3R4S5T6V7W8X9Y0Z0001", "team_01JD2Q3R4S5T6V7W8X9Y0Z0002"} {
+			if !strings.Contains(got, id) {
+				t.Errorf("width %d: id %s truncated:\n%s", w, id, got)
+			}
+		}
+	}
+	got := render(t, body, RenderOptions{Format: "table", Options: Options{Columns: cols, Width: 80}})
+	if !strings.Contains(got, "…") {
+		t.Errorf("expected the note to shrink first:\n%s", got)
+	}
+	vert := render(t, `{"id":"team_01JD2Q3R4S5T6V7W8X9Y0Z0001","note":"x"}`, RenderOptions{Format: "table", Options: Options{Columns: cols[:1], Width: 20}})
+	if !strings.Contains(vert, "team_01JD2Q3R4S5T6V7W8X9Y0Z0001") {
+		t.Errorf("vertical id truncated:\n%s", vert)
+	}
+}

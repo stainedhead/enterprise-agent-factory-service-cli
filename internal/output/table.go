@@ -176,11 +176,17 @@ func WriteTable(w io.Writer, v any, o Options) error {
 			}
 		}
 	}
-	fit(widths, width)
+	keep := make([]bool, len(cols))
+	for i, c := range cols {
+		keep[i] = isIDColumn(c)
+	}
+	fit(widths, keep, width)
 	var b strings.Builder
 	line := func(vals []string, header bool) {
 		for i, s := range vals {
-			s = trunc(s, widths[i])
+			if !keep[i] {
+				s = trunc(s, widths[i])
+			}
 			if i == len(vals)-1 {
 				s = strings.TrimRight(s, " ")
 			} else {
@@ -216,8 +222,22 @@ func boldKeepPad(s string, on bool) string {
 	return bold(trimmed, true) + s[len(trimmed):]
 }
 
-// fit shrinks the widest columns until the line (with two-space gaps) fits.
-func fit(widths []int, limit int) {
+// isIDColumn is true for a column that holds an identifier (id, teamId, agentId, ...). Users copy
+// identifiers out of a table, so they are never truncated.
+func isIDColumn(c Column) bool {
+	leaf := c.Path
+	if i := strings.LastIndexByte(leaf, '.'); i >= 0 {
+		leaf = leaf[i+1:]
+	}
+	if leaf == "" {
+		leaf = c.Header
+	}
+	return leaf == "id" || leaf == "Id" || strings.HasSuffix(leaf, "Id") || strings.HasSuffix(leaf, "ID")
+}
+
+// fit shrinks the widest shrinkable columns until the line (with two-space gaps) fits. Columns
+// marked keep (identifiers) are never shrunk; when only they remain the line overflows.
+func fit(widths []int, keep []bool, limit int) {
 	total := func() int {
 		t := 2 * (len(widths) - 1)
 		for _, w := range widths {
@@ -226,13 +246,16 @@ func fit(widths []int, limit int) {
 		return t
 	}
 	for total() > limit {
-		wi := 0
+		wi := -1
 		for i, w := range widths {
-			if w > widths[wi] {
+			if keep[i] {
+				continue
+			}
+			if wi < 0 || w > widths[wi] {
 				wi = i
 			}
 		}
-		if widths[wi] <= minColWidth {
+		if wi < 0 || widths[wi] <= minColWidth {
 			return
 		}
 		widths[wi]--
@@ -253,7 +276,11 @@ func writeVertical(w io.Writer, row any, cols []Column, o Options, width int) er
 	var b strings.Builder
 	b.WriteString(boldKeepPad(pad("Field", kw), o.Color) + "  " + bold("Value", o.Color) + "\n")
 	for _, c := range cols {
-		b.WriteString(pad(c.Header, kw) + "  " + strings.TrimRight(trunc(strings.NewReplacer("\n", " ", "\t", " ").Replace(cell(lookup(row, c.Path))), vw), " ") + "\n")
+		v := strings.NewReplacer("\n", " ", "\t", " ").Replace(cell(lookup(row, c.Path)))
+		if !isIDColumn(c) {
+			v = trunc(v, vw)
+		}
+		b.WriteString(pad(c.Header, kw) + "  " + strings.TrimRight(v, " ") + "\n")
 	}
 	_, err := io.WriteString(w, b.String())
 	return err
