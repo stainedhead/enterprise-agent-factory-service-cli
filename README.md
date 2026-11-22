@@ -1,11 +1,18 @@
 # enterprise-agent-factory-service-cli
 
-`afs`, the command line for the Enterprise Agent Factory Service. It follows AWS CLI conventions:
-`afs <service> <operation> --options`, named profiles, `--output json|table|text|yaml`, `--query`,
-pagination, and AWS CLI exit codes. It talks only to the service's REST API, whose role-based access
-decides what each user can do.
+**`afs`, the command line for the [Enterprise Agent Factory Service](https://github.com/stainedhead/enterprise-agent-factory-service).**
+If you know the AWS CLI, you already know `afs`: `afs <service> <operation> --options`, named profiles,
+`--output json|table|text|yaml|csv`, `--query` (JMESPath), automatic pagination, `--cli-input-json`,
+`--generate-cli-skeleton` and AWS CLI exit codes. It talks only to the service's REST API, whose role-based
+access decides what each user can do.
 
-Part of [enterprise-agent-factory-service](https://github.com/stainedhead/enterprise-agent-factory-service).
+| | |
+|---|---|
+| **Use it** | [Getting started](user-docs/getting-started.md) · [Install](user-docs/install.md) · [Command reference](user-docs/reference/README.md) · [All user docs](user-docs/README.md) |
+| **Understand it** | [Product summary](docs/product-summary.md) · [Technical details](docs/technical-details.md) · [Decisions](docs/architectural-decision-record.md) · [PRD](enterprise-agent-factory-service-cli-PRD.md) |
+| **Change it** | [CONTRIBUTING.md](CONTRIBUTING.md) · [AGENTS.md](AGENTS.md) · [API contract](https://github.com/stainedhead/enterprise-agent-factory-service/blob/main/docs/contracts/api-contract.md) |
+
+![afs help](docs/images/afs-help.svg)
 
 **Status:** feature complete against API contract 1.1 (milestones M0 to M6). All 180 operations of the pinned
 contract are commands, with examples, table columns, golden help and output, and an `AccessDenied` test each, plus the
@@ -19,7 +26,8 @@ What every command gets: AWS-style global options, profiles, five output formats
 
 ## Install
 
-Download a signed release archive or build from source; see [Install](user-docs/install.md). Then follow
+Build from source with `make build` until the first release is tagged; signed archives and Homebrew
+(`brew install stainedhead/tap/afs`) follow it. See [Install](user-docs/install.md), then
 [Getting started](user-docs/getting-started.md).
 
 ## Examples
@@ -32,6 +40,23 @@ afs agents list-agents --team-id team_01J... --query "items[?status.phase=='Runn
 afs budgets put-budget --team-id team_01J... --amount-usd 40000 --period monthly --thresholds 50 80 100
 afs secrets create-secret --team-id team_01J... --name github-bot-key --scope team --secret-value file://key.pem
 ```
+
+## How it works
+
+Every operation is generated from the pinned OpenAPI contract, so the CLI cannot drift from the API, and
+every invocation runs the same pipeline: parse, build, safe update with `If-Match`, send, paginate or wait,
+render.
+
+![From contract to command](docs/images/cli-command-pipeline.svg)
+
+Secret values are accepted only from a file, standard input or a hidden prompt, never as an argument that
+would land in shell history:
+
+![Secret values never go on the command line](docs/images/afs-secret-guard.svg)
+
+## Where it fits
+
+![Architecture overview](docs/images/architecture-overview.svg)
 
 ## Build and test
 
@@ -74,4 +99,9 @@ User guides ([index](user-docs/README.md)):
 Technical documentation: [product summary](docs/product-summary.md), [product details](docs/product-details.md),
 [technical details](docs/technical-details.md), [architectural decisions](docs/architectural-decision-record.md).
 
-Contributor and agent rules: [AGENTS.md](AGENTS.md). Why this repository exists: [INTENT.md](INTENT.md).
+## Contributing
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) and the product-wide
+[contributing guide](https://github.com/stainedhead/enterprise-agent-factory-service/blob/main/CONTRIBUTING.md).
+The terminal images above are real `afs` output, rendered by `node docs/images/source/terminal-shots.mjs`
+after `make build`. Why this repository exists: [INTENT.md](INTENT.md).
