@@ -30,3 +30,17 @@ Inherited decisions PC-CLI-D1..D12 are in the PRD section 7.1. Decisions taken w
 ## Lessons learned
 
 (at completion)
+
+## Review of the spec (step 2)
+
+| Dimension | Status | Note |
+|---|---|---|
+| Acceptance criteria | Pass | CLI-US-24..35 numbered, each with a named test |
+| Technical approach | Pass | table-driven overrides plus one local command |
+| Component coverage | Pass | spec.md section 6 and 7 name packages and files |
+| Edge case handling | Pass (after fix) | spec.md section 13 added |
+| Open questions | Pass (after fix) | spec.md section 14 added |
+| Out-of-scope clarity | Pass | PRD section 2.1 |
+| Status initialization | Pass | Phase 0 in progress |
+
+Verdict: implementation-ready.

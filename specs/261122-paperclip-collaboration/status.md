@@ -6,9 +6,9 @@
 
 | Phase | Name | Status |
 |---|---|---|
-| 0 | Initial research (PRD) | In Progress |
-| 1 | Specification (spec.md) | Not Started |
-| 2 | Research and data modeling | Not Started |
+| 0 | Initial research (PRD) | Complete |
+| 1 | Specification (spec.md) | Complete (reviewed) |
+| 2 | Research and data modeling | In Progress |
 | 3 | Architecture and planning | Not Started |
 | 4 | Task breakdown | Not Started |
 | 5 | Implementation (M7 to M10) | Not Started |

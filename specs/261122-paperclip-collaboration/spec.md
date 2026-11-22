@@ -98,3 +98,26 @@ M7 (C1), M8 (C2), M9 (C3), M10 (C4); each ends with a commit, a push and `Curren
 ## 12. References
 
 PRD (this directory); API contract v1.3.1; change PRD (root); `docs/solution-design.md` §11 (root).
+
+## 13. Edge cases (added in review, step 2)
+
+| Case | Behaviour |
+|---|---|
+| `put-collaboration` with the version read answering 404 | No `If-Match`; API's `409 collaboration_agent_missing` shown (PC-CLI-D2) |
+| `put-collaboration --wait` sees a stale `Ready` | Keep polling until `observedGeneration >= generation` |
+| `restApiUrl` null, http, userinfo, port, IP literal, foreign domain | Exit 255 without any call to the edge (US-25.5) |
+| Paperclip key file mode wider than 0600, empty, over 4096 bytes, whitespace | 255 for mode, 252 for shape; before any call |
+| Edge answers with a non-envelope body (WAF, Paperclip 5xx) | `HttpError`, exit 254, body to stdout, never in stderr |
+| `3xx` from the edge | Printed, exit 0, never followed |
+| Concurrent writes | `412` message with the current version, exit 254 |
+| Empty / null inputs | `--registration-mode` omitted omits the member; no `--collaboration-*` flags omit `collaboration` |
+| Permission boundaries | Always the API's answer; hints add words only; the CLI never predicts a 403 (workload-token refusal is a credential-handling rule, PC-CLI-D3) |
+| External failure: GetTeamCollaboration read fails inside invoke-api | The error is printed as for any operation (exit 254) and no request reaches the edge |
+
+## 14. Open questions
+
+| # | Question | Owner | Decision |
+|---|---|---|---|
+| OQ-1 | PC-CLI-OQ5: fill an omitted surface from the current value? | J | No: both required (built). Revisit after console and CLI are used together |
+| OQ-2 | Pin to an unmerged restapi commit? | coordinator | Yes, 99bfcfc; follow-up to re-pin SOURCE to the merge commit |
+| OQ-3 | Root `skills/` entry cannot be edited from this repository | coordinator | Recorded as a root follow-up (listed in the report); the command list for it is in `user-docs/collaboration.md` |
