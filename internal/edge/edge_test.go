@@ -151,7 +151,7 @@ type roundTripFunc func(*http.Request) (*http.Response, error)
 
 func (f roundTripFunc) RoundTrip(r *http.Request) (*http.Response, error) { return f(r) }
 
-func TestDoRetryAfterHonouredAndCapped(t *testing.T) {
+func TestDoRetryAfterHonoured(t *testing.T) {
 	n := 0
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		n++
@@ -170,7 +170,8 @@ func TestDoRetryAfterHonouredAndCapped(t *testing.T) {
 	defer srv.Close()
 	var s []time.Duration
 	resp, err := newClient(http.DefaultTransport, &s).Do(context.Background(), Request{Origin: srv.URL, Method: "HEAD", Path: "/"})
-	if err != nil || resp.Status != 200 || len(s) != 2 || s[0] < 3*time.Second || s[1] != 20*time.Second {
+	// 429 with Retry-After 3 is waited for; the 503 that asks for 9999 s is returned as it is (FR-R1)
+	if err != nil || resp.Status != 503 || len(s) != 1 || s[0] < 3*time.Second || n != 2 {
 		t.Fatalf("%v %v %v", resp, err, s)
 	}
 	resp.Close()
@@ -224,5 +225,31 @@ func TestDebugNeverLogsQueryOrBody(t *testing.T) {
 	}
 	if !strings.Contains(dbg.String(), "DEBUG collab request: POST t.example/p attempt=1") {
 		t.Error(dbg.String())
+	}
+}
+
+// FR-R1
+func TestDoRetryAfterOverCapNotRetried(t *testing.T) {
+	n := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		n++
+		w.Header().Set("Retry-After", "9999")
+		w.WriteHeader(503)
+	}))
+	defer srv.Close()
+	var s []time.Duration
+	resp, err := newClient(http.DefaultTransport, &s).Do(context.Background(), Request{Origin: srv.URL, Method: "GET", Path: "/"})
+	if err != nil || resp.Status != 503 || n != 1 || len(s) != 0 {
+		t.Fatalf("%v %v n=%d slept=%v", resp, err, n, s)
+	}
+	resp.Close()
+}
+
+// FR-R4
+func TestReadKeyDirectory(t *testing.T) {
+	d := t.TempDir()
+	_, err := ReadKey(d, nil)
+	if err == nil || !strings.Contains(err.Error(), d) {
+		t.Errorf("%v", err)
 	}
 }

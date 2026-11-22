@@ -107,3 +107,9 @@ func IsDialError(err error) bool { return isDialError(err) }
 
 // MaxAttempts is the total number of tries of a request (CLI-11).
 const MaxAttempts = maxAttempts
+
+// RetryAfterExceedsCap reports a Retry-After longer than the client will wait (20 s, or the read timeout when
+// that is smaller): the caller must not retry, as client.Do does not.
+func RetryAfterExceedsCap(h http.Header, now time.Time, readTimeout time.Duration) bool {
+	return parseRetryAfter(h, now) > retryAfterCap(readTimeout)
+}

@@ -119,6 +119,11 @@ func (c *Client) Do(ctx context.Context, req Request) (*Response, error) {
 				return nil, err
 			}
 		case idempotent && (resp.Status == http.StatusTooManyRequests || resp.Status == http.StatusServiceUnavailable) && attempt < client.MaxAttempts:
+			if client.RetryAfterExceedsCap(resp.Header, c.Now(), c.ReadTimeout) {
+				c.debugf("Retry-After is over the limit; not retrying")
+				resp.Attempts = attempt
+				return resp, nil
+			}
 			delay = client.RetryAfter(resp.Header, c.Now(), c.ReadTimeout) // capped at 20 s or the read timeout
 			resp.Close()
 			last = fmt.Errorf("HTTP %d", resp.Status)

@@ -276,3 +276,20 @@ func TestMissingCommandOrOperationExits252(t *testing.T) {
 		}
 	}
 }
+
+// FR-R3: an unknown option that starts a known one names it; a value after = is never echoed.
+func TestUnknownOptionSuggestsAndNeverEchoesValue(t *testing.T) {
+	r := testRegistry(t)
+	r.AddLocal(&Command{Service: "tool", Name: "run", Local: func(context.Context, *Invocation) int { return 0 },
+		Options: []Option{{Flag: "--key-file", Kind: String}, {Flag: "--other", Kind: String}}})
+	for args, want := range map[string]string{
+		"--key":            "Did you mean --key-file?",
+		"--key=SECRET-VAL": "Did you mean --key-file?",
+		"--zzz=SECRET-VAL": "Unknown options: --zzz\n",
+	} {
+		env, _, eb := testEnv()
+		if code := Run(context.Background(), []string{"tool", "run", args}, env, r); code != ExitUsage || !strings.Contains(eb.String(), want) || strings.Contains(eb.String(), "SECRET-VAL") {
+			t.Errorf("%s: %d %q", args, code, eb.String())
+		}
+	}
+}

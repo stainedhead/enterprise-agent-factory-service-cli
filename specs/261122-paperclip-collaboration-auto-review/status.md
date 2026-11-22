@@ -3,5 +3,5 @@
 | Phase | Status |
 |---|---|
 | 0 to 4 | Complete |
-| 5 Implementation | Not Started (0/5 tasks) |
-| 6 Archival | Not Started |
+| 5 Implementation | Complete (5/5 tasks) |
+| 6 Archival | Complete (archived in step 10) |
