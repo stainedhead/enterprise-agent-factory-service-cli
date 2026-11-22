@@ -92,7 +92,12 @@ func operationHelp(w io.Writer, c *cli.Command) {
 			if o.Required {
 				req = " (required)"
 			}
-			p("       %s (%s)%s\n", o.Flag, kindNames[o.Kind], req)
+			if o.Sensitive {
+				// a no-echo prompt is offered on a terminal, so the option is not marked required (FR-018)
+				p("       %s (file://PATH | fileb://PATH | -; prompted without echo when omitted on a terminal)\n", o.Flag)
+			} else {
+				p("       %s (%s)%s\n", o.Flag, kindNames[o.Kind], req)
+			}
 			if o.Desc != "" {
 				p("          %s\n", o.Desc)
 			}
@@ -103,7 +108,7 @@ func operationHelp(w io.Writer, c *cli.Command) {
 				p("          Range: %s to %s\n", bound(o.Min), bound(o.Max))
 			}
 			if o.Sensitive {
-				p("          Give file://PATH, fileb://PATH or - (standard input), or leave the option out to be prompted without echo on a terminal; never the value itself.\n")
+				p("          Never pass the value itself on the command line.\n")
 			}
 		}
 	}

@@ -99,7 +99,7 @@ func TestGlobalOptions(t *testing.T) {
 			env.Home = home
 			env.StdoutTTY = true
 			started := false
-			env.StartPager = func(cmd string, o io.Writer) (io.WriteCloser, func() error, error) {
+			env.StartPager = func(_ context.Context, cmd string, o io.Writer) (io.WriteCloser, func() error, error) {
 				started = true
 				return nopWC{o}, func() error { return nil }, nil
 			}

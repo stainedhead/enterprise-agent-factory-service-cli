@@ -80,7 +80,7 @@ func TestOperationHelpShowsOptionsPermissionAndExample(t *testing.T) {
 		}
 	}
 	_, out, _ = afs(t, "secrets", "put-secret-value", "help")
-	if !strings.Contains(out, "never the value itself") {
+	if !strings.Contains(out, "Never pass the value itself") {
 		t.Error("secret option help does not say how to pass the value")
 	}
 }
@@ -89,6 +89,38 @@ func TestHelpInvalidChoices252(t *testing.T) {
 	for _, args := range [][]string{{"nope", "help"}, {"teams", "nope", "help"}} {
 		if code, _, errOut := afs(t, args...); code != 252 || !strings.Contains(errOut, "Invalid choice") {
 			t.Errorf("%v: %d %q", args, code, errOut)
+		}
+	}
+}
+
+// FR-018: a sensitive option is not "(required)" (a hidden prompt is offered) and its help lists the safe forms.
+func TestSensitiveOptionHelpListsSafeFormsAndIsNotRequired(t *testing.T) {
+	for _, op := range spec.All() {
+		if op.Body == nil {
+			continue
+		}
+		hasSecret := false
+		for _, f := range op.Body.Fields {
+			if f.Schema.Ref == "SecretValue" {
+				hasSecret = true
+			}
+		}
+		if !hasSecret {
+			continue
+		}
+		code, out, _ := afs(t, op.Service, op.Command, "help")
+		if code != 0 {
+			t.Fatalf("%s: exit %d", op.ID, code)
+		}
+		line := ""
+		for _, l := range strings.Split(out, "\n") {
+			if strings.Contains(l, "--secret-value") && strings.Contains(l, "(") {
+				line = strings.TrimSpace(l)
+				break
+			}
+		}
+		if line != "--secret-value (file://PATH | fileb://PATH | -; prompted without echo when omitted on a terminal)" {
+			t.Errorf("%s: option line = %q", op.ID, line)
 		}
 	}
 }

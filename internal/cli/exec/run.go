@@ -102,7 +102,7 @@ func Run(ctx context.Context, inv *cli.Invocation) int {
 
 	// the output sink
 	_, pagerSet := env.LookupEnv("AFS_PAGER")
-	sink, closeSink := output.OpenPager(output.PagerOptions{Out: env.Stdout, TTY: env.StdoutTTY, NoPager: g.NoCLIPager, Getenv: env.Getenv, Start: env.StartPager}, pagerSet)
+	sink, closeSink := output.OpenPager(ctx, output.PagerOptions{Out: env.Stdout, TTY: env.StdoutTTY, NoPager: g.NoCLIPager, Getenv: env.Getenv, Start: env.StartPager}, pagerSet)
 	defer func() { _ = closeSink() }()
 
 	var resp *client.Response

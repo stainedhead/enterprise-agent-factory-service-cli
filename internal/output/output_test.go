@@ -2,11 +2,13 @@ package output
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"io"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/golden"
 )
@@ -258,7 +260,7 @@ type fakePager struct {
 	closed  bool
 }
 
-func (f *fakePager) start(cmd string, out io.Writer) (io.WriteCloser, func() error, error) {
+func (f *fakePager) start(ctx context.Context, cmd string, out io.Writer) (io.WriteCloser, func() error, error) {
 	f.cmd, f.started = cmd, true
 	return &pagerWriter{f: f}, func() error { return nil }, nil
 }
@@ -273,14 +275,14 @@ func pagerEnv(m map[string]string) func(string) string { return func(k string) s
 func TestPagerOnlyOnTTY(t *testing.T) {
 	var out bytes.Buffer
 	fp := &fakePager{}
-	w, done := OpenPager(PagerOptions{Out: &out, TTY: false, Getenv: pagerEnv(nil), Start: fp.start}, false)
+	w, done := OpenPager(context.Background(), PagerOptions{Out: &out, TTY: false, Getenv: pagerEnv(nil), Start: fp.start}, false)
 	_, _ = w.Write([]byte("x"))
 	_ = done()
 	if fp.started || out.String() != "x" {
 		t.Error("pager used without a terminal")
 	}
 	out.Reset()
-	w, done = OpenPager(PagerOptions{Out: &out, TTY: true, Getenv: pagerEnv(nil), Start: fp.start}, false)
+	w, done = OpenPager(context.Background(), PagerOptions{Out: &out, TTY: true, Getenv: pagerEnv(nil), Start: fp.start}, false)
 	_, _ = w.Write([]byte("y"))
 	_ = done()
 	if !fp.started || fp.cmd != "less -R" || fp.buf.String() != "y" || !fp.closed {
@@ -291,7 +293,7 @@ func TestPagerOnlyOnTTY(t *testing.T) {
 func TestNoCLIPager(t *testing.T) {
 	var out bytes.Buffer
 	fp := &fakePager{}
-	w, _ := OpenPager(PagerOptions{Out: &out, TTY: true, NoPager: true, Getenv: pagerEnv(nil), Start: fp.start}, false)
+	w, _ := OpenPager(context.Background(), PagerOptions{Out: &out, TTY: true, NoPager: true, Getenv: pagerEnv(nil), Start: fp.start}, false)
 	_, _ = w.Write([]byte("z"))
 	if fp.started || out.String() != "z" {
 		t.Error("--no-cli-pager ignored")
@@ -310,7 +312,7 @@ func TestPagerCommandPrecedenceAndEmptyDisables(t *testing.T) {
 	}
 	var out bytes.Buffer
 	fp := &fakePager{}
-	w, _ := OpenPager(PagerOptions{Out: &out, TTY: true, Getenv: pagerEnv(nil), Start: fp.start}, true)
+	w, _ := OpenPager(context.Background(), PagerOptions{Out: &out, TTY: true, Getenv: pagerEnv(nil), Start: fp.start}, true)
 	_, _ = w.Write([]byte("q"))
 	if fp.started {
 		t.Error("empty AFS_PAGER did not disable the pager")
@@ -321,7 +323,7 @@ func TestEmptyAFSPagerDisables(t *testing.T) { TestPagerCommandPrecedenceAndEmpt
 
 func TestPagerStartFailureWritesDirect(t *testing.T) {
 	var out bytes.Buffer
-	w, _ := OpenPager(PagerOptions{Out: &out, TTY: true, Getenv: pagerEnv(nil), Start: func(string, io.Writer) (io.WriteCloser, func() error, error) {
+	w, _ := OpenPager(context.Background(), PagerOptions{Out: &out, TTY: true, Getenv: pagerEnv(nil), Start: func(context.Context, string, io.Writer) (io.WriteCloser, func() error, error) {
 		return nil, nil, errors.New("no such pager")
 	}}, false)
 	_, _ = w.Write([]byte("d"))
@@ -332,7 +334,7 @@ func TestPagerStartFailureWritesDirect(t *testing.T) {
 
 func TestStartProcessRealPager(t *testing.T) {
 	var out bytes.Buffer
-	w, wait, err := startProcess("cat", &out)
+	w, wait, err := startProcess(context.Background(), "cat", &out)
 	if err != nil {
 		t.Skip("cat not available")
 	}
@@ -341,10 +343,10 @@ func TestStartProcessRealPager(t *testing.T) {
 	if err := wait(); err != nil || out.String() != "through cat" {
 		t.Errorf("out %q err %v", out.String(), err)
 	}
-	if _, _, err := startProcess("", &out); err == nil {
+	if _, _, err := startProcess(context.Background(), "", &out); err == nil {
 		t.Error("empty command accepted")
 	}
-	if _, _, err := startProcess("definitely-not-a-program-xyz", &out); err == nil {
+	if _, _, err := startProcess(context.Background(), "definitely-not-a-program-xyz", &out); err == nil {
 		t.Error("missing program started")
 	}
 }
@@ -422,5 +424,40 @@ func TestTableNeverTruncatesIDColumns(t *testing.T) {
 	vert := render(t, `{"id":"team_01JD2Q3R4S5T6V7W8X9Y0Z0001","note":"x"}`, RenderOptions{Format: "table", Options: Options{Columns: cols[:1], Width: 20}})
 	if !strings.Contains(vert, "team_01JD2Q3R4S5T6V7W8X9Y0Z0001") {
 		t.Errorf("vertical id truncated:\n%s", vert)
+	}
+}
+
+// FR-020: the pager starts under the command context, so cancelling the command reaches it.
+func TestPagerReceivesTheCommandContext(t *testing.T) {
+	type key struct{}
+	ctx := context.WithValue(context.Background(), key{}, "cmd")
+	var got context.Context
+	var out bytes.Buffer
+	w, done := OpenPager(ctx, PagerOptions{Out: &out, TTY: true, Getenv: pagerEnv(nil), Start: func(c context.Context, _ string, _ io.Writer) (io.WriteCloser, func() error, error) {
+		got = c
+		return nopCloser{io.Discard}, func() error { return nil }, nil
+	}}, false)
+	_, _ = w.Write([]byte("x"))
+	_ = done()
+	if got == nil || got.Value(key{}) != "cmd" {
+		t.Errorf("pager context = %v", got)
+	}
+}
+
+func TestRealPagerStopsWhenTheContextIsCancelled(t *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	var out bytes.Buffer
+	w, wait, err := startProcess(ctx, "cat", &out)
+	if err != nil {
+		t.Skip("cat unavailable")
+	}
+	_, _ = w.Write([]byte("hi"))
+	cancel()
+	done := make(chan struct{})
+	go func() { _ = wait(); close(done) }()
+	select {
+	case <-done:
+	case <-time.After(10 * time.Second):
+		t.Fatal("pager still running after the context was cancelled")
 	}
 }

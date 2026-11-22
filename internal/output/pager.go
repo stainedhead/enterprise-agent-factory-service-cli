@@ -3,8 +3,10 @@ package output
 import (
 	"context"
 	"io"
+	"os"
 	"os/exec"
 	"strings"
+	"time"
 )
 
 // PagerOptions decide whether output goes through a pager (D-C22).
@@ -14,7 +16,7 @@ type PagerOptions struct {
 	NoPager bool
 	Getenv  func(string) string
 	// Start starts the pager command; nil runs it with os/exec, writing to Out.
-	Start func(command string, out io.Writer) (io.WriteCloser, func() error, error)
+	Start func(ctx context.Context, command string, out io.Writer) (io.WriteCloser, func() error, error)
 }
 
 // PagerCommand returns the pager command: AFS_PAGER, else PAGER, else "less -R". An AFS_PAGER that
@@ -39,7 +41,7 @@ func (nopCloser) Close() error { return nil }
 // OpenPager returns the writer to use and a function to call when done (it closes the pager and
 // waits for it). Without a terminal, with --no-cli-pager or with an empty AFS_PAGER the output is
 // written directly.
-func OpenPager(o PagerOptions, afsPagerSet bool) (io.WriteCloser, func() error) {
+func OpenPager(ctx context.Context, o PagerOptions, afsPagerSet bool) (io.WriteCloser, func() error) {
 	direct := func() (io.WriteCloser, func() error) { return nopCloser{o.Out}, func() error { return nil } }
 	if !o.TTY || o.NoPager {
 		return direct()
@@ -52,7 +54,7 @@ func OpenPager(o PagerOptions, afsPagerSet bool) (io.WriteCloser, func() error) 
 	if start == nil {
 		start = startProcess
 	}
-	w, wait, err := start(cmd, o.Out)
+	w, wait, err := start(ctx, cmd, o.Out)
 	if err != nil {
 		return direct()
 	}
@@ -62,12 +64,15 @@ func OpenPager(o PagerOptions, afsPagerSet bool) (io.WriteCloser, func() error) 
 	}
 }
 
-func startProcess(command string, out io.Writer) (io.WriteCloser, func() error, error) {
+func startProcess(ctx context.Context, command string, out io.Writer) (io.WriteCloser, func() error, error) {
 	fields := strings.Fields(command)
 	if len(fields) == 0 {
 		return nil, nil, io.ErrClosedPipe
 	}
-	c := exec.CommandContext(context.Background(), fields[0], fields[1:]...) //nolint:gosec // the user's own pager command
+	c := exec.CommandContext(ctx, fields[0], fields[1:]...) //nolint:gosec // the user's own pager command
+	// on cancellation ask the pager to stop (it restores the terminal) rather than kill it
+	c.Cancel = func() error { return c.Process.Signal(os.Interrupt) }
+	c.WaitDelay = 2 * time.Second
 	c.Stdout = out
 	in, err := c.StdinPipe()
 	if err != nil {

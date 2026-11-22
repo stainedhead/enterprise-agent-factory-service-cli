@@ -39,7 +39,7 @@ type Env struct {
 	// nil when stdin is not a terminal.
 	ReadPassword func(prompt string) ([]byte, error)
 	// StartPager starts the pager command writing to out; nil uses os/exec.
-	StartPager func(command string, out io.Writer) (io.WriteCloser, func() error, error)
+	StartPager func(ctx context.Context, command string, out io.Writer) (io.WriteCloser, func() error, error)
 }
 
 // Getenv returns the value of an environment variable.
