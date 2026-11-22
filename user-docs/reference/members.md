@@ -43,7 +43,7 @@ OPTIONS
        --group-name (string)
        --identity-provider-id (string)
        --role (string) (required)
-          Possible values: team_admin, team_viewer
+          Possible values: team_admin, team_collaborator, team_viewer
        --subject-type (string) (required)
           Possible values: user, group
        --user-id (string)
@@ -193,7 +193,7 @@ OPTIONS
           Team id; taken from the path only
        --binding-id (string) (required)
        --role (string) (required)
-          Possible values: team_admin, team_viewer
+          Possible values: team_admin, team_collaborator, team_viewer
        --if-match (string)
           Apply only if the resource is at this version (safe update).
 

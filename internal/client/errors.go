@@ -73,6 +73,26 @@ func (e *APIError) AmbiguousRepos() []AmbiguousRepo {
 // UnownedRepos is details.unownedRepos: repositories no team owns, as host/owner/repo.
 func (e *APIError) UnownedRepos() []string { return e.detailList("unownedRepos") }
 
+// FieldError is one entry of details.fields of a ValidationError.
+type FieldError struct {
+	Field  string `json:"field"`
+	Reason string `json:"reason"`
+}
+
+// Fields is details.fields: the member and the reason of each validation failure.
+func (e *APIError) Fields() []FieldError {
+	var d struct {
+		F []FieldError `json:"fields"`
+	}
+	if json.Unmarshal(e.Details, &d) != nil {
+		return nil
+	}
+	return d.F
+}
+
+// Patterns is details.patterns of a SecretDetected answer: pattern types only, never content.
+func (e *APIError) Patterns() []string { return e.detailList("patterns") }
+
 // Reason is details.reason (for example idempotency_in_progress).
 func (e *APIError) Reason() string { return e.detail("reason") }
 

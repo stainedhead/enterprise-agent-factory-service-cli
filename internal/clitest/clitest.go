@@ -51,6 +51,10 @@ type Options struct {
 	Home string
 	// LookPath replaces the program lookup (nil keeps the real one); NoAWS makes `aws` missing.
 	LookPath func(string) (string, error)
+	// Now and Sleep replace the clock of --wait (a virtual clock makes a timeout instant); nil keeps
+	// the real clock and a Sleep that returns at once.
+	Now   func() time.Time
+	Sleep func(context.Context, time.Duration) error
 }
 
 // Reply writes a JSON response with a request id.
@@ -108,6 +112,12 @@ func RunWith(t *testing.T, o Options, h http.HandlerFunc, args ...string) Result
 		env.LookPath = o.LookPath
 	}
 	env.Sleep = func(context.Context, time.Duration) error { return nil }
+	if o.Sleep != nil {
+		env.Sleep = o.Sleep
+	}
+	if o.Now != nil {
+		env.Now = o.Now
+	}
 	res.Code = cli.Run(context.Background(), args, env, reg)
 	res.Out, res.Err = out.String(), eb.String()
 	if n := len(res.Requests); n > 0 {

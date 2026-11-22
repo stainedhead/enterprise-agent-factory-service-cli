@@ -18,7 +18,7 @@ const fixture = `{"items":[
  {"id":"team_01JD2Q3R4S5T6V7W8X9Y0Z0002","slug":"billing","state":"suspended","version":12,"quotas":{"cpu":"4"},"tags":[],"note":"a very long note that should be truncated when the table is narrow enough to need it","status":{"phase":"Pending"}}
 ],"nextToken":"abc"}`
 
-var teamCols = []Column{{"Id", "id"}, {"Slug", "slug"}, {"State", "state"}, {"Phase", "status.phase"}, {"Version", "version"}}
+var teamCols = []Column{{Header: "Id", Path: "id"}, {Header: "Slug", Path: "slug"}, {Header: "State", Path: "state"}, {Header: "Phase", Path: "status.phase"}, {Header: "Version", Path: "version"}}
 
 func render(t *testing.T, raw string, o RenderOptions) string {
 	t.Helper()
@@ -120,7 +120,7 @@ func TestGoldenTableAndText(t *testing.T) {
 
 // NFR accessibility: table readable at 80 columns, with a truncation mark.
 func TestTableFitsIn80Columns(t *testing.T) {
-	cols := []Column{{"Id", "id"}, {"Slug", "slug"}, {"State", "state"}, {"Note", "note"}, {"Version", "version"}}
+	cols := []Column{{Header: "Id", Path: "id"}, {Header: "Slug", Path: "slug"}, {Header: "State", Path: "state"}, {Header: "Note", Path: "note"}, {Header: "Version", Path: "version"}}
 	got := render(t, fixture, RenderOptions{Format: "table", Options: Options{Columns: cols}})
 	for _, l := range strings.Split(strings.TrimRight(got, "\n"), "\n") {
 		if n := len([]rune(l)); n > 80 {
@@ -130,7 +130,7 @@ func TestTableFitsIn80Columns(t *testing.T) {
 	if !strings.Contains(got, "…") {
 		t.Errorf("no truncation mark:\n%s", got)
 	}
-	vert := render(t, `{"note":"`+strings.Repeat("x", 200)+`"}`, RenderOptions{Format: "table", Options: Options{Columns: []Column{{"Note", "note"}}}})
+	vert := render(t, `{"note":"`+strings.Repeat("x", 200)+`"}`, RenderOptions{Format: "table", Options: Options{Columns: []Column{{Header: "Note", Path: "note"}}}})
 	for _, l := range strings.Split(strings.TrimRight(vert, "\n"), "\n") {
 		if len([]rune(l)) > 80 {
 			t.Errorf("vertical line too long: %d", len([]rune(l)))
@@ -199,7 +199,7 @@ func TestColor(t *testing.T) {
 	if plain := render(t, fixture, RenderOptions{Format: "table", Options: Options{Columns: teamCols}}); strings.Contains(plain, "\x1b") {
 		t.Error("escape codes without color")
 	}
-	vert := render(t, `{"a":1}`, RenderOptions{Format: "table", Options: Options{Columns: []Column{{"A", "a"}}, Color: true}})
+	vert := render(t, `{"a":1}`, RenderOptions{Format: "table", Options: Options{Columns: []Column{{Header: "A", Path: "a"}}, Color: true}})
 	if !strings.Contains(vert, "\x1b[1mValue") {
 		t.Errorf("vertical header: %q", vert)
 	}
@@ -404,7 +404,7 @@ func TestGenericColumnsSpreadUsageKey(t *testing.T) {
 // columns shrink first.
 func TestTableNeverTruncatesIDColumns(t *testing.T) {
 	const body = `{"items":[{"id":"team_01JD2Q3R4S5T6V7W8X9Y0Z0001","teamId":"team_01JD2Q3R4S5T6V7W8X9Y0Z0002","slug":"payments-platform","note":"a very long note that needs to shrink"}]}`
-	cols := []Column{{"Id", "id"}, {"TeamId", "teamId"}, {"Slug", "slug"}, {"Note", "note"}}
+	cols := []Column{{Header: "Id", Path: "id"}, {Header: "TeamId", Path: "teamId"}, {Header: "Slug", Path: "slug"}, {Header: "Note", Path: "note"}}
 	for _, w := range []int{40, 80, 120} {
 		got := render(t, body, RenderOptions{Format: "table", Options: Options{Columns: cols, Width: w}})
 		for _, id := range []string{"team_01JD2Q3R4S5T6V7W8X9Y0Z0001", "team_01JD2Q3R4S5T6V7W8X9Y0Z0002"} {
@@ -418,7 +418,7 @@ func TestTableNeverTruncatesIDColumns(t *testing.T) {
 		t.Errorf("expected the note to shrink first:\n%s", got)
 	}
 	url := "https://example.com/exports/exp_1.json?X-Amz-Signature=0123456789abcdef0123456789abcdef"
-	if got := render(t, `{"downloadUrl":"`+url+`"}`, RenderOptions{Format: "table", Options: Options{Columns: []Column{{"DownloadUrl", "downloadUrl"}}, Width: 40}}); !strings.Contains(got, url) {
+	if got := render(t, `{"downloadUrl":"`+url+`"}`, RenderOptions{Format: "table", Options: Options{Columns: []Column{{Header: "DownloadUrl", Path: "downloadUrl"}}, Width: 40}}); !strings.Contains(got, url) {
 		t.Errorf("URL truncated:\n%s", got)
 	}
 	vert := render(t, `{"id":"team_01JD2Q3R4S5T6V7W8X9Y0Z0001","note":"x"}`, RenderOptions{Format: "table", Options: Options{Columns: cols[:1], Width: 20}})
@@ -459,5 +459,21 @@ func TestRealPagerStopsWhenTheContextIsCancelled(t *testing.T) {
 	case <-done:
 	case <-time.After(10 * time.Second):
 		t.Fatal("pager still running after the context was cancelled")
+	}
+}
+
+// CLI-US-24.1: a column with Null set shows that text for an absent or null value in table and text.
+func TestColumnNullPlaceholder(t *testing.T) {
+	v := &Object{Keys: []string{"hostname", "name"}, Vals: map[string]any{"hostname": nil, "name": "a"}}
+	cols := []Column{{Header: "Hostname", Path: "hostname", Null: "-"}, {Header: "Name", Path: "name"}}
+	var tb, tx strings.Builder
+	if err := WriteTable(&tb, v, Options{Columns: cols}); err != nil {
+		t.Fatal(err)
+	}
+	if err := WriteText(&tx, v, Options{Columns: cols}); err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(tb.String(), "-") || tx.String() != "-\ta\n" {
+		t.Errorf("table %q text %q", tb.String(), tx.String())
 	}
 }

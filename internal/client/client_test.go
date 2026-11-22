@@ -151,7 +151,7 @@ func TestContractVersionNoticeOncePerProcess(t *testing.T) {
 	cases := []struct {
 		server string
 		notice bool
-	}{{"1.2.0", true}, {"1.1.0", false}, {"1.0.5", false}, {"2.0.0", true}, {"", false}, {"junk", false}}
+	}{{"1.2.0", true}, {"1.3.1", true}, {"1.1.0", false}, {"1.0.5", false}, {"2.0.0", true}, {"", false}, {"junk", false}}
 	for _, tc := range cases {
 		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if tc.server != "" {

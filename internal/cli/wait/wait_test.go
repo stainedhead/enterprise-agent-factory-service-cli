@@ -180,3 +180,25 @@ func TestRetryAfterSetsThePollInterval(t *testing.T) {
 		t.Errorf("%v %v", err, slept)
 	}
 }
+
+// CLI-US-24.6, 34.3 (ADR-008): the wait entry of PutTeamCollaboration polls and reads the resource
+// itself, and the two POST actions of the service have no wait entry.
+func TestCollaborationWaitTableMatchesSnapshot(t *testing.T) {
+	target, ok := Table["PutTeamCollaboration"]
+	if !ok || target.PollOp != "GetTeamCollaboration" || target.GetOp != "GetTeamCollaboration" || target.Delete {
+		t.Fatalf("target = %+v ok %v", target, ok)
+	}
+	put, get := spec.ByID("PutTeamCollaboration"), spec.ByID(target.PollOp)
+	if get == nil || get.Method != "GET" || get.Path != put.Path {
+		t.Errorf("the poll operation must be the GET of the same path: %+v", get)
+	}
+	for _, id := range []string{"ConnectAgentToCollaboration", "DisconnectAgentFromCollaboration", "RotateCollaborationKeys", "ListCollaborationLinks"} {
+		if _, has := Table[id]; has {
+			t.Errorf("%s must have no wait entry", id)
+		}
+	}
+	poll, read := Paths(target, map[string]string{"teamId": "team_1"}, []byte(`{}`))
+	if poll != "/v1/teams/team_1/collaboration" || read != poll {
+		t.Errorf("paths %q %q", poll, read)
+	}
+}

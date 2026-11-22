@@ -8,10 +8,10 @@
 |---|---|---|
 | 0 | Initial research (PRD) | Complete |
 | 1 | Specification (spec.md) | Complete (reviewed) |
-| 2 | Research and data modeling | In Progress |
-| 3 | Architecture and planning | Not Started |
-| 4 | Task breakdown | Not Started |
-| 5 | Implementation (M7 to M10) | Not Started |
+| 2 | Research and data modeling | Complete |
+| 3 | Architecture and planning | Complete |
+| 4 | Task breakdown | Complete |
+| 5 | Implementation (M7 to M10) | In Progress: M7 done (11/38 tasks) |
 | 6 | Completion and archival | Not Started |
 
 ## Phase 0 checklist
@@ -27,3 +27,4 @@ None.
 ## Recent activity
 
 - 2026-11-22: spec created from `paperclip-collaboration-PRD.md`.
+- 2026-11-22: M7 complete: re-pin to 99bfcfc, redaction, hints, collaboration service (5 operations), agents, secrets, teams, members, api-keys, docs first cut; gate green, coverage 94.7%.

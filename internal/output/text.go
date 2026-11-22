@@ -26,7 +26,7 @@ func WriteText(w io.Writer, v any, o Options) error {
 	for _, row := range rows {
 		vals := make([]string, len(cols))
 		for i, c := range cols {
-			vals[i] = Sanitize(strings.NewReplacer("\t", " ", "\n", " ").Replace(cell(lookup(row, c.Path))))
+			vals[i] = Sanitize(strings.NewReplacer("\t", " ", "\n", " ").Replace(cellOf(row, c)))
 		}
 		b.WriteString(strings.Join(vals, "\t") + "\n")
 	}

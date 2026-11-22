@@ -56,6 +56,8 @@ type Override struct {
 	// Accept is the media type to ask for when the operation answers in something other than JSON
 	// (application/yaml for a kubeconfig); the response is then given to Handle.
 	Accept string
+	// OmitEmptyBody sends no request body when the operation's body is optional and no member was given.
+	OmitEmptyBody bool
 	// Handle takes over a successful response instead of the generic rendering (kubeconfig).
 	Handle AfterFunc
 }
@@ -64,6 +66,7 @@ type Override struct {
 func (a *Override) merge(b Override) error {
 	a.Examples = append(a.Examples, b.Examples...)
 	a.Dynamic = a.Dynamic || b.Dynamic
+	a.OmitEmptyBody = a.OmitEmptyBody || b.OmitEmptyBody
 	a.Extra = append(a.Extra, b.Extra...)
 	a.Optional = append(a.Optional, b.Optional...)
 	if b.ResultKey != "" {

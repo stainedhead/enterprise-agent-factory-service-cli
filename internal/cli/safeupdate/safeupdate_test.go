@@ -45,8 +45,8 @@ func TestReaderTableCoversAllIfMatchOperations(t *testing.T) {
 			without = append(without, op.ID)
 		}
 	}
-	if len(withReader)+len(without) != 59 {
-		t.Fatalf("%d If-Match operations, want 59", len(withReader)+len(without))
+	if len(withReader)+len(without) != 60 {
+		t.Fatalf("%d If-Match operations, want 60", len(withReader)+len(without))
 	}
 	t.Logf("no reader (send no If-Match): %s", strings.Join(without, ", "))
 	if len(without) > 6 {
@@ -192,6 +192,23 @@ func TestListWithOddPagesSendsNoVersion(t *testing.T) {
 		f := &fake{byPath: map[string][]any{"/v1/teams/team_1/stages|": {body}}}
 		if v, ok, err := Version(context.Background(), f, op, path); ok || err != nil {
 			t.Errorf("%s: %q %v %v", name, v, ok, err)
+		}
+	}
+}
+
+// CLI-US-34.3 (ADR-008): PutTeamCollaboration reads GetTeamCollaboration at the same path; the two
+// new POST actions have no reader and no If-Match, and no operation of the collaboration service
+// outside the Put has one.
+func TestReaderTableMatchesSnapshot(t *testing.T) {
+	put := spec.ByID("PutTeamCollaboration")
+	r := ReaderFor(put)
+	if r == nil || r.Get == nil || r.Get.ID != "GetTeamCollaboration" || r.Path != put.Path || r.Match != "" {
+		t.Fatalf("reader of PutTeamCollaboration = %+v", r)
+	}
+	for _, id := range []string{"ConnectAgentToCollaboration", "DisconnectAgentFromCollaboration", "RotateCollaborationKeys"} {
+		op := spec.ByID(id)
+		if op.IfMatch != spec.IfMatchNone { // the executor reads a version only when the operation takes If-Match
+			t.Errorf("%s must take no If-Match, so no version is read", id)
 		}
 	}
 }

@@ -16,6 +16,7 @@ const (
 var agentColumns = []output.Column{
 	{Header: "Id", Path: "id"}, {Header: "Name", Path: "name"}, {Header: "Template", Path: "template"},
 	{Header: "Model", Path: "modelId"}, {Header: "Paused", Path: "paused"}, {Header: "Phase", Path: "status.phase"},
+	{Header: "Role", Path: "role"}, {Header: "Paperclip", Path: "collaboration.linkState", Null: "-"},
 	{Header: "Version", Path: "version"},
 }
 

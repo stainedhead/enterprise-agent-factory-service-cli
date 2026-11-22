@@ -22,6 +22,10 @@ afs agents pause-agent|resume-agent|restart-agent --team-id team_... --agent-id 
   `list-agent-templates`, and `afs models list-models`.
 - Agent configuration values: `list-config-values`, `put-config-value --name N --source literal --value V`
   (or `--source namespace` to take the team's value), `delete-config-value`.
+- Paperclip: `create-agent --role collaboration` creates the team's collaboration agent; `--collaboration-connect`
+  or `--no-collaboration-connect` and `--paperclip-agent-id` control whether a worker is connected; `list-agents --role`
+  and `list-agent-templates --capability paperclip` filter. The agent table has `Role` and `Paperclip` columns. See
+  [Team collaboration](collaboration.md).
 - Per-agent external systems: `list-external-systems`, `set-external-system-state --system-id ... --enabled` or `--no-enabled`.
 
 ## Secrets
@@ -34,6 +38,9 @@ listings or logs. Give it one of:
 | A file (read byte for byte, no newline trimming) | `--secret-value file://token.txt` (`fileb://` is the same) |
 | Standard input | `printf '%s' "$TOKEN" \| afs secrets create-secret ... --secret-value -` |
 | A hidden prompt (terminal only) | leave `--secret-value` out |
+
+`afs secrets list-secrets --managed-by user|afs|paperclip` filters by who manages a secret (a `ManagedBy` column shows it); AFS and
+Paperclip secrets are read-only here and answer `409 Conflict` (see [Team collaboration](collaboration.md)).
 
 A plain argument (`--secret-value hunter2`) exits 252 before any call. With no terminal and no value the
 command exits 252 and lists the options above. The value must be UTF-8 text of 1 to 65,536 bytes.

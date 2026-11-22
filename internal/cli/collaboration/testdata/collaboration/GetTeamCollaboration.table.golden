@@ -1,0 +1,9 @@
+Field             Value
+Hostname          payments-factory.collab.example.com
+WebUi             true
+RestApi           false
+EffectiveWebUi    true
+EffectiveRestApi  false
+Mode              manual
+Phase             Ready
+Version           4

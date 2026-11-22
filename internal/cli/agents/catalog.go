@@ -14,7 +14,7 @@ var storageClassColumns = []output.Column{
 
 var templateColumns = []output.Column{
 	{Header: "Name", Path: "name"}, {Header: "Harness", Path: "harness"}, {Header: "Digest", Path: "currentDigest"},
-	{Header: "Enabled", Path: "enabled"}, {Header: "Version", Path: "version"},
+	{Header: "Capabilities", Path: "capabilities", Null: "-"}, {Header: "Enabled", Path: "enabled"}, {Header: "Version", Path: "version"},
 }
 
 func registerCatalog(r *cli.Registry) {
@@ -23,5 +23,6 @@ func registerCatalog(r *cli.Registry) {
 	}})
 	r.Override(cli.Override{Op: "ListAgentTemplates", Columns: templateColumns, Examples: []cli.Example{
 		{Title: "List the agent templates", Command: "afs agents list-agent-templates"},
+		{Title: "List the templates that can run Paperclip", Command: "afs agents list-agent-templates --capability paperclip"},
 	}})
 }

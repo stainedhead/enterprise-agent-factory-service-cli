@@ -38,7 +38,7 @@ func TestCommandTableMatchesSnapshot(t *testing.T) {
 			wantCmd[op.OperationID] = op.CLI
 		}
 	}
-	if len(wantCmd) != 180 {
+	if len(wantCmd) != 187 {
 		t.Fatalf("snapshot has %d CLI operations", len(wantCmd))
 	}
 	for id, name := range wantCmd {
@@ -111,15 +111,18 @@ func TestDoneOperationsHaveGoldens(t *testing.T) {
 	}
 }
 
-// M6-X1, CLI-US-7: the feature is complete: all 180 operations have a command, none is held back
+// wantMilestone is raised only by a milestone's exit task (PC-CLI-D9: M7 to M10).
+const wantMilestone = 7
+
+// M6-X1, CLI-US-7: the feature is complete: all 187 operations have a command, none is held back
 // by the milestone gate, and none lacks an example or columns.
 func TestFeatureCompleteStrict(t *testing.T) {
 	reg, err := services.NewRegistry()
 	if err != nil {
 		t.Fatal(err)
 	}
-	if cli.CurrentMilestone != 6 {
-		t.Fatalf("CurrentMilestone = %d, want 6", cli.CurrentMilestone)
+	if cli.CurrentMilestone != wantMilestone {
+		t.Fatalf("CurrentMilestone = %d, want %d", cli.CurrentMilestone, wantMilestone)
 	}
 	n := 0
 	for _, c := range reg.All() {
@@ -127,12 +130,12 @@ func TestFeatureCompleteStrict(t *testing.T) {
 			continue
 		}
 		n++
-		if cli.MilestoneOf(c.Op.ID) > 6 {
+		if cli.MilestoneOf(c.Op.ID) > 10 { // later milestones are held back by design until their exit task
 			t.Errorf("%s has milestone %d", c.Op.ID, cli.MilestoneOf(c.Op.ID))
 		}
 	}
-	if n != 180 {
-		t.Errorf("%d operation commands, want 180", n)
+	if n != 187 {
+		t.Errorf("%d operation commands, want 187", n)
 	}
 	if p := reg.Pending(); len(p) != 0 {
 		t.Errorf("pending: %v", p)

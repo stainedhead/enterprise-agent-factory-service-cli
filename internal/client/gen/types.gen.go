@@ -11,14 +11,17 @@ import (
 
 // Defines values for AddMemberRequestRole.
 const (
-	AddMemberRequestRoleTeamAdmin  AddMemberRequestRole = "team_admin"
-	AddMemberRequestRoleTeamViewer AddMemberRequestRole = "team_viewer"
+	AddMemberRequestRoleTeamAdmin        AddMemberRequestRole = "team_admin"
+	AddMemberRequestRoleTeamCollaborator AddMemberRequestRole = "team_collaborator"
+	AddMemberRequestRoleTeamViewer       AddMemberRequestRole = "team_viewer"
 )
 
 // Valid indicates whether the value is a known member of the AddMemberRequestRole enum.
 func (e AddMemberRequestRole) Valid() bool {
 	switch e {
 	case AddMemberRequestRoleTeamAdmin:
+		return true
+	case AddMemberRequestRoleTeamCollaborator:
 		return true
 	case AddMemberRequestRoleTeamViewer:
 		return true
@@ -81,6 +84,48 @@ func (e AgentIamIdentity) Valid() bool {
 	}
 }
 
+// Defines values for AgentRole.
+const (
+	AgentRoleCollaboration AgentRole = "collaboration"
+	AgentRoleWorker        AgentRole = "worker"
+)
+
+// Valid indicates whether the value is a known member of the AgentRole enum.
+func (e AgentRole) Valid() bool {
+	switch e {
+	case AgentRoleCollaboration:
+		return true
+	case AgentRoleWorker:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for AgentCollaborationLinkState.
+const (
+	AgentCollaborationLinkStateDisabled AgentCollaborationLinkState = "disabled"
+	AgentCollaborationLinkStateFailed   AgentCollaborationLinkState = "failed"
+	AgentCollaborationLinkStateLinked   AgentCollaborationLinkState = "linked"
+	AgentCollaborationLinkStatePending  AgentCollaborationLinkState = "pending"
+)
+
+// Valid indicates whether the value is a known member of the AgentCollaborationLinkState enum.
+func (e AgentCollaborationLinkState) Valid() bool {
+	switch e {
+	case AgentCollaborationLinkStateDisabled:
+		return true
+	case AgentCollaborationLinkStateFailed:
+		return true
+	case AgentCollaborationLinkStateLinked:
+		return true
+	case AgentCollaborationLinkStatePending:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for AgentIdentityKind.
 const (
 	AgentIdentityKindAwsIamRole        AgentIdentityKind = "aws_iam_role"
@@ -123,6 +168,21 @@ func (e AgentIdentityStatus) Valid() bool {
 	case AgentIdentityStatusError:
 		return true
 	case AgentIdentityStatusPending:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for AgentTemplateCapabilities.
+const (
+	AgentTemplateCapabilitiesPaperclip AgentTemplateCapabilities = "paperclip"
+)
+
+// Valid indicates whether the value is a known member of the AgentTemplateCapabilities enum.
+func (e AgentTemplateCapabilities) Valid() bool {
+	switch e {
+	case AgentTemplateCapabilitiesPaperclip:
 		return true
 	default:
 		return false
@@ -196,6 +256,7 @@ func (e AllowedAccountStatus) Valid() bool {
 const (
 	ApiKeyRoleSecurityOperator ApiKeyRole = "security_operator"
 	ApiKeyRoleTeamAdmin        ApiKeyRole = "team_admin"
+	ApiKeyRoleTeamCollaborator ApiKeyRole = "team_collaborator"
 	ApiKeyRoleTeamViewer       ApiKeyRole = "team_viewer"
 )
 
@@ -205,6 +266,8 @@ func (e ApiKeyRole) Valid() bool {
 	case ApiKeyRoleSecurityOperator:
 		return true
 	case ApiKeyRoleTeamAdmin:
+		return true
+	case ApiKeyRoleTeamCollaborator:
 		return true
 	case ApiKeyRoleTeamViewer:
 		return true
@@ -324,6 +387,102 @@ func (e CatalogSystemRequestCategory) Valid() bool {
 	case CatalogSystemRequestCategoryLlm:
 		return true
 	case CatalogSystemRequestCategoryOther:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CollaborationEffectiveReasons.
+const (
+	BaseDomainUnset             CollaborationEffectiveReasons = "base_domain_unset"
+	ProviderWithoutCollabClient CollaborationEffectiveReasons = "provider_without_collab_client"
+	ServiceEndpointsOff         CollaborationEffectiveReasons = "service_endpoints_off"
+	TeamNotAllowed              CollaborationEffectiveReasons = "team_not_allowed"
+)
+
+// Valid indicates whether the value is a known member of the CollaborationEffectiveReasons enum.
+func (e CollaborationEffectiveReasons) Valid() bool {
+	switch e {
+	case BaseDomainUnset:
+		return true
+	case ProviderWithoutCollabClient:
+		return true
+	case ServiceEndpointsOff:
+		return true
+	case TeamNotAllowed:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CollaborationEndpointPhase.
+const (
+	CollaborationEndpointPhaseDegraded CollaborationEndpointPhase = "Degraded"
+	CollaborationEndpointPhaseFailed   CollaborationEndpointPhase = "Failed"
+	CollaborationEndpointPhasePending  CollaborationEndpointPhase = "Pending"
+	CollaborationEndpointPhaseReady    CollaborationEndpointPhase = "Ready"
+)
+
+// Valid indicates whether the value is a known member of the CollaborationEndpointPhase enum.
+func (e CollaborationEndpointPhase) Valid() bool {
+	switch e {
+	case CollaborationEndpointPhaseDegraded:
+		return true
+	case CollaborationEndpointPhaseFailed:
+		return true
+	case CollaborationEndpointPhasePending:
+		return true
+	case CollaborationEndpointPhaseReady:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CollaborationEndpointTeamState.
+const (
+	CollaborationEndpointTeamStateActive    CollaborationEndpointTeamState = "active"
+	CollaborationEndpointTeamStateDeleted   CollaborationEndpointTeamState = "deleted"
+	CollaborationEndpointTeamStateDeleting  CollaborationEndpointTeamState = "deleting"
+	CollaborationEndpointTeamStateSuspended CollaborationEndpointTeamState = "suspended"
+)
+
+// Valid indicates whether the value is a known member of the CollaborationEndpointTeamState enum.
+func (e CollaborationEndpointTeamState) Valid() bool {
+	switch e {
+	case CollaborationEndpointTeamStateActive:
+		return true
+	case CollaborationEndpointTeamStateDeleted:
+		return true
+	case CollaborationEndpointTeamStateDeleting:
+		return true
+	case CollaborationEndpointTeamStateSuspended:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CollaborationLinkLinkState.
+const (
+	CollaborationLinkLinkStateDisabled CollaborationLinkLinkState = "disabled"
+	CollaborationLinkLinkStateFailed   CollaborationLinkLinkState = "failed"
+	CollaborationLinkLinkStateLinked   CollaborationLinkLinkState = "linked"
+	CollaborationLinkLinkStatePending  CollaborationLinkLinkState = "pending"
+)
+
+// Valid indicates whether the value is a known member of the CollaborationLinkLinkState enum.
+func (e CollaborationLinkLinkState) Valid() bool {
+	switch e {
+	case CollaborationLinkLinkStateDisabled:
+		return true
+	case CollaborationLinkLinkStateFailed:
+		return true
+	case CollaborationLinkLinkStateLinked:
+		return true
+	case CollaborationLinkLinkStatePending:
 		return true
 	default:
 		return false
@@ -471,16 +630,37 @@ func (e CreateAgentRequestIamIdentity) Valid() bool {
 	}
 }
 
+// Defines values for CreateAgentRequestRole.
+const (
+	CreateAgentRequestRoleCollaboration CreateAgentRequestRole = "collaboration"
+	CreateAgentRequestRoleWorker        CreateAgentRequestRole = "worker"
+)
+
+// Valid indicates whether the value is a known member of the CreateAgentRequestRole enum.
+func (e CreateAgentRequestRole) Valid() bool {
+	switch e {
+	case CreateAgentRequestRoleCollaboration:
+		return true
+	case CreateAgentRequestRoleWorker:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for CreateApiKeyRequestRole.
 const (
-	CreateApiKeyRequestRoleTeamAdmin  CreateApiKeyRequestRole = "team_admin"
-	CreateApiKeyRequestRoleTeamViewer CreateApiKeyRequestRole = "team_viewer"
+	CreateApiKeyRequestRoleTeamAdmin        CreateApiKeyRequestRole = "team_admin"
+	CreateApiKeyRequestRoleTeamCollaborator CreateApiKeyRequestRole = "team_collaborator"
+	CreateApiKeyRequestRoleTeamViewer       CreateApiKeyRequestRole = "team_viewer"
 )
 
 // Valid indicates whether the value is a known member of the CreateApiKeyRequestRole enum.
 func (e CreateApiKeyRequestRole) Valid() bool {
 	switch e {
 	case CreateApiKeyRequestRoleTeamAdmin:
+		return true
+	case CreateApiKeyRequestRoleTeamCollaborator:
 		return true
 	case CreateApiKeyRequestRoleTeamViewer:
 		return true
@@ -854,6 +1034,7 @@ const (
 	ErrorCodeNotFound             ErrorCode = "NotFound"
 	ErrorCodePreconditionFailed   ErrorCode = "PreconditionFailed"
 	ErrorCodePreconditionRequired ErrorCode = "PreconditionRequired"
+	ErrorCodeSecretDetected       ErrorCode = "SecretDetected"
 	ErrorCodeThrottled            ErrorCode = "Throttled"
 	ErrorCodeUnauthenticated      ErrorCode = "Unauthenticated"
 	ErrorCodeUnavailable          ErrorCode = "Unavailable"
@@ -874,6 +1055,8 @@ func (e ErrorCode) Valid() bool {
 	case ErrorCodePreconditionFailed:
 		return true
 	case ErrorCodePreconditionRequired:
+		return true
+	case ErrorCodeSecretDetected:
 		return true
 	case ErrorCodeThrottled:
 		return true
@@ -1118,15 +1301,18 @@ func (e LogDestinationKind) Valid() bool {
 
 // Defines values for MeTeamRole.
 const (
-	MeTeamRoleTeamAdmin  MeTeamRole = "team_admin"
-	MeTeamRoleTeamViewer MeTeamRole = "team_viewer"
-	MeTeamRoleWorkload   MeTeamRole = "workload"
+	MeTeamRoleTeamAdmin        MeTeamRole = "team_admin"
+	MeTeamRoleTeamCollaborator MeTeamRole = "team_collaborator"
+	MeTeamRoleTeamViewer       MeTeamRole = "team_viewer"
+	MeTeamRoleWorkload         MeTeamRole = "workload"
 )
 
 // Valid indicates whether the value is a known member of the MeTeamRole enum.
 func (e MeTeamRole) Valid() bool {
 	switch e {
 	case MeTeamRoleTeamAdmin:
+		return true
+	case MeTeamRoleTeamCollaborator:
 		return true
 	case MeTeamRoleTeamViewer:
 		return true
@@ -1139,14 +1325,17 @@ func (e MeTeamRole) Valid() bool {
 
 // Defines values for MemberRole.
 const (
-	MemberRoleTeamAdmin  MemberRole = "team_admin"
-	MemberRoleTeamViewer MemberRole = "team_viewer"
+	MemberRoleTeamAdmin        MemberRole = "team_admin"
+	MemberRoleTeamCollaborator MemberRole = "team_collaborator"
+	MemberRoleTeamViewer       MemberRole = "team_viewer"
 )
 
 // Valid indicates whether the value is a known member of the MemberRole enum.
 func (e MemberRole) Valid() bool {
 	switch e {
 	case MemberRoleTeamAdmin:
+		return true
+	case MemberRoleTeamCollaborator:
 		return true
 	case MemberRoleTeamViewer:
 		return true
@@ -1383,6 +1572,21 @@ func (e PrincipalType) Valid() bool {
 	}
 }
 
+// Defines values for PutAgentTemplateRequestCapabilities.
+const (
+	PutAgentTemplateRequestCapabilitiesPaperclip PutAgentTemplateRequestCapabilities = "paperclip"
+)
+
+// Valid indicates whether the value is a known member of the PutAgentTemplateRequestCapabilities enum.
+func (e PutAgentTemplateRequestCapabilities) Valid() bool {
+	switch e {
+	case PutAgentTemplateRequestCapabilitiesPaperclip:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for PutBudgetRequestOnExhaust.
 const (
 	PutBudgetRequestOnExhaustBlock  PutBudgetRequestOnExhaust = "block"
@@ -1467,6 +1671,24 @@ func (e PutStorageClassRequestVolumeType) Valid() bool {
 	case PutStorageClassRequestVolumeTypeGp3:
 		return true
 	case PutStorageClassRequestVolumeTypeIo2:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for PutTeamCollaborationRequestRegistrationMode.
+const (
+	PutTeamCollaborationRequestRegistrationModeManaged PutTeamCollaborationRequestRegistrationMode = "managed"
+	PutTeamCollaborationRequestRegistrationModeManual  PutTeamCollaborationRequestRegistrationMode = "manual"
+)
+
+// Valid indicates whether the value is a known member of the PutTeamCollaborationRequestRegistrationMode enum.
+func (e PutTeamCollaborationRequestRegistrationMode) Valid() bool {
+	switch e {
+	case PutTeamCollaborationRequestRegistrationModeManaged:
+		return true
+	case PutTeamCollaborationRequestRegistrationModeManual:
 		return true
 	default:
 		return false
@@ -1668,6 +1890,45 @@ func (e RoleLinkStatus) Valid() bool {
 	case RoleLinkStatusPendingTrust:
 		return true
 	case RoleLinkStatusVerified:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for RotateCollaborationKeysRequestNames.
+const (
+	PaperclipBetterAuthSecret        RotateCollaborationKeysRequestNames = "paperclip-better-auth-secret"
+	PaperclipToolActionSigningSecret RotateCollaborationKeysRequestNames = "paperclip-tool-action-signing-secret"
+)
+
+// Valid indicates whether the value is a known member of the RotateCollaborationKeysRequestNames enum.
+func (e RotateCollaborationKeysRequestNames) Valid() bool {
+	switch e {
+	case PaperclipBetterAuthSecret:
+		return true
+	case PaperclipToolActionSigningSecret:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for SecretManagedBy.
+const (
+	SecretManagedByAfs       SecretManagedBy = "afs"
+	SecretManagedByPaperclip SecretManagedBy = "paperclip"
+	SecretManagedByUser      SecretManagedBy = "user"
+)
+
+// Valid indicates whether the value is a known member of the SecretManagedBy enum.
+func (e SecretManagedBy) Valid() bool {
+	switch e {
+	case SecretManagedByAfs:
+		return true
+	case SecretManagedByPaperclip:
+		return true
+	case SecretManagedByUser:
 		return true
 	default:
 		return false
@@ -2037,6 +2298,24 @@ func (e TeamBudgetInputPeriod) Valid() bool {
 	}
 }
 
+// Defines values for TeamCollaborationRegistrationMode.
+const (
+	TeamCollaborationRegistrationModeManaged TeamCollaborationRegistrationMode = "managed"
+	TeamCollaborationRegistrationModeManual  TeamCollaborationRegistrationMode = "manual"
+)
+
+// Valid indicates whether the value is a known member of the TeamCollaborationRegistrationMode enum.
+func (e TeamCollaborationRegistrationMode) Valid() bool {
+	switch e {
+	case TeamCollaborationRegistrationModeManaged:
+		return true
+	case TeamCollaborationRegistrationModeManual:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for TeamTagSource.
 const (
 	TeamTagSourceMissing        TeamTagSource = "missing"
@@ -2084,14 +2363,17 @@ func (e UpdateAgentRequestIamIdentity) Valid() bool {
 
 // Defines values for UpdateMemberRequestRole.
 const (
-	UpdateMemberRequestRoleTeamAdmin  UpdateMemberRequestRole = "team_admin"
-	UpdateMemberRequestRoleTeamViewer UpdateMemberRequestRole = "team_viewer"
+	UpdateMemberRequestRoleTeamAdmin        UpdateMemberRequestRole = "team_admin"
+	UpdateMemberRequestRoleTeamCollaborator UpdateMemberRequestRole = "team_collaborator"
+	UpdateMemberRequestRoleTeamViewer       UpdateMemberRequestRole = "team_viewer"
 )
 
 // Valid indicates whether the value is a known member of the UpdateMemberRequestRole enum.
 func (e UpdateMemberRequestRole) Valid() bool {
 	switch e {
 	case UpdateMemberRequestRoleTeamAdmin:
+		return true
+	case UpdateMemberRequestRoleTeamCollaborator:
 		return true
 	case UpdateMemberRequestRoleTeamViewer:
 		return true
@@ -2469,6 +2751,30 @@ func (e ListAdminAuditEventsParamsOutcome) Valid() bool {
 	}
 }
 
+// Defines values for ListCollaborationEndpointsParamsState.
+const (
+	ListCollaborationEndpointsParamsStateDegraded ListCollaborationEndpointsParamsState = "Degraded"
+	ListCollaborationEndpointsParamsStateFailed   ListCollaborationEndpointsParamsState = "Failed"
+	ListCollaborationEndpointsParamsStatePending  ListCollaborationEndpointsParamsState = "Pending"
+	ListCollaborationEndpointsParamsStateReady    ListCollaborationEndpointsParamsState = "Ready"
+)
+
+// Valid indicates whether the value is a known member of the ListCollaborationEndpointsParamsState enum.
+func (e ListCollaborationEndpointsParamsState) Valid() bool {
+	switch e {
+	case ListCollaborationEndpointsParamsStateDegraded:
+		return true
+	case ListCollaborationEndpointsParamsStateFailed:
+		return true
+	case ListCollaborationEndpointsParamsStatePending:
+		return true
+	case ListCollaborationEndpointsParamsStateReady:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for ListCostReconciliationsParamsStatus.
 const (
 	ListCostReconciliationsParamsStatusMissingBilling ListCostReconciliationsParamsStatus = "missing_billing"
@@ -2556,6 +2862,21 @@ func (e PutSettingParamsKey) Valid() bool {
 	case WorkOrdersNotificationChannelId:
 		return true
 	case WorkOrdersSlaWarningHours:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListAgentTemplatesParamsCapability.
+const (
+	ListAgentTemplatesParamsCapabilityPaperclip ListAgentTemplatesParamsCapability = "paperclip"
+)
+
+// Valid indicates whether the value is a known member of the ListAgentTemplatesParamsCapability enum.
+func (e ListAgentTemplatesParamsCapability) Valid() bool {
+	switch e {
+	case ListAgentTemplatesParamsCapabilityPaperclip:
 		return true
 	default:
 		return false
@@ -2655,6 +2976,24 @@ func (e ListTeamsParamsKind) Valid() bool {
 	}
 }
 
+// Defines values for ListAgentsParamsRole.
+const (
+	ListAgentsParamsRoleCollaboration ListAgentsParamsRole = "collaboration"
+	ListAgentsParamsRoleWorker        ListAgentsParamsRole = "worker"
+)
+
+// Valid indicates whether the value is a known member of the ListAgentsParamsRole enum.
+func (e ListAgentsParamsRole) Valid() bool {
+	switch e {
+	case ListAgentsParamsRoleCollaboration:
+		return true
+	case ListAgentsParamsRoleWorker:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for GetAgentReportParamsRange.
 const (
 	GetAgentReportParamsRangeMtd  GetAgentReportParamsRange = "mtd"
@@ -2727,6 +3066,30 @@ func (e ListAuditEventsParamsOutcome) Valid() bool {
 	}
 }
 
+// Defines values for ListCollaborationLinksParamsLinkState.
+const (
+	ListCollaborationLinksParamsLinkStateDisabled ListCollaborationLinksParamsLinkState = "disabled"
+	ListCollaborationLinksParamsLinkStateFailed   ListCollaborationLinksParamsLinkState = "failed"
+	ListCollaborationLinksParamsLinkStateLinked   ListCollaborationLinksParamsLinkState = "linked"
+	ListCollaborationLinksParamsLinkStatePending  ListCollaborationLinksParamsLinkState = "pending"
+)
+
+// Valid indicates whether the value is a known member of the ListCollaborationLinksParamsLinkState enum.
+func (e ListCollaborationLinksParamsLinkState) Valid() bool {
+	switch e {
+	case ListCollaborationLinksParamsLinkStateDisabled:
+		return true
+	case ListCollaborationLinksParamsLinkStateFailed:
+		return true
+	case ListCollaborationLinksParamsLinkStateLinked:
+		return true
+	case ListCollaborationLinksParamsLinkStatePending:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for GetTeamReportParamsRange.
 const (
 	GetTeamReportParamsRangeMtd  GetTeamReportParamsRange = "mtd"
@@ -2772,6 +3135,27 @@ func (e GetTeamReportParamsKind) Valid() bool {
 	case GetTeamReportParamsKindTraffic:
 		return true
 	case GetTeamReportParamsKindUsage:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListSecretsParamsManagedBy.
+const (
+	ListSecretsParamsManagedByAfs       ListSecretsParamsManagedBy = "afs"
+	ListSecretsParamsManagedByPaperclip ListSecretsParamsManagedBy = "paperclip"
+	ListSecretsParamsManagedByUser      ListSecretsParamsManagedBy = "user"
+)
+
+// Valid indicates whether the value is a known member of the ListSecretsParamsManagedBy enum.
+func (e ListSecretsParamsManagedBy) Valid() bool {
+	switch e {
+	case ListSecretsParamsManagedByAfs:
+		return true
+	case ListSecretsParamsManagedByPaperclip:
+		return true
+	case ListSecretsParamsManagedByUser:
 		return true
 	default:
 		return false
@@ -2913,6 +3297,9 @@ type AddSecurityOperatorRequestSubjectType string
 
 // Agent An agent. It has no replica count (RA-US-4.6)
 type Agent struct {
+	// Collaboration A worker agent's connection to the team's Paperclip (absent on the collaboration agent)
+	Collaboration *AgentCollaboration `json:"collaboration,omitempty"`
+
 	// CreatedAt RFC 3339 UTC with Z
 	CreatedAt   *Timestamp       `json:"createdAt,omitempty"`
 	CreatedBy   *string          `json:"createdBy,omitempty"`
@@ -2927,9 +3314,12 @@ type Agent struct {
 	ModelId string   `json:"modelId"`
 
 	// Name Immutable name (team slug, agent, pool, secret)
-	Name           *Name            `json:"name,omitempty"`
-	Paused         *bool            `json:"paused,omitempty"`
-	Resources      *Resources       `json:"resources,omitempty"`
+	Name      *Name      `json:"name,omitempty"`
+	Paused    *bool      `json:"paused,omitempty"`
+	Resources *Resources `json:"resources,omitempty"`
+
+	// Role worker or collaboration; set on create, immutable
+	Role           *AgentRole       `json:"role,omitempty"`
 	SecretBindings *[]SecretBinding `json:"secretBindings,omitempty"`
 
 	// Status Reconcile status of a desired-state resource (contract §1.1)
@@ -2948,6 +3338,29 @@ type Agent struct {
 
 // AgentIamIdentity defines model for Agent.IamIdentity.
 type AgentIamIdentity string
+
+// AgentRole worker or collaboration; set on create, immutable
+type AgentRole string
+
+// AgentCollaboration A worker agent's connection to the team's Paperclip (absent on the collaboration agent)
+type AgentCollaboration struct {
+	Connect          bool                         `json:"connect"`
+	LastError        *string                      `json:"lastError,omitempty"`
+	LastSyncedAt     *time.Time                   `json:"lastSyncedAt,omitempty"`
+	LinkState        *AgentCollaborationLinkState `json:"linkState,omitempty"`
+	PaperclipAgentId *string                      `json:"paperclipAgentId,omitempty"`
+}
+
+// AgentCollaborationLinkState defines model for AgentCollaboration.LinkState.
+type AgentCollaborationLinkState string
+
+// AgentCollaborationInput defines model for AgentCollaborationInput.
+type AgentCollaborationInput struct {
+	Connect *bool `json:"connect,omitempty"`
+
+	// PaperclipAgentId Accepted only while registrationMode is manual
+	PaperclipAgentId *string `json:"paperclipAgentId,omitempty"`
+}
 
 // AgentIdentity defines model for AgentIdentity.
 type AgentIdentity struct {
@@ -2991,7 +3404,8 @@ type AgentList struct {
 
 // AgentTemplate defines model for AgentTemplate.
 type AgentTemplate struct {
-	AllowedDigests []string `json:"allowedDigests"`
+	AllowedDigests []string                     `json:"allowedDigests"`
+	Capabilities   *[]AgentTemplateCapabilities `json:"capabilities,omitempty"`
 
 	// CreatedAt RFC 3339 UTC with Z
 	CreatedAt        *Timestamp `json:"createdAt,omitempty"`
@@ -3007,6 +3421,9 @@ type AgentTemplate struct {
 	UpdatedAt *Timestamp `json:"updatedAt,omitempty"`
 	Version   *int       `json:"version,omitempty"`
 }
+
+// AgentTemplateCapabilities defines model for AgentTemplate.Capabilities.
+type AgentTemplateCapabilities string
 
 // AgentTemplateList A page of AgentTemplate resources
 type AgentTemplateList struct {
@@ -3185,6 +3602,73 @@ type CatalogSystemRequest struct {
 // CatalogSystemRequestCategory defines model for CatalogSystemRequest.Category.
 type CatalogSystemRequestCategory string
 
+// CollaborationEffective What the edge honours (stored choice, team guardrail, service settings and the provider's collaboration client)
+type CollaborationEffective struct {
+	Reasons []CollaborationEffectiveReasons `json:"reasons"`
+	RestApi bool                            `json:"restApi"`
+	WebUi   bool                            `json:"webUi"`
+}
+
+// CollaborationEffectiveReasons defines model for CollaborationEffective.Reasons.
+type CollaborationEffectiveReasons string
+
+// CollaborationEndpoint defines model for CollaborationEndpoint.
+type CollaborationEndpoint struct {
+	AgentId   string `json:"agentId"`
+	Effective struct {
+		RestApi bool `json:"restApi"`
+		WebUi   bool `json:"webUi"`
+	} `json:"effective"`
+	Hostname               *string                        `json:"hostname"`
+	LastAccessAt           *time.Time                     `json:"lastAccessAt,omitempty"`
+	MayExposeCollaboration bool                           `json:"mayExposeCollaboration"`
+	Phase                  CollaborationEndpointPhase     `json:"phase"`
+	RestApiEnabled         bool                           `json:"restApiEnabled"`
+	Slug                   string                         `json:"slug"`
+	TeamId                 string                         `json:"teamId"`
+	TeamState              CollaborationEndpointTeamState `json:"teamState"`
+	WebUiEnabled           bool                           `json:"webUiEnabled"`
+}
+
+// CollaborationEndpointPhase defines model for CollaborationEndpoint.Phase.
+type CollaborationEndpointPhase string
+
+// CollaborationEndpointTeamState defines model for CollaborationEndpoint.TeamState.
+type CollaborationEndpointTeamState string
+
+// CollaborationEndpointList defines model for CollaborationEndpointList.
+type CollaborationEndpointList struct {
+	Items []CollaborationEndpoint `json:"items"`
+
+	// NextToken Absent on the last page
+	NextToken *string `json:"nextToken,omitempty"`
+}
+
+// CollaborationLink defines model for CollaborationLink.
+type CollaborationLink struct {
+	AgentId   *string `json:"agentId,omitempty"`
+	AgentName *string `json:"agentName,omitempty"`
+	Connect   bool    `json:"connect"`
+
+	// LastError A short sanitized reason; never a Paperclip key or content
+	LastError        *string                     `json:"lastError,omitempty"`
+	LastSyncedAt     *time.Time                  `json:"lastSyncedAt,omitempty"`
+	LinkState        *CollaborationLinkLinkState `json:"linkState,omitempty"`
+	PaperclipAgentId *string                     `json:"paperclipAgentId,omitempty"`
+	Version          *int                        `json:"version,omitempty"`
+}
+
+// CollaborationLinkLinkState defines model for CollaborationLink.LinkState.
+type CollaborationLinkLinkState string
+
+// CollaborationLinkList defines model for CollaborationLinkList.
+type CollaborationLinkList struct {
+	Items []CollaborationLink `json:"items"`
+
+	// NextToken Absent on the last page
+	NextToken *string `json:"nextToken,omitempty"`
+}
+
 // Condition defines model for Condition.
 type Condition struct {
 	// LastTransitionTime RFC 3339 UTC with Z
@@ -3228,6 +3712,12 @@ type ConfigValueList struct {
 
 	// NextToken Absent on the last page
 	NextToken *string `json:"nextToken,omitempty"`
+}
+
+// ConnectAgentRequest defines model for ConnectAgentRequest.
+type ConnectAgentRequest struct {
+	// PaperclipAgentId Accepted only while registrationMode is manual
+	PaperclipAgentId *string `json:"paperclipAgentId,omitempty"`
 }
 
 // CostList defines model for CostList.
@@ -3314,17 +3804,21 @@ type CreateAgentIdentityRequestKind string
 
 // CreateAgentRequest defines model for CreateAgentRequest.
 type CreateAgentRequest struct {
-	Description *string                        `json:"description,omitempty"`
-	IamIdentity *CreateAgentRequestIamIdentity `json:"iamIdentity,omitempty"`
+	Collaboration *AgentCollaborationInput       `json:"collaboration,omitempty"`
+	Description   *string                        `json:"description,omitempty"`
+	IamIdentity   *CreateAgentRequestIamIdentity `json:"iamIdentity,omitempty"`
 
 	// Image Container image pinned by digest
 	Image   ImageRef `json:"image"`
 	ModelId string   `json:"modelId"`
 
 	// Name Immutable name (team slug, agent, pool, secret)
-	Name           Name             `json:"name"`
-	Resources      *Resources       `json:"resources,omitempty"`
-	SecretBindings *[]SecretBinding `json:"secretBindings,omitempty"`
+	Name      Name       `json:"name"`
+	Resources *Resources `json:"resources,omitempty"`
+
+	// Role Set on create; immutable
+	Role           *CreateAgentRequestRole `json:"role,omitempty"`
+	SecretBindings *[]SecretBinding        `json:"secretBindings,omitempty"`
 
 	// Template Agent template name
 	Template string       `json:"template"`
@@ -3333,6 +3827,9 @@ type CreateAgentRequest struct {
 
 // CreateAgentRequestIamIdentity defines model for CreateAgentRequest.IamIdentity.
 type CreateAgentRequestIamIdentity string
+
+// CreateAgentRequestRole Set on create; immutable
+type CreateAgentRequestRole string
 
 // CreateApiKeyRequest defines model for CreateApiKeyRequest.
 type CreateApiKeyRequest struct {
@@ -3353,15 +3850,21 @@ type CreateExportRequest struct {
 
 // CreateIdentityProviderRequest defines model for CreateIdentityProviderRequest.
 type CreateIdentityProviderRequest struct {
-	CliClientId     string                            `json:"cliClientId"`
-	ClientSecretArn *string                           `json:"clientSecretArn,omitempty"`
-	ConsoleClientId string                            `json:"consoleClientId"`
-	Enabled         *bool                             `json:"enabled,omitempty"`
-	GroupsClaim     *string                           `json:"groupsClaim,omitempty"`
-	IsDefault       *bool                             `json:"isDefault,omitempty"`
-	IssuerUrl       string                            `json:"issuerUrl"`
-	Kind            CreateIdentityProviderRequestKind `json:"kind"`
-	Name            string                            `json:"name"`
+	CliClientId     string  `json:"cliClientId"`
+	ClientSecretArn *string `json:"clientSecretArn,omitempty"`
+
+	// CollabClientId The collaboration (Paperclip edge) client of this provider
+	CollabClientId *string `json:"collabClientId,omitempty"`
+
+	// CollabClientSecretArn Reference only; needs collabClientId; never returned by ListSignInProviders
+	CollabClientSecretArn *string                           `json:"collabClientSecretArn,omitempty"`
+	ConsoleClientId       string                            `json:"consoleClientId"`
+	Enabled               *bool                             `json:"enabled,omitempty"`
+	GroupsClaim           *string                           `json:"groupsClaim,omitempty"`
+	IsDefault             *bool                             `json:"isDefault,omitempty"`
+	IssuerUrl             string                            `json:"issuerUrl"`
+	Kind                  CreateIdentityProviderRequestKind `json:"kind"`
+	Name                  string                            `json:"name"`
 }
 
 // CreateIdentityProviderRequestKind defines model for CreateIdentityProviderRequest.Kind.
@@ -3576,6 +4079,9 @@ type CreateTeamRequest struct {
 
 	// MayAddExternalSystems Guardrail field: needs teams:set-guardrails
 	MayAddExternalSystems *bool `json:"mayAddExternalSystems,omitempty"`
+
+	// MayExposeCollaboration Guardrail field: needs teams:set-guardrails. Whether the team may publish its Paperclip endpoints (default true)
+	MayExposeCollaboration *bool `json:"mayExposeCollaboration,omitempty"`
 
 	// MayManageAwsAccounts Guardrail field: needs teams:set-guardrails
 	MayManageAwsAccounts *bool `json:"mayManageAwsAccounts,omitempty"`
@@ -3804,7 +4310,13 @@ type IdentityProvider struct {
 
 	// ClientSecretArn Secrets Manager ARN of the confidential client's secret; the value never reaches AFS
 	ClientSecretArn *string `json:"clientSecretArn,omitempty"`
-	ConsoleClientId string  `json:"consoleClientId"`
+
+	// CollabClientId The collaboration (Paperclip edge) client of this provider
+	CollabClientId *string `json:"collabClientId,omitempty"`
+
+	// CollabClientSecretArn Reference only; needs collabClientId; never returned by ListSignInProviders
+	CollabClientSecretArn *string `json:"collabClientSecretArn,omitempty"`
+	ConsoleClientId       string  `json:"consoleClientId"`
 
 	// CreatedAt RFC 3339 UTC with Z
 	CreatedAt   *Timestamp           `json:"createdAt,omitempty"`
@@ -4273,13 +4785,17 @@ type PrincipalType string
 
 // PutAgentTemplateRequest defines model for PutAgentTemplateRequest.
 type PutAgentTemplateRequest struct {
-	AllowedDigests   []string   `json:"allowedDigests"`
-	CurrentDigest    string     `json:"currentDigest"`
-	DefaultResources *Resources `json:"defaultResources,omitempty"`
-	Description      *string    `json:"description,omitempty"`
-	Enabled          *bool      `json:"enabled,omitempty"`
-	Harness          string     `json:"harness"`
+	AllowedDigests   []string                               `json:"allowedDigests"`
+	Capabilities     *[]PutAgentTemplateRequestCapabilities `json:"capabilities,omitempty"`
+	CurrentDigest    string                                 `json:"currentDigest"`
+	DefaultResources *Resources                             `json:"defaultResources,omitempty"`
+	Description      *string                                `json:"description,omitempty"`
+	Enabled          *bool                                  `json:"enabled,omitempty"`
+	Harness          string                                 `json:"harness"`
 }
+
+// PutAgentTemplateRequestCapabilities defines model for PutAgentTemplateRequest.Capabilities.
+type PutAgentTemplateRequestCapabilities string
 
 // PutBudgetRequest defines model for PutBudgetRequest.
 type PutBudgetRequest struct {
@@ -4358,6 +4874,17 @@ type PutStorageClassRequest struct {
 
 // PutStorageClassRequestVolumeType defines model for PutStorageClassRequest.VolumeType.
 type PutStorageClassRequestVolumeType string
+
+// PutTeamCollaborationRequest defines model for PutTeamCollaborationRequest.
+type PutTeamCollaborationRequest struct {
+	// RegistrationMode Omitted keeps the current value
+	RegistrationMode *PutTeamCollaborationRequestRegistrationMode `json:"registrationMode,omitempty"`
+	RestApiEnabled   bool                                         `json:"restApiEnabled"`
+	WebUiEnabled     bool                                         `json:"webUiEnabled"`
+}
+
+// PutTeamCollaborationRequestRegistrationMode Omitted keeps the current value
+type PutTeamCollaborationRequestRegistrationMode string
 
 // PutTeamModelsRequest defines model for PutTeamModelsRequest.
 type PutTeamModelsRequest struct {
@@ -4576,10 +5103,33 @@ type RoleLinkList struct {
 	NextToken *string `json:"nextToken,omitempty"`
 }
 
-// RotateSecretRequest Writes a new Secrets Manager version with this value
+// RotateCollaborationKeysRequest defines model for RotateCollaborationKeysRequest.
+type RotateCollaborationKeysRequest struct {
+	// Names Default is both. paperclip-secrets-master-key is refused (master_key_not_rotatable)
+	Names *[]RotateCollaborationKeysRequestNames `json:"names,omitempty"`
+}
+
+// RotateCollaborationKeysRequestNames defines model for RotateCollaborationKeysRequest.Names.
+type RotateCollaborationKeysRequestNames string
+
+// RotateCollaborationKeysResult defines model for RotateCollaborationKeysResult.
+type RotateCollaborationKeysResult struct {
+	AgentRolloutPending bool            `json:"agentRolloutPending"`
+	Rotated             []RotatedSecret `json:"rotated"`
+	SignsOutEveryone    bool            `json:"signsOutEveryone"`
+}
+
+// RotateSecretRequest Writes a new Secrets Manager version with this value. Required for a secret a team manages; an AFS-managed secret takes no body (AFS generates the value) and a Paperclip secret is refused (409 managed_secret)
 type RotateSecretRequest struct {
 	// Value Sent once, passed to Secrets Manager and dropped; never returned, logged or audited
 	Value *SecretValue `json:"value,omitempty"`
+}
+
+// RotatedSecret defines model for RotatedSecret.
+type RotatedSecret struct {
+	Name      string `json:"name"`
+	SecretId  string `json:"secretId"`
+	VersionId string `json:"versionId"`
 }
 
 // ScalePoolRequest defines model for ScalePoolRequest.
@@ -4600,9 +5150,10 @@ type Secret struct {
 	Id               *string    `json:"id,omitempty"`
 
 	// LastChangedAt RFC 3339 UTC with Z
-	LastChangedAt *Timestamp `json:"lastChangedAt,omitempty"`
-	Name          string     `json:"name"`
-	PoolId        *string    `json:"poolId,omitempty"`
+	LastChangedAt *Timestamp       `json:"lastChangedAt,omitempty"`
+	ManagedBy     *SecretManagedBy `json:"managedBy,omitempty"`
+	Name          string           `json:"name"`
+	PoolId        *string          `json:"poolId,omitempty"`
 	Rotation      *struct {
 		Days    *int  `json:"days,omitempty"`
 		Enabled *bool `json:"enabled,omitempty"`
@@ -4618,6 +5169,9 @@ type Secret struct {
 	Version   *int    `json:"version,omitempty"`
 	VersionId *string `json:"versionId,omitempty"`
 }
+
+// SecretManagedBy defines model for Secret.ManagedBy.
+type SecretManagedBy string
 
 // SecretScope defines model for Secret.Scope.
 type SecretScope string
@@ -4886,6 +5440,10 @@ type SwarmTemplateList struct {
 
 // SwarmTemplateSpec defines model for SwarmTemplateSpec.
 type SwarmTemplateSpec struct {
+	// Collaboration Optional collaboration agent of the remediation team (PC-D29); the template must be enabled and carry capability paperclip
+	Collaboration *struct {
+		TemplateId string `json:"templateId"`
+	} `json:"collaboration,omitempty"`
 	ConfigValues *[]map[string]interface{} `json:"configValues,omitempty"`
 	Handoffs     *[]map[string]interface{} `json:"handoffs,omitempty"`
 	Pools        []map[string]interface{}  `json:"pools"`
@@ -4951,6 +5509,9 @@ type Team struct {
 	// MayAddExternalSystems Guardrail field: needs teams:set-guardrails
 	MayAddExternalSystems bool `json:"mayAddExternalSystems"`
 
+	// MayExposeCollaboration Guardrail field: needs teams:set-guardrails. Whether the team may publish its Paperclip endpoints (default true)
+	MayExposeCollaboration *bool `json:"mayExposeCollaboration,omitempty"`
+
 	// MayManageAwsAccounts Guardrail field: needs teams:set-guardrails
 	MayManageAwsAccounts bool                 `json:"mayManageAwsAccounts"`
 	Namespace            *string              `json:"namespace,omitempty"`
@@ -5005,6 +5566,39 @@ type TeamBudgetInput struct {
 // TeamBudgetInputPeriod defines model for TeamBudgetInput.Period.
 type TeamBudgetInputPeriod string
 
+// TeamCollaboration The team's collaboration resource; singleton per team (API contract §4.4b)
+type TeamCollaboration struct {
+	AgentId *string `json:"agentId,omitempty"`
+
+	// CreatedAt RFC 3339 UTC with Z
+	CreatedAt *Timestamp `json:"createdAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+
+	// Effective What the edge honours (stored choice, team guardrail, service settings and the provider's collaboration client)
+	Effective        CollaborationEffective            `json:"effective"`
+	Generation       *int                              `json:"generation,omitempty"`
+	Hostname         *string                           `json:"hostname,omitempty"`
+	RegistrationMode TeamCollaborationRegistrationMode `json:"registrationMode"`
+	RestApiEnabled   bool                              `json:"restApiEnabled"`
+	RestApiUrl       *string                           `json:"restApiUrl,omitempty"`
+
+	// Status Reconcile status of a desired-state resource (contract §1.1)
+	Status                   *Status   `json:"status,omitempty"`
+	TeamId                   *string   `json:"teamId,omitempty"`
+	UnmanagedPaperclipAgents *[]string `json:"unmanagedPaperclipAgents,omitempty"`
+
+	// UpdatedAt RFC 3339 UTC with Z
+	UpdatedAt *Timestamp `json:"updatedAt,omitempty"`
+
+	// Version Optimistic-concurrency version; ETag is "<version>"
+	Version      *int    `json:"version,omitempty"`
+	WebUiEnabled bool    `json:"webUiEnabled"`
+	WebUiUrl     *string `json:"webUiUrl,omitempty"`
+}
+
+// TeamCollaborationRegistrationMode defines model for TeamCollaboration.RegistrationMode.
+type TeamCollaborationRegistrationMode string
+
 // TeamDirectoryEntry defines model for TeamDirectoryEntry.
 type TeamDirectoryEntry struct {
 	DisplayName string `json:"displayName"`
@@ -5058,8 +5652,9 @@ type Timestamp = time.Time
 
 // UpdateAgentRequest defines model for UpdateAgentRequest.
 type UpdateAgentRequest struct {
-	Description *string                        `json:"description,omitempty"`
-	IamIdentity *UpdateAgentRequestIamIdentity `json:"iamIdentity,omitempty"`
+	Collaboration *AgentCollaborationInput       `json:"collaboration,omitempty"`
+	Description   *string                        `json:"description,omitempty"`
+	IamIdentity   *UpdateAgentRequestIamIdentity `json:"iamIdentity,omitempty"`
 
 	// Image Container image pinned by digest
 	Image          *ImageRef        `json:"image,omitempty"`
@@ -5100,11 +5695,17 @@ type UpdateExternalSystemRequest struct {
 type UpdateIdentityProviderRequest struct {
 	CliClientId     *string `json:"cliClientId,omitempty"`
 	ClientSecretArn *string `json:"clientSecretArn,omitempty"`
-	ConsoleClientId *string `json:"consoleClientId,omitempty"`
-	Enabled         *bool   `json:"enabled,omitempty"`
-	GroupsClaim     *string `json:"groupsClaim,omitempty"`
-	IsDefault       *bool   `json:"isDefault,omitempty"`
-	Name            *string `json:"name,omitempty"`
+
+	// CollabClientId The collaboration (Paperclip edge) client of this provider
+	CollabClientId *string `json:"collabClientId,omitempty"`
+
+	// CollabClientSecretArn Reference only; needs collabClientId; never returned by ListSignInProviders
+	CollabClientSecretArn *string `json:"collabClientSecretArn,omitempty"`
+	ConsoleClientId       *string `json:"consoleClientId,omitempty"`
+	Enabled               *bool   `json:"enabled,omitempty"`
+	GroupsClaim           *string `json:"groupsClaim,omitempty"`
+	IsDefault             *bool   `json:"isDefault,omitempty"`
+	Name                  *string `json:"name,omitempty"`
 }
 
 // UpdateLogDestinationRequest defines model for UpdateLogDestinationRequest.
@@ -5204,7 +5805,7 @@ type UpdateSwarmTemplateRequest struct {
 // UpdateSwarmTemplateRequestTeardownRule defines model for UpdateSwarmTemplateRequest.TeardownRule.
 type UpdateSwarmTemplateRequestTeardownRule string
 
-// UpdateTeamRequest Fields to change. maxBudgetUsd, the ceiling override, quotas, isolationTier, viewerKubectl, mayManageAwsAccounts and mayAddExternalSystems need teams:set-guardrails; allowedAwsAccounts needs teams:set-aws-accounts
+// UpdateTeamRequest Fields to change. maxBudgetUsd, the ceiling override, quotas, isolationTier, viewerKubectl, mayManageAwsAccounts, mayAddExternalSystems and mayExposeCollaboration need teams:set-guardrails; allowedAwsAccounts needs teams:set-aws-accounts
 type UpdateTeamRequest struct {
 	AllowedAwsAccounts       *[]AwsAccountId `json:"allowedAwsAccounts,omitempty"`
 	CeilingOverrideExpiresAt *Timestamp      `json:"ceilingOverrideExpiresAt,omitempty"`
@@ -5222,12 +5823,13 @@ type UpdateTeamRequest struct {
 	Kind *UpdateTeamRequestKind `json:"kind,omitempty"`
 
 	// MaxBudgetUsd USD amount as a decimal string with at most 6 fraction digits; never a JSON number
-	MaxBudgetUsd          *Money               `json:"maxBudgetUsd,omitempty"`
-	MayAddExternalSystems *bool                `json:"mayAddExternalSystems,omitempty"`
-	MayManageAwsAccounts  *bool                `json:"mayManageAwsAccounts,omitempty"`
-	OwnerEmail            *openapi_types.Email `json:"ownerEmail,omitempty"`
-	Quotas                *Quotas              `json:"quotas,omitempty"`
-	ViewerKubectl         *bool                `json:"viewerKubectl,omitempty"`
+	MaxBudgetUsd           *Money               `json:"maxBudgetUsd,omitempty"`
+	MayAddExternalSystems  *bool                `json:"mayAddExternalSystems,omitempty"`
+	MayExposeCollaboration *bool                `json:"mayExposeCollaboration,omitempty"`
+	MayManageAwsAccounts   *bool                `json:"mayManageAwsAccounts,omitempty"`
+	OwnerEmail             *openapi_types.Email `json:"ownerEmail,omitempty"`
+	Quotas                 *Quotas              `json:"quotas,omitempty"`
+	ViewerKubectl          *bool                `json:"viewerKubectl,omitempty"`
 }
 
 // UpdateTeamRequestIsolationTier defines model for UpdateTeamRequest.IsolationTier.
@@ -5581,6 +6183,22 @@ type ListAdminAuditEventsParams struct {
 
 // ListAdminAuditEventsParamsOutcome defines parameters for ListAdminAuditEvents.
 type ListAdminAuditEventsParamsOutcome string
+
+// ListCollaborationEndpointsParams defines parameters for ListCollaborationEndpoints.
+type ListCollaborationEndpointsParams struct {
+	TeamId     *string                                `form:"teamId,omitempty" json:"teamId,omitempty"`
+	State      *ListCollaborationEndpointsParamsState `form:"state,omitempty" json:"state,omitempty"`
+	MaxResults *MaxResults                            `form:"maxResults,omitempty" json:"maxResults,omitempty"`
+
+	// NextToken Opaque token from the previous page; expires after 24 hours
+	NextToken *NextToken `form:"nextToken,omitempty" json:"nextToken,omitempty"`
+
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// ListCollaborationEndpointsParamsState defines parameters for ListCollaborationEndpoints.
+type ListCollaborationEndpointsParamsState string
 
 // ListCostReconciliationsParams defines parameters for ListCostReconciliations.
 type ListCostReconciliationsParams struct {
@@ -5996,7 +6614,8 @@ type EnableSwarmTemplateParams struct {
 
 // ListAgentTemplatesParams defines parameters for ListAgentTemplates.
 type ListAgentTemplatesParams struct {
-	MaxResults *MaxResults `form:"maxResults,omitempty" json:"maxResults,omitempty"`
+	Capability *ListAgentTemplatesParamsCapability `form:"capability,omitempty" json:"capability,omitempty"`
+	MaxResults *MaxResults                         `form:"maxResults,omitempty" json:"maxResults,omitempty"`
 
 	// NextToken Opaque token from the previous page; expires after 24 hours
 	NextToken *NextToken `form:"nextToken,omitempty" json:"nextToken,omitempty"`
@@ -6004,6 +6623,9 @@ type ListAgentTemplatesParams struct {
 	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
 	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
 }
+
+// ListAgentTemplatesParamsCapability defines parameters for ListAgentTemplates.
+type ListAgentTemplatesParamsCapability string
 
 // ListExportsParams defines parameters for ListExports.
 type ListExportsParams struct {
@@ -6176,7 +6798,8 @@ type UpdateTeamParams struct {
 
 // ListAgentsParams defines parameters for ListAgents.
 type ListAgentsParams struct {
-	MaxResults *MaxResults `form:"maxResults,omitempty" json:"maxResults,omitempty"`
+	Role       *ListAgentsParamsRole `form:"role,omitempty" json:"role,omitempty"`
+	MaxResults *MaxResults           `form:"maxResults,omitempty" json:"maxResults,omitempty"`
 
 	// NextToken Opaque token from the previous page; expires after 24 hours
 	NextToken *NextToken `form:"nextToken,omitempty" json:"nextToken,omitempty"`
@@ -6184,6 +6807,9 @@ type ListAgentsParams struct {
 	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
 	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
 }
+
+// ListAgentsParamsRole defines parameters for ListAgents.
+type ListAgentsParamsRole string
 
 // CreateAgentParams defines parameters for CreateAgent.
 type CreateAgentParams struct {
@@ -6501,6 +7127,64 @@ type PutBudgetParams struct {
 
 	// IfMatch Required when the resource exists (428 otherwise); omit when the PUT creates it
 	IfMatch *IfMatchPut `json:"If-Match,omitempty"`
+}
+
+// GetTeamCollaborationParams defines parameters for GetTeamCollaboration.
+type GetTeamCollaborationParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// PutTeamCollaborationParams defines parameters for PutTeamCollaboration.
+type PutTeamCollaborationParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch Required when the resource exists (428 otherwise); omit when the PUT creates it
+	IfMatch *IfMatchPut `json:"If-Match,omitempty"`
+}
+
+// ListCollaborationLinksParams defines parameters for ListCollaborationLinks.
+type ListCollaborationLinksParams struct {
+	LinkState  *ListCollaborationLinksParamsLinkState `form:"linkState,omitempty" json:"linkState,omitempty"`
+	Connect    *bool                                  `form:"connect,omitempty" json:"connect,omitempty"`
+	MaxResults *MaxResults                            `form:"maxResults,omitempty" json:"maxResults,omitempty"`
+
+	// NextToken Opaque token from the previous page; expires after 24 hours
+	NextToken *NextToken `form:"nextToken,omitempty" json:"nextToken,omitempty"`
+
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// ListCollaborationLinksParamsLinkState defines parameters for ListCollaborationLinks.
+type ListCollaborationLinksParamsLinkState string
+
+// ConnectAgentToCollaborationParams defines parameters for ConnectAgentToCollaboration.
+type ConnectAgentToCollaborationParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// DisconnectAgentFromCollaborationParams defines parameters for DisconnectAgentFromCollaboration.
+type DisconnectAgentFromCollaborationParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// RotateCollaborationKeysParams defines parameters for RotateCollaborationKeys.
+type RotateCollaborationKeysParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
 }
 
 // ListNamespaceConfigValuesParams defines parameters for ListNamespaceConfigValues.
@@ -7044,7 +7728,8 @@ type RestoreRevisionParams struct {
 
 // ListSecretsParams defines parameters for ListSecrets.
 type ListSecretsParams struct {
-	MaxResults *MaxResults `form:"maxResults,omitempty" json:"maxResults,omitempty"`
+	ManagedBy  *ListSecretsParamsManagedBy `form:"managedBy,omitempty" json:"managedBy,omitempty"`
+	MaxResults *MaxResults                 `form:"maxResults,omitempty" json:"maxResults,omitempty"`
 
 	// NextToken Opaque token from the previous page; expires after 24 hours
 	NextToken *NextToken `form:"nextToken,omitempty" json:"nextToken,omitempty"`
@@ -7052,6 +7737,9 @@ type ListSecretsParams struct {
 	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
 	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
 }
+
+// ListSecretsParamsManagedBy defines parameters for ListSecrets.
+type ListSecretsParamsManagedBy string
 
 // CreateSecretParams defines parameters for CreateSecret.
 type CreateSecretParams struct {
@@ -7381,6 +8069,15 @@ type CreateApiKeyJSONRequestBody = CreateApiKeyRequest
 
 // PutBudgetJSONRequestBody defines body for PutBudget for application/json ContentType.
 type PutBudgetJSONRequestBody = PutBudgetRequest
+
+// PutTeamCollaborationJSONRequestBody defines body for PutTeamCollaboration for application/json ContentType.
+type PutTeamCollaborationJSONRequestBody = PutTeamCollaborationRequest
+
+// ConnectAgentToCollaborationJSONRequestBody defines body for ConnectAgentToCollaboration for application/json ContentType.
+type ConnectAgentToCollaborationJSONRequestBody = ConnectAgentRequest
+
+// RotateCollaborationKeysJSONRequestBody defines body for RotateCollaborationKeys for application/json ContentType.
+type RotateCollaborationKeysJSONRequestBody = RotateCollaborationKeysRequest
 
 // PutNamespaceConfigValueJSONRequestBody defines body for PutNamespaceConfigValue for application/json ContentType.
 type PutNamespaceConfigValueJSONRequestBody = PutNamespaceConfigValueRequest

@@ -3,6 +3,7 @@ package client
 import (
 	"fmt"
 	"io"
+	"net/http"
 	"time"
 
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/redact"
@@ -19,6 +20,13 @@ func (d *debugLog) printf(component, format string, a ...any) {
 		return
 	}
 	_, _ = fmt.Fprintf(d.w, "%s DEBUG %s %s\n", d.now().UTC().Format(time.RFC3339), component, fmt.Sprintf(format, a...))
+}
+
+// headers writes one line per request header with sensitive values masked (CLI-25).
+func (d *debugLog) headers(component string, h http.Header) {
+	for _, l := range redact.Headers(h) {
+		d.printf(component, "request header: %s", l)
+	}
 }
 
 const maxLoggedBody = 4096

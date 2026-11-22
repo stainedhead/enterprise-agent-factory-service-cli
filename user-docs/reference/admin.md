@@ -35,6 +35,7 @@ OPERATIONS
        get-settings                   Get settings
        list-agent-templates           List admin agent templates
        list-api-keys                  List service API keys
+       list-collaboration-endpoints   List collaboration endpoints
        list-cost-reconciliations      List cost reconciliations
        list-cost-tag-status           List cost tag status
        list-exports                   List exports
@@ -337,6 +338,10 @@ SYNOPSIS
 OPTIONS
        --cli-client-id (string) (required)
        --client-secret-arn (string)
+       --collab-client-id (string)
+          The collaboration (Paperclip edge) client of this provider
+       --collab-client-secret-arn (string)
+          Reference only; needs collabClientId; never returned by ListSignInProviders
        --console-client-id (string) (required)
        --enabled (boolean)
        --groups-claim (string)
@@ -1171,6 +1176,49 @@ EXAMPLES
 
 ```
 
+## list-collaboration-endpoints
+
+```text
+AFS ADMIN LIST-COLLABORATION-ENDPOINTS
+
+NAME
+       admin list-collaboration-endpoints
+
+DESCRIPTION
+       List collaboration endpoints
+
+       Required permission: admin:settings
+
+SYNOPSIS
+       afs admin list-collaboration-endpoints [options]
+
+OPTIONS
+       --team-id (string)
+       --state (string)
+          Possible values: Ready, Degraded, Failed, Pending
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       afs admin list-collaboration-endpoints help
+```
+
 ## list-cost-reconciliations
 
 ```text
@@ -1734,6 +1782,7 @@ SYNOPSIS
 OPTIONS
        --name (string) (required)
        --allowed-digests (list) (required)
+       --capabilities (list)
        --current-digest (string) (required)
        --default-resources (JSON)
        --description (string)
@@ -2091,6 +2140,10 @@ OPTIONS
        --provider-id (string) (required)
        --cli-client-id (string)
        --client-secret-arn (string)
+       --collab-client-id (string)
+          The collaboration (Paperclip edge) client of this provider
+       --collab-client-secret-arn (string)
+          Reference only; needs collabClientId; never returned by ListSignInProviders
        --console-client-id (string)
        --enabled (boolean)
        --groups-claim (string)

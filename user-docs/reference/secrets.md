@@ -200,6 +200,8 @@ SYNOPSIS
        afs secrets list-secrets [options]
 
 OPTIONS
+       --managed-by (string)
+          Possible values: user, afs, paperclip
        --team-id (string) (required)
           Team id; taken from the path only
 
@@ -225,6 +227,10 @@ EXAMPLES
        List a team's secrets (names and metadata, never values)
 
        afs secrets list-secrets --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
+       List the secrets that AFS generated
+
+       afs secrets list-secrets --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --managed-by afs
 
 ```
 
@@ -327,6 +333,10 @@ EXAMPLES
        Rotate a secret to a new value
 
        afs secrets rotate-secret --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --secret-id sec_01JD2Q3R4S5T6V7W8X9Y0Z0001 --secret-value file://new-token.txt
+
+       Rotate a secret that AFS generates (no value, so none is sent)
+
+       afs secrets rotate-secret --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --secret-id sec_01JD2Q3R4S5T6V7W8X9Y0Z0001
 
 ```
 

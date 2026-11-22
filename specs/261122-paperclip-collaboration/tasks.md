@@ -4,21 +4,21 @@
 
 ## Progress summary
 
-0/38 tasks complete.
+11/38 tasks complete (M7 done).
 
 ## M7 (C1)
 
-- [ ] P7.1 Re-pin snapshot, regenerate, fix count/version tests, milestone and stream entries for 7 operations (FR-001)
-- [ ] P7.2 Redact edge headers in `internal/redact` and the client debug writer (FR-008)
-- [ ] P7.3 Reason hint table and `details.fields[]` printing in `exec` (FR-009)
-- [ ] P7.4 `collaboration describe-collaboration` + notice + missing-agent hint (FR-002)
-- [ ] P7.5 `collaboration put-collaboration` body, required surfaces, If-Match reader, `--wait` (FR-003)
-- [ ] P7.6 `list-collaboration-links`, `connect-agent`, `disconnect-agent` (FR-004)
-- [ ] P7.7 `agents` flags, validation, columns, skeleton, `list-agent-templates --capability`, `admin put-agent-template --capabilities` (FR-005)
-- [ ] P7.8 `secrets` managed-by, column, hints (FR-006)
-- [ ] P7.9 `teams` guardrail flag, `hostname_held` hint, `members`/`api-keys` role (FR-007)
-- [ ] P7.10 safeupdate and wait table checks (US-34.3)
-- [ ] P7.11 Docs first cut; raise `CurrentMilestone` to 7; gate; commit; push
+- [x] P7.1 Re-pin snapshot, regenerate, fix count/version tests, milestone and stream entries for 7 operations (FR-001)
+- [x] P7.2 Redact edge headers in `internal/redact` and the client debug writer (FR-008)
+- [x] P7.3 Reason hint table and `details.fields[]` printing in `exec` (FR-009)
+- [x] P7.4 `collaboration describe-collaboration` + notice + missing-agent hint (FR-002)
+- [x] P7.5 `collaboration put-collaboration` body, required surfaces, If-Match reader, `--wait` (FR-003)
+- [x] P7.6 `list-collaboration-links`, `connect-agent`, `disconnect-agent` (FR-004)
+- [x] P7.7 `agents` flags, validation, columns, skeleton, `list-agent-templates --capability`, `admin put-agent-template --capabilities` (FR-005)
+- [x] P7.8 `secrets` managed-by, column, hints (FR-006)
+- [x] P7.9 `teams` guardrail flag, `hostname_held` hint, `members`/`api-keys` role (FR-007)
+- [x] P7.10 safeupdate and wait table checks (US-34.3)
+- [x] P7.11 Docs first cut; raise `CurrentMilestone` to 7; gate; commit; push
 
 ## M8 (C2)
 

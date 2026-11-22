@@ -32,7 +32,7 @@
 
 | Milestone | Scope | Status | Commit |
 |---|---|---|---|
-| M7 | C1: re-pin, collaboration describe/put/links/connect/disconnect, agents, secrets, teams, members, api-keys, redaction | Pending | - |
+| M7 | C1: re-pin, collaboration describe/put/links/connect/disconnect, agents, secrets, teams, members, api-keys, redaction | Complete | see git log |
 | M8 | C2: admin endpoints, identity provider collab client, settings, notice | Pending | - |
 | M9 | C3: invoke-api, rotate keys, managed hints | Pending | - |
 | M10 | C4: swarm templates, reports, docs, skills, traceability, release | Pending | - |

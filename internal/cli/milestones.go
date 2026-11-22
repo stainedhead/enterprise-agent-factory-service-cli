@@ -4,9 +4,9 @@ import "github.com/stainedhead/enterprise-agent-factory-service-cli/internal/spe
 
 // CurrentMilestone is the highest milestone whose operations are complete (example, table
 // columns, golden files). It is bumped only by milestone exit tasks (D-C4).
-const CurrentMilestone = 6
+const CurrentMilestone = 7
 
-// MilestoneOf returns the milestone (0..6) in which an operation is completed, or -1 when unknown.
+// MilestoneOf returns the milestone (0..10) in which an operation is completed, or -1 when unknown.
 func MilestoneOf(opID string) int {
 	if m, ok := milestoneOf[opID]; ok {
 		return m

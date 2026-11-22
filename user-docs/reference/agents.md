@@ -61,6 +61,7 @@ SYNOPSIS
 OPTIONS
        --team-id (string) (required)
           Team id; taken from the path only
+       --collaboration (JSON)
        --description (string)
        --iam-identity (string)
           Possible values: team_shared, dedicated
@@ -70,12 +71,19 @@ OPTIONS
        --name (string) (required)
           Immutable name (team slug, agent, pool, secret)
        --resources (JSON)
+       --role (string)
+          Set on create; immutable
+          Possible values: worker, collaboration
        --secret-bindings (JSON)
        --template (string) (required)
           Agent template name
        --volume (JSON)
        --idempotency-key (string)
           Idempotency key (default: a new ULID per invocation).
+       --collaboration-connect (boolean)
+          Connect the agent to the team's Paperclip (--no-collaboration-connect disconnects it).
+       --paperclip-agent-id (string)
+          The agent's id in Paperclip (accepted only while registrationMode is manual).
        --wait (boolean)
           Wait until the resource is ready (or gone, for a delete).
        --wait-timeout (duration)
@@ -107,6 +115,14 @@ EXAMPLES
        Create an agent from a file
 
        afs agents create-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --cli-input-json file://agent.json
+
+       Create the team's collaboration agent (Paperclip) and wait until it is ready
+
+       afs agents create-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name paperclip --role collaboration --template paperclip --image registry.example.com/agents/coder@sha256:4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f --model-id anthropic.claude-sonnet-4-5 --wait
+
+       Create a worker that does not connect to Paperclip
+
+       afs agents create-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name coder --template claude-code --image registry.example.com/agents/coder@sha256:4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f --model-id anthropic.claude-sonnet-4-5 --no-collaboration-connect
 
 ```
 
@@ -621,6 +637,10 @@ DESCRIPTION
 SYNOPSIS
        afs agents list-agent-templates [options]
 
+OPTIONS
+       --capability (string)
+          Possible values: paperclip
+
 GLOBAL OPTIONS
        --profile                Use a specific profile from ~/.afs/config.
        --endpoint-url           Override the API endpoint URL.
@@ -644,6 +664,10 @@ EXAMPLES
 
        afs agents list-agent-templates
 
+       List the templates that can run Paperclip
+
+       afs agents list-agent-templates --capability paperclip
+
 ```
 
 ## list-agents
@@ -663,6 +687,8 @@ SYNOPSIS
        afs agents list-agents [options]
 
 OPTIONS
+       --role (string)
+          Possible values: worker, collaboration
        --team-id (string) (required)
           Team id; taken from the path only
 
@@ -692,6 +718,10 @@ EXAMPLES
        Print agent ids and phases
 
        afs agents list-agents --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --query 'items[].[id,status.phase]' --output text
+
+       Find the team's collaboration agent
+
+       afs agents list-agents --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --role collaboration
 
 ```
 
@@ -1249,6 +1279,7 @@ OPTIONS
        --team-id (string) (required)
           Team id; taken from the path only
        --agent-id (string) (required)
+       --collaboration (JSON)
        --description (string)
        --iam-identity (string)
           Possible values: team_shared, dedicated
@@ -1262,6 +1293,10 @@ OPTIONS
        --volume (JSON)
        --if-match (string)
           Apply only if the resource is at this version (safe update).
+       --collaboration-connect (boolean)
+          Connect the agent to the team's Paperclip (--no-collaboration-connect disconnects it).
+       --paperclip-agent-id (string)
+          The agent's id in Paperclip (accepted only while registrationMode is manual).
        --wait (boolean)
           Wait until the resource is ready (or gone, for a delete).
        --wait-timeout (duration)
@@ -1286,6 +1321,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
+       Connect an existing worker to Paperclip (the same effect as afs collaboration connect-agent)
+
+       afs agents update-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --collaboration-connect
+
        Change the model (reads the current version, sends If-Match)
 
        afs agents update-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --model-id anthropic.claude-haiku-4-5

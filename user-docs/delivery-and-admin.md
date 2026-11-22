@@ -12,6 +12,9 @@ afs api-keys list-api-keys --team-id team_01J...
 afs api-keys delete-api-key --team-id team_01J... --key-id key_01J...
 ```
 
+`--role` is `team_admin`, `team_collaborator` or `team_viewer` (a key with `team_collaborator` can call the team's Paperclip, see
+[Team collaboration](collaboration.md)).
+
 `create-api-key` prints the key's secret **once**, in the normal output, and says
 `Store this key now; it cannot be shown again.` on stderr. `--debug` never prints it. If you repeat the
 call with the same `--idempotency-key`, the service replays the response without the secret and the CLI says so:

@@ -30,6 +30,11 @@ afs teams create-team --slug payments --display-name "Payments" --kind persisten
 
 `afs teams list-revisions` and `describe-revision --revision-id N` show the configuration history.
 
+## Teams and Paperclip
+
+`afs teams create-team` and `update-team` take `--may-expose-collaboration` or `--no-may-expose-collaboration` (service administrators: it lets the
+team publish its Paperclip endpoint).
+
 ## Members
 
 ```bash
@@ -38,6 +43,9 @@ afs members add-member --team-id team_... --subject-type group --group-name paym
 afs members update-member --team-id team_... --binding-id mem_... --role team_viewer
 afs members remove-member --team-id team_... --binding-id mem_...
 ```
+
+The roles are `team_admin`, `team_collaborator` (may use the team's Paperclip, see [Team collaboration](collaboration.md)) and
+`team_viewer`.
 
 There is no single-member read, so `update-member` and `remove-member` find the version in the member
 list. Pass `--if-match` to skip that read.

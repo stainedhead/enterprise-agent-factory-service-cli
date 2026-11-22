@@ -61,6 +61,7 @@ func ReportError(w io.Writer, opID, profile string, err error) int {
 		if ae.RequestID != "" {
 			_, _ = fmt.Fprintf(w, "Request ID: %s\n", ae.RequestID)
 		}
+		printDetails(w, ae)
 		return cli.ExitService
 	}
 	var fe *wait.FailedError

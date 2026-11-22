@@ -11,6 +11,10 @@ DESCRIPTION
 SYNOPSIS
        afs agents list-agent-templates [options]
 
+OPTIONS
+       --capability (string)
+          Possible values: paperclip
+
 GLOBAL OPTIONS
        --profile                Use a specific profile from ~/.afs/config.
        --endpoint-url           Override the API endpoint URL.
@@ -33,4 +37,8 @@ EXAMPLES
        List the agent templates
 
        afs agents list-agent-templates
+
+       List the templates that can run Paperclip
+
+       afs agents list-agent-templates --capability paperclip
 
