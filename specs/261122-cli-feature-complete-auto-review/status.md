@@ -18,7 +18,7 @@
 | 2 | Research and data modelling | Complete | research.md, data-dictionary.md |
 | 3 | Architecture and planning | Complete | architecture.md, plan.md |
 | 4 | Task breakdown | Complete | tasks.md, one task per FR |
-| 5 | Implementation | In Progress | 3 / 20 FRs |
+| 5 | Implementation | In Progress | 4 / 20 FRs |
 | 6 | Completion and archival | Not Started | |
 
 ## Task log
@@ -29,3 +29,4 @@ Updated after every fix: FR, commit, tests added, review note.
 | FR-001 | P0 | Done | reject INI injection and invalid SSO provider fields | Set returns an error on control chars and structural chars; ValidateIssuer/ValidateIdentifier; provider validated in Pick and configure sso. Review: second pass tried tab, NUL, DEL, C1, bracket keys, http issuer; all refused. Gate green, 93.5%. |
 | FR-002 | P1 | Done | require https and a matching issuer for OIDC discovery and endpoints | Discover validates issuer, issuer equality, endpoint schemes; sso_issuer validated on read (non-lenient) and write. Review: no secret form sent in any rejected case. Gate green, 93.5%. |
 | FR-003 | P1 | Done | sanitize terminal control characters in table, text, errors and prompts | output.Sanitize + sanitizing writer in ReportError; device prompt and provider list sanitized; json/yaml unchanged (D-R7). Review: bypass attempts with C1, DEL, invalid UTF-8 covered. 93.6%. |
+| FR-004 | P1 | Done | print NextToken on stderr for CSV with --no-paginate; resume without header | fetchCSV reports X-Afs-Next-Token; CSVWriter.Resume. Review: stdout stays clean CSV. 93.6%. |

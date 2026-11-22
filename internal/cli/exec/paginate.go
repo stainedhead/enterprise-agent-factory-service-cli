@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/url"
 	"strconv"
 
@@ -64,6 +65,7 @@ type pages struct {
 	op   *spec.Operation
 	g    cli.Globals
 	base url.Values
+	errw io.Writer // CSV: where "NextToken: <t>" goes with --no-paginate
 }
 
 // fetchJSON returns the merged listing body and the last response.
@@ -196,6 +198,9 @@ func (p *pages) fetchCSV(ctx context.Context, w *output.CSVWriter) (*client.Resp
 			return last, err
 		}
 		next = resp.Header.Get("X-Afs-Next-Token")
+		if next != "" && p.g.NoPaginate && p.errw != nil {
+			_, _ = fmt.Fprintf(p.errw, "NextToken: %s\n", output.Sanitize(next))
+		}
 		if next == "" || p.g.NoPaginate {
 			return last, nil
 		}

@@ -384,3 +384,39 @@ func newServer(t *testing.T, h http.HandlerFunc) string {
 	t.Cleanup(srv.Close)
 	return srv.URL
 }
+
+// FR-004 (PRD CLI-7): --no-paginate with CSV prints the page and reports the next token on stderr.
+func TestCSVNoPaginatePrintsNextTokenOnStderr(t *testing.T) {
+	var queries []string
+	h := func(w http.ResponseWriter, req *http.Request) {
+		queries = append(queries, req.URL.RawQuery)
+		w.Header().Set("Content-Type", "text/csv")
+		if req.URL.Query().Get("nextToken") == "" {
+			w.Header().Set("X-Afs-Next-Token", "tok-2")
+			_, _ = w.Write([]byte("a,b\n1,2\n"))
+			return
+		}
+		_, _ = w.Write([]byte("a,b\n3,4\n"))
+	}
+	base := []string{"budgets", "list-costs", "--team-id", "team_1", "--output", "csv"}
+	r := run(t, h, append(base, "--no-paginate")...)
+	if r.code != 0 || r.out != "a,b\n1,2\n" || !strings.Contains(r.errOut, "NextToken: tok-2\n") || len(queries) != 1 {
+		t.Fatalf("%+v queries=%v", r, queries)
+	}
+	// resume: the page after the token, and no second header
+	r = run(t, h, append(base, "--no-paginate", "--starting-token", "tok-2")...)
+	if r.code != 0 || r.out != "3,4\n" || strings.Contains(r.errOut, "NextToken") {
+		t.Fatalf("resume: %+v", r)
+	}
+	if !strings.Contains(queries[len(queries)-1], "nextToken=tok-2") {
+		t.Errorf("token not sent: %v", queries)
+	}
+	// no further page: nothing extra
+	r = run(t, func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "text/csv")
+		_, _ = w.Write([]byte("a,b\n1,2\n"))
+	}, append(base, "--no-paginate")...)
+	if r.out != "a,b\n1,2\n" || strings.Contains(r.errOut, "NextToken") {
+		t.Fatalf("last page: %+v", r)
+	}
+}

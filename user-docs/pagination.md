@@ -20,4 +20,15 @@ afs teams list-teams --max-items 10 --starting-token eyJ0Ijoi...
 ## CSV
 
 `--output csv` streams every page, writing the header once. It cannot be combined with `--query` or
-`--max-items`. With `--no-paginate` only the first page is printed.
+`--max-items`. With `--no-paginate` only the first page is printed, and when more rows exist `afs` writes
+`NextToken: <token>` to stderr (stdout holds only the CSV page, so redirecting it stays clean).
+
+```bash
+afs budgets list-costs --team-id team_1 --output csv --no-paginate > costs.csv
+# stderr: NextToken: eyJ...
+afs budgets list-costs --team-id team_1 --output csv --no-paginate --starting-token eyJ... >> costs.csv
+```
+
+A resumed CSV run (`--starting-token`) leaves out the header row, so appending the pages yields one valid
+file. CSV tokens come from the service's `X-Afs-Next-Token` header and are not the same as the JSON
+`NextToken`; a token from one format cannot be used with the other.

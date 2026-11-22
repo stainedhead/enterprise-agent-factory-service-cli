@@ -108,8 +108,8 @@ func Run(ctx context.Context, inv *cli.Invocation) int {
 	var data []byte
 	switch {
 	case accept == "text/csv":
-		pg := &pages{do: send, op: op, g: g, base: b.Query}
-		resp, err = pg.fetchCSV(ctx, &output.CSVWriter{W: sink})
+		pg := &pages{do: send, op: op, g: g, base: b.Query, errw: env.Stderr}
+		resp, err = pg.fetchCSV(ctx, &output.CSVWriter{W: sink, Resume: g.StartingToken != ""})
 		if err != nil {
 			return fail(err)
 		}
