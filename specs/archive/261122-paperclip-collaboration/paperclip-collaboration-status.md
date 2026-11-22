@@ -7,7 +7,7 @@
 **Process Start:** 2026-11-22T20:47:53Z
 **Process End:** 2026-11-22T21:40:00Z
 **Total Runtime:** about 52 min
-**Release:** v1.0.1 (tag `v1.0.1`, pushed by J). Contract pin: restapi 358807471cfc6b527baf29ef8ca7062d98038405 (PR #7, unmerged; re-pinned from 99bfcfc for the collaboration report)
+**Release:** v1.0.1 (tag `v1.0.1`, pushed by J). Contract pin: restapi 763e939e8f9f83daa92a6ece7d7a7c555f1ff45b (main; re-pinned from 3588074, which was re-pinned from 99bfcfc)
 
 ## Step Summary
 

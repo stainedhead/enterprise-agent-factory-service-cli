@@ -2,7 +2,7 @@
 
 Adds Paperclip team collaboration to the `afs` CLI (API contract v1.3.1, release **v1.0.1**): the `collaboration` service (describe, put with If-Match and `--wait`, links, connect, disconnect, rotate keys), the local command `afs collaboration invoke-api` for pipelines (AFS credential in `X-Afs-Authorization`, Paperclip key from a 0600 file or stdin, origin validation, no redirects or cookies, narrow retries, edge errors mapped to AWS-style messages), the collaboration agent role and managed secrets, the collaborator role, the collaboration report, swarm template `spec.collaboration`, and `admin list-collaboration-endpoints`. Credentials never reach stdout, stderr, debug output or process arguments (sentinel tests).
 
-The contract snapshot is pinned to `-restapi` commit 3588074 (`api/SOURCE`); `afs --version` prints `contract/1.3`.
+The contract snapshot is pinned to `-restapi` commit 763e939 (`api/SOURCE`); `afs --version` prints `contract/1.3`.
 
 ## Process
 
@@ -21,7 +21,7 @@ Implemented with the dev-flow `implm-frm-prd` workflow, 14 steps. Analysis: [pap
 
 ## Root contract follow-ups
 
-See `implementation-notes.md`: RCF-1 (`admin list-agent-templates` has no capability filter), RCF-2 (`managedBy` in `managed_secret` details), RCF-3 and RCF-7 (root `skills/` entry), RCF-5 (`collab.*` keys missing from the `PutSetting` key enum).
+See `implementation-notes.md`: RCF-1 (`admin list-agent-templates` has no capability filter), RCF-2 (`managedBy` in `managed_secret` details), RCF-3 and RCF-7 (root `skills/` entry), RCF-5 (`collab.*` keys missing from the `PutSetting` key enum; resolved at 763e939).
 
 ## Release steps for J
 

@@ -6,7 +6,7 @@ package spec
 const ContractVersion = "1.3.1"
 
 // SnapshotSHA256 is the checksum of the snapshot these descriptors were generated from.
-const SnapshotSHA256 = "3d7ddf41202ef6ca19c1bfe066f82a202bec715d7f57b9377e49a0ac0ecb8c6e"
+const SnapshotSHA256 = "12bb52959d31141d6577a0487a3c40318a2a542423e1adc30c947ac57bcdb357"
 
 var operations = []Operation{
 	{ID: "AddMember", Method: "POST", Path: "/v1/teams/{teamId}/members", Service: "members", Command: "add-member", Summary: "Add member",
@@ -1687,7 +1687,7 @@ var operations = []Operation{
 	{ID: "PutSetting", Method: "PUT", Path: "/v1/admin/settings/{key}", Service: "admin", Command: "put-setting", Summary: "Put setting",
 		Permission: "admin:settings", Scope: "service", Priority: "P0", CSV: false,
 		Params: []Param{
-			{Name: "key", In: "path", Required: true, Desc: "", Example: "", Schema: Schema{Type: "string", Enum: []string{"secrets.path_prefix", "pricing.price_list_sync", "billing.variance_alert_pct", "api.idempotency_key_ttl_seconds", "teams.ephemeral_max_days", "work_orders.sla_warning_hours", "billing.tag_activation_acknowledged", "work_orders.notification_channel_id", "reports.idle_cpu_millicores", "egress.denied_spike_threshold", "gateway.reservation_ttl_seconds", "api.cors_origins"}}},
+			{Name: "key", In: "path", Required: true, Desc: "", Example: "", Schema: Schema{Type: "string", Enum: []string{"secrets.path_prefix", "pricing.price_list_sync", "billing.variance_alert_pct", "api.idempotency_key_ttl_seconds", "teams.ephemeral_max_days", "work_orders.sla_warning_hours", "billing.tag_activation_acknowledged", "work_orders.notification_channel_id", "reports.idle_cpu_millicores", "egress.denied_spike_threshold", "gateway.reservation_ttl_seconds", "api.cors_origins", "collab.base_domain", "collab.public_endpoints", "collab.allowed_source_cidrs", "collab.session_ttl_minutes", "collab.content_scan", "collab.max_body_mb", "collab.denied_spike_threshold"}}},
 		},
 		IfMatch: IfMatchOptional, Idempotent: false, Paginated: false,
 		Body: &Body{Required: true, MediaType: "application/json", SchemaName: "PutSettingRequest", Fields: []Field{

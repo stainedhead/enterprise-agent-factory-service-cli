@@ -2829,6 +2829,13 @@ const (
 	ApiIdempotencyKeyTtlSeconds      PutSettingParamsKey = "api.idempotency_key_ttl_seconds"
 	BillingTagActivationAcknowledged PutSettingParamsKey = "billing.tag_activation_acknowledged"
 	BillingVarianceAlertPct          PutSettingParamsKey = "billing.variance_alert_pct"
+	CollabAllowedSourceCidrs         PutSettingParamsKey = "collab.allowed_source_cidrs"
+	CollabBaseDomain                 PutSettingParamsKey = "collab.base_domain"
+	CollabContentScan                PutSettingParamsKey = "collab.content_scan"
+	CollabDeniedSpikeThreshold       PutSettingParamsKey = "collab.denied_spike_threshold"
+	CollabMaxBodyMb                  PutSettingParamsKey = "collab.max_body_mb"
+	CollabPublicEndpoints            PutSettingParamsKey = "collab.public_endpoints"
+	CollabSessionTtlMinutes          PutSettingParamsKey = "collab.session_ttl_minutes"
 	EgressDeniedSpikeThreshold       PutSettingParamsKey = "egress.denied_spike_threshold"
 	GatewayReservationTtlSeconds     PutSettingParamsKey = "gateway.reservation_ttl_seconds"
 	PricingPriceListSync             PutSettingParamsKey = "pricing.price_list_sync"
@@ -2849,6 +2856,20 @@ func (e PutSettingParamsKey) Valid() bool {
 	case BillingTagActivationAcknowledged:
 		return true
 	case BillingVarianceAlertPct:
+		return true
+	case CollabAllowedSourceCidrs:
+		return true
+	case CollabBaseDomain:
+		return true
+	case CollabContentScan:
+		return true
+	case CollabDeniedSpikeThreshold:
+		return true
+	case CollabMaxBodyMb:
+		return true
+	case CollabPublicEndpoints:
+		return true
+	case CollabSessionTtlMinutes:
 		return true
 	case EgressDeniedSpikeThreshold:
 		return true

@@ -22,11 +22,11 @@ Paperclip team collaboration (API contract v1.3.1). Spec: `specs/archive/261122-
 - Profile key `collab_base_domain`; reason hints for the collaboration errors; `Patterns:` for `SecretDetected`.
 
 ### Changed
-- The pinned API snapshot is re-pinned to contract v1.3.1 (`-restapi` 3588074) (`afs --version` prints `contract/1.3`);
+- The pinned API snapshot is re-pinned to contract v1.3.1 (`-restapi` 763e939) (`afs --version` prints `contract/1.3`);
   generated types, descriptors and the reference docs are regenerated.
 - `X-Afs-Authorization` joins the headers masked in `--debug` output; unknown options echo only their name and
   suggest the options that start with it.
-- `put-setting --key` and the report schedule `--report` are open enums: the API judges values the snapshot does not list.
+- The report schedule `--report` is an open enum (`put-setting --key` is closed again at 763e939, which lists the `collab.*` keys): the API judges values the snapshot does not list.
 
 ### Release
 - Tag `v1.0.1`. The version is stamped by the Makefile from the tag (`make build VERSION=1.0.1`).
