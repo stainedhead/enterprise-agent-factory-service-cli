@@ -1,0 +1,52 @@
+# PowerShell completion for afs; load with: afs completion powershell | Out-String | Invoke-Expression
+$afsValueFlags = @('--profile','--endpoint-url','--output','--query','--max-items','--page-size','--starting-token','--cli-input-json','--color','--cli-connect-timeout','--cli-read-timeout')
+$afsGlobals = @('--profile','--endpoint-url','--output','--query','--no-paginate','--max-items','--page-size','--starting-token','--cli-input-json','--generate-cli-skeleton','--debug','--no-cli-pager','--color','--cli-connect-timeout','--cli-read-timeout','--version')
+$afsEnums = @{ '--output' = @('json','yaml','table','text','csv'); '--color' = @('on','off','auto') }
+$afsCommands = @{
+  'audit' = @{
+    'list-audit-events' = @('--action','--actor-id','--from','--outcome','--resource-id','--resource-kind','--team-id','--to')
+  }
+  'completion' = @{
+    'bash' = @()
+    'zsh' = @()
+    'fish' = @()
+    'powershell' = @()
+  }
+  'teams' = @{
+    'list-teams' = @('--kind','--state')
+    'suspend-team' = @('--idempotency-key','--team-id')
+  }
+}
+$afsOptionEnums = @{
+  'audit list-audit-events --outcome' = @('allowed','denied','failed')
+  'teams list-teams --kind' = @('persistent','ephemeral')
+  'teams list-teams --state' = @('active','suspended','deleting','deleted')
+}
+Register-ArgumentCompleter -Native -CommandName afs -ScriptBlock {
+  param($wordToComplete, $commandAst, $cursorPosition)
+  $w = @($commandAst.CommandElements | ForEach-Object { $_.ToString() })
+  $positional = @()
+  for ($i = 1; $i -lt $w.Count; $i++) {
+    if ($w[$i] -notlike '-*' -and -not ($i -gt 1 -and $w[$i-1] -in $afsValueFlags)) { $positional += $w[$i] }
+  }
+  if ($wordToComplete -ne '' -and $positional.Count -gt 0) { $positional = @($positional | Select-Object -SkipLast 1) }
+  $prev = if ($wordToComplete -eq '') { $w[-1] } elseif ($w.Count -gt 1) { $w[-2] } else { '' }
+  $candidates = @()
+  if ($positional.Count -ge 2 -and $afsOptionEnums.ContainsKey("$($positional[0]) $($positional[1]) $prev")) {
+    $candidates = $afsOptionEnums["$($positional[0]) $($positional[1]) $prev"]
+  } elseif ($afsEnums.ContainsKey($prev)) {
+    $candidates = $afsEnums[$prev]
+  } elseif ($wordToComplete -like '-*') {
+    $candidates = $afsGlobals
+    if ($positional.Count -ge 2 -and $afsCommands.ContainsKey($positional[0]) -and $afsCommands[$positional[0]].ContainsKey($positional[1])) {
+      $candidates = $afsCommands[$positional[0]][$positional[1]] + $afsGlobals
+    }
+  } elseif ($positional.Count -eq 0) {
+    $candidates = $afsCommands.Keys
+  } elseif ($positional.Count -eq 1 -and $afsCommands.ContainsKey($positional[0])) {
+    $candidates = $afsCommands[$positional[0]].Keys
+  }
+  $candidates | Where-Object { $_ -like "$wordToComplete*" } | Sort-Object | ForEach-Object {
+    [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
+  }
+}

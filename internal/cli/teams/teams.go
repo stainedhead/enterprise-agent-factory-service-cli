@@ -31,8 +31,8 @@ func registerTeams(r *cli.Registry) {
 	r.Override(cli.Override{Op: "GetTeamStatus", Columns: statusColumns, Examples: []cli.Example{
 		{Title: "Show reconcile status", Command: "afs teams get-team-status --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW"},
 	}})
-	r.Override(cli.Override{Op: "CreateTeam", Columns: teamColumns, Examples: []cli.Example{
-		{Title: "Create a persistent team and wait until it is ready", Command: `afs teams create-team --slug payments --display-name "Payments" --kind persistent --max-budget-usd 500.00 --first-admin '{"email":"ada@example.com"}' --tags '{"project":"checkout"}' --wait`},
+	r.Override(cli.Override{Op: "CreateTeam", Columns: teamColumns, Kinds: map[string]cli.Kind{"tags": cli.TagPairs}, Examples: []cli.Example{
+		{Title: "Create a persistent team and wait until it is ready", Command: `afs teams create-team --slug payments --display-name "Payments" --kind persistent --max-budget-usd 500.00 --first-admin '{"email":"ada@example.com"}' --tags project=checkout cost-center=CC-1001 --wait`},
 		{Title: "Create a team from a file", Command: "afs teams create-team --cli-input-json file://team.json"},
 		{Title: "Print the input skeleton", Command: "afs teams create-team --generate-cli-skeleton"},
 	}})

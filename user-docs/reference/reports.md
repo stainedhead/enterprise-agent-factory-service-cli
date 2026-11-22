@@ -55,6 +55,17 @@ OPTIONS
           Possible values: usage, costs, activity, traffic
        --idempotency-key (string)
           Idempotency key (default: a new ULID per invocation).
+       --range (string)
+          Report range: 24h, 7d, 30d, 90d or mtd.
+          Possible values: 24h, 7d, 30d, 90d, mtd
+       --from (string)
+          Start of the report window (RFC 3339); use with --to instead of --range.
+       --to (string)
+          End of the report window (RFC 3339).
+       --group-by (string)
+          Comma-separated dimensions: team, agent, model, system, day, hour, pool, tag:<key>.
+       --tag (list)
+          Filter by a tag, key=value (several allowed); sent as tag.<key>=<value>.
 
 GLOBAL OPTIONS
        --profile                Use a specific profile from ~/.afs/config.
@@ -75,7 +86,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs reports create-report-schedule help
+       Email the cost-by-project report every week
+
+       afs reports create-report-schedule --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name weekly-costs --report costs --cadence weekly --channel-id nch_01JD2Q3R4S5T6V7W8X9Y0Z0001 --range 30d --group-by tag:project
+
 ```
 
 ## delete-report-schedule
@@ -120,7 +134,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs reports delete-report-schedule help
+       Delete a schedule
+
+       afs reports delete-report-schedule --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --schedule-id rsc_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## get-agent-report
@@ -349,7 +366,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs reports list-report-schedules help
+       List a team's scheduled reports
+
+       afs reports list-report-schedules --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
 ```
 
 ## update-report-schedule
@@ -381,6 +401,17 @@ OPTIONS
           Stored report query parameters
        --if-match (string)
           Apply only if the resource is at this version (safe update).
+       --range (string)
+          Report range: 24h, 7d, 30d, 90d or mtd.
+          Possible values: 24h, 7d, 30d, 90d, mtd
+       --from (string)
+          Start of the report window (RFC 3339); use with --to instead of --range.
+       --to (string)
+          End of the report window (RFC 3339).
+       --group-by (string)
+          Comma-separated dimensions: team, agent, model, system, day, hour, pool, tag:<key>.
+       --tag (list)
+          Filter by a tag, key=value (several allowed); sent as tag.<key>=<value>.
 
 GLOBAL OPTIONS
        --profile                Use a specific profile from ~/.afs/config.
@@ -401,5 +432,8 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs reports update-report-schedule help
+       Pause a schedule
+
+       afs reports update-report-schedule --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --schedule-id rsc_01J9ZQ3ABCDEFGHJKMNPQRSTVW --no-enabled
+
 ```

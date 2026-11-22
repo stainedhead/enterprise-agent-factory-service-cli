@@ -1,0 +1,9 @@
+Field           Value
+Id              arl_01JD2Q3R4S5T6V7W8X9Y0Z0001
+Profile         deploy
+AccountId       444455556666
+RoleArn         arn:aws:iam::444455556666:role/payments-deployer
+Status          pending_trust
+ExternalId      afs-4N8P2Q
+LastVerifiedAt  
+LastError       

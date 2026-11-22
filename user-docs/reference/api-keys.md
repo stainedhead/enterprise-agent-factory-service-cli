@@ -65,7 +65,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs api-keys create-api-key help
+       Create a team API key (the secret is shown once)
+
+       afs api-keys create-api-key --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --name ci-pipeline --role team_admin --expires-at 2027-02-19T18:00:00Z
+
 ```
 
 ## delete-api-key
@@ -110,7 +113,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs api-keys delete-api-key help
+       Delete an API key
+
+       afs api-keys delete-api-key --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --key-id key_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## list-api-keys
@@ -152,5 +158,8 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs api-keys list-api-keys help
+       List a team's API keys
+
+       afs api-keys list-api-keys --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```

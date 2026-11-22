@@ -93,6 +93,11 @@ func Build(cmd *cli.Command, p *cli.Parsed, src Sources, profileTeamID string) (
 	if err != nil {
 		return nil, err
 	}
+	if cmd.Precheck != nil {
+		if err := cmd.Precheck(p); err != nil {
+			return nil, usage(cmd, "%v", err)
+		}
+	}
 	b := &Built{Path: map[string]string{}, Query: url.Values{}}
 	if op.Body != nil {
 		b.Body = cli.NewObject()
@@ -345,6 +350,20 @@ func convert(o cli.Option, vals []string, src Sources, p *cli.Parsed) (json.RawM
 		}
 		raw, _ := json.Marshal(items)
 		return raw, strings.Join(vals, ","), nil
+	case cli.TagPairs:
+		if !strings.HasPrefix(first, "{") && !strings.HasPrefix(first, "[") && !strings.HasPrefix(first, "file://") {
+			pairs := make([]map[string]string, 0, len(vals))
+			for _, kv := range vals {
+				k, v, ok := strings.Cut(kv, "=")
+				if !ok || k == "" {
+					return nil, "", fmt.Errorf("expected key=value pairs, JSON or file://PATH, got %q", kv)
+				}
+				pairs = append(pairs, map[string]string{"key": k, "value": v})
+			}
+			raw, _ := json.Marshal(pairs)
+			return raw, strings.Join(vals, ","), nil
+		}
+		fallthrough
 	case cli.JSON, cli.Any:
 		text, err := src.textOrFile(first)
 		if err != nil {
@@ -357,7 +376,7 @@ func convert(o cli.Option, vals []string, src Sources, p *cli.Parsed) (json.RawM
 			}
 			return buf.Bytes(), text, nil
 		}
-		if o.Kind == cli.JSON {
+		if o.Kind == cli.JSON || o.Kind == cli.TagPairs {
 			return nil, "", fmt.Errorf("expected JSON or file://PATH")
 		}
 		raw, _ := json.Marshal(text)

@@ -29,11 +29,11 @@ func TestPutTeamModelsNoIfMatch(t *testing.T) {
 	}
 }
 
-// CLI-1: describe-revision takes the revision number as --rev.
+// CLI-1: describe-revision takes the revision number as --revision-id.
 func TestDescribeRevisionPath(t *testing.T) {
 	r := clitest.Run(t, func(w http.ResponseWriter, _ *http.Request) {
 		clitest.Reply(w, 200, `{"revision":12,"operation":"update"}`)
-	}, "teams", "describe-revision", "--team-id", "team_1", "--rev", "12")
+	}, "teams", "describe-revision", "--team-id", "team_1", "--revision-id", "12")
 	if r.Code != 0 || r.Req.URL.Path != "/v1/teams/team_1/revisions/12" {
 		t.Fatalf("%+v", r)
 	}

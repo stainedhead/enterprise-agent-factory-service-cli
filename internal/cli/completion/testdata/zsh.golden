@@ -1,0 +1,36 @@
+#compdef afs
+# zsh completion for afs; save as _afs in a directory of $fpath
+_afs() {
+  local svc op prev
+  svc="${words[2]}"; op="${words[3]}"; prev="${words[CURRENT-1]}"
+  case "$svc $op $prev" in
+    "audit list-audit-events --outcome") compadd -- allowed denied failed; return ;;
+    "teams list-teams --kind") compadd -- persistent ephemeral; return ;;
+    "teams list-teams --state") compadd -- active suspended deleting deleted; return ;;
+    *" --output") compadd -- json yaml table text csv; return ;;
+    *" --color") compadd -- on off auto; return ;;
+  esac
+  if [[ "${words[CURRENT]}" == -* ]]; then
+    case "$svc $op" in
+      "audit list-audit-events") compadd -- --action --actor-id --from --outcome --resource-id --resource-kind --team-id --to --profile --endpoint-url --output --query --no-paginate --max-items --page-size --starting-token --cli-input-json --generate-cli-skeleton --debug --no-cli-pager --color --cli-connect-timeout --cli-read-timeout --version ;;
+      "completion bash") compadd --  --profile --endpoint-url --output --query --no-paginate --max-items --page-size --starting-token --cli-input-json --generate-cli-skeleton --debug --no-cli-pager --color --cli-connect-timeout --cli-read-timeout --version ;;
+      "completion zsh") compadd --  --profile --endpoint-url --output --query --no-paginate --max-items --page-size --starting-token --cli-input-json --generate-cli-skeleton --debug --no-cli-pager --color --cli-connect-timeout --cli-read-timeout --version ;;
+      "completion fish") compadd --  --profile --endpoint-url --output --query --no-paginate --max-items --page-size --starting-token --cli-input-json --generate-cli-skeleton --debug --no-cli-pager --color --cli-connect-timeout --cli-read-timeout --version ;;
+      "completion powershell") compadd --  --profile --endpoint-url --output --query --no-paginate --max-items --page-size --starting-token --cli-input-json --generate-cli-skeleton --debug --no-cli-pager --color --cli-connect-timeout --cli-read-timeout --version ;;
+      "teams list-teams") compadd -- --kind --state --profile --endpoint-url --output --query --no-paginate --max-items --page-size --starting-token --cli-input-json --generate-cli-skeleton --debug --no-cli-pager --color --cli-connect-timeout --cli-read-timeout --version ;;
+      "teams suspend-team") compadd -- --idempotency-key --team-id --profile --endpoint-url --output --query --no-paginate --max-items --page-size --starting-token --cli-input-json --generate-cli-skeleton --debug --no-cli-pager --color --cli-connect-timeout --cli-read-timeout --version ;;
+      *) compadd -- --profile --endpoint-url --output --query --no-paginate --max-items --page-size --starting-token --cli-input-json --generate-cli-skeleton --debug --no-cli-pager --color --cli-connect-timeout --cli-read-timeout --version ;;
+    esac
+    return
+  fi
+  if (( CURRENT == 2 )); then
+    compadd -- audit completion teams
+  elif (( CURRENT == 3 )); then
+    case "$svc" in
+      audit) compadd -- list-audit-events ;;
+      completion) compadd -- bash zsh fish powershell ;;
+      teams) compadd -- list-teams suspend-team ;;
+    esac
+  fi
+}
+compdef _afs afs

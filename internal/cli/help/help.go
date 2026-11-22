@@ -32,7 +32,7 @@ var ServiceSummaries = map[string]string{
 
 var kindNames = map[cli.Kind]string{
 	cli.String: "string", cli.Int: "integer", cli.Number: "number", cli.Bool: "boolean",
-	cli.List: "list", cli.JSON: "JSON", cli.Any: "string or JSON", cli.Duration: "duration",
+	cli.List: "list", cli.JSON: "JSON", cli.Any: "string or JSON", cli.Duration: "duration", cli.TagPairs: "key=value pairs or JSON",
 }
 
 func rootHelp(w io.Writer, reg *cli.Registry) {

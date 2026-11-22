@@ -1,0 +1,64 @@
+AFS REPORTS CREATE-REPORT-SCHEDULE
+
+NAME
+       reports create-report-schedule
+
+DESCRIPTION
+       Create report schedule
+
+       Required permission: reports:schedule
+
+SYNOPSIS
+       afs reports create-report-schedule [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --cadence (string) (required)
+          Possible values: daily, weekly, monthly
+       --channel-id (string) (required)
+       --enabled (boolean)
+       --format (string)
+          Possible values: csv
+       --name (string) (required)
+       --query-json (JSON)
+          Stored report query parameters
+       --report (string) (required)
+          Possible values: usage, costs, activity, traffic
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+       --range (string)
+          Report range: 24h, 7d, 30d, 90d or mtd.
+          Possible values: 24h, 7d, 30d, 90d, mtd
+       --from (string)
+          Start of the report window (RFC 3339); use with --to instead of --range.
+       --to (string)
+          End of the report window (RFC 3339).
+       --group-by (string)
+          Comma-separated dimensions: team, agent, model, system, day, hour, pool, tag:<key>.
+       --tag (list)
+          Filter by a tag, key=value (several allowed); sent as tag.<key>=<value>.
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       Email the cost-by-project report every week
+
+       afs reports create-report-schedule --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name weekly-costs --report costs --cadence weekly --channel-id nch_01JD2Q3R4S5T6V7W8X9Y0Z0001 --range 30d --group-by tag:project
+

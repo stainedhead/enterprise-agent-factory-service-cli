@@ -151,8 +151,12 @@ func Run(ctx context.Context, inv *cli.Invocation) int {
 	}
 
 	if len(bytes.TrimSpace(data)) > 0 && resp.Status != 204 {
+		itemsKey := op.ResultKey
+		if cmd.ResultKey != "" {
+			itemsKey = cmd.ResultKey
+		}
 		ro := output.RenderOptions{Format: format, Query: g.Query, Options: output.Options{
-			Columns: cmd.Columns, ItemsKey: op.ResultKey,
+			Columns: cmd.Columns, ItemsKey: itemsKey,
 			Color: output.ColorEnabled(g.Color, env.StdoutTTY, env.Getenv),
 		}}
 		if err := output.Render(sink, data, ro); err != nil {

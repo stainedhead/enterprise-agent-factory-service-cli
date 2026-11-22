@@ -104,7 +104,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams create-log-destination help
+       Ship logs to CloudWatch and wait until it is applied
+
+       afs teams create-log-destination --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name team-cloudwatch --kind cloudwatch --config '{"logGroup":"/afs/payments","region":"us-east-1"}' --wait
+
 ```
 
 ## create-notification-channel
@@ -212,7 +215,7 @@ OPTIONS
        --quotas (JSON)
        --slug (string) (required)
           Immutable name (team slug, agent, pool, secret)
-       --tags (JSON)
+       --tags (key=value pairs or JSON)
           Team-owned tag values, including required service tags
        --teardown-rule (string)
           Possible values: at_expiry, at_cap_or_expiry, at_work_complete
@@ -246,7 +249,7 @@ GLOBAL OPTIONS
 EXAMPLES
        Create a persistent team and wait until it is ready
 
-       afs teams create-team --slug payments --display-name "Payments" --kind persistent --max-budget-usd 500.00 --first-admin '{"email":"ada@example.com"}' --tags '{"project":"checkout"}' --wait
+       afs teams create-team --slug payments --display-name "Payments" --kind persistent --max-budget-usd 500.00 --first-admin '{"email":"ada@example.com"}' --tags project=checkout cost-center=CC-1001 --wait
 
        Create a team from a file
 
@@ -429,7 +432,7 @@ SYNOPSIS
 OPTIONS
        --team-id (string) (required)
           Team id; taken from the path only
-       --id (string) (required)
+       --destination-id (string) (required)
        --if-match (string)
           Apply only if the resource is at this version (safe update).
        --wait (boolean)
@@ -456,7 +459,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams delete-log-destination help
+       Delete a destination and wait until it is gone
+
+       afs teams delete-log-destination --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --destination-id log_01J9ZQ3ABCDEFGHJKMNPQRSTVW --wait
+
 ```
 
 ## delete-notification-channel
@@ -581,7 +587,7 @@ SYNOPSIS
 OPTIONS
        --team-id (string) (required)
           Team id; taken from the path only
-       --id (string) (required)
+       --destination-id (string) (required)
 
 GLOBAL OPTIONS
        --profile                Use a specific profile from ~/.afs/config.
@@ -602,7 +608,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams describe-log-destination help
+       Show a destination's configuration and delivery status
+
+       afs teams describe-log-destination --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --destination-id log_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## describe-notification-channel
@@ -670,7 +679,7 @@ SYNOPSIS
 OPTIONS
        --team-id (string) (required)
           Team id; taken from the path only
-       --rev (integer) (required)
+       --revision-id (integer) (required)
           Range: 1 to unbounded
 
 GLOBAL OPTIONS
@@ -694,7 +703,7 @@ GLOBAL OPTIONS
 EXAMPLES
        Show one revision with its snapshot
 
-       afs teams describe-revision --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --rev 12 --output json
+       afs teams describe-revision --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --revision-id 12 --output json
 
 ```
 
@@ -869,7 +878,14 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams get-team-tags help
+       Show every tag of a team and where it comes from
+
+       afs teams get-team-tags --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
+       Print the tags as JSON
+
+       afs teams get-team-tags --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --output json
+
 ```
 
 ## list-allowed-accounts
@@ -911,7 +927,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams list-allowed-accounts help
+       List the AWS accounts a team may link roles in
+
+       afs teams list-allowed-accounts --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
 ```
 
 ## list-config-values
@@ -1043,7 +1062,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams list-log-destinations help
+       List a team's log destinations
+
+       afs teams list-log-destinations --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
 ```
 
 ## list-notification-channels
@@ -1392,7 +1414,7 @@ SYNOPSIS
 OPTIONS
        --team-id (string) (required)
           Team id; taken from the path only
-       --tags (JSON) (required)
+       --tags (key=value pairs or JSON) (required)
           Team-owned keys only
        --if-match (string)
           Apply only if the resource is at this version (safe update).
@@ -1416,7 +1438,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams put-team-tags help
+       Replace the team-owned tags
+
+       afs teams put-team-tags --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --tags cost-center=CC-2002 project=checkout
+
 ```
 
 ## restore-revision
@@ -1438,7 +1463,7 @@ SYNOPSIS
 OPTIONS
        --team-id (string) (required)
           Team id; taken from the path only
-       --rev (integer) (required)
+       --revision-id (integer) (required)
           Range: 1 to unbounded
        --dry-run (boolean)
        --idempotency-key (string)
@@ -1463,7 +1488,14 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams restore-revision help
+       Show what restoring revision 41 would change
+
+       afs teams restore-revision --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --revision-id 41 --dry-run
+
+       Restore revision 41
+
+       afs teams restore-revision --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --revision-id 41
+
 ```
 
 ## resume-team
@@ -1738,7 +1770,7 @@ SYNOPSIS
 OPTIONS
        --team-id (string) (required)
           Team id; taken from the path only
-       --id (string) (required)
+       --destination-id (string) (required)
        --config (JSON)
        --enabled (boolean)
        --name (string)
@@ -1769,7 +1801,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams update-log-destination help
+       Disable a destination
+
+       afs teams update-log-destination --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --destination-id log_01J9ZQ3ABCDEFGHJKMNPQRSTVW --no-enabled
+
 ```
 
 ## update-notification-channel

@@ -134,6 +134,21 @@ Recorded during M3 (2026-11-22):
 - **`test-notification-channel`** follows D-C20 through an `After` hook; the `DeliveryFailed` code is CLI-side.
 - Notification channel path parameter `id` is `--channel-id`.
 
+Recorded during M4 (2026-11-22):
+
+- **M4-0 re-sync: no change.** `-restapi` `feat/restapi-feature-complete` at `1bfb195` still serves the pinned snapshot (sha256 `3456b9e9...`).
+- **Table never truncates identifiers** (user request): columns whose path leaf is `id` or ends in `Id`, `ID`, `Url` or `URL` keep their full width. Other columns shrink first (to a minimum of 6); when only identifier columns are left the line overflows 80 columns rather than cut an id. The vertical (single object) table keeps those values whole too. Goldens regenerated (supersedes the M1 note on `…`).
+- **`TagPairs` option kind and `Override.Kinds`**: `--tags k=v k2=v2` (also JSON or `file://`) sends `[{"key","value"}]`, which is what `TagValue` is. This also fixes `create-team --tags`, whose M1 example (`--tags '{"project":"checkout"}'`) sent an object the API would refuse; the example now reads `--tags project=checkout cost-center=CC-1001`.
+- **`Override.ResultKey`**: names the response member the table lists (`tags` for `get-team-tags`/`put-team-tags`), when it is not `items` or `rows`.
+- **`Override.Precheck`**: runs in `exec.Build` before any option value or file is read; `create-import` uses it for the 100 MB bundle limit (`os.Stat`, no read).
+- **`--revision-id`** replaces `--rev` on `describe-revision` and `restore-revision` (task M4-C3 names `--revision-id`; one name for one path parameter).
+- **Log destinations** use `--destination-id`; service notification channels use `--channel-id` (as the team ones, D-C32 rename).
+- **Report schedules**: `--range`, `--from`, `--to`, `--group-by`, `--tag key=value` build the stored `query` (`filters` `tag.<key>`); `--query-json` is the whole object and the flags are folded over it. CLI-CD-10 stays as decided: the body member is `--query-json`, not renamed, because `--query` is the global JMESPath option.
+- **API keys** (`api-keys` and, in M6, `admin create-api-key`) share `ShowSecretNotice`: the secret is in the normal output once, `Store this key now; it cannot be shown again.` on stderr; a replay prints `This is a replay; ...`. `--debug` redacts the key (test).
+- **`afs completion`** is a local command; scripts are generated from the command table (`internal/cli/completion`): services, operations, options and enumerated values. Goldens use a three-operation fixture (readable); `TestCompletionListsEveryCommand` covers the real table; `bash -n`, `zsh -n` and `fish --no-execute` run when the shell is installed; a bash behaviour test drives `_afs`.
+- **Release pipeline (M4-G)**: `.goreleaser.yaml` (five targets, ldflags from `buildinfo`, `checksums.txt`, cosign `sign-blob` keyless, Homebrew formula skipped without `HOMEBREW_TAP_TOKEN`), CI job `goreleaser` (check and `--snapshot --skip=sign,publish,notarize`, then `--version` grep), `.github/workflows/release.yml` (gate, GoReleaser, verify job with `cosign verify-blob`; the macOS notarization and Windows signing jobs are gated on repository variables and are scaffolds until the certificates exist). `internal/release` tests read `.goreleaser.yaml` (targets, checksum, cosign) and build a binary with its ldflags to check `--version`. GoReleaser and cosign are not installed in the build environment, so the workflow files are unexercised.
+- **Not done in M4 (needs J):** Apple notarization credentials, a Windows code-signing certificate, the `homebrew-tap` repository and `HOMEBREW_TAP_TOKEN`, a first `v0.1.0` tag (M4-X1: documented as pending).
+
 ## Contract deltas found in M0
 
 | Id | Delta | CLI behaviour |

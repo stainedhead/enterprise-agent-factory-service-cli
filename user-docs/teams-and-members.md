@@ -28,7 +28,7 @@ afs teams create-team --slug payments --display-name "Payments" --kind persisten
 - Guardrail fields (`--max-budget-usd`, `--isolation-tier`, ...) need the matching permission; the API
   answers `AccessDenied` naming it. `--ceiling-override-reason` is an ordinary text option.
 
-`afs teams list-revisions` and `describe-revision --rev N` show the configuration history.
+`afs teams list-revisions` and `describe-revision --revision-id N` show the configuration history.
 
 ## Members
 

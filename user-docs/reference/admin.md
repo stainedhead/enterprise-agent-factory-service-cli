@@ -151,7 +151,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin approve-price-proposal help
+       Approve a proposal
+
+       afs admin approve-price-proposal --proposal-id 1042 --note "Matches the AWS price list"
+
 ```
 
 ## create-api-key
@@ -242,7 +245,14 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin create-export help
+       Export two teams
+
+       afs admin create-export --team-ids team_01J9ZQ3ABCDEFGHJKMNPQRSTVW team_01J9ZQ3ABCDEFGHJKMNPQRSTVX
+
+       Export every team
+
+       afs admin create-export
+
 ```
 
 ## create-external-system
@@ -398,7 +408,14 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin create-import help
+       Dry-run an import (nothing is changed)
+
+       afs admin create-import --bundle file://bundle.json --account-map file://accounts.json
+
+       Apply the import
+
+       afs admin create-import --bundle file://bundle.json --account-map file://accounts.json --no-dry-run
+
 ```
 
 ## create-model
@@ -557,7 +574,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin create-notification-channel help
+       Create an email channel for security events
+
+       afs admin create-notification-channel --name security-email --kind email --config '{"to":["security@example.com"]}' --event-types 'work_order.*'
+
 ```
 
 ## delete-agent-template
@@ -758,7 +778,7 @@ SYNOPSIS
        afs admin delete-notification-channel [options]
 
 OPTIONS
-       --id (string) (required)
+       --channel-id (string) (required)
        --if-match (string)
           Apply only if the resource is at this version (safe update).
 
@@ -781,7 +801,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin delete-notification-channel help
+       Delete a channel (refused while a setting names it)
+
+       afs admin delete-notification-channel --channel-id nch_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
 ```
 
 ## delete-service-tag
@@ -824,7 +847,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin delete-service-tag help
+       Delete a service tag
+
+       afs admin delete-service-tag --key cost-center
+
 ```
 
 ## delete-storage-class
@@ -911,7 +937,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin describe-export help
+       Show an export (sha256, size and download URL when it has finished)
+
+       afs admin describe-export --export-id exp_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## describe-external-system
@@ -1165,7 +1194,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin list-cost-reconciliations help
+       Show the days where billing differs from the gateway
+
+       afs admin list-cost-reconciliations --status over_threshold
+
 ```
 
 ## list-cost-tag-status
@@ -1241,7 +1273,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin list-exports help
+       List exports
+
+       afs admin list-exports
+
 ```
 
 ## list-external-systems
@@ -1446,7 +1481,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin list-notification-channels help
+       List the service-level notification channels
+
+       afs admin list-notification-channels
+
 ```
 
 ## list-org-accounts
@@ -1484,7 +1522,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin list-org-accounts help
+       List the AWS Organization accounts the service knows
+
+       afs admin list-org-accounts
+
 ```
 
 ## list-price-proposals
@@ -1526,7 +1567,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin list-price-proposals help
+       List the pending price proposals
+
+       afs admin list-price-proposals --status pending --output table
+
 ```
 
 ## list-security-operators
@@ -1602,7 +1646,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin list-service-tags help
+       List the service tags
+
+       afs admin list-service-tags
+
 ```
 
 ## list-storage-classes
@@ -1744,7 +1791,14 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin put-service-tag help
+       Require a cost-center tag with allowed values
+
+       afs admin put-service-tag --key cost-center --mode required --allowed-values CC-1001 CC-2002 --description "Finance cost center"
+
+       Apply a fixed tag to every team
+
+       afs admin put-service-tag --key environment --mode fixed --value production
+
 ```
 
 ## put-setting
@@ -1891,7 +1945,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin reject-price-proposal help
+       Reject a proposal
+
+       afs admin reject-price-proposal --proposal-id 1042 --note "Waiting for the contract rate"
+
 ```
 
 ## remove-security-operator
@@ -2111,7 +2168,7 @@ SYNOPSIS
        afs admin update-notification-channel [options]
 
 OPTIONS
-       --id (string) (required)
+       --channel-id (string) (required)
        --config (JSON)
        --enabled (boolean)
        --event-types (list)
@@ -2139,5 +2196,8 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin update-notification-channel help
+       Disable a channel
+
+       afs admin update-notification-channel --channel-id nch_01JD2Q3R4S5T6V7W8X9Y0Z0001 --no-enabled
+
 ```

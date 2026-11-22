@@ -42,7 +42,7 @@ OPTIONS
        --quotas (JSON)
        --slug (string) (required)
           Immutable name (team slug, agent, pool, secret)
-       --tags (JSON)
+       --tags (key=value pairs or JSON)
           Team-owned tag values, including required service tags
        --teardown-rule (string)
           Possible values: at_expiry, at_cap_or_expiry, at_work_complete
@@ -76,7 +76,7 @@ GLOBAL OPTIONS
 EXAMPLES
        Create a persistent team and wait until it is ready
 
-       afs teams create-team --slug payments --display-name "Payments" --kind persistent --max-budget-usd 500.00 --first-admin '{"email":"ada@example.com"}' --tags '{"project":"checkout"}' --wait
+       afs teams create-team --slug payments --display-name "Payments" --kind persistent --max-budget-usd 500.00 --first-admin '{"email":"ada@example.com"}' --tags project=checkout cost-center=CC-1001 --wait
 
        Create a team from a file
 

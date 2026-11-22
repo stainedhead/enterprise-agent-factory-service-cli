@@ -9,6 +9,7 @@ Generated from `afs help` by `make docs`; do not edit by hand.
 | [api-keys](api-keys.md) | Create and revoke API keys. |
 | [audit](audit.md) | Search and export the audit log. |
 | [budgets](budgets.md) | Set budgets and read spend. |
+| [completion](completion.md) | Print a shell completion script. |
 | [configure](configure.md) | Create and edit profiles in ~/.afs/config. |
 | [members](members.md) | Manage team members and role bindings. |
 | [models](models.md) | List and manage models and their prices. |

@@ -1,0 +1,9 @@
+Field       Value
+Id          rsc_01JD2Q3R4S5T6V7W8X9Y0Z0001
+Name        weekly-usage
+Report      usage
+Cadence     weekly
+Enabled     true
+NextRunAt   2026-11-28T06:00:00Z
+LastStatus  
+ChannelId   nch_01JD2Q3R4S5T6V7W8X9Y0Z0001

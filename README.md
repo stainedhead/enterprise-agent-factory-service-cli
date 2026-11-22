@@ -7,7 +7,7 @@ decides what each user can do.
 
 Part of [enterprise-agent-factory-service](https://github.com/stainedhead/enterprise-agent-factory-service).
 
-**Status:** milestones M0 (foundation), M1 (teams, members, team audit, settings, identity providers) M2 (agents, secrets, configuration values, external systems, catalogs) and M3 (budgets, usage, reports and CSV, notification channels, models and prices) done. All 180 operations of the pinned API contract are callable through
+**Status:** milestones M0 (foundation), M1 (teams, members, team audit, settings, identity providers), M2 (agents, secrets, configuration values, external systems, catalogs), M3 (budgets, usage, reports and CSV, notification channels, models and prices) and M4 (API keys, role links, identities, tags, log destinations, restore, report schedules, service administration, exports and imports, `afs completion`, release configuration) done. All 180 operations of the pinned API contract are callable through
 the generic executor (`--cli-input-json`, `--generate-cli-skeleton`, pagination, safe updates with `If-Match`,
 `--wait`, retries and idempotency keys); `afs configure`, `afs configure sso`, `afs sso login`, `afs sso logout`,
 `afs sso get-caller-identity` and `afs sso list-providers` are finished. Per-service polish (examples, table
@@ -34,9 +34,13 @@ make gate     # tidy, contract-check, generate-check, fmt-check, vet, lint, race
 Other targets: `make generate` (regenerate descriptors and types from `api/openapi.yaml`),
 `make contract-sync RESTAPI_REF=<ref>` (re-pin the API snapshot), `make docs` (regenerate `user-docs/reference/`).
 
+Releases are built by GoReleaser (`.goreleaser.yaml`, `.github/workflows/release.yml`): archives for five platforms, a
+cosign-signed `checksums.txt`, and notarization, Authenticode signing and the Homebrew tap as soon as their secrets exist
+(see [install](user-docs/install.md)). `afs completion bash|zsh|fish|powershell` prints a completion script.
+
 ## Documentation
 
-[user-docs/](user-docs/README.md): getting started, configuration, single sign-on, credentials, output,
+[user-docs/](user-docs/README.md): install and release verification, getting started, configuration, single sign-on, credentials, output,
 pagination, errors and exit codes, troubleshooting, and the generated command reference.
 
 Contributor and agent rules: [AGENTS.md](AGENTS.md). Why this repository exists: [INTENT.md](INTENT.md).

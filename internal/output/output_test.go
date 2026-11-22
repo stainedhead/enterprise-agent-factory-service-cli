@@ -415,6 +415,10 @@ func TestTableNeverTruncatesIDColumns(t *testing.T) {
 	if !strings.Contains(got, "…") {
 		t.Errorf("expected the note to shrink first:\n%s", got)
 	}
+	url := "https://example.com/exports/exp_1.json?X-Amz-Signature=0123456789abcdef0123456789abcdef"
+	if got := render(t, `{"downloadUrl":"`+url+`"}`, RenderOptions{Format: "table", Options: Options{Columns: []Column{{"DownloadUrl", "downloadUrl"}}, Width: 40}}); !strings.Contains(got, url) {
+		t.Errorf("URL truncated:\n%s", got)
+	}
 	vert := render(t, `{"id":"team_01JD2Q3R4S5T6V7W8X9Y0Z0001","note":"x"}`, RenderOptions{Format: "table", Options: Options{Columns: cols[:1], Width: 20}})
 	if !strings.Contains(vert, "team_01JD2Q3R4S5T6V7W8X9Y0Z0001") {
 		t.Errorf("vertical id truncated:\n%s", vert)

@@ -34,9 +34,17 @@ type Override struct {
 	Op       string
 	Examples []Example
 	Rename   map[string]string // wire name -> option name without dashes
-	Extra    []Option
-	Build    BuildFunc
-	Validate ValidateFunc
+	// Kinds overrides how a body member is read from the command line (wire name -> kind).
+	Kinds map[string]Kind
+	// ResultKey names the member of the response that holds the rows of a table, when it is not
+	// the operation's list member (for example "tags").
+	ResultKey string
+	Extra     []Option
+	Build     BuildFunc
+	Validate  ValidateFunc
+	// Precheck runs before any option value or file is read, so it can refuse input by its size or
+	// name without reading it.
+	Precheck ValidateFunc
 	Columns  []output.Column
 	// Dynamic says the table columns follow the response (report rows are shaped by --group-by),
 	// so the operation is done without a fixed column list.
@@ -49,6 +57,15 @@ func (a *Override) merge(b Override) error {
 	a.Examples = append(a.Examples, b.Examples...)
 	a.Dynamic = a.Dynamic || b.Dynamic
 	a.Extra = append(a.Extra, b.Extra...)
+	if b.ResultKey != "" {
+		a.ResultKey = b.ResultKey
+	}
+	for k, v := range b.Kinds {
+		if a.Kinds == nil {
+			a.Kinds = map[string]Kind{}
+		}
+		a.Kinds[k] = v
+	}
 	for k, v := range b.Rename {
 		if _, dup := a.Rename[k]; dup {
 			return fmt.Errorf("%s: rename of %q registered twice", b.Op, k)
@@ -80,6 +97,19 @@ func (a *Override) merge(b Override) error {
 					return err
 				}
 				return next(p, parts)
+			}
+		}
+	}
+	if b.Precheck != nil {
+		prev, next := a.Precheck, b.Precheck
+		if prev == nil {
+			a.Precheck = next
+		} else {
+			a.Precheck = func(p *Parsed) error {
+				if err := prev(p); err != nil {
+					return err
+				}
+				return next(p)
 			}
 		}
 	}

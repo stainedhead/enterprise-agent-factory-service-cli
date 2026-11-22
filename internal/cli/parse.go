@@ -168,7 +168,7 @@ func (r *Registry) Parse(args []string) (*Parsed, *Command, error) {
 				return p, cmd, r.cmdUsage(cmd, "argument %s: takes no value", o.Flag)
 			}
 			p.Values[o.Name()] = []string{v}
-		case List:
+		case List, TagPairs:
 			var vals []string
 			if hasEq {
 				vals = append(vals, val)

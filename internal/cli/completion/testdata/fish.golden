@@ -1,0 +1,34 @@
+# fish completion for afs; save as ~/.config/fish/completions/afs.fish
+complete -c afs -f
+complete -c afs -l profile
+complete -c afs -l endpoint-url
+complete -c afs -l output -xa 'json yaml table text csv'
+complete -c afs -l query
+complete -c afs -l no-paginate
+complete -c afs -l max-items
+complete -c afs -l page-size
+complete -c afs -l starting-token
+complete -c afs -l cli-input-json
+complete -c afs -l generate-cli-skeleton
+complete -c afs -l debug
+complete -c afs -l no-cli-pager
+complete -c afs -l color -xa 'on off auto'
+complete -c afs -l cli-connect-timeout
+complete -c afs -l cli-read-timeout
+complete -c afs -l version
+complete -c afs -n '__fish_use_subcommand' -a 'audit completion teams'
+complete -c afs -n '__fish_seen_subcommand_from audit; and not __fish_seen_subcommand_from list-audit-events' -a 'list-audit-events'
+complete -c afs -n '__fish_seen_subcommand_from audit; and __fish_seen_subcommand_from list-audit-events' -l action
+complete -c afs -n '__fish_seen_subcommand_from audit; and __fish_seen_subcommand_from list-audit-events' -l actor-id
+complete -c afs -n '__fish_seen_subcommand_from audit; and __fish_seen_subcommand_from list-audit-events' -l from
+complete -c afs -n '__fish_seen_subcommand_from audit; and __fish_seen_subcommand_from list-audit-events' -l outcome -xa 'allowed denied failed'
+complete -c afs -n '__fish_seen_subcommand_from audit; and __fish_seen_subcommand_from list-audit-events' -l resource-id
+complete -c afs -n '__fish_seen_subcommand_from audit; and __fish_seen_subcommand_from list-audit-events' -l resource-kind
+complete -c afs -n '__fish_seen_subcommand_from audit; and __fish_seen_subcommand_from list-audit-events' -l team-id
+complete -c afs -n '__fish_seen_subcommand_from audit; and __fish_seen_subcommand_from list-audit-events' -l to
+complete -c afs -n '__fish_seen_subcommand_from completion; and not __fish_seen_subcommand_from bash zsh fish powershell' -a 'bash zsh fish powershell'
+complete -c afs -n '__fish_seen_subcommand_from teams; and not __fish_seen_subcommand_from list-teams suspend-team' -a 'list-teams suspend-team'
+complete -c afs -n '__fish_seen_subcommand_from teams; and __fish_seen_subcommand_from list-teams' -l kind -xa 'persistent ephemeral'
+complete -c afs -n '__fish_seen_subcommand_from teams; and __fish_seen_subcommand_from list-teams' -l state -xa 'active suspended deleting deleted'
+complete -c afs -n '__fish_seen_subcommand_from teams; and __fish_seen_subcommand_from suspend-team' -l idempotency-key
+complete -c afs -n '__fish_seen_subcommand_from teams; and __fish_seen_subcommand_from suspend-team' -l team-id

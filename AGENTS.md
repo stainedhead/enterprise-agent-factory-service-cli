@@ -16,7 +16,7 @@ It talks only to the API in
 [enterprise-agent-factory-service-restapi](https://github.com/stainedhead/enterprise-agent-factory-service-restapi),
 whose `api/openapi.yaml` is the contract.
 
-Status: milestone M0 done (foundation and generic executor for all 180 operations). See `specs/` for the plan.
+Status: milestones M0-M4 done (generic executor for all 180 operations; per-operation polish through M4). See `specs/` for the plan.
 
 ## Toolchain
 

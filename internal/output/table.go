@@ -222,8 +222,8 @@ func boldKeepPad(s string, on bool) string {
 	return bold(trimmed, true) + s[len(trimmed):]
 }
 
-// isIDColumn is true for a column that holds an identifier (id, teamId, agentId, ...). Users copy
-// identifiers out of a table, so they are never truncated.
+// isIDColumn is true for a column that holds an identifier (id, teamId, agentId, ...) or a URL
+// (downloadUrl). Users copy these out of a table, so they are never truncated.
 func isIDColumn(c Column) bool {
 	leaf := c.Path
 	if i := strings.LastIndexByte(leaf, '.'); i >= 0 {
@@ -232,7 +232,8 @@ func isIDColumn(c Column) bool {
 	if leaf == "" {
 		leaf = c.Header
 	}
-	return leaf == "id" || leaf == "Id" || strings.HasSuffix(leaf, "Id") || strings.HasSuffix(leaf, "ID")
+	return leaf == "id" || leaf == "Id" || strings.HasSuffix(leaf, "Id") || strings.HasSuffix(leaf, "ID") ||
+		strings.HasSuffix(leaf, "Url") || strings.HasSuffix(leaf, "URL")
 }
 
 // fit shrinks the widest shrinkable columns until the line (with two-space gaps) fits. Columns

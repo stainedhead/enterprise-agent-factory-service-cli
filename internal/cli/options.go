@@ -20,6 +20,9 @@ const (
 	JSON // object or array of objects: JSON text or file://
 	Any  // JSON when valid, else a string
 	Duration
+	// TagPairs is an array of {key, value} objects given as `key=value ...` pairs (a list option) or as
+	// JSON or file://PATH (tags).
+	TagPairs
 )
 
 // Option is one command-specific option derived from the operation.
@@ -106,6 +109,11 @@ func DeriveOptions(op *spec.Operation, ov *Override) []Option {
 				continue
 			}
 			k, elem := kindOf(f.Schema)
+			if ov != nil {
+				if kk, ok := ov.Kinds[f.Name]; ok {
+					k = kk
+				}
+			}
 			o := Option{Flag: flag(f.Name), Wire: f.Name, In: "body", Kind: k, Elem: elem, Required: f.Required,
 				Enum: f.Schema.Enum, Min: f.Schema.Min, Max: f.Schema.Max, Desc: f.Desc}
 			if _, isGlobal := lookupGlobal(o.Name()); isGlobal {

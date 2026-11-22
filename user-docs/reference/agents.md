@@ -156,7 +156,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents create-identity help
+       Register a GitHub App identity
+
+       afs agents create-identity --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --kind github_app --external-ref github.com/example-org/apps/afs-coder --secret-id sec_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## create-role-link
@@ -205,7 +208,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents create-role-link help
+       Link a role in another account (prints the trust policy's external id)
+
+       afs agents create-role-link --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --role-arn arn:aws:iam::111122223333:role/payments-deployer --profile-name deploy
+
 ```
 
 ## create-snapshot
@@ -401,7 +407,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents delete-identity help
+       Delete an identity
+
+       afs agents delete-identity --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --identity-id aid_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## delete-role-link
@@ -447,7 +456,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents delete-role-link help
+       Delete a role link
+
+       afs agents delete-role-link --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --link-id arl_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## describe-agent
@@ -537,7 +549,14 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents describe-role-link help
+       Show a role link
+
+       afs agents describe-role-link --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --link-id arl_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
+       Print only the trust policy to paste into IAM
+
+       afs agents describe-role-link --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --link-id arl_01J9ZQ3ABCDEFGHJKMNPQRSTVW --query trustPolicy --output json
+
 ```
 
 ## get-agent-status
@@ -808,7 +827,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents list-identities help
+       List an agent's identities
+
+       afs agents list-identities --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
 ```
 
 ## list-role-links
@@ -851,7 +873,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents list-role-links help
+       List an agent's role links
+
+       afs agents list-role-links --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
 ```
 
 ## list-snapshots
@@ -1314,5 +1339,8 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents verify-role-link help
+       Check that the trust policy is in place
+
+       afs agents verify-role-link --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --link-id arl_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```

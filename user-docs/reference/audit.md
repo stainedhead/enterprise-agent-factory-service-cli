@@ -121,5 +121,12 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs audit list-service-audit-events help
+       Service-wide audit events as CSV (platform roles)
+
+       afs audit list-service-audit-events --from 2026-11-01T00:00:00Z --output csv
+
+       Denied events of one team
+
+       afs audit list-service-audit-events --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --outcome denied
+
 ```

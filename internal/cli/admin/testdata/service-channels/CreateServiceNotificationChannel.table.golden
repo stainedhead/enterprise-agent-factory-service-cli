@@ -1,0 +1,10 @@
+Field       Value
+Id          nch_01JD2Q3R4S5T6V7W8X9Y0Z0001
+Name        security-email
+Kind        email
+Enabled     true
+EventTypes  work_order.*
+Phase       Pending
+Healthy     true
+LastError   
+Version     1

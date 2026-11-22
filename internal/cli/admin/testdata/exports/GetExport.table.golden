@@ -1,0 +1,9 @@
+Field        Value
+Id           exp_01JD2Q3R4S5T6V7W8X9Y0Z0001
+Status       succeeded
+TeamIds      
+SizeBytes    48213
+Sha256       9f9f9f9f9f9f9f9f9f9f9f9f9f9f9f9f9f9f9f9f9f9f9f9f9f9f9f9f9f9f9f9f
+FinishedAt   2026-11-21T18:05:00Z
+DownloadUrl  https://afs-exports-example.s3.amazonaws.com/exports/exp.json?X-Amz-Signature=EXAMPLE
+Error        

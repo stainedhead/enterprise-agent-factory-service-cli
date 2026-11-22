@@ -11,6 +11,8 @@ How to install, configure and use the `afs` CLI.
 | [Teams and members](teams-and-members.md) | Teams, members, team audit events, service settings, identity providers |
 | [Agents and secrets](agents-and-secrets.md) | Agents, secret input rules, configuration values, external systems, platform catalogs |
 | [Budgets and reports](budgets-and-reports.md) | Budgets, usage, costs, reports and CSV, notification channels, models and prices |
+| [Keys, tags, logs, schedules and service administration](delivery-and-admin.md) | API keys, role links, identities, team tags, log destinations, restore, report schedules, service audit, price proposals, exports and imports |
+| [Install](install.md) | Releases, verifying them, Homebrew, shell completion |
 | [Output](output.md) | `--output json|yaml|table|text|csv`, `--query`, the pager, colour |
 | [Pagination](pagination.md) | Auto-pagination, `--max-items`, `--starting-token`, `--page-size`, CSV |
 | [Errors and exit codes](errors-and-exit-codes.md) | Error format, exit codes, retries, `--debug` |

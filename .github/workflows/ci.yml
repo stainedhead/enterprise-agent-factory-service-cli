@@ -68,3 +68,29 @@ jobs:
           GOARCH: ${{ matrix.goarch }}
           CGO_ENABLED: "0"
         run: go build ./...
+
+  goreleaser:
+    name: goreleaser check and snapshot build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+      - uses: goreleaser/goreleaser-action@v6
+        with:
+          version: "~> v2"
+          args: check
+      - uses: goreleaser/goreleaser-action@v6
+        with:
+          version: "~> v2"
+          args: release --snapshot --clean --skip=sign,publish,notarize
+        env:
+          HOMEBREW_TAP_TOKEN: ""
+      - name: The snapshot binary reports its version and contract (CLI-15)
+        run: |
+          bin=$(find dist -path '*linux_amd64*' -name afs -type f | head -1)
+          "$bin" --version | grep -E '^afs-cli/[^ ]+ contract/[0-9]+\.[0-9]+ go'
