@@ -5,6 +5,7 @@ import (
 	"net"
 	"net/url"
 	"path/filepath"
+	"regexp"
 	"strings"
 )
 
@@ -142,6 +143,10 @@ func ValidateEndpoint(raw string) error {
 	if err != nil || u.Host == "" {
 		return fmt.Errorf("endpoint_url %q is not a valid URL", raw)
 	}
+	return checkScheme("endpoint_url", raw, u)
+}
+
+func checkScheme(key, raw string, u *url.URL) error {
 	switch u.Scheme {
 	case "https":
 		return nil
@@ -153,9 +158,42 @@ func ValidateEndpoint(raw string) error {
 		if ip := net.ParseIP(h); ip != nil && ip.IsLoopback() {
 			return nil
 		}
-		return fmt.Errorf("endpoint_url must use https (http is allowed only for loopback hosts): %s", raw)
+		return fmt.Errorf("%s must use https (http is allowed only for loopback hosts): %s", key, raw)
 	}
-	return fmt.Errorf("endpoint_url must use https: %s", raw)
+	return fmt.Errorf("%s must use https: %s", key, raw)
+}
+
+// ValidateIssuer checks an OIDC issuer URL (profile key sso_issuer or a provider's issuerUrl): an
+// absolute https URL (http for a loopback host) with no userinfo, query or fragment. The message
+// names key and never echoes the value.
+func ValidateIssuer(key, raw string) error {
+	for _, r := range raw {
+		if r < 0x20 || (r >= 0x7f && r <= 0x9f) || r == ' ' {
+			return fmt.Errorf("%s is not a valid issuer URL", key)
+		}
+	}
+	u, err := url.Parse(raw)
+	if err != nil || u.Host == "" || u.Hostname() == "" {
+		return fmt.Errorf("%s is not a valid issuer URL", key)
+	}
+	if u.User != nil || u.RawQuery != "" || u.Fragment != "" || strings.Contains(raw, "?") || strings.Contains(raw, "#") {
+		return fmt.Errorf("%s must not contain credentials, a query or a fragment", key)
+	}
+	if err := checkScheme(key, raw, u); err != nil {
+		return fmt.Errorf("%s must use https (http is allowed only for loopback hosts)", key)
+	}
+	return nil
+}
+
+var identifierRE = regexp.MustCompile(`^[A-Za-z0-9][A-Za-z0-9._:@+-]{0,255}$`)
+
+// ValidateIdentifier checks an opaque id from the service (a provider id or client id) against a strict
+// character set so it is safe to store and to send to an identity provider.
+func ValidateIdentifier(field, v string) error {
+	if !identifierRE.MatchString(v) {
+		return fmt.Errorf("%s is not a valid identifier", field)
+	}
+	return nil
 }
 
 // WriteProfile sets keys of a profile in ~/.afs/config, leaving every other profile untouched.
@@ -167,7 +205,9 @@ func WriteProfile(s Source, profile string, kv map[string]string, order []string
 	}
 	for _, k := range order {
 		if v, ok := kv[k]; ok && v != "" {
-			f.Set(ConfigSection(profile), k, v)
+			if err := f.Set(ConfigSection(profile), k, v); err != nil {
+				return path, fmt.Errorf("not writing %s: %w", k, err)
+			}
 		}
 	}
 	return path, f.Save()

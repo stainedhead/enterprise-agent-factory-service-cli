@@ -135,6 +135,9 @@ func configureSSO(ctx context.Context, inv *cli.Invocation) int {
 			return cli.ExitUsage
 		}
 	}
+	if err := chosen.Validate(); err != nil {
+		return exec.ReportError(env.Stderr, "configure", st.Profile, err)
+	}
 	kv := map[string]string{"sso_provider_id": chosen.ID, "sso_issuer": chosen.IssuerURL, "sso_client_id": chosen.CLIClientID}
 	if st.EndpointURL != "" && st.Sources["endpoint_url"] != "profile" {
 		kv["endpoint_url"] = st.EndpointURL

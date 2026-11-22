@@ -8,6 +8,7 @@ import (
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/runtime"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/client"
+	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/config"
 )
 
 // Provider is one enabled sign-in provider (no secret).
@@ -39,8 +40,34 @@ func Providers(ctx context.Context, env *cli.Env, g cli.Globals) ([]Provider, er
 	return doc.Items, nil
 }
 
+// Validate checks the fields that are written to ~/.afs/config or sent to the identity provider.
+// The provider list is unauthenticated service data, so nothing in it is trusted (FR-001).
+func (p Provider) Validate() error {
+	bad := func(field string) error {
+		return fmt.Errorf("the service returned an invalid sign-in provider (%s)", field)
+	}
+	if config.ValidateIdentifier("id", p.ID) != nil {
+		return bad("id")
+	}
+	if config.ValidateIssuer("issuerUrl", p.IssuerURL) != nil {
+		return bad("issuerUrl")
+	}
+	if config.ValidateIdentifier("cliClientId", p.CLIClientID) != nil {
+		return bad("cliClientId")
+	}
+	return nil
+}
+
 // Pick chooses a provider: the one named by id, else the default, else the only one.
 func Pick(ps []Provider, id string) (Provider, error) {
+	p, err := pick(ps, id)
+	if err != nil {
+		return p, err
+	}
+	return p, p.Validate()
+}
+
+func pick(ps []Provider, id string) (Provider, error) {
 	if len(ps) == 0 {
 		return Provider{}, fmt.Errorf("the service has no sign-in providers enabled")
 	}

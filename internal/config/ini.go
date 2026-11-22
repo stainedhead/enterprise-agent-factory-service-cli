@@ -92,20 +92,47 @@ func (f *File) Get(section, key string) (string, bool) {
 	return "", false
 }
 
-// Set sets a key, creating the section when needed.
-func (f *File) Set(section, key, value string) {
+// checkINI refuses text that would add lines, sections or keys to the file: control characters
+// anywhere, and "=", "[" or "]" in a section or key (FR-001).
+func checkINI(what, s string, structural bool) error {
+	for _, r := range s {
+		if r < 0x20 || (r >= 0x7f && r <= 0x9f) {
+			return fmt.Errorf("%s contains a control character", what)
+		}
+		if structural && (r == '=' || r == '[' || r == ']') {
+			return fmt.Errorf("%s contains %q", what, r)
+		}
+	}
+	if structural && strings.TrimSpace(s) == "" {
+		return fmt.Errorf("%s is empty", what)
+	}
+	return nil
+}
+
+// Set sets a key, creating the section when needed. It refuses, and changes nothing, when the
+// section, key or value could add lines, sections or keys.
+func (f *File) Set(section, key, value string) error {
+	if err := checkINI("section name", section, true); err != nil {
+		return err
+	}
+	if err := checkINI("key", key, true); err != nil {
+		return err
+	}
+	if err := checkINI("value of "+key, value, false); err != nil {
+		return err
+	}
 	s, e, ok := f.span(section)
 	if !ok {
 		if len(f.lines) > 0 && strings.TrimSpace(f.lines[len(f.lines)-1]) != "" {
 			f.lines = append(f.lines, "")
 		}
 		f.lines = append(f.lines, "["+section+"]", key+" = "+value)
-		return
+		return nil
 	}
 	for i := s; i < e; i++ {
 		if k, _, ok := keyValue(f.lines[i]); ok && k == key {
 			f.lines[i] = key + " = " + value
-			return
+			return nil
 		}
 	}
 	// insert after the last non-blank line of the section
@@ -114,6 +141,7 @@ func (f *File) Set(section, key, value string) {
 		at--
 	}
 	f.lines = append(f.lines[:at], append([]string{key + " = " + value}, f.lines[at:]...)...)
+	return nil
 }
 
 // String renders the file.

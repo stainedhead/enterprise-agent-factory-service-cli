@@ -214,9 +214,9 @@ func TestCheckPrivate(t *testing.T) {
 
 func TestINIEdgeCases(t *testing.T) {
 	f := &File{Path: filepath.Join(t.TempDir(), "sub", "x")}
-	f.Set("a", "k", "1")
-	f.Set("b", "k", "2")
-	f.Set("a", "j", "3")
+	_ = f.Set("a", "k", "1")
+	_ = f.Set("b", "k", "2")
+	_ = f.Set("a", "j", "3")
 	if f.String() != "[a]\nk = 1\nj = 3\n\n[b]\nk = 2\n" {
 		t.Errorf("render:\n%s", f.String())
 	}
@@ -247,5 +247,68 @@ func TestINIEdgeCases(t *testing.T) {
 	}
 	if ConfigSection("default") != "default" || ConfigSection("p") != "profile p" {
 		t.Error("section names")
+	}
+}
+
+func TestSetRejectsInjection(t *testing.T) {
+	cases := []struct{ name, section, key, value string }{
+		{"newline in value", "profile p", "k", "a\n[profile prod]\nendpoint_url = https://attacker.example"},
+		{"carriage return", "profile p", "k", "a\rb"},
+		{"tab is a control char", "profile p", "k", "a\tb"},
+		{"NUL", "profile p", "k", "a\x00b"},
+		{"DEL", "profile p", "k", "a\x7fb"},
+		{"newline in key", "profile p", "k\nx", "v"},
+		{"equals in key", "profile p", "k=x", "v"},
+		{"bracket in key", "profile p", "[k", "v"},
+		{"empty key", "profile p", "", "v"},
+		{"newline in section", "profile p\n[x", "k", "v"},
+		{"bracket in section", "profile ]p", "k", "v"},
+		{"empty section", "", "k", "v"},
+	}
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			f := &File{Path: filepath.Join(t.TempDir(), "config")}
+			if err := f.Set("default", "endpoint_url", "https://ok.example"); err != nil {
+				t.Fatal(err)
+			}
+			before := f.String()
+			if err := f.Set(c.section, c.key, c.value); err == nil {
+				t.Fatalf("accepted %+v", c)
+			}
+			if f.String() != before {
+				t.Errorf("file changed:\n%s", f.String())
+			}
+		})
+	}
+}
+
+func TestValidateIssuer(t *testing.T) {
+	ok := []string{"https://idp.example.com", "https://idp.example.com/realms/a", "http://127.0.0.1:8080", "http://localhost/x", "https://idp.example.com/"}
+	bad := []string{"", "http://idp.example.com", "https://u:p@idp.example.com", "https://idp.example.com?x=1", "https://idp.example.com#f", "idp.example.com", "https://", "ftp://idp.example.com", "https://idp.example.com\nx"}
+	for _, s := range ok {
+		if err := ValidateIssuer("sso_issuer", s); err != nil {
+			t.Errorf("%q: %v", s, err)
+		}
+	}
+	for _, s := range bad {
+		err := ValidateIssuer("sso_issuer", s)
+		if err == nil {
+			t.Errorf("%q accepted", s)
+		} else if !strings.Contains(err.Error(), "sso_issuer") {
+			t.Errorf("%q: message does not name the key: %v", s, err)
+		}
+	}
+}
+
+func TestValidateIdentifier(t *testing.T) {
+	for _, s := range []string{"idp_1", "cli1", "0oa1b2c3d4e5", "abc.def-ghi_jk@x", "a:b"} {
+		if err := ValidateIdentifier("cliClientId", s); err != nil {
+			t.Errorf("%q: %v", s, err)
+		}
+	}
+	for _, s := range []string{"", "a b", "a\nb", "a=b", "[x]", "a/b", strings.Repeat("a", 300), "-lead"} {
+		if err := ValidateIdentifier("cliClientId", s); err == nil {
+			t.Errorf("%q accepted", s)
+		}
 	}
 }

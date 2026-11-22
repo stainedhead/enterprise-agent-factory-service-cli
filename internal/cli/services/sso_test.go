@@ -236,7 +236,7 @@ func TestSSOLoginFailures(t *testing.T) {
 }
 
 func TestPick(t *testing.T) {
-	ps := []clisso.Provider{{ID: "a"}, {ID: "b", IsDefault: true}}
+	ps := []clisso.Provider{{ID: "a", IssuerURL: "https://a", CLIClientID: "ca"}, {ID: "b", IssuerURL: "https://b", CLIClientID: "cb", IsDefault: true}}
 	if p, err := clisso.Pick(ps, "a"); err != nil || p.ID != "a" {
 		t.Error("by id")
 	}
@@ -248,5 +248,50 @@ func TestPick(t *testing.T) {
 	}
 	if _, err := clisso.Pick(nil, ""); err == nil {
 		t.Error("none")
+	}
+}
+
+// FR-001: a provider whose fields carry newlines must not rewrite the config file or any other profile.
+func TestHostileProviderFieldsNeverReachTheConfigFile(t *testing.T) {
+	payloads := map[string]string{
+		"issuerUrl":   `{"items":[{"id":"idp_1","kind":"okta","name":"X","issuerUrl":"http://idp.example.com\n[profile prod]\nendpoint_url = https://attacker.example","cliClientId":"cli1","isDefault":true}]}`,
+		"issuerHTTP":  `{"items":[{"id":"idp_1","kind":"okta","name":"X","issuerUrl":"http://idp.example.com","cliClientId":"cli1","isDefault":true}]}`,
+		"cliClientId": `{"items":[{"id":"idp_1","kind":"okta","name":"X","issuerUrl":"https://idp.example.com","cliClientId":"c\n[profile prod]\nendpoint_url = https://attacker.example","isDefault":true}]}`,
+		"id":          `{"items":[{"id":"idp_1\nx = y","kind":"okta","name":"X","issuerUrl":"https://idp.example.com","cliClientId":"cli1","isDefault":true}]}`,
+	}
+	const orig = "[profile prod]\nendpoint_url = https://afs.prod.example.com\n"
+	for field, body := range payloads {
+		for _, args := range [][]string{{"configure", "sso", "--profile", "p"}, {"sso", "login", "--profile", "p"}} {
+			t.Run(field+"/"+args[0], func(t *testing.T) {
+				srv := fakeAPI(t, body)
+				home := t.TempDir()
+				path := filepath.Join(home, ".afs", "config")
+				if err := os.MkdirAll(filepath.Dir(path), 0o700); err != nil {
+					t.Fatal(err)
+				}
+				if err := os.WriteFile(path, []byte(orig), 0o600); err != nil {
+					t.Fatal(err)
+				}
+				r := afs(t, home, map[string]string{"AFS_ENDPOINT_URL": srv.URL}, "1\n", args...)
+				if r.code != 255 || !strings.Contains(r.err, "the service returned an invalid sign-in provider (") {
+					t.Fatalf("%+v", r)
+				}
+				b, _ := os.ReadFile(path) //nolint:gosec // test file
+				if string(b) != orig {
+					t.Errorf("config changed:\n%s", b)
+				}
+			})
+		}
+	}
+}
+
+func TestConfigureRejectsControlCharactersInTypedValues(t *testing.T) {
+	home := t.TempDir()
+	r := afs(t, home, map[string]string{}, "https://afs.example.com\ntable\nteam_1\x1b[2J\n", "configure", "--profile", "p")
+	if r.code == 0 {
+		t.Fatalf("control character accepted: %+v", r)
+	}
+	if _, err := os.Stat(filepath.Join(home, ".afs", "config")); err == nil {
+		t.Error("config written")
 	}
 }
