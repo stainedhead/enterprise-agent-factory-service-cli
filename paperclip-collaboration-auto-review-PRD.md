@@ -42,3 +42,9 @@ to retry when the server asks for longer than the cap. The two must agree: a pip
 Use TDD (Red, Green, Refactor) for every fix; review each fix against `AGENTS.md` before the next; fixes are small and independent,
 so agent teammates and git worktrees may be used in parallel but this change is small enough to do in sequence. Priorities:
 P0 blockers first, then P1, then P2.
+
+## 5. Review of this PRD (step 6)
+
+Every requirement has measurable acceptance criteria and a named test. Priorities were checked: FR-R1 is P1 (behavioural inconsistency
+with the API client, not a blocker); FR-R2 to FR-R4 are P2 test and diagnostics gaps; nothing is P0 because no finding blocks release.
+The guidance to use TDD, review each fix, and use agent teammates and worktrees is in section 4. Verdict: ready to implement.
