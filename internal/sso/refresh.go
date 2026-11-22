@@ -20,7 +20,7 @@ func Refresh(ctx context.Context, hc HTTPDoer, now time.Time, t *Token) (*Token,
 	if err != nil {
 		return nil, fmt.Errorf("refresh rejected: %w", err)
 	}
-	return tr.token(t.Issuer, t.ClientID, now, t.RefreshToken), nil
+	return tr.token(t.Issuer, t.ClientID, now, t.RefreshToken)
 }
 
 // Source is the cached SSO session of a profile as a credential source (auth.TokenSource).

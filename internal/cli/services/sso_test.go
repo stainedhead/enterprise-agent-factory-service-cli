@@ -312,3 +312,87 @@ func TestProfileWithInsecureIssuerIsRefused(t *testing.T) {
 		t.Fatalf("%+v", r)
 	}
 }
+
+func hangingIdP(t *testing.T) *httptest.Server {
+	t.Helper()
+	release := make(chan struct{})
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		select {
+		case <-release:
+		case <-r.Context().Done():
+		}
+	}))
+	t.Cleanup(func() { close(release); srv.Close() })
+	return srv
+}
+
+// FR-006: an identity provider that never answers fails the refresh within --cli-read-timeout.
+func TestRefreshAgainstSilentIdPTimesOut(t *testing.T) {
+	api := fakeAPI(t, oneProvider)
+	idp := hangingIdP(t)
+	home := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(home, ".afs"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	cfg := "[default]\nsso_issuer = " + idp.URL + "\nsso_client_id = c\n"
+	if err := os.WriteFile(filepath.Join(home, ".afs", "config"), []byte(cfg), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	tok := &sso.Token{Issuer: idp.URL, ClientID: "c", AccessToken: "old", RefreshToken: "rt", TokenType: "Bearer", ExpiresAt: time.Now().Add(-time.Hour)}
+	if err := sso.NewCache(home).Save(tok); err != nil {
+		t.Fatal(err)
+	}
+	start := time.Now()
+	r := afs(t, home, map[string]string{"AFS_ENDPOINT_URL": api.URL}, "", "sso", "get-caller-identity", "--cli-read-timeout", "1")
+	if r.code != 255 || !strings.Contains(r.err, "afs sso login") {
+		t.Fatalf("%+v", r)
+	}
+	if d := time.Since(start); d > 10*time.Second {
+		t.Errorf("took %v", d)
+	}
+}
+
+func TestLoginAgainstSilentIdPTimesOut(t *testing.T) {
+	idp := hangingIdP(t)
+	home := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(home, ".afs"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	cfg := "[default]\nsso_issuer = " + idp.URL + "\nsso_client_id = c\n"
+	if err := os.WriteFile(filepath.Join(home, ".afs", "config"), []byte(cfg), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	start := time.Now()
+	r := afs(t, home, map[string]string{}, "", "sso", "login", "--cli-read-timeout", "1")
+	if r.code != 255 {
+		t.Fatalf("%+v", r)
+	}
+	if d := time.Since(start); d > 10*time.Second {
+		t.Errorf("took %v", d)
+	}
+}
+
+// FR-008: afs sso login --debug logs the identity-provider calls and none of their secrets.
+func TestSSOLoginDebugCoversIdPTraffic(t *testing.T) {
+	srv := idpServer(t)
+	r := afs(t, t.TempDir(), map[string]string{"AFS_ENDPOINT_URL": srv.URL}, "", "sso", "login", "--debug")
+	if r.code != 0 {
+		t.Fatalf("%+v", r)
+	}
+	var lines []string
+	for _, l := range strings.Split(r.err, "\n") {
+		if strings.Contains(l, " DEBUG sso ") {
+			lines = append(lines, l)
+		}
+	}
+	if len(lines) < 3 {
+		t.Fatalf("IdP calls not logged:\n%s", r.err)
+	}
+	for _, l := range lines {
+		for _, secret := range []string{"access-xyz", "refresh-xyz", "device_code", "ABCD-1234", `"dc"`} {
+			if strings.Contains(l, secret) {
+				t.Errorf("secret %q in %q", secret, l)
+			}
+		}
+	}
+}

@@ -18,7 +18,7 @@
 | 2 | Research and data modelling | Complete | research.md, data-dictionary.md |
 | 3 | Architecture and planning | Complete | architecture.md, plan.md |
 | 4 | Task breakdown | Complete | tasks.md, one task per FR |
-| 5 | Implementation | In Progress | 4 / 20 FRs |
+| 5 | Implementation | In Progress | 7 / 20 FRs |
 | 6 | Completion and archival | Not Started | |
 
 ## Task log
@@ -30,3 +30,4 @@ Updated after every fix: FR, commit, tests added, review note.
 | FR-002 | P1 | Done | require https and a matching issuer for OIDC discovery and endpoints | Discover validates issuer, issuer equality, endpoint schemes; sso_issuer validated on read (non-lenient) and write. Review: no secret form sent in any rejected case. Gate green, 93.5%. |
 | FR-003 | P1 | Done | sanitize terminal control characters in table, text, errors and prompts | output.Sanitize + sanitizing writer in ReportError; device prompt and provider list sanitized; json/yaml unchanged (D-R7). Review: bypass attempts with C1, DEL, invalid UTF-8 covered. 93.6%. |
 | FR-004 | P1 | Done | print NextToken on stderr for CSV with --no-paginate; resume without header | fetchCSV reports X-Afs-Next-Token; CSVWriter.Resume. Review: stdout stays clean CSV. 93.6%. |
+| FR-006,FR-007,FR-008 | P2 | Done | IdP timeouts, access-token validation, --debug for OIDC traffic | FR-006 IdPClient (transport + read timeout); FR-007 token()/ErrNoAccessToken, Bearer only; FR-008 sso.WithDebug logs method, redacted URL, status, duration, never bodies. Review: no secret reaches debug output. 93.7%. |

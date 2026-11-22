@@ -3,7 +3,6 @@ package sso
 import (
 	"context"
 	"fmt"
-	"net/http"
 
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/exec"
@@ -46,11 +45,7 @@ func login(ctx context.Context, inv *cli.Invocation) int {
 			return fail(inv, st.Profile, err)
 		}
 	}
-	rt := env.RoundTripper
-	if rt == nil {
-		rt = http.DefaultTransport
-	}
-	tok, err := issso.Login(ctx, issso.LoginOptions{HTTP: &http.Client{Transport: rt}, Out: env.Stderr, Now: env.Clock, Sleep: env.SleepCtx}, issuer, clientID)
+	tok, err := issso.Login(ctx, issso.LoginOptions{HTTP: runtime.IdPClient(env, inv.P.G), Out: env.Stderr, Now: env.Clock, Sleep: env.SleepCtx}, issuer, clientID)
 	if err != nil {
 		return fail(inv, st.Profile, err)
 	}

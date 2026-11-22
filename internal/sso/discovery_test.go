@@ -18,11 +18,18 @@ type hostileIdP struct {
 	srv  *httptest.Server
 	mu   sync.Mutex
 	reqs []string
+	// tokenBody, when set, is the answer of the token and device endpoints; discovery then names this server.
+	tokenBody string
 }
 
 func newHostileIdP(t *testing.T, doc func(base string) string) *hostileIdP {
 	t.Helper()
 	h := &hostileIdP{}
+	if doc == nil {
+		doc = func(b string) string {
+			return fmt.Sprintf(`{"issuer":"%[1]s","device_authorization_endpoint":"%[1]s/device","token_endpoint":"%[1]s/token"}`, b)
+		}
+	}
 	h.srv = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		_ = r.ParseForm()
 		h.mu.Lock()
@@ -30,6 +37,14 @@ func newHostileIdP(t *testing.T, doc func(base string) string) *hostileIdP {
 		h.mu.Unlock()
 		if r.URL.Path == "/.well-known/openid-configuration" {
 			_, _ = w.Write([]byte(doc(h.srv.URL)))
+			return
+		}
+		if r.URL.Path == "/device" {
+			_, _ = w.Write([]byte(`{"device_code":"d","user_code":"U","verification_uri":"https://v"}`))
+			return
+		}
+		if h.tokenBody != "" {
+			_, _ = w.Write([]byte(h.tokenBody))
 			return
 		}
 		_, _ = w.Write([]byte(`{"access_token":"a"}`))
@@ -140,5 +155,85 @@ func TestDevicePromptIsSanitized(t *testing.T) {
 		if (r < 0x20 && r != '\n') || (r >= 0x7f && r <= 0x9f) {
 			t.Fatalf("control character %U in %q", r, out.String())
 		}
+	}
+}
+
+// FR-007: a token response without a usable access token is an error, and nothing is cached.
+func TestTokenResponsesWithoutAccessTokenAreRejected(t *testing.T) {
+	cases := map[string]string{
+		"missing":      `{"refresh_token":"r","expires_in":60}`,
+		"empty":        `{"access_token":"","refresh_token":"r"}`,
+		"mac type":     `{"access_token":"a","token_type":"MAC"}`,
+		"dpop type":    `{"access_token":"a","token_type":"DPoP"}`,
+		"unknown type": `{"access_token":"a","token_type":"x"}`,
+	}
+	for name, body := range cases {
+		t.Run(name, func(t *testing.T) {
+			h := newHostileIdP(t, nil)
+			h.tokenBody = body
+			clk := &clock{t: time.Now()}
+			tok, err := Login(context.Background(), loginOpts(clk, &bytes.Buffer{}), h.srv.URL, "c")
+			if err == nil || tok != nil {
+				t.Fatalf("login: %v %v", tok, err)
+			}
+			rt := &Token{Issuer: h.srv.URL, ClientID: "c", RefreshToken: "rt", ExpiresAt: time.Now().Add(-time.Hour)}
+			if nt, err := Refresh(context.Background(), http.DefaultClient, time.Now(), rt); err == nil || nt != nil {
+				t.Fatalf("refresh: %v %v", nt, err)
+			} else if !strings.Contains(err.Error(), "access token") && !strings.Contains(err.Error(), "token_type") {
+				t.Errorf("message: %v", err)
+			}
+		})
+	}
+	for _, ok := range []string{`{"access_token":"a"}`, `{"access_token":"a","token_type":"bearer"}`, `{"access_token":"a","token_type":"BEARER"}`} {
+		h := newHostileIdP(t, nil)
+		h.tokenBody = ok
+		clk := &clock{t: time.Now()}
+		if _, err := Login(context.Background(), loginOpts(clk, &bytes.Buffer{}), h.srv.URL, "c"); err != nil {
+			t.Errorf("%s: %v", ok, err)
+		}
+	}
+}
+
+// FR-008: --debug logs method, URL, status and duration of IdP calls, and no secret.
+func TestDebugLogsIdPCallsWithoutSecrets(t *testing.T) {
+	clk := &clock{t: time.Now()}
+	p := newIdP(t, clk)
+	var dbg bytes.Buffer
+	o := loginOpts(clk, &bytes.Buffer{})
+	o.HTTP = WithDebug(http.DefaultClient, &dbg, nil)
+	tok, err := Login(context.Background(), o, p.srv.URL, "cli-client")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := Refresh(context.Background(), o.HTTP, time.Now(), &Token{Issuer: p.srv.URL, ClientID: "cli-client", RefreshToken: tok.RefreshToken}); err != nil {
+		t.Fatal(err)
+	}
+	out := dbg.String()
+	for _, want := range []string{" DEBUG sso GET " + p.srv.URL + "/.well-known/openid-configuration -> 200", " DEBUG sso POST " + p.srv.URL + "/device -> 200", " DEBUG sso POST " + p.srv.URL + "/token -> 200"} {
+		if !strings.Contains(out, want) {
+			t.Errorf("missing %q in\n%s", want, out)
+		}
+	}
+	for _, secret := range []string{"dev-123", "ABCD-EFGH", "rt-1", "at-1", "refreshed-at", "device_code", "refresh_token", "client_id"} {
+		if strings.Contains(out, secret) {
+			t.Errorf("debug output contains %q:\n%s", secret, out)
+		}
+	}
+	if WithDebug(http.DefaultClient, nil, nil) != HTTPDoer(http.DefaultClient) {
+		t.Error("nil writer wrapped")
+	}
+	// transport errors and credentials in a URL
+	dbg.Reset()
+	d := WithDebug(http.DefaultClient, &dbg, nil)
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	req, _ := http.NewRequestWithContext(ctx, http.MethodGet, "http://user:hunter2@127.0.0.1:1/x", nil)
+	resp, err := d.Do(req)
+	if err == nil {
+		_ = resp.Body.Close()
+		t.Fatal("expected an error")
+	}
+	if strings.Contains(dbg.String(), "hunter2") || !strings.Contains(dbg.String(), "cancelled") {
+		t.Errorf("%q", dbg.String())
 	}
 }

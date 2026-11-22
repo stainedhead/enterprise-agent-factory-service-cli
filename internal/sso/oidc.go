@@ -3,6 +3,7 @@ package sso
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -131,7 +132,16 @@ type tokenResponse struct {
 	ExpiresIn    int64  `json:"expires_in"`
 }
 
-func (r tokenResponse) token(issuer, clientID string, now time.Time, prevRefresh string) *Token {
+// ErrNoAccessToken is returned when the identity provider answers 200 without a usable access token.
+var ErrNoAccessToken = errors.New("the identity provider returned no access token")
+
+func (r tokenResponse) token(issuer, clientID string, now time.Time, prevRefresh string) (*Token, error) {
+	if r.AccessToken == "" {
+		return nil, ErrNoAccessToken
+	}
+	if r.TokenType != "" && !strings.EqualFold(r.TokenType, "Bearer") {
+		return nil, fmt.Errorf("the identity provider returned an unsupported token_type; afs needs Bearer")
+	}
 	t := &Token{Issuer: issuer, ClientID: clientID, AccessToken: r.AccessToken, RefreshToken: r.RefreshToken, TokenType: r.TokenType}
 	if t.TokenType == "" {
 		t.TokenType = "Bearer"
@@ -144,5 +154,5 @@ func (r tokenResponse) token(issuer, clientID string, now time.Time, prevRefresh
 		exp = 3600
 	}
 	t.ExpiresAt = now.Add(time.Duration(exp) * time.Second)
-	return t
+	return t, nil
 }

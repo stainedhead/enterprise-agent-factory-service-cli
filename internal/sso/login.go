@@ -82,7 +82,7 @@ func Login(ctx context.Context, o LoginOptions, issuer, clientID string) (*Token
 		var oe *oauthError
 		switch {
 		case err == nil:
-			return tr.token(issuer, clientID, o.Now(), ""), nil
+			return tr.token(issuer, clientID, o.Now(), "")
 		case errors.As(err, &oe) && oe.Code == "authorization_pending":
 			continue
 		case errors.As(err, &oe) && oe.Code == "slow_down":

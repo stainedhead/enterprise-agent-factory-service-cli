@@ -70,21 +70,11 @@ func open(env *cli.Env, g cli.Globals, noAuth, lenient bool) (*Session, error) {
 		}
 	}
 	src := Source(env)
-	rt := env.RoundTripper
-	if rt == nil {
-		ct := client.DefaultConnectTimeout
-		if g.Set["cli-connect-timeout"] {
-			ct = time.Duration(g.ConnectTimeout) * time.Second
-		}
-		rt = client.NewTransport(client.TransportOptions{ConnectTimeout: ct, DialContext: env.Dial})
-	}
-	rto := client.DefaultReadTimeout
-	if g.Set["cli-read-timeout"] {
-		rto = time.Duration(g.ReadTimeout) * time.Second
-	}
+	rt := transport(env, g)
+	rto := readTimeout(g)
 	in := auth.Inputs{Source: src, Settings: st}
 	if st.SSOIssuer != "" && st.SSOClientID != "" {
-		in.SSO = &sso.Source{Cache: sso.NewCache(env.Home), Issuer: st.SSOIssuer, ClientID: st.SSOClientID, Profile: st.Profile, HTTP: &http.Client{Transport: rt}, Now: env.Clock}
+		in.SSO = &sso.Source{Cache: sso.NewCache(env.Home), Issuer: st.SSOIssuer, ClientID: st.SSOClientID, Profile: st.Profile, HTTP: idpClient(env, g, rt, rto), Now: env.Clock}
 	}
 	in.Workload = auth.WorkloadToken{Getenv: env.Getenv}
 	cfg := client.Config{
@@ -99,4 +89,37 @@ func open(env *cli.Env, g cli.Globals, noAuth, lenient bool) (*Session, error) {
 		cfg.Debug = env.Stderr
 	}
 	return &Session{Settings: st, Client: client.New(cfg), Source: src}, nil
+}
+
+// transport is the HTTP transport with the connect timeout of --cli-connect-timeout.
+func transport(env *cli.Env, g cli.Globals) http.RoundTripper {
+	if env.RoundTripper != nil {
+		return env.RoundTripper
+	}
+	ct := client.DefaultConnectTimeout
+	if g.Set["cli-connect-timeout"] {
+		ct = time.Duration(g.ConnectTimeout) * time.Second
+	}
+	return client.NewTransport(client.TransportOptions{ConnectTimeout: ct, DialContext: env.Dial})
+}
+
+func readTimeout(g cli.Globals) time.Duration {
+	if g.Set["cli-read-timeout"] {
+		return time.Duration(g.ReadTimeout) * time.Second
+	}
+	return client.DefaultReadTimeout
+}
+
+// IdPClient is the HTTP client for identity-provider calls (discovery, device flow, refresh): the same
+// transport as the API client, with each request bounded by --cli-read-timeout (FR-006).
+func IdPClient(env *cli.Env, g cli.Globals) sso.HTTPDoer {
+	return idpClient(env, g, transport(env, g), readTimeout(g))
+}
+
+func idpClient(env *cli.Env, g cli.Globals, rt http.RoundTripper, rto time.Duration) sso.HTTPDoer {
+	var hc sso.HTTPDoer = &http.Client{Transport: rt, Timeout: rto}
+	if g.Debug {
+		hc = sso.WithDebug(hc, env.Stderr, env.Clock)
+	}
+	return hc
 }

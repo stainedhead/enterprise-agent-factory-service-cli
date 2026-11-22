@@ -31,6 +31,12 @@ Sign-in and refresh require the identity provider to use `https` throughout: the
 endpoints. A loopback issuer (a local test provider) may use plain `http`. Anything else fails with exit 255
 before a device code or refresh token is sent.
 
+Every request to the identity provider uses the same connect timeout as API calls and is bounded by
+`--cli-read-timeout` (default 60 seconds), so a provider that never answers fails the command instead of
+hanging it. A token response without an `access_token`, or with a `token_type` other than `Bearer`, fails
+with `the identity provider returned no access token` and nothing is cached. `--debug` logs each identity
+provider call (method, URL, status, duration) and never a code, token or form body.
+
 ## Refresh and expiry
 
 When the access token has expired, `afs` refreshes it silently with the refresh token. If there is no
