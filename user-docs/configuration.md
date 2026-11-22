@@ -4,7 +4,7 @@
 
 | File | Holds |
 |---|---|
-| `~/.afs/config` | Profiles: `endpoint_url`, `output`, `team_id`, `sso_provider_id`, `sso_issuer`, `sso_client_id` |
+| `~/.afs/config` | Profiles: `endpoint_url`, `output`, `team_id`, `sso_provider_id`, `sso_issuer`, `sso_client_id`, and optionally `collab_base_domain` |
 | `~/.afs/credentials` | `api_key` per profile. Must be readable by you only (`chmod 600`) |
 | `~/.afs/sso/cache/` | Cached single sign-on sessions (mode 0600) |
 
@@ -23,6 +23,10 @@ sso_client_id = 0oa1cli
 ```
 
 `AFS_CONFIG_FILE` and `AFS_SHARED_CREDENTIALS_FILE` override the two file paths.
+
+`collab_base_domain` is optional and recommended for pipelines that call a team's Paperclip with
+`afs collaboration invoke-api`: when it is set, the team's collaboration host must be `<label>.<that domain>`, so a
+hostile or mistaken answer cannot send your credential to another host (see [Team collaboration](collaboration.md)).
 
 ## Precedence
 

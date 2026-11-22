@@ -18,6 +18,9 @@ Inherited decisions PC-CLI-D1..D12 are in the PRD section 7.1. Decisions taken w
 | D-8 | Hints table sits in `internal/cli/exec/hints.go`; the field lines and hints print after `Request ID` for every API error, not only collaboration | One code path; unknown reasons print nothing |
 | D-9 | `clitest.Options` gained `Now` and `Sleep` so a `--wait` timeout is proven with a virtual clock | A timeout test must not wait 10 minutes |
 | D-10 | Redaction: members named `...Secret` whose value is a string not starting `arn:` are masked; `...Arn` members never | CLI-US-31.2: `collabClientSecretArn` is logged, `clientSecret` is not |
+| D-11 | `cli.Override.OpenEnum` and `Option.OpenEnum`: the help says "Known values" and a value outside the pinned enum is sent for the API to judge; used for `admin put-setting --key` | The pinned snapshot's `key` enum lacks the seven `collab.*` settings the contract lists (RCF-5); CLI-US-31.3 says the CLI carries no list of keys |
+| D-12 | `--collab-client-secret-arn` is checked against a Secrets Manager ARN shape (any partition, 12-digit account) in a Build hook, covering `--cli-input-json` too; the error never repeats the value | CLI-US-31.2 |
+| D-13 | Settings gained `CollabBaseDomain` (profile key `collab_base_domain`), read per profile; `afs configure` does not prompt for it | Optional key (PC-CLI-D5) |
 
 ## Edge cases and solutions
 
@@ -34,6 +37,7 @@ Inherited decisions PC-CLI-D1..D12 are in the PRD section 7.1. Decisions taken w
 | RCF-1 | PRD/contract: `admin list-agent-templates` has no `capability` filter in the contract (§4.4 names it for `ListAgentTemplates` only). The PRD story CLI-US-28.7 and the living PRD should drop `afs admin list-agent-templates --capability` or the contract should add it |
 | RCF-2 | PRD/contract: the `managed_secret` hint cannot name the manager without reading `managedBy`; the contract could add `details.managedBy` so the hint can say AFS or Paperclip |
 | RCF-3 | The root `skills/enterprise-agent-factory-service-cli.md` must gain the new commands (root repository is not edited here); the command list is in `user-docs/collaboration.md` and `user-docs/reference/collaboration.md` |
+| RCF-5 | `-restapi` `api/openapi.yaml` (99bfcfc): the `PutSetting`/`GetSettings` key enum lacks `collab.base_domain`, `collab.public_endpoints`, `collab.session_ttl_minutes`, `collab.max_body_mb`, `collab.content_scan`, `collab.allowed_source_cidrs`, `collab.denied_spike_threshold` although the root contract §4.13 lists them; the CLI treats `--key` as an open enum until the snapshot lists them |
 | RCF-4 | Re-pin `api/SOURCE` to the `-restapi` merge commit when PR #7 lands (api/openapi.yaml is expected to be unchanged, so only SOURCE changes) |
 
 ## Parked

@@ -95,3 +95,23 @@ A team slug whose collaboration hostname is held (30 days after the deletion of 
 | `Not effective: ... (team_not_allowed)` | A service admin turns the guardrail on: `afs teams update-team --may-expose-collaboration` |
 | `Not effective: ... (base_domain_unset)` | A service admin sets `collab.base_domain` with `afs admin put-setting` |
 | `This secret is managed by AFS or Paperclip and cannot be changed here.` | Change it in Paperclip, or rotate with `rotate-secret` if AFS generates it |
+
+## Service administrator setup
+
+A service administrator prepares the service once, then switches teams on:
+
+```bash
+afs admin put-setting --key collab.base_domain --value '"collab.example.com"'
+afs admin put-setting --key collab.public_endpoints --value true
+afs admin update-identity-provider --provider-id idp_... \
+  --collab-client-id paperclip-web --collab-client-secret-arn arn:aws:secretsmanager:eu-west-1:111122223333:secret:afs/collab-AbCdEf
+afs teams update-team --team-id team_... --may-expose-collaboration
+afs admin list-collaboration-endpoints [--team-id team_...] [--state Failed] [--output csv]
+```
+
+- `--collab-client-secret-arn` takes the **ARN** of a Secrets Manager secret, never the secret's value; a value that is not an ARN
+  exits 252 before any call, and `--debug` shows the ARN (a reference) but never a client secret.
+- The seven `collab.*` settings (`base_domain`, `public_endpoints`, `session_ttl_minutes`, `max_body_mb`, `content_scan`,
+  `allowed_source_cidrs` and `denied_spike_threshold`) go through `put-setting`; the value is JSON, and the service names the valid range when it refuses one.
+- `list-collaboration-endpoints` shows each team's hostname, effective surfaces, phase and last access; with `--output csv` it
+  pages through the whole list.

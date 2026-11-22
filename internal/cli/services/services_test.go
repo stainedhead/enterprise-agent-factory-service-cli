@@ -112,7 +112,7 @@ func TestDoneOperationsHaveGoldens(t *testing.T) {
 }
 
 // wantMilestone is raised only by a milestone's exit task (PC-CLI-D9: M7 to M10).
-const wantMilestone = 7
+const wantMilestone = 8
 
 // M6-X1, CLI-US-7: the feature is complete: all 187 operations have a command, none is held back
 // by the milestone gate, and none lacks an example or columns.

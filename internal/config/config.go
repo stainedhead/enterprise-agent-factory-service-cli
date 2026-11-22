@@ -26,15 +26,18 @@ type Overrides struct {
 
 // Settings are the resolved settings of one invocation.
 type Settings struct {
-	Profile         string
-	EndpointURL     string
-	Output          string
-	SSOProviderID   string
-	SSOIssuer       string
-	SSOClientID     string
-	TeamID          string
-	ConfigPath      string
-	CredentialsPath string
+	Profile       string
+	EndpointURL   string
+	Output        string
+	SSOProviderID string
+	SSOIssuer     string
+	SSOClientID   string
+	TeamID        string
+	// CollabBaseDomain is the optional profile key collab_base_domain: when set, the host of a team's collaboration
+	// endpoint must be <label>.<this domain> (PC-CLI-D5).
+	CollabBaseDomain string
+	ConfigPath       string
+	CredentialsPath  string
 	// Sources names where Output and EndpointURL came from ("option", "environment", "profile", "default").
 	Sources map[string]string
 }
@@ -92,6 +95,7 @@ func Resolve(ov Overrides, s Source) (Settings, error) {
 	get := func(k string) string { v, _ := f.Get(sec, k); return v }
 
 	st.SSOProviderID, st.SSOIssuer, st.SSOClientID, st.TeamID = get("sso_provider_id"), get("sso_issuer"), get("sso_client_id"), get("team_id")
+	st.CollabBaseDomain = get("collab_base_domain")
 
 	switch {
 	case ov.EndpointURL != "":

@@ -36,7 +36,10 @@ type Option struct {
 	Enum      []string
 	Min, Max  *float64
 	Sensitive bool // secret values: only file://, fileb:// or -
-	Desc      string
+	// OpenEnum says Enum lists the known values only: the API decides what else is valid, so another
+	// value is sent as given (put-setting --key: the collab.* settings, CLI-US-31.3).
+	OpenEnum bool
+	Desc     string
 }
 
 // Name is the flag without dashes.
@@ -140,6 +143,11 @@ func DeriveOptions(op *spec.Operation, ov *Override) []Option {
 			for _, w := range ov.Optional {
 				if out[i].Wire == w {
 					out[i].Required = false
+				}
+			}
+			for _, w := range ov.OpenEnum {
+				if out[i].Wire == w {
+					out[i].OpenEnum = true
 				}
 			}
 		}

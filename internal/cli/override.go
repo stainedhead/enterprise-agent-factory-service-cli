@@ -56,6 +56,9 @@ type Override struct {
 	// Accept is the media type to ask for when the operation answers in something other than JSON
 	// (application/yaml for a kubeconfig); the response is then given to Handle.
 	Accept string
+	// OpenEnum lists wire names whose enum is open: the help says "Known values" and the CLI sends
+	// any other value for the API to judge (no client-side copy of a server list).
+	OpenEnum []string
 	// OmitEmptyBody sends no request body when the operation's body is optional and no member was given.
 	OmitEmptyBody bool
 	// Handle takes over a successful response instead of the generic rendering (kubeconfig).
@@ -69,6 +72,7 @@ func (a *Override) merge(b Override) error {
 	a.OmitEmptyBody = a.OmitEmptyBody || b.OmitEmptyBody
 	a.Extra = append(a.Extra, b.Extra...)
 	a.Optional = append(a.Optional, b.Optional...)
+	a.OpenEnum = append(a.OpenEnum, b.OpenEnum...)
 	if b.ResultKey != "" {
 		a.ResultKey = b.ResultKey
 	}

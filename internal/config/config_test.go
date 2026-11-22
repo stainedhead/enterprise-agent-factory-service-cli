@@ -393,3 +393,17 @@ func TestSaveFailuresLeaveOriginalAndNoTempFile(t *testing.T) {
 		t.Errorf("target damaged: %v", err)
 	}
 }
+
+// PC-CLI-D5: the optional profile key collab_base_domain is read per profile.
+func TestCollabBaseDomainProfileKey(t *testing.T) {
+	s, home := src(t, nil)
+	writeConfig(t, home, "[default]\nendpoint_url = https://d.example\ncollab_base_domain = collab.example.com\n\n[profile p2]\nendpoint_url = https://p2.example\n")
+	st, err := Resolve(Overrides{}, s)
+	if err != nil || st.CollabBaseDomain != "collab.example.com" {
+		t.Fatalf("%+v %v", st, err)
+	}
+	st, err = Resolve(Overrides{Profile: "p2"}, s)
+	if err != nil || st.CollabBaseDomain != "" {
+		t.Fatalf("p2: %+v %v", st, err)
+	}
+}

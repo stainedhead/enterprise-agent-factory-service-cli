@@ -1,0 +1,2 @@
+Team      TeamState  Hostname                WebUi  RestApi  Phase  LastAccessAt
+payments  active     payments.collab.examp…  true   false    Ready  -

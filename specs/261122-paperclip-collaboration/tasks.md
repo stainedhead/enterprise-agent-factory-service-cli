@@ -4,7 +4,7 @@
 
 ## Progress summary
 
-11/38 tasks complete (M7 done).
+16/38 tasks complete (M7, M8 done).
 
 ## M7 (C1)
 
@@ -22,11 +22,11 @@
 
 ## M8 (C2)
 
-- [ ] P8.1 `admin list-collaboration-endpoints` columns, CSV (FR-010)
-- [ ] P8.2 Identity provider `--collab-client-id`, `--collab-client-secret-arn` validation (FR-011)
-- [ ] P8.3 `collab.*` settings pass-through tests; redaction of ARN vs secret (FR-011)
-- [ ] P8.4 Config profile key `collab_base_domain`
-- [ ] P8.5 Docs; `CurrentMilestone` 8; gate; commit; push
+- [x] P8.1 `admin list-collaboration-endpoints` columns, CSV (FR-010)
+- [x] P8.2 Identity provider `--collab-client-id`, `--collab-client-secret-arn` validation (FR-011)
+- [x] P8.3 `collab.*` settings pass-through tests; redaction of ARN vs secret (FR-011)
+- [x] P8.4 Config profile key `collab_base_domain`
+- [x] P8.5 Docs; `CurrentMilestone` 8; gate; commit; push
 
 ## M9 (C3)
 

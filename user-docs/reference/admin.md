@@ -1216,7 +1216,18 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin list-collaboration-endpoints help
+       List every team's Paperclip endpoint
+
+       afs admin list-collaboration-endpoints
+
+       List the endpoints that are not ready, as CSV
+
+       afs admin list-collaboration-endpoints --state Failed --output csv
+
+       Show one team's endpoint
+
+       afs admin list-collaboration-endpoints --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## list-cost-reconciliations
@@ -1890,7 +1901,7 @@ SYNOPSIS
 
 OPTIONS
        --key (string) (required)
-          Possible values: secrets.path_prefix, pricing.price_list_sync, billing.variance_alert_pct, api.idempotency_key_ttl_seconds, teams.ephemeral_max_days, work_orders.sla_warning_hours, billing.tag_activation_acknowledged, work_orders.notification_channel_id, reports.idle_cpu_millicores, egress.denied_spike_threshold, gateway.reservation_ttl_seconds, api.cors_origins
+          Known values: secrets.path_prefix, pricing.price_list_sync, billing.variance_alert_pct, api.idempotency_key_ttl_seconds, teams.ephemeral_max_days, work_orders.sla_warning_hours, billing.tag_activation_acknowledged, work_orders.notification_channel_id, reports.idle_cpu_millicores, egress.denied_spike_threshold, gateway.reservation_ttl_seconds, api.cors_origins
        --value (string or JSON) (required)
           JSON value of the setting's type
        --if-match (string)
@@ -1915,6 +1926,14 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
+       Set the base domain of the Paperclip endpoints
+
+       afs admin put-setting --key collab.base_domain --value '"collab.example.com"'
+
+       Switch the public Paperclip endpoints on
+
+       afs admin put-setting --key collab.public_endpoints --value true
+
        Set a list value (JSON)
 
        afs admin put-setting --key api.cors_origins --value '["https://console.example.com"]'
@@ -2171,6 +2190,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
+       Register the collaboration sign-in client (a reference to the secret, never its value)
+
+       afs admin update-identity-provider --provider-id idp_01J9ZQ3ABCDEFGHJKMNPQRSTVW --collab-client-id paperclip-web --collab-client-secret-arn arn:aws:secretsmanager:eu-west-1:111122223333:secret:afs/collab-AbCdEf
+
        Disable a provider
 
        afs admin update-identity-provider --provider-id idp_01J9ZQ3ABCDEFGHJKMNPQRSTVW --no-enabled
