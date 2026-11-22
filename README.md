@@ -7,11 +7,11 @@ decides what each user can do.
 
 Part of [enterprise-agent-factory-service](https://github.com/stainedhead/enterprise-agent-factory-service).
 
-**Status:** milestone M0 (foundation) done. All 180 operations of the pinned API contract are callable through
+**Status:** milestones M0 (foundation) and M1 (teams, members, team audit, settings, identity providers) done. All 180 operations of the pinned API contract are callable through
 the generic executor (`--cli-input-json`, `--generate-cli-skeleton`, pagination, safe updates with `If-Match`,
 `--wait`, retries and idempotency keys); `afs configure`, `afs configure sso`, `afs sso login`, `afs sso logout`,
 `afs sso get-caller-identity` and `afs sso list-providers` are finished. Per-service polish (examples, table
-columns, golden files) lands milestone by milestone.
+columns, golden files, `AccessDenied` tests) lands milestone by milestone.
 
 ## Examples
 

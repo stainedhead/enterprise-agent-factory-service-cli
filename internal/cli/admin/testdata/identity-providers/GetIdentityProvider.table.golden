@@ -1,0 +1,8 @@
+Field    Value
+Id       idp_01JD2Q3R4S5T6V7W8X9Y0Z0001
+Name     Corporate Okta
+Kind     okta
+Issuer   https://example.okta.com/oauth2/default
+Enabled  true
+Default  true
+Version  1

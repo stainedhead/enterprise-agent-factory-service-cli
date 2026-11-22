@@ -69,7 +69,14 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs members add-member help
+       Add a user as team_admin
+
+       afs members add-member --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --subject-type user --email ada@example.com --role team_admin
+
+       Bind an identity provider group
+
+       afs members add-member --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --subject-type group --group-name payments-devs --role team_viewer
+
 ```
 
 ## list-members
@@ -111,7 +118,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs members list-members help
+       List a team's members and groups
+
+       afs members list-members --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## remove-member
@@ -156,7 +166,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs members remove-member help
+       Remove a member
+
+       afs members remove-member --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --binding-id mem_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## update-member
@@ -203,5 +216,8 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs members update-member help
+       Change a member's role (reads the version from the member list)
+
+       afs members update-member --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --binding-id mem_01J9ZQ3ABCDEFGHJKMNPQRSTVW --role team_viewer
+
 ```

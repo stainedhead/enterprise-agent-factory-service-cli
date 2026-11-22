@@ -1,6 +1,8 @@
 package services_test
 
 import (
+	"io/fs"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -77,6 +79,34 @@ func TestDoneUpToCurrentMilestone(t *testing.T) {
 			if !strings.HasPrefix(ex.Command, "afs ") {
 				t.Errorf("%s: example %q must start with afs", c.Key(), ex.Command)
 			}
+		}
+	}
+}
+
+// D-C4: every operation at or below CurrentMilestone has golden help (and, when it returns a
+// body, table and text) files in its package's testdata, written by clitest.CheckOperations.
+func TestDoneOperationsHaveGoldens(t *testing.T) {
+	have := map[string]bool{}
+	root := filepath.Join("..", "..", "..", "internal", "cli")
+	_ = filepath.WalkDir(root, func(p string, d fs.DirEntry, err error) error {
+		if err == nil && !d.IsDir() && strings.HasSuffix(p, ".golden") && strings.Contains(p, "testdata") {
+			have[filepath.Base(p)] = true
+		}
+		return nil
+	})
+	reg, err := services.NewRegistry()
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, c := range reg.All() {
+		if c.Op == nil || cli.MilestoneOf(c.Op.ID) < 1 || cli.MilestoneOf(c.Op.ID) > cli.CurrentMilestone {
+			continue
+		}
+		if !have[c.Op.ID+".help.golden"] {
+			t.Errorf("%s: no help golden", c.Op.ID)
+		}
+		if len(c.Columns) > 0 && !have[c.Op.ID+".table.golden"] {
+			t.Errorf("%s: no table golden", c.Op.ID)
 		}
 	}
 }

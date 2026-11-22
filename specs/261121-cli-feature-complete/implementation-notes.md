@@ -106,6 +106,16 @@ Recorded during M0 (2026-11-21):
 - **Debug redaction** masks `secretKey` in response bodies; `exec` prints it once from the raw body (D-C25 is for M4).
 - **`afs help <service> [<operation>]`** is accepted as well as `afs <service> <operation> help` and `--help`.
 
+Recorded during M1 (2026-11-22):
+
+- **M1-0 / M2-0 / M3-0 re-sync: no change.** `-restapi` `feat/restapi-feature-complete` at `bfe8b05` still serves `api/openapi.yaml` with sha256 `3456b9e9...`, the pinned snapshot; nothing regenerated.
+- **Shared test harness `internal/clitest`** (not in the plan): runs afs against an httptest server, replays the snapshot's documented response example, and `CheckOperations` proves "command done" per operation (example parses, columns, golden `table`/`text`/`help`, `AccessDenied` 254). Excluded from the coverage figure like `internal/golden`. Goldens live in `testdata/<group>/<OperationId>.{table,text,help}.golden` of each service package; `services.TestDoneOperationsHaveGoldens` fails when an operation at or below `CurrentMilestone` has none.
+- **`Pending()` no longer asks for columns on 204-only operations** (nothing to render); `TestPendingListsOperationsWithoutExamples` now derives its expectation from `CurrentMilestone`.
+- **Bug fixed in `DeriveOptions`:** any `writeOnly` body field was turned into `--secret-value`. Only the `SecretValue` schema is a secret; `UpdateTeam.ceilingOverrideReason` (writeOnly, audit-only) is an ordinary `--ceiling-override-reason` option.
+- **`PutTeamModels` reads nothing first** (`safeupdate.versionless`): its same-path `GET` is the model list, which has no version; D-C8 says no `If-Match`.
+- **Enumerations are enforced client-side**, so examples use the API's values: roles `team_admin`/`team_viewer`, identity provider kinds `okta`/`entra_id`, setting keys from the `PutSetting` enum (for example `api.cors_origins`).
+- **Table width:** at 80 columns the widest column shrinks first, so a ULID `Id` can show truncated with a `…` in `table`; `json`, `text` and `csv` are untouched.
+
 ## Contract deltas found in M0
 
 | Id | Delta | CLI behaviour |

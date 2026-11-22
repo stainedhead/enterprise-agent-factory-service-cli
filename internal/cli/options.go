@@ -112,7 +112,7 @@ func DeriveOptions(op *spec.Operation, ov *Override) []Option {
 				// A body member named like a global option (report schedule "query") gets a -json suffix.
 				o.Flag += "-json"
 			}
-			if f.Schema.Ref == "SecretValue" || f.WriteOnly {
+			if f.Schema.Ref == "SecretValue" {
 				o.Flag, o.Sensitive, o.Kind = "--secret-value", true, String
 			}
 			out = append(out, o)

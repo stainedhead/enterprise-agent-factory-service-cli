@@ -1,0 +1,6 @@
+Field    Value
+Key      api.idempotency_key_ttl_seconds
+Value    7200
+Type     integer
+Default  3600
+Version  2

@@ -344,7 +344,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin create-identity-provider help
+       Register an OIDC provider
+
+       afs admin create-identity-provider --name "Corp SSO" --kind okta --issuer-url https://idp.example.com --console-client-id console-app --cli-client-id afs-cli --client-secret-arn arn:aws:secretsmanager:eu-west-1:111122223333:secret:afs/idp-AbCdEf
+
 ```
 
 ## create-import
@@ -694,7 +697,7 @@ SYNOPSIS
        afs admin delete-identity-provider [options]
 
 OPTIONS
-       --id (string) (required)
+       --provider-id (string) (required)
        --if-match (string)
           Apply only if the resource is at this version (safe update).
 
@@ -717,7 +720,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin delete-identity-provider help
+       Delete a provider that no team uses
+
+       afs admin delete-identity-provider --provider-id idp_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## delete-notification-channel
@@ -948,7 +954,7 @@ SYNOPSIS
        afs admin describe-identity-provider [options]
 
 OPTIONS
-       --id (string) (required)
+       --provider-id (string) (required)
 
 GLOBAL OPTIONS
        --profile                Use a specific profile from ~/.afs/config.
@@ -969,7 +975,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin describe-identity-provider help
+       Show one identity provider (never a secret, only its ARN)
+
+       afs admin describe-identity-provider --provider-id idp_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## get-settings
@@ -1007,7 +1016,14 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin get-settings help
+       List every service setting
+
+       afs admin get-settings
+
+       Print the settings as JSON
+
+       afs admin get-settings --output json
+
 ```
 
 ## list-agent-templates
@@ -1277,7 +1293,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin list-identity-providers help
+       List identity providers
+
+       afs admin list-identity-providers
+
 ```
 
 ## list-model-prices
@@ -1732,7 +1751,14 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin put-setting help
+       Set a list value (JSON)
+
+       afs admin put-setting --key api.cors_origins --value '["https://console.example.com"]'
+
+       Set a number
+
+       afs admin put-setting --key api.idempotency_key_ttl_seconds --value 86400
+
 ```
 
 ## put-storage-class
@@ -1935,7 +1961,7 @@ SYNOPSIS
        afs admin update-identity-provider [options]
 
 OPTIONS
-       --id (string) (required)
+       --provider-id (string) (required)
        --cli-client-id (string)
        --client-secret-arn (string)
        --console-client-id (string)
@@ -1965,7 +1991,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin update-identity-provider help
+       Disable a provider
+
+       afs admin update-identity-provider --provider-id idp_01J9ZQ3ABCDEFGHJKMNPQRSTVW --no-enabled
+
 ```
 
 ## update-model

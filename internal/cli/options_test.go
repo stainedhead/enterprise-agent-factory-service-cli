@@ -173,8 +173,14 @@ func TestEveryOperationHasMilestone(t *testing.T) {
 }
 
 func TestPendingListsOperationsWithoutExamples(t *testing.T) {
-	r := testRegistry(t)
-	if p := r.Pending(); len(p) != 2 {
-		t.Errorf("pending = %v, want GetMe and ListSignInProviders", p)
+	r := testRegistry(t) // no service overrides: every operation up to CurrentMilestone is pending
+	want := 0
+	for _, c := range r.All() {
+		if c.Op != nil && MilestoneOf(c.Op.ID) <= CurrentMilestone {
+			want++
+		}
+	}
+	if p := r.Pending(); len(p) != want {
+		t.Errorf("pending = %d operations %v, want %d", len(p), p, want)
 	}
 }

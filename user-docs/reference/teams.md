@@ -241,7 +241,18 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams create-team help
+       Create a persistent team and wait until it is ready
+
+       afs teams create-team --slug payments --display-name "Payments" --kind persistent --max-budget-usd 500.00 --first-admin '{"email":"ada@example.com"}' --tags '{"project":"checkout"}' --wait
+
+       Create a team from a file
+
+       afs teams create-team --cli-input-json file://team.json
+
+       Print the input skeleton
+
+       afs teams create-team --generate-cli-skeleton
+
 ```
 
 ## declare-external-system
@@ -530,7 +541,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams delete-team help
+       Delete a team and wait until it is gone
+
+       afs teams delete-team --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --wait
+
 ```
 
 ## describe-log-destination
@@ -660,7 +674,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams describe-revision help
+       Show one revision with its snapshot
+
+       afs teams describe-revision --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --rev 12 --output json
+
 ```
 
 ## describe-team
@@ -702,7 +719,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams describe-team help
+       Show one team
+
+       afs teams describe-team --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## get-kubeconfig
@@ -786,7 +806,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams get-team-status help
+       Show reconcile status
+
+       afs teams get-team-status --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## get-team-tags
@@ -1082,7 +1105,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams list-revisions help
+       List the configuration revisions of a team
+
+       afs teams list-revisions --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## list-team-directory
@@ -1162,7 +1188,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams list-team-models help
+       List the models a team may use
+
+       afs teams list-team-models --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## list-teams
@@ -1206,7 +1235,14 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams list-teams help
+       List the teams you can see
+
+       afs teams list-teams
+
+       List suspended teams as ids and names only
+
+       afs teams list-teams --state suspended --query 'items[].[id,displayName]' --output text
+
 ```
 
 ## put-config-value
@@ -1301,7 +1337,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams put-team-models help
+       Replace the team's model list
+
+       afs teams put-team-models --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --model-ids claude-sonnet claude-haiku
+
 ```
 
 ## put-team-tags
@@ -1442,7 +1481,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams resume-team help
+       Resume a suspended team
+
+       afs teams resume-team --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## set-external-system-state
@@ -1536,7 +1578,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams suspend-team help
+       Suspend a team (writes are refused until it is resumed)
+
+       afs teams suspend-team --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## test-notification-channel
@@ -1763,9 +1808,8 @@ OPTIONS
           Team id; taken from the path only
        --allowed-aws-accounts (list)
        --ceiling-override-expires-at (string or JSON)
-       --secret-value (string)
+       --ceiling-override-reason (string)
           Required with an override; stored in the audit record only
-          Give file://PATH, fileb://PATH or - (standard input); never the value itself.
        --ceiling-override-usd (string or JSON)
        --cost-center (string)
        --description (string)
@@ -1809,5 +1853,12 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams update-team help
+       Change a team's description (reads the current version, sends If-Match)
+
+       afs teams update-team --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --description "Payments platform"
+
+       Apply a change only if the team is still at version 7
+
+       afs teams update-team --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --viewer-kubectl --if-match 7
+
 ```

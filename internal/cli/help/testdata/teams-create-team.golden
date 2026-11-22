@@ -74,4 +74,15 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams create-team help
+       Create a persistent team and wait until it is ready
+
+       afs teams create-team --slug payments --display-name "Payments" --kind persistent --max-budget-usd 500.00 --first-admin '{"email":"ada@example.com"}' --tags '{"project":"checkout"}' --wait
+
+       Create a team from a file
+
+       afs teams create-team --cli-input-json file://team.json
+
+       Print the input skeleton
+
+       afs teams create-team --generate-cli-skeleton
+

@@ -1,0 +1,1 @@
+api.idempotency_key_ttl_seconds	7200	integer	3600	2

@@ -44,9 +44,16 @@ func getOps() map[string]*spec.Operation {
 	return m
 }
 
+// versionless lists operations whose resource has no version: they send If-Match only when the
+// user passes --if-match, and read nothing first (D-C8).
+var versionless = map[string]bool{"PutTeamModels": true}
+
 // ReaderFor returns the reader of an operation, or nil when its resource carries no readable
 // version (the operation then sends no If-Match).
 func ReaderFor(op *spec.Operation) *Reader {
+	if versionless[op.ID] {
+		return nil
+	}
 	gets := getOps()
 	segs := segments(op.Path)
 	// a trailing literal such as /value or /state belongs to the parent resource

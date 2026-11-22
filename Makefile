@@ -45,7 +45,7 @@ vuln:
 COVER_MIN ?= 90
 cover:
 	@go test -coverpkg=./internal/... -coverprofile=cover.out ./internal/... >/dev/null
-	@grep -v -e '_gen.go' -e '/gen/' -e '/internal/golden/' cover.out > cover.filtered.out
+	@grep -v -e '_gen.go' -e '/gen/' -e '/internal/golden/' -e '/internal/clitest/' cover.out > cover.filtered.out
 	@total=$$(go tool cover -func=cover.filtered.out | awk '/^total:/ {gsub("%","",$$3); print $$3}'); \
 	  echo "internal/... coverage: $$total% (minimum $(COVER_MIN)%)"; \
 	  awk -v t="$$total" -v m="$(COVER_MIN)" 'BEGIN { exit !(t+0 >= m+0) }' || { echo "coverage below $(COVER_MIN)%"; exit 1; }
