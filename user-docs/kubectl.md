@@ -23,6 +23,15 @@ context. The file is written atomically (a temporary file, then a rename), so a 
 A new file is created with mode 0600 (and `~/.kube` with 0700). An existing file keeps its mode, and a warning
 says so when it is wider than 0600.
 
+## What `afs` refuses to merge
+
+Because kubectl runs the plugin command on every call, `afs` checks the service's kubeconfig before it touches your
+file. It exits 255 and leaves the file unchanged when a user's exec plugin is not `aws` with arguments that start
+`eks get-token`, when a user has no exec plugin (for example a static token), when the plugin sets an environment
+variable that does not start with `AWS_`, or when a cluster, context, user or `current-context` name does not start
+with `afs`. Entries you own with other names are therefore never replaced. `--kubeconfig -` prints the response as is
+and merges nothing.
+
 ## Another AWS profile
 
 ```bash

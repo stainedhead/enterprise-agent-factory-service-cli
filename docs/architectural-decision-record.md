@@ -121,3 +121,16 @@ Decisions local to this repository. Cross-repo decisions live in the root reposi
 - Decision: the CLI prints the PRD text on stderr after the write succeeds, only when it read the version itself. No notice
   appears when the write fails or when `--if-match` is given.
 - Consequences: matches the root PRD, so no deviation is reported to the root PRD owner.
+
+## ADR-014 Generated types are compile-time references for the fields the CLI reads
+
+- Status: Accepted (2026-11-22, review fixes FR-017; amends ADR-002 and ADR-007)
+- Context: `internal/client/gen` (oapi-codegen types) was imported by nothing but its own test, so ADR-002's "the client is
+  generated from the contract" was true only of the descriptors. Commands decode into ordered trees or `json.RawMessage`
+  because `--output json` must keep the API's bytes (ADR-005) and unknown fields must survive.
+- Decision: keep the types, and make them useful where the CLI reads response members itself: the SSO provider list, the
+  `--wait` status evaluator and the safe-update version readers reference each member they read (`contract.go` in
+  `internal/cli/sso`, `wait` and `safeupdate`). A contract rename of such a member fails the build. Decoding for output
+  still goes through trees. Removing the package was considered (OQ-5) and not done in this change.
+- Consequences: `make generate-check` still guards both generated outputs; a rename that the references do not cover is
+  caught by the contract replay and example tests.

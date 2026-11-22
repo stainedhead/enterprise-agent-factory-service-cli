@@ -13,10 +13,6 @@ import (
 
 // Run executes the CLI with args (excluding the program name) and returns the process exit code.
 func Run(ctx context.Context, args []string, env *Env, reg *Registry) int {
-	if len(args) == 0 {
-		printf(env, "%s", rootUsage)
-		return ExitUsage
-	}
 	p, cmd, err := reg.Parse(args)
 	if err != nil {
 		var ue *UsageError
@@ -32,6 +28,15 @@ func Run(ctx context.Context, args []string, env *Env, reg *Registry) int {
 		return ExitOK
 	}
 	inv := &Invocation{Env: env, Cmd: cmd, P: p, Reg: reg}
+	if cmd == nil && !p.Help {
+		// no operation given: usage and exit 252 like the AWS CLI, so a script with a missing operation fails
+		if p.Service == "" {
+			printf2(env, "%s\nafs: error: the following arguments are required: command\n", rootUsage)
+		} else {
+			printf2(env, "usage: afs %s <operation> [parameters]\n\nTo see help text, run: afs %s help\n\nafs: error: the following arguments are required: operation\n", p.Service, p.Service)
+		}
+		return ExitUsage
+	}
 	if p.Help || cmd == nil {
 		if reg.Help == nil {
 			_, _ = fmt.Fprint(env.Stdout, rootUsage)
@@ -48,7 +53,5 @@ func Run(ctx context.Context, args []string, env *Env, reg *Registry) int {
 	}
 	return reg.Exec(ctx, inv)
 }
-
-func printf(env *Env, format string, a ...any) { _, _ = fmt.Fprintf(env.Stdout, format, a...) }
 
 func printf2(env *Env, format string, a ...any) { _, _ = fmt.Fprintf(env.Stderr, format, a...) }

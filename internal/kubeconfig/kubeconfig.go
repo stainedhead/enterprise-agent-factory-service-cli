@@ -10,6 +10,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"gopkg.in/yaml.v3"
 )
@@ -121,6 +122,66 @@ func addAWSProfile(in *yaml.Node, profile string) {
 	}
 }
 
+// afsPrefix is the name every entry of the service's kubeconfig starts with ("afs", "afs-<team>"): the
+// pinned snapshot's GetTeamKubeconfig example (OQ-3, D-R3).
+const afsPrefix = "afs"
+
+func hasAFSPrefix(name string) bool {
+	return name == afsPrefix || strings.HasPrefix(name, afsPrefix+"-")
+}
+
+// validateIncoming refuses a kubeconfig that kubectl would run something other than `aws eks get-token`
+// for, or whose entries could replace entries that are not AFS's (FR-014).
+func validateIncoming(in *yaml.Node) error {
+	m := mapping(in)
+	for _, sec := range sections {
+		list := get(m, sec)
+		if list == nil {
+			continue
+		}
+		if list.Kind != yaml.SequenceNode {
+			return fmt.Errorf("%s is not a list", sec)
+		}
+		for _, item := range list.Content {
+			if name := entryName(item); !hasAFSPrefix(name) {
+				return fmt.Errorf("%s entry %q does not start with %q", sec, name, afsPrefix+"-")
+			}
+		}
+	}
+	if c := get(m, "current-context"); c != nil && !hasAFSPrefix(c.Value) {
+		return fmt.Errorf("current-context %q does not start with %q", c.Value, afsPrefix+"-")
+	}
+	users := get(m, "users")
+	if users == nil {
+		return nil
+	}
+	for _, u := range users.Content {
+		user := get(u, "user")
+		ex := (*yaml.Node)(nil)
+		if user != nil && user.Kind == yaml.MappingNode {
+			ex = get(user, "exec")
+		}
+		if ex == nil || ex.Kind != yaml.MappingNode {
+			return fmt.Errorf("user %q has no exec credential plugin", entryName(u))
+		}
+		if cmd := get(ex, "command"); cmd == nil || cmd.Value != "aws" {
+			return fmt.Errorf("user %q runs a command other than aws", entryName(u))
+		}
+		args := get(ex, "args")
+		if args == nil || args.Kind != yaml.SequenceNode || len(args.Content) < 2 || args.Content[0].Value != "eks" || args.Content[1].Value != "get-token" {
+			return fmt.Errorf("user %q does not run `aws eks get-token`", entryName(u))
+		}
+		if env := get(ex, "env"); env != nil {
+			for _, e := range env.Content {
+				if !strings.HasPrefix(entryName(e), "AWS_") {
+					return fmt.Errorf("user %q sets an environment variable other than AWS_*", entryName(u))
+				}
+			}
+		}
+	}
+	return nil
+}
+
 // Merge folds the incoming kubeconfig into the existing one (nil or empty for none): clusters,
 // contexts and users are replaced by name or appended, everything else in the existing file is
 // kept as it is, and current-context becomes the incoming one. It returns the merged YAML and
@@ -129,6 +190,9 @@ func Merge(existing, incoming []byte, o Options) ([]byte, string, error) {
 	in, err := parse(incoming)
 	if err != nil {
 		return nil, "", fmt.Errorf("the service returned an invalid kubeconfig: %w", err)
+	}
+	if err := validateIncoming(in); err != nil {
+		return nil, "", fmt.Errorf("the service returned a kubeconfig that afs will not merge: %w", err)
 	}
 	if o.AWSProfile != "" {
 		addAWSProfile(in, o.AWSProfile)
