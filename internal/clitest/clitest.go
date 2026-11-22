@@ -47,6 +47,10 @@ type Options struct {
 	Password *string
 	// Prompts receives the text of each prompt shown.
 	Prompts *[]string
+	// Home is the home directory; empty means a fresh temporary directory.
+	Home string
+	// LookPath replaces the program lookup (nil keeps the real one); NoAWS makes `aws` missing.
+	LookPath func(string) (string, error)
 }
 
 // Reply writes a JSON response with a request id.
@@ -86,7 +90,10 @@ func RunWith(t *testing.T, o Options, h http.HandlerFunc, args ...string) Result
 	for k, v := range o.Vars {
 		env.Vars[k] = v
 	}
-	env.Home = t.TempDir()
+	env.Home = o.Home
+	if env.Home == "" {
+		env.Home = t.TempDir()
+	}
 	env.StdinTTY = o.TTY
 	if o.Password != nil {
 		env.StdinTTY = true
@@ -96,6 +103,9 @@ func RunWith(t *testing.T, o Options, h http.HandlerFunc, args ...string) Result
 			}
 			return []byte(*o.Password), nil
 		}
+	}
+	if o.LookPath != nil {
+		env.LookPath = o.LookPath
 	}
 	env.Sleep = func(context.Context, time.Duration) error { return nil }
 	res.Code = cli.Run(context.Background(), args, env, reg)

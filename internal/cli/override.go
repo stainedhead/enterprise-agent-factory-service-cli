@@ -50,6 +50,11 @@ type Override struct {
 	// so the operation is done without a fixed column list.
 	Dynamic bool
 	After   AfterFunc
+	// Accept is the media type to ask for when the operation answers in something other than JSON
+	// (application/yaml for a kubeconfig); the response is then given to Handle.
+	Accept string
+	// Handle takes over a successful response instead of the generic rendering (kubeconfig).
+	Handle AfterFunc
 }
 
 // merge folds b into a; two registrations setting Columns, After or the same Rename key conflict.
@@ -80,6 +85,15 @@ func (a *Override) merge(b Override) error {
 			return fmt.Errorf("%s: Columns registered twice", b.Op)
 		}
 		a.Columns = b.Columns
+	}
+	if b.Accept != "" {
+		a.Accept = b.Accept
+	}
+	if b.Handle != nil {
+		if a.Handle != nil {
+			return fmt.Errorf("%s: Handle registered twice", b.Op)
+		}
+		a.Handle = b.Handle
 	}
 	if b.After != nil {
 		if a.After != nil {

@@ -149,6 +149,16 @@ Recorded during M4 (2026-11-22):
 - **Release pipeline (M4-G)**: `.goreleaser.yaml` (five targets, ldflags from `buildinfo`, `checksums.txt`, cosign `sign-blob` keyless, Homebrew formula skipped without `HOMEBREW_TAP_TOKEN`), CI job `goreleaser` (check and `--snapshot --skip=sign,publish,notarize`, then `--version` grep), `.github/workflows/release.yml` (gate, GoReleaser, verify job with `cosign verify-blob`; the macOS notarization and Windows signing jobs are gated on repository variables and are scaffolds until the certificates exist). `internal/release` tests read `.goreleaser.yaml` (targets, checksum, cosign) and build a binary with its ldflags to check `--version`. GoReleaser and cosign are not installed in the build environment, so the workflow files are unexercised.
 - **Not done in M4 (needs J):** Apple notarization credentials, a Windows code-signing certificate, the `homebrew-tap` repository and `HOMEBREW_TAP_TOKEN`, a first `v0.1.0` tag (M4-X1: documented as pending).
 
+Recorded during M5 (2026-11-22):
+
+- **M5-0 re-sync: no change** (restapi `feat/restapi-feature-complete` still serves sha256 `3456b9e9...`).
+- **`Override.Handle` and `Override.Accept`**: an operation that answers in a non-JSON type (kubeconfig, `application/yaml`) sets `Accept`, and its `Handle` hook takes the response instead of the generic rendering. `teams get-kubeconfig` is `Dynamic` (no table).
+- **D-C36 kubeconfig merge** (`internal/kubeconfig`): works on `yaml.v3` nodes so unrelated entries, settings and comments survive. clusters, contexts and users are replaced by name or appended; `current-context` becomes the team's (as `aws eks update-kubeconfig` does; the PRD only says entries with the same names are replaced). `--aws-profile` sets `AWS_PROFILE` in every exec plugin's `env`, replacing an earlier value. `WriteFile` writes a temp file in the target directory, fsyncs, and renames; a new file is 0600 and a new directory 0700; an existing file keeps its mode and a wider-than-0600 mode is reported (warning). Symlinked configs are written through to the target. stdout gets `Created|Updated <path> with context <name>`.
+- **`--wait` on pools** counts workers: when the polled body has `workers.desired` and `workers.reporting`, done means `reporting == desired` (after the stale-generation and `Failed`/`Degraded` checks), so `scale-pool --wait` ends at 20 of 20; other waits are unchanged (`phase == Ready`).
+- **Ephemeral `create-team`** (`teams/create_ephemeral.go`, registered next to M1-A2's, D-C32): `--budget-usd` and `--budget-thresholds` fold into the body's `budget` (`period: lifetime`); the three required members are checked in the build hook, after `--cli-input-json` is merged, so the full object is validated too. The budget flags on a non-ephemeral team are a usage error.
+- **`--scratch-size-gib`** replaces the derived `--scratch-size-gi-b` on `create-pool` and `update-pool`.
+- `clitest.Options` gained `Home` and `LookPath` (the kubeconfig tests).
+
 ## Contract deltas found in M0
 
 | Id | Delta | CLI behaviour |

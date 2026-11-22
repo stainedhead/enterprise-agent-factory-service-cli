@@ -89,6 +89,9 @@ func Run(ctx context.Context, inv *cli.Invocation) int {
 	if format == "csv" && op.CSV {
 		accept = "text/csv"
 	}
+	if cmd.Handle != nil && cmd.Accept != "" {
+		accept = cmd.Accept
+	}
 	send := func(ctx context.Context, q url.Values) (*client.Response, error) {
 		return c.Do(ctx, client.Request{
 			Method: op.Method, Path: client.BuildPath(op.Path, b.Path), Query: q, Body: body, Accept: accept,
@@ -118,6 +121,12 @@ func Run(ctx context.Context, inv *cli.Invocation) int {
 		if errors.As(err, &uf) {
 			return usageExit(env, uf.error)
 		}
+	case cmd.Handle != nil:
+		resp, err = send(ctx, b.Query)
+		if err != nil {
+			return fail(err)
+		}
+		return cmd.Handle(inv, resp)
 	default:
 		resp, err = send(ctx, b.Query)
 		if resp != nil {

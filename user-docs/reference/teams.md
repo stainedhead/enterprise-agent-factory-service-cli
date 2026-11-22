@@ -223,6 +223,10 @@ OPTIONS
           Guardrail field: needs teams:set-guardrails
        --idempotency-key (string)
           Idempotency key (default: a new ULID per invocation).
+       --budget-usd (string)
+          Lifetime budget of an ephemeral team in USD, for example 500.00 (required with --kind ephemeral).
+       --budget-thresholds (list)
+          Percent-of-budget alert thresholds of an ephemeral team, for example 50 80 100.
        --wait (boolean)
           Wait until the resource is ready (or gone, for a delete).
        --wait-timeout (duration)
@@ -247,6 +251,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
+       Create an ephemeral team with a lifetime budget
+
+       afs teams create-team --slug cve-sprint --display-name "CVE sprint" --kind ephemeral --max-budget-usd 500.00 --first-admin '{"email":"ada@example.com"}' --expires-at 2026-12-31T00:00:00Z --teardown-rule at_cap_or_expiry --budget-usd 500.00 --budget-thresholds 50 80 100
+
        Create a persistent team and wait until it is ready
 
        afs teams create-team --slug payments --display-name "Payments" --kind persistent --max-budget-usd 500.00 --first-admin '{"email":"ada@example.com"}' --tags project=checkout cost-center=CC-1001 --wait
@@ -771,6 +779,10 @@ SYNOPSIS
 OPTIONS
        --team-id (string) (required)
           Team id; taken from the path only
+       --kubeconfig (string)
+          Kubeconfig file to merge into (default: the first path of $KUBECONFIG, else ~/.kube/config); - prints the API's YAML to stdout.
+       --aws-profile (string)
+          Set AWS_PROFILE to this profile in the exec credential plugin.
 
 GLOBAL OPTIONS
        --profile                Use a specific profile from ~/.afs/config.
@@ -791,7 +803,18 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams get-kubeconfig help
+       Merge the team's context into ~/.kube/config
+
+       afs teams get-kubeconfig --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
+       Write a separate file and use an AWS profile for the token
+
+       afs teams get-kubeconfig --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --kubeconfig ./kc.yaml --aws-profile ops
+
+       Print the YAML only
+
+       afs teams get-kubeconfig --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --kubeconfig -
+
 ```
 
 ## get-team-status

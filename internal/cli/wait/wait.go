@@ -78,6 +78,11 @@ type statusDoc struct {
 	Phase              string          `json:"phase"`
 	ObservedGeneration json.Number     `json:"observedGeneration"`
 	Conditions         json.RawMessage `json:"conditions"`
+	// Workers is present in a pool's status: the pool is done when every desired worker reports (CLI-12).
+	Workers *struct {
+		Desired   json.Number `json:"desired"`
+		Reporting json.Number `json:"reporting"`
+	} `json:"workers"`
 }
 
 func num(n json.Number) (int64, bool) {
@@ -103,13 +108,17 @@ func Evaluate(body []byte, generation int64) (done bool, err error) {
 	if o, ok := num(obs); ok && generation > 0 && o < generation {
 		return false, nil // stale: the controller has not seen this generation yet
 	}
-	switch phase {
-	case "Ready":
-		return true, nil
-	case "Failed", "Degraded":
+	if phase == "Failed" || phase == "Degraded" {
 		return false, &FailedError{Phase: phase, Conditions: cond}
 	}
-	return false, nil
+	if d.Workers != nil {
+		want, ok1 := num(d.Workers.Desired)
+		have, ok2 := num(d.Workers.Reporting)
+		if ok1 && ok2 {
+			return have == want, nil
+		}
+	}
+	return phase == "Ready", nil
 }
 
 // Generation reads the generation of a mutation response (0 when absent).

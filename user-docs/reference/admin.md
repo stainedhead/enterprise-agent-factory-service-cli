@@ -1235,7 +1235,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin list-cost-tag-status help
+       Show which cost-allocation tags AWS has activated and seen in the cost report
+
+       afs admin list-cost-tag-status
+
 ```
 
 ## list-exports

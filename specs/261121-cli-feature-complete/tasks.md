@@ -8,7 +8,7 @@
 
 ## Progress summary
 
-79 / 101 tasks complete. M0 28/28 · M1 10/10 · M2 14/14 · M3 10/10 · M4 17/17 · M5 0/11 · M6 0/11.
+90 / 101 tasks complete. M0 28/28 · M1 10/10 · M2 14/14 · M3 10/10 · M4 17/17 · M5 11/11 · M6 0/11.
 
 ## Parallel work rules
 

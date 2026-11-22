@@ -69,7 +69,7 @@ OPTIONS
           Immutable name (team slug, agent, pool, secret)
        --persona (string)
        --resources (JSON)
-       --scratch-size-gi-b (integer)
+       --scratch-size-gib (integer)
           Range: 1 to 500
        --shared-volume (string)
           Possible values: none, efs
@@ -104,7 +104,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools create-pool help
+       Create a pool of 10 workers and wait until they report
+
+       afs pools create-pool --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --name fixer --template claude-code --image registry.example.com/agents/coder@sha256:4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f --model-id anthropic.claude-sonnet-4-5 --workers 10 --wait
+
 ```
 
 ## create-role-link
@@ -154,7 +157,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools create-role-link help
+       Link a role by name in an account
+
+       afs pools create-role-link --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --pool-id pool_01J9ZQ3ABCDEFGHJKMNPQRSTVW --account-id 111122223333 --role-name afs-cve-reader --profile-name target
+
 ```
 
 ## create-stage
@@ -203,7 +209,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools create-stage help
+       Add a stage at position 1
+
+       afs pools create-stage --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --name triage --position 1 --description "Find affected repositories"
+
 ```
 
 ## delete-config-value
@@ -249,7 +258,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools delete-config-value help
+       Remove a configuration value
+
+       afs pools delete-config-value --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --pool-id pool_01J9ZQ3ABCDEFGHJKMNPQRSTVW --name LOG_LEVEL
+
 ```
 
 ## delete-pool
@@ -298,7 +310,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools delete-pool help
+       Delete a pool and wait until it is gone
+
+       afs pools delete-pool --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --pool-id pool_01J9ZQ3ABCDEFGHJKMNPQRSTVW --wait
+
 ```
 
 ## delete-role-link
@@ -344,7 +359,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools delete-role-link help
+       Delete a role link
+
+       afs pools delete-role-link --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --pool-id pool_01J9ZQ3ABCDEFGHJKMNPQRSTVW --link-id prl_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## delete-stage
@@ -389,7 +407,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools delete-stage help
+       Delete a stage
+
+       afs pools delete-stage --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --stage-id stg_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## describe-pool
@@ -432,7 +453,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools describe-pool help
+       Show a pool (desired workers, state, phase)
+
+       afs pools describe-pool --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --pool-id pool_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## get-pool-status
@@ -475,7 +499,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools get-pool-status help
+       Show desired, reporting, working, idle and impaired workers
+
+       afs pools get-pool-status --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --pool-id pool_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## list-config-values
@@ -518,7 +545,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools list-config-values help
+       List a pool's configuration values
+
+       afs pools list-config-values --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --pool-id pool_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## list-external-systems
@@ -561,7 +591,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools list-external-systems help
+       List the external systems a pool may reach
+
+       afs pools list-external-systems --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --pool-id pool_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## list-handoffs
@@ -604,7 +637,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools list-handoffs help
+       Show where a pool hands work to
+
+       afs pools list-handoffs --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --pool-id pool_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## list-pools
@@ -646,7 +682,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools list-pools help
+       List a team's pools
+
+       afs pools list-pools --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## list-role-links
@@ -689,7 +728,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools list-role-links help
+       List a pool's role links
+
+       afs pools list-role-links --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --pool-id pool_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## list-secret-bindings
@@ -732,7 +774,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools list-secret-bindings help
+       List a pool's secret bindings
+
+       afs pools list-secret-bindings --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --pool-id pool_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## list-stages
@@ -774,7 +819,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools list-stages help
+       List a swarm team's stages
+
+       afs pools list-stages --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## pause-pool
@@ -823,7 +871,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools pause-pool help
+       Pause a pool
+
+       afs pools pause-pool --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --pool-id pool_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## put-config-value
@@ -873,7 +924,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools put-config-value help
+       Set a literal value
+
+       afs pools put-config-value --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --pool-id pool_01J9ZQ3ABCDEFGHJKMNPQRSTVW --name LOG_LEVEL --source literal --value debug
+
 ```
 
 ## put-external-system
@@ -920,7 +974,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools put-external-system help
+       Disable an external system for a pool
+
+       afs pools put-external-system --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --pool-id pool_01J9ZQ3ABCDEFGHJKMNPQRSTVW --system-id ext_01J9ZQ3ABCDEFGHJKMNPQRSTVW --no-enabled
+
 ```
 
 ## put-handoffs
@@ -966,7 +1023,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools put-handoffs help
+       Hand off to two pools
+
+       afs pools put-handoffs --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --pool-id pool_01J9ZQ3ABCDEFGHJKMNPQRSTVW --to-pool-ids pool_01J9ZQ3ABCDEFGHJKMNPQRSTVX pool_01J9ZQ3ABCDEFGHJKMNPQRSTVY
+
 ```
 
 ## put-secret-bindings
@@ -1012,7 +1072,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools put-secret-bindings help
+       Bind a secret as a file (the value is never shown)
+
+       afs pools put-secret-bindings --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --pool-id pool_01J9ZQ3ABCDEFGHJKMNPQRSTVW --items '[{"secretId":"sec_01J9ZQ3ABCDEFGHJKMNPQRSTVW","delivery":"file","target":"/var/run/afs/secrets/github-app.pem"}]'
+
 ```
 
 ## resume-pool
@@ -1061,7 +1124,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools resume-pool help
+       Resume a pool
+
+       afs pools resume-pool --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --pool-id pool_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## scale-pool
@@ -1112,7 +1178,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools scale-pool help
+       Scale a pool to 20 workers and wait until all 20 report
+
+       afs pools scale-pool --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --pool-id pool_01J9ZQ3ABCDEFGHJKMNPQRSTVW --workers 20 --wait
+
 ```
 
 ## update-pool
@@ -1141,7 +1210,7 @@ OPTIONS
        --model-id (string)
        --persona (string)
        --resources (JSON)
-       --scratch-size-gi-b (integer)
+       --scratch-size-gib (integer)
           Range: 1 to 500
        --shared-volume (string)
           Possible values: none, efs
@@ -1176,7 +1245,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools update-pool help
+       Change a pool's persona
+
+       afs pools update-pool --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --pool-id pool_01J9ZQ3ABCDEFGHJKMNPQRSTVW --persona "Minimal-change dependency upgrader"
+
 ```
 
 ## update-stage
@@ -1224,7 +1296,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools update-stage help
+       Move a stage
+
+       afs pools update-stage --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --stage-id stg_01J9ZQ3ABCDEFGHJKMNPQRSTVW --position 2
+
 ```
 
 ## verify-role-link
@@ -1270,5 +1345,8 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs pools verify-role-link help
+       Check that the trust policy is in place
+
+       afs pools verify-role-link --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --pool-id pool_01J9ZQ3ABCDEFGHJKMNPQRSTVW --link-id prl_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
