@@ -14,10 +14,8 @@ func registerReports(r *cli.Registry) {
 		r.Override(flags(op))
 		r.Override(cli.Override{Op: op, Dynamic: true}) // columns follow --group-by
 	}
-	// The pinned snapshot lists four kinds and no collaboration dimensions although contract v1.3 adds the
-	// collaboration report (RCF-6): the kind is an open enum and the API answers for any kind it does not know.
-	r.Override(cli.Override{Op: "GetTeamReport", OpenEnum: []string{"kind"}})
-	r.Override(cli.Override{Op: "GetServiceReport", OpenEnum: []string{"kind"}})
+	// The collaboration report is not schedulable (PC-D13), so the schedule's report enum stays the four kinds in
+	// the snapshot; --report collaboration is sent for the API's ValidationError (CLI-US-32.2).
 	r.Override(cli.Override{Op: "CreateReportSchedule", OpenEnum: []string{"report"}})
 	r.Override(cli.Override{Op: "UpdateReportSchedule", OpenEnum: []string{"report"}})
 	r.Override(cli.Override{Op: "GetTeamReport", Examples: []cli.Example{

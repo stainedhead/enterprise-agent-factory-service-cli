@@ -1697,16 +1697,19 @@ func (e PutTeamCollaborationRequestRegistrationMode) Valid() bool {
 
 // Defines values for ReportKind.
 const (
-	ReportKindActivity ReportKind = "activity"
-	ReportKindCosts    ReportKind = "costs"
-	ReportKindTraffic  ReportKind = "traffic"
-	ReportKindUsage    ReportKind = "usage"
+	ReportKindActivity      ReportKind = "activity"
+	ReportKindCollaboration ReportKind = "collaboration"
+	ReportKindCosts         ReportKind = "costs"
+	ReportKindTraffic       ReportKind = "traffic"
+	ReportKindUsage         ReportKind = "usage"
 )
 
 // Valid indicates whether the value is a known member of the ReportKind enum.
 func (e ReportKind) Valid() bool {
 	switch e {
 	case ReportKindActivity:
+		return true
+	case ReportKindCollaboration:
 		return true
 	case ReportKindCosts:
 		return true
@@ -2912,16 +2915,19 @@ func (e GetServiceReportParamsRange) Valid() bool {
 
 // Defines values for GetServiceReportParamsKind.
 const (
-	GetServiceReportParamsKindActivity GetServiceReportParamsKind = "activity"
-	GetServiceReportParamsKindCosts    GetServiceReportParamsKind = "costs"
-	GetServiceReportParamsKindTraffic  GetServiceReportParamsKind = "traffic"
-	GetServiceReportParamsKindUsage    GetServiceReportParamsKind = "usage"
+	GetServiceReportParamsKindActivity      GetServiceReportParamsKind = "activity"
+	GetServiceReportParamsKindCollaboration GetServiceReportParamsKind = "collaboration"
+	GetServiceReportParamsKindCosts         GetServiceReportParamsKind = "costs"
+	GetServiceReportParamsKindTraffic       GetServiceReportParamsKind = "traffic"
+	GetServiceReportParamsKindUsage         GetServiceReportParamsKind = "usage"
 )
 
 // Valid indicates whether the value is a known member of the GetServiceReportParamsKind enum.
 func (e GetServiceReportParamsKind) Valid() bool {
 	switch e {
 	case GetServiceReportParamsKindActivity:
+		return true
+	case GetServiceReportParamsKindCollaboration:
 		return true
 	case GetServiceReportParamsKindCosts:
 		return true
@@ -3119,16 +3125,19 @@ func (e GetTeamReportParamsRange) Valid() bool {
 
 // Defines values for GetTeamReportParamsKind.
 const (
-	GetTeamReportParamsKindActivity GetTeamReportParamsKind = "activity"
-	GetTeamReportParamsKindCosts    GetTeamReportParamsKind = "costs"
-	GetTeamReportParamsKindTraffic  GetTeamReportParamsKind = "traffic"
-	GetTeamReportParamsKindUsage    GetTeamReportParamsKind = "usage"
+	GetTeamReportParamsKindActivity      GetTeamReportParamsKind = "activity"
+	GetTeamReportParamsKindCollaboration GetTeamReportParamsKind = "collaboration"
+	GetTeamReportParamsKindCosts         GetTeamReportParamsKind = "costs"
+	GetTeamReportParamsKindTraffic       GetTeamReportParamsKind = "traffic"
+	GetTeamReportParamsKindUsage         GetTeamReportParamsKind = "usage"
 )
 
 // Valid indicates whether the value is a known member of the GetTeamReportParamsKind enum.
 func (e GetTeamReportParamsKind) Valid() bool {
 	switch e {
 	case GetTeamReportParamsKindActivity:
+		return true
+	case GetTeamReportParamsKindCollaboration:
 		return true
 	case GetTeamReportParamsKindCosts:
 		return true
@@ -6696,7 +6705,7 @@ type GetServiceReportParams struct {
 	// Range Instead of from and to
 	Range *GetServiceReportParamsRange `form:"range,omitempty" json:"range,omitempty"`
 
-	// GroupBy Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams. Filters tag.<key>=<value> are also accepted
+	// GroupBy Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams. The collaboration report takes team (service report), day, surface, reason and person. Filters tag.<key>=<value> are also accepted
 	GroupBy *GroupBy `form:"groupBy,omitempty" json:"groupBy,omitempty"`
 
 	// TeamId Filter (service reports only)
@@ -6930,7 +6939,7 @@ type GetAgentReportParams struct {
 	// Range Instead of from and to
 	Range *GetAgentReportParamsRange `form:"range,omitempty" json:"range,omitempty"`
 
-	// GroupBy Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams. Filters tag.<key>=<value> are also accepted
+	// GroupBy Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams. The collaboration report takes team (service report), day, surface, reason and person. Filters tag.<key>=<value> are also accepted
 	GroupBy *GroupBy `form:"groupBy,omitempty" json:"groupBy,omitempty"`
 
 	// TeamId Filter (service reports only)
@@ -7672,7 +7681,7 @@ type GetTeamReportParams struct {
 	// Range Instead of from and to
 	Range *GetTeamReportParamsRange `form:"range,omitempty" json:"range,omitempty"`
 
-	// GroupBy Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams. Filters tag.<key>=<value> are also accepted
+	// GroupBy Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams. The collaboration report takes team (service report), day, surface, reason and person. Filters tag.<key>=<value> are also accepted
 	GroupBy *GroupBy `form:"groupBy,omitempty" json:"groupBy,omitempty"`
 
 	// TeamId Filter (service reports only)

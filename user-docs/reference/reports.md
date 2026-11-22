@@ -219,7 +219,7 @@ SYNOPSIS
 
 OPTIONS
        --kind (string) (required)
-          Known values: usage, costs, activity, traffic
+          Possible values: usage, costs, activity, traffic, collaboration
        --from (string)
        --to (string)
        --range (string)
@@ -286,7 +286,7 @@ OPTIONS
        --team-id (string) (required)
           Team id; taken from the path only
        --kind (string) (required)
-          Known values: usage, costs, activity, traffic
+          Possible values: usage, costs, activity, traffic, collaboration
        --from (string)
        --to (string)
        --range (string)

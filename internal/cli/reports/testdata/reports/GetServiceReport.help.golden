@@ -13,7 +13,7 @@ SYNOPSIS
 
 OPTIONS
        --kind (string) (required)
-          Known values: usage, costs, activity, traffic
+          Possible values: usage, costs, activity, traffic, collaboration
        --from (string)
        --to (string)
        --range (string)

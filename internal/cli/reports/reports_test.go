@@ -51,8 +51,7 @@ func TestRangeEnum252(t *testing.T) {
 			t.Errorf("%s: %+v", name, r)
 		}
 	}
-	// the kind is an open enum (RCF-6): the API decides which reports exist
-	if r := clitest.Run(t, clitest.Fail(400, "ValidationError", "unknown report kind"), "reports", "get-team-report", "--team-id", "team_1", "--kind", "mood"); r.Code != 254 || r.Req.URL.Path != "/v1/teams/team_1/reports/mood" {
+	if r := clitest.Run(t, nil, "reports", "get-team-report", "--team-id", "team_1", "--kind", "mood"); r.Code != 252 {
 		t.Errorf("kind: %+v", r)
 	}
 }

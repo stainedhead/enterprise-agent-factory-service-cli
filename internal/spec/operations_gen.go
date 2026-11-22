@@ -6,7 +6,7 @@ package spec
 const ContractVersion = "1.3.1"
 
 // SnapshotSHA256 is the checksum of the snapshot these descriptors were generated from.
-const SnapshotSHA256 = "a983de4a7ab9ff20e5f512e622d4c4cb42e143d4cb07909dcedb39895b82ea7c"
+const SnapshotSHA256 = "3d7ddf41202ef6ca19c1bfe066f82a202bec715d7f57b9377e49a0ac0ecb8c6e"
 
 var operations = []Operation{
 	{ID: "AddMember", Method: "POST", Path: "/v1/teams/{teamId}/members", Service: "members", Command: "add-member", Summary: "Add member",
@@ -732,7 +732,7 @@ var operations = []Operation{
 			{Name: "from", In: "query", Required: false, Desc: "", Example: "2026-11-21T18:00:00Z", Schema: Schema{Type: "string", Ref: "Timestamp"}},
 			{Name: "to", In: "query", Required: false, Desc: "", Example: "2026-11-21T18:00:00Z", Schema: Schema{Type: "string", Ref: "Timestamp"}},
 			{Name: "range", In: "query", Required: false, Desc: "Instead of from and to", Example: "", Schema: Schema{Type: "string", Enum: []string{"24h", "7d", "30d", "90d", "mtd"}}},
-			{Name: "groupBy", In: "query", Required: false, Desc: "Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams.", Example: "", Schema: Schema{Type: "string", Pattern: "^(team|agent|model|system|day|hour|pool|tag:[A-Za-z0-9_.:/=+@-]+)(,(team|agent|model|system|day|hour|pool|tag:[A-Za-z0-9_.:/=+@-]+))*$"}},
+			{Name: "groupBy", In: "query", Required: false, Desc: "Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams.", Example: "", Schema: Schema{Type: "string", Pattern: "^(team|agent|model|system|day|hour|pool|surface|reason|person|tag:[A-Za-z0-9_.:/=+@-]+)(,(team|agent|model|system|day|hour|pool|surface|reason|person|tag:[A-Za-z0-9_.:/=+@-]+))*$"}},
 			{Name: "modelId", In: "query", Required: false, Desc: "", Example: "", Schema: Schema{Type: "string"}},
 			{Name: "systemId", In: "query", Required: false, Desc: "", Example: "ext_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^ext_[0-9A-HJKMNP-TV-Z]{26}$"}},
 			{Name: "poolId", In: "query", Required: false, Desc: "Ephemeral teams only", Example: "pool_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^pool_[0-9A-HJKMNP-TV-Z]{26}$"}},
@@ -880,11 +880,11 @@ var operations = []Operation{
 	{ID: "GetServiceReport", Method: "GET", Path: "/v1/reports/{kind}", Service: "reports", Command: "get-service-report", Summary: "Get service report",
 		Permission: "admin:reports", Scope: "service", Priority: "P0", CSV: true,
 		Params: []Param{
-			{Name: "kind", In: "path", Required: true, Desc: "", Example: "", Schema: Schema{Type: "string", Enum: []string{"usage", "costs", "activity", "traffic"}}},
+			{Name: "kind", In: "path", Required: true, Desc: "", Example: "", Schema: Schema{Type: "string", Enum: []string{"usage", "costs", "activity", "traffic", "collaboration"}}},
 			{Name: "from", In: "query", Required: false, Desc: "", Example: "2026-11-21T18:00:00Z", Schema: Schema{Type: "string", Ref: "Timestamp"}},
 			{Name: "to", In: "query", Required: false, Desc: "", Example: "2026-11-21T18:00:00Z", Schema: Schema{Type: "string", Ref: "Timestamp"}},
 			{Name: "range", In: "query", Required: false, Desc: "Instead of from and to", Example: "", Schema: Schema{Type: "string", Enum: []string{"24h", "7d", "30d", "90d", "mtd"}}},
-			{Name: "groupBy", In: "query", Required: false, Desc: "Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams.", Example: "", Schema: Schema{Type: "string", Pattern: "^(team|agent|model|system|day|hour|pool|tag:[A-Za-z0-9_.:/=+@-]+)(,(team|agent|model|system|day|hour|pool|tag:[A-Za-z0-9_.:/=+@-]+))*$"}},
+			{Name: "groupBy", In: "query", Required: false, Desc: "Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams.", Example: "", Schema: Schema{Type: "string", Pattern: "^(team|agent|model|system|day|hour|pool|surface|reason|person|tag:[A-Za-z0-9_.:/=+@-]+)(,(team|agent|model|system|day|hour|pool|surface|reason|person|tag:[A-Za-z0-9_.:/=+@-]+))*$"}},
 			{Name: "teamId", In: "query", Required: false, Desc: "Filter (service reports only)", Example: "team_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^team_[0-9A-HJKMNP-TV-Z]{26}$"}},
 			{Name: "agentId", In: "query", Required: false, Desc: "", Example: "agt_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^agt_[0-9A-HJKMNP-TV-Z]{26}$"}},
 			{Name: "modelId", In: "query", Required: false, Desc: "", Example: "", Schema: Schema{Type: "string"}},
@@ -942,11 +942,11 @@ var operations = []Operation{
 		Permission: "reports:read", Scope: "team", Priority: "P0", CSV: true,
 		Params: []Param{
 			{Name: "teamId", In: "path", Required: true, Desc: "Team id; taken from the path only", Example: "team_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^team_[0-9A-HJKMNP-TV-Z]{26}$"}},
-			{Name: "kind", In: "path", Required: true, Desc: "", Example: "", Schema: Schema{Type: "string", Enum: []string{"usage", "costs", "activity", "traffic"}}},
+			{Name: "kind", In: "path", Required: true, Desc: "", Example: "", Schema: Schema{Type: "string", Enum: []string{"usage", "costs", "activity", "traffic", "collaboration"}}},
 			{Name: "from", In: "query", Required: false, Desc: "", Example: "2026-11-21T18:00:00Z", Schema: Schema{Type: "string", Ref: "Timestamp"}},
 			{Name: "to", In: "query", Required: false, Desc: "", Example: "2026-11-21T18:00:00Z", Schema: Schema{Type: "string", Ref: "Timestamp"}},
 			{Name: "range", In: "query", Required: false, Desc: "Instead of from and to", Example: "", Schema: Schema{Type: "string", Enum: []string{"24h", "7d", "30d", "90d", "mtd"}}},
-			{Name: "groupBy", In: "query", Required: false, Desc: "Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams.", Example: "", Schema: Schema{Type: "string", Pattern: "^(team|agent|model|system|day|hour|pool|tag:[A-Za-z0-9_.:/=+@-]+)(,(team|agent|model|system|day|hour|pool|tag:[A-Za-z0-9_.:/=+@-]+))*$"}},
+			{Name: "groupBy", In: "query", Required: false, Desc: "Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams.", Example: "", Schema: Schema{Type: "string", Pattern: "^(team|agent|model|system|day|hour|pool|surface|reason|person|tag:[A-Za-z0-9_.:/=+@-]+)(,(team|agent|model|system|day|hour|pool|surface|reason|person|tag:[A-Za-z0-9_.:/=+@-]+))*$"}},
 			{Name: "agentId", In: "query", Required: false, Desc: "", Example: "agt_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^agt_[0-9A-HJKMNP-TV-Z]{26}$"}},
 			{Name: "modelId", In: "query", Required: false, Desc: "", Example: "", Schema: Schema{Type: "string"}},
 			{Name: "systemId", In: "query", Required: false, Desc: "", Example: "ext_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^ext_[0-9A-HJKMNP-TV-Z]{26}$"}},
