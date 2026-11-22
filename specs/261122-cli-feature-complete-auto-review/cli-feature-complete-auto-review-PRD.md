@@ -6,7 +6,7 @@
 | **Reviewed spec** | `specs/261121-cli-feature-complete/` (spec.md, implementation-notes.md D-C1..D-C36, the moved PRD) |
 | **Rules** | `AGENTS.md` (command design, security and RBAC, architecture, TDD, quality gate, design review checklist) |
 | **Review date** | 2026-11-22 |
-| **Status** | Reviewed (step 6, `review-prd`); ready for `create-spec`. Fixes not started |
+| **Status** | Reviewed (step 6); spec created (step 8); fixes in progress |
 
 ## 1. Executive summary
 
