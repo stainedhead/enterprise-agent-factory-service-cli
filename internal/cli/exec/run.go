@@ -64,13 +64,23 @@ func Run(ctx context.Context, inv *cli.Invocation) int {
 		return ReportError(env.Stderr, op.ID, st.Profile, err)
 	}
 	c := sess.Client
+	var denied *safeupdate.ReadDeniedError
 	fail := func(err error) int {
+		var ae *client.APIError
+		if denied != nil && errors.As(err, &ae) {
+			err = &safeupdate.ReadDeniedError{Err: ae}
+		}
 		return ReportError(env.Stderr, op.ID, st.Profile, currentVersionOn412(ctx, c, op, b.Path, err))
 	}
 
 	readVersion := "" // set when the CLI read the version itself; the notice follows the write
 	if op.IfMatch != spec.IfMatchNone && b.IfMatch == "" {
 		v, ok, err := safeupdate.Version(ctx, c, op, b.Path)
+		if errors.As(err, &denied) && safeupdate.ReadOptional[op.ID] {
+			err = nil // the service lets this caller omit If-Match
+		} else {
+			denied = nil
+		}
 		if err != nil {
 			return fail(err)
 		}

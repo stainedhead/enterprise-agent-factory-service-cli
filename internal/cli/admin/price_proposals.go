@@ -18,9 +18,9 @@ func registerPriceProposals(r *cli.Registry) {
 		{Title: "List the pending price proposals", Command: "afs admin list-price-proposals --status pending --output table"},
 	}})
 	r.Override(cli.Override{Op: "ApproveModelPriceProposal", Columns: proposalColumns, Examples: []cli.Example{
-		{Title: "Approve a proposal", Command: `afs admin approve-price-proposal --proposal-id 1042 --note "Matches the AWS price list"`},
+		{Title: "Approve a proposal", Command: `afs admin approve-price-proposal --proposal-id mpp_01JD2Q3R4S5T6V7W8X9Y0Z0042 --note "Matches the AWS price list"`},
 	}})
 	r.Override(cli.Override{Op: "RejectModelPriceProposal", Columns: proposalColumns, Examples: []cli.Example{
-		{Title: "Reject a proposal", Command: `afs admin reject-price-proposal --proposal-id 1042 --note "Waiting for the contract rate"`},
+		{Title: "Reject a proposal", Command: `afs admin reject-price-proposal --proposal-id mpp_01JD2Q3R4S5T6V7W8X9Y0Z0042 --note "Waiting for the contract rate"`},
 	}})
 }

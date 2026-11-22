@@ -10,7 +10,7 @@ Part of [enterprise-agent-factory-service](https://github.com/stainedhead/enterp
 **Status:** feature complete against API contract 1.1 (milestones M0 to M6). All 180 operations of the pinned
 contract are commands, with examples, table columns, golden help and output, and an `AccessDenied` test each, plus the
 local commands `configure`, `configure sso`, `sso login`, `sso logout` and `completion`. The contract snapshot is pinned to
-the `-restapi` feature branch until that repository publishes a release tag.
+the final contract on `-restapi` `main` (commit `d887609`, task M6-X2; no release tag exists yet).
 
 What every command gets: AWS-style global options, profiles, five output formats and `--query`, automatic pagination,
 `--cli-input-json` and `--generate-cli-skeleton`, safe updates with `If-Match`, idempotent retries, `--wait`, a redacted

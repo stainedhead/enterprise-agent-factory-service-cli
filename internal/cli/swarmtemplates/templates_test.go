@@ -64,3 +64,17 @@ func TestCreateSwarmTemplateSpecFile(t *testing.T) {
 		t.Fatalf("%+v body=%s", r, r.ReqBody)
 	}
 }
+
+// Final contract: a template's spec secrets entries are typed {pool, name, description?, delivery?, target?}
+// and reach the API unchanged; the CLI never holds a value.
+func TestCreateSwarmTemplateTypedSecrets(t *testing.T) {
+	spec := `{"pools":[{"name":"fixers"}],"secrets":[{"pool":"fixers","name":"registry-token","description":"Registry read token","delivery":"file","target":"/etc/registry/token"},{"pool":"fixers","name":"scan-key"}]}`
+	r := clitest.Run(t, func(w http.ResponseWriter, _ *http.Request) {
+		clitest.Reply(w, 201, `{"id":"`+tmpl+`","name":"cve","kind":"general","enabled":true,"budgetUsd":"10.00","ttlHours":1,"teardownRule":"at_expiry","version":1}`)
+	},
+		"swarm-templates", "create-swarm-template", "--name", "cve", "--kind", "general", "--budget-usd", "10.00", "--ttl-hours", "1",
+		"--teardown-rule", "at_expiry", "--spec", spec)
+	if r.Code != 0 || !strings.Contains(string(r.ReqBody), `"spec":`+spec) {
+		t.Fatalf("%+v body=%s", r, r.ReqBody)
+	}
+}

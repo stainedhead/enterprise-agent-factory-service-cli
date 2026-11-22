@@ -949,6 +949,7 @@ func (e ExternalSystemCategory) Valid() bool {
 const (
 	ExternalSystemDisabledAtAgent       ExternalSystemDisabledAt = "agent"
 	ExternalSystemDisabledAtLessThannil ExternalSystemDisabledAt = "<nil>"
+	ExternalSystemDisabledAtPool        ExternalSystemDisabledAt = "pool"
 	ExternalSystemDisabledAtService     ExternalSystemDisabledAt = "service"
 	ExternalSystemDisabledAtTeam        ExternalSystemDisabledAt = "team"
 )
@@ -959,6 +960,8 @@ func (e ExternalSystemDisabledAt) Valid() bool {
 	case ExternalSystemDisabledAtAgent:
 		return true
 	case ExternalSystemDisabledAtLessThannil:
+		return true
+	case ExternalSystemDisabledAtPool:
 		return true
 	case ExternalSystemDisabledAtService:
 		return true
@@ -1694,16 +1697,16 @@ func (e SecretScope) Valid() bool {
 
 // Defines values for SecretBindingDelivery.
 const (
-	Env  SecretBindingDelivery = "env"
-	File SecretBindingDelivery = "file"
+	SecretBindingDeliveryEnv  SecretBindingDelivery = "env"
+	SecretBindingDeliveryFile SecretBindingDelivery = "file"
 )
 
 // Valid indicates whether the value is a known member of the SecretBindingDelivery enum.
 func (e SecretBindingDelivery) Valid() bool {
 	switch e {
-	case Env:
+	case SecretBindingDeliveryEnv:
 		return true
-	case File:
+	case SecretBindingDeliveryFile:
 		return true
 	default:
 		return false
@@ -1890,6 +1893,24 @@ func (e SwarmTemplateTeardownRule) Valid() bool {
 	case SwarmTemplateTeardownRuleAtExpiry:
 		return true
 	case SwarmTemplateTeardownRuleAtWorkComplete:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for SwarmTemplateSpecSecretsDelivery.
+const (
+	SwarmTemplateSpecSecretsDeliveryEnv  SwarmTemplateSpecSecretsDelivery = "env"
+	SwarmTemplateSpecSecretsDeliveryFile SwarmTemplateSpecSecretsDelivery = "file"
+)
+
+// Valid indicates whether the value is a known member of the SwarmTemplateSpecSecretsDelivery enum.
+func (e SwarmTemplateSpecSecretsDelivery) Valid() bool {
+	switch e {
+	case SwarmTemplateSpecSecretsDeliveryEnv:
+		return true
+	case SwarmTemplateSpecSecretsDeliveryFile:
 		return true
 	default:
 		return false
@@ -3703,20 +3724,22 @@ type ExternalSystem struct {
 	Category ExternalSystemCategory `json:"category"`
 
 	// CreatedAt RFC 3339 UTC with Z
-	CreatedAt   *Timestamp                `json:"createdAt,omitempty"`
-	Description *string                   `json:"description,omitempty"`
-	DisabledAt  *ExternalSystemDisabledAt `json:"disabledAt,omitempty"`
-	DocsUrl     *string                   `json:"docsUrl,omitempty"`
-	Enabled     bool                      `json:"enabled"`
-	Endpoints   []string                  `json:"endpoints"`
-	Id          *string                   `json:"id,omitempty"`
-	Name        string                    `json:"name"`
-	Owner       *string                   `json:"owner,omitempty"`
-	Purpose     *string                   `json:"purpose,omitempty"`
-	Scope       *ExternalSystemScope      `json:"scope,omitempty"`
-	Slug        string                    `json:"slug"`
-	TeamState   *ExternalSystemTeamState  `json:"teamState,omitempty"`
-	Unmetered   *bool                     `json:"unmetered,omitempty"`
+	CreatedAt   *Timestamp `json:"createdAt,omitempty"`
+	Description *string    `json:"description,omitempty"`
+
+	// DisabledAt The level whose switch has the system off; pool applies to the pool views only.
+	DisabledAt *ExternalSystemDisabledAt `json:"disabledAt,omitempty"`
+	DocsUrl    *string                   `json:"docsUrl,omitempty"`
+	Enabled    bool                      `json:"enabled"`
+	Endpoints  []string                  `json:"endpoints"`
+	Id         *string                   `json:"id,omitempty"`
+	Name       string                    `json:"name"`
+	Owner      *string                   `json:"owner,omitempty"`
+	Purpose    *string                   `json:"purpose,omitempty"`
+	Scope      *ExternalSystemScope      `json:"scope,omitempty"`
+	Slug       string                    `json:"slug"`
+	TeamState  *ExternalSystemTeamState  `json:"teamState,omitempty"`
+	Unmetered  *bool                     `json:"unmetered,omitempty"`
 
 	// UpdatedAt RFC 3339 UTC with Z
 	UpdatedAt *Timestamp `json:"updatedAt,omitempty"`
@@ -3726,7 +3749,7 @@ type ExternalSystem struct {
 // ExternalSystemCategory defines model for ExternalSystem.Category.
 type ExternalSystemCategory string
 
-// ExternalSystemDisabledAt defines model for ExternalSystem.DisabledAt.
+// ExternalSystemDisabledAt The level whose switch has the system off; pool applies to the pool views only.
 type ExternalSystemDisabledAt string
 
 // ExternalSystemScope defines model for ExternalSystem.Scope.
@@ -4221,7 +4244,9 @@ type PriceProposal struct {
 	// OutputUsdPerMtok USD amount as a decimal string with at most 6 fraction digits; never a JSON number
 	OutputUsdPerMtok Money                `json:"outputUsdPerMtok"`
 	Status           *PriceProposalStatus `json:"status,omitempty"`
-	Version          *int                 `json:"version,omitempty"`
+
+	// Version Derived from the status, not a row counter. 1 while the proposal is pending, 2 once it is approved, rejected or superseded. A proposal changes only once, so clients never need to send it (the approve and reject operations take no If-Match).
+	Version *int `json:"version,omitempty"`
 }
 
 // PriceProposalStatus defines model for PriceProposal.Status.
@@ -4417,7 +4442,7 @@ type ReportSchedule struct {
 	// UpdatedAt RFC 3339 UTC with Z
 	UpdatedAt *Timestamp `json:"updatedAt,omitempty"`
 
-	// Version Optimistic-concurrency version; ETag is "<version>"
+	// Version Optimistic-concurrency version; ETag is "<version>". A scheduled run records lastRunAt, lastStatus and lastError without changing the version.
 	Version *int `json:"version,omitempty"`
 }
 
@@ -4864,9 +4889,26 @@ type SwarmTemplateSpec struct {
 	ConfigValues *[]map[string]interface{} `json:"configValues,omitempty"`
 	Handoffs     *[]map[string]interface{} `json:"handoffs,omitempty"`
 	Pools        []map[string]interface{}  `json:"pools"`
-	Secrets      *[]map[string]interface{} `json:"secrets,omitempty"`
-	Stages       []map[string]interface{}  `json:"stages"`
+
+	// Secrets Secrets a remediation team gets, created empty (the team sets the value with PutSecretValue), each bound to one of the template's pools. A template never holds a value.
+	Secrets *[]struct {
+		Delivery    *SwarmTemplateSpecSecretsDelivery `json:"delivery,omitempty"`
+		Description *string                           `json:"description,omitempty"`
+
+		// Name Unique within the template.
+		Name string `json:"name"`
+
+		// Pool A pool the template defines.
+		Pool string `json:"pool"`
+
+		// Target An env variable name (^[A-Z_][A-Z0-9_]{0,127}$, default the upper-case name with underscores) or, for file delivery, an absolute path (^/[A-Za-z0-9._/-]{1,255}$). Unique within the pool.
+		Target *string `json:"target,omitempty"`
+	} `json:"secrets,omitempty"`
+	Stages []map[string]interface{} `json:"stages"`
 }
+
+// SwarmTemplateSpecSecretsDelivery defines model for SwarmTemplateSpec.Secrets.Delivery.
+type SwarmTemplateSpecSecretsDelivery string
 
 // TagValue defines model for TagValue.
 type TagValue struct {

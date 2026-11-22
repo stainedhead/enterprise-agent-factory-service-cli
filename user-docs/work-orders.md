@@ -48,9 +48,10 @@ afs work-orders update-repo --work-order-id wo_01J... --repo github.com/acme/led
 ```
 
 `--repo host/owner/repo` fills the three path segments (`--host`, `--owner` and `--repo ledger` also work). Without
-`--if-match` the CLI reads the repository's version first; a workload principal cannot make that read today, so the
-call ends with the API's `AccessDenied` and `Pass --if-match <version> (the version printed by the previous
-update-repo).` (exit 254). Pass the `version` the previous `update-repo` printed.
+`--if-match` the CLI reads the repository's version first. A workload principal cannot read it, so when that read is
+denied the CLI sends the update without `If-Match` and the API applies it to the current version. Pass `--if-match
+<version>` to guard against concurrent changes; if the API still refuses the update, the CLI adds `Pass --if-match
+<version> (the version printed by the previous update-repo).` (exit 254).
 A workload token cannot cancel a work order (`AccessDenied`).
 
 ## Swarm templates (service admin)
@@ -62,6 +63,8 @@ afs swarm-templates disable-swarm-template --template-id swt_01J...
 afs swarm-templates enable-swarm-template --template-id swt_01J...
 afs swarm-templates delete-swarm-template --template-id swt_01J...
 ```
+
+A template's `secrets` entries in the spec are `{pool, name, description?, delivery?, target?}` (`delivery` is `env` or `file`); the template never holds a value, the team sets it with `afs secrets put-secret-value`.
 
 Deleting a template that an open work order uses is a `Conflict` listing the work orders under `Dependents`.
 

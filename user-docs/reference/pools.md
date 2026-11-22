@@ -186,7 +186,7 @@ OPTIONS
        --name (string) (required)
           Immutable name (team slug, agent, pool, secret)
        --position (integer) (required)
-          Range: 0 to 100
+          Range: 1 to 50
        --idempotency-key (string)
           Idempotency key (default: a new ULID per invocation).
 
@@ -1273,7 +1273,7 @@ OPTIONS
        --stage-id (string) (required)
        --description (string)
        --position (integer)
-          Range: 0 to 100
+          Range: 1 to 50
        --if-match (string)
           Apply only if the resource is at this version (safe update).
 
