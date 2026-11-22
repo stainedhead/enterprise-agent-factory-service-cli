@@ -16,7 +16,7 @@ It talks only to the API in
 [enterprise-agent-factory-service-restapi](https://github.com/stainedhead/enterprise-agent-factory-service-restapi),
 whose `api/openapi.yaml` is the contract.
 
-Status: feature complete, milestones M0-M6 done (all 180 operations with examples, columns and goldens). Release signing and the Homebrew tap need credentials and a tap repository that are not in this repository. See `specs/` for the plan.
+Status: feature complete, milestones M0-M10 done, release v1.0.1 (all 187 operations with examples, columns and goldens, plus Paperclip collaboration and `collaboration invoke-api`). Release signing and the Homebrew tap need credentials and a tap repository that are not in this repository. See `specs/` for the plan.
 
 ## Toolchain
 

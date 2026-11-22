@@ -12,8 +12,6 @@ import (
 	"strings"
 	"sync"
 	"time"
-
-	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/redact"
 )
 
 // Credential is the Authorization header value and where it came from (for --debug).
@@ -199,9 +197,7 @@ func (c *Client) once(ctx context.Context, req *Request, key string, cred Creden
 	start := c.cfg.Now()
 	c.dbg.printf("client", "request: %s %s operation=%s attempt=%d", req.Method, redactURL(u), req.Operation, attempt)
 	if c.dbg != nil {
-		for _, l := range redact.Headers(hr.Header) {
-			c.dbg.printf("client", "request header: %s", l)
-		}
+		c.dbg.headers("client", hr.Header)
 		c.dbg.body("client", "request body", req.Body)
 	}
 

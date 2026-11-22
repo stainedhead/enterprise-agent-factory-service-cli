@@ -170,7 +170,7 @@ func WriteTable(w io.Writer, v any, o Options) error {
 	for r, row := range rows {
 		cells[r] = make([]string, len(cols))
 		for i, c := range cols {
-			cells[r][i] = Sanitize(strings.NewReplacer("\n", " ", "\t", " ").Replace(cell(lookup(row, c.Path))))
+			cells[r][i] = Sanitize(strings.NewReplacer("\n", " ", "\t", " ").Replace(cellOf(row, c)))
 			if n := utf8.RuneCountInString(cells[r][i]); n > widths[i] {
 				widths[i] = n
 			}
@@ -277,7 +277,7 @@ func writeVertical(w io.Writer, row any, cols []Column, o Options, width int) er
 	var b strings.Builder
 	b.WriteString(boldKeepPad(pad("Field", kw), o.Color) + "  " + bold("Value", o.Color) + "\n")
 	for _, c := range cols {
-		v := Sanitize(strings.NewReplacer("\n", " ", "\t", " ").Replace(cell(lookup(row, c.Path))))
+		v := Sanitize(strings.NewReplacer("\n", " ", "\t", " ").Replace(cellOf(row, c)))
 		if !isIDColumn(c) {
 			v = trunc(v, vw)
 		}

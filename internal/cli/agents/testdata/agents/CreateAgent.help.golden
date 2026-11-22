@@ -14,6 +14,7 @@ SYNOPSIS
 OPTIONS
        --team-id (string) (required)
           Team id; taken from the path only
+       --collaboration (JSON)
        --description (string)
        --iam-identity (string)
           Possible values: team_shared, dedicated
@@ -23,12 +24,19 @@ OPTIONS
        --name (string) (required)
           Immutable name (team slug, agent, pool, secret)
        --resources (JSON)
+       --role (string)
+          Set on create; immutable
+          Possible values: worker, collaboration
        --secret-bindings (JSON)
        --template (string) (required)
           Agent template name
        --volume (JSON)
        --idempotency-key (string)
           Idempotency key (default: a new ULID per invocation).
+       --collaboration-connect (boolean)
+          Connect the agent to the team's Paperclip (--no-collaboration-connect disconnects it).
+       --paperclip-agent-id (string)
+          The agent's id in Paperclip (accepted only while registrationMode is manual).
        --wait (boolean)
           Wait until the resource is ready (or gone, for a delete).
        --wait-timeout (duration)
@@ -60,4 +68,12 @@ EXAMPLES
        Create an agent from a file
 
        afs agents create-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --cli-input-json file://agent.json
+
+       Create the team's collaboration agent (Paperclip) and wait until it is ready
+
+       afs agents create-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name paperclip --role collaboration --template paperclip --image registry.example.com/agents/coder@sha256:4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f --model-id anthropic.claude-sonnet-4-5 --wait
+
+       Create a worker that does not connect to Paperclip
+
+       afs agents create-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name coder --template claude-code --image registry.example.com/agents/coder@sha256:4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f --model-id anthropic.claude-sonnet-4-5 --no-collaboration-connect
 

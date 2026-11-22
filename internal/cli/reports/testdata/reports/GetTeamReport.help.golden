@@ -15,7 +15,7 @@ OPTIONS
        --team-id (string) (required)
           Team id; taken from the path only
        --kind (string) (required)
-          Possible values: usage, costs, activity, traffic
+          Possible values: usage, costs, activity, traffic, collaboration
        --from (string)
        --to (string)
        --range (string)
@@ -57,4 +57,8 @@ EXAMPLES
        Usage by agent and model, filtered by tag
 
        afs reports get-team-report --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --kind usage --range 7d --group-by agent,model --tag project=checkout
+
+       Who used Paperclip in the last week, by day and person
+
+       afs reports get-team-report --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --kind collaboration --range 7d --group-by day,person
 

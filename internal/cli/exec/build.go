@@ -299,7 +299,7 @@ func scalarText(raw json.RawMessage) string {
 }
 
 func checkEnum(o cli.Option, v string) error {
-	if len(o.Enum) == 0 {
+	if len(o.Enum) == 0 || o.OpenEnum {
 		return nil
 	}
 	for _, e := range o.Enum {

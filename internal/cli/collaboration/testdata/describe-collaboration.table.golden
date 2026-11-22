@@ -1,0 +1,9 @@
+Field             Value
+Hostname          -
+WebUi             true
+RestApi           false
+EffectiveWebUi    false
+EffectiveRestApi  false
+Mode              manual
+Phase             Ready
+Version           4

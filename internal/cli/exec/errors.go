@@ -61,6 +61,17 @@ func ReportError(w io.Writer, opID, profile string, err error) int {
 		if ae.RequestID != "" {
 			_, _ = fmt.Fprintf(w, "Request ID: %s\n", ae.RequestID)
 		}
+		printDetails(w, ae)
+		if ae.Code == "SecretDetected" {
+			// pattern types only, never the matched text (CLI-US-25.6)
+			if pt := ae.Patterns(); len(pt) > 0 {
+				_, _ = fmt.Fprintf(w, "Patterns: %s\n", strings.Join(pt, ", "))
+			}
+			_, _ = fmt.Fprintln(w, "Store the credential as an AFS secret instead (afs secrets create-secret).")
+		}
+		if opID == "InvokeApi" && ae.Status == 404 {
+			_, _ = fmt.Fprintln(w, "The team's Paperclip is not reachable through the public endpoint; run afs collaboration describe-collaboration to see why.")
+		}
 		return cli.ExitService
 	}
 	var fe *wait.FailedError

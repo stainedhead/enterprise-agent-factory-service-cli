@@ -134,3 +134,21 @@ Decisions local to this repository. Cross-repo decisions live in the root reposi
   still goes through trees. Removing the package was considered (OQ-5) and not done in this change.
 - Consequences: `make generate-check` still guards both generated outputs; a rename that the references do not cover is
   caught by the contract replay and example tests.
+
+## ADR-015 invoke-api is a local command with its own narrow HTTP client
+
+- Status: Accepted (2026-11-22, release v1.0.1, spec `261122-paperclip-collaboration`)
+- Context: a team's Paperclip REST API is served by the AFS edge (API contract 4.4c), not by `afs-api`, with two
+  credentials in two headers and different retry, redirect and error rules than the operations of the contract.
+- Decision: `afs collaboration invoke-api` is a local command (no `operationId`) built on `internal/edge`. It uses the
+  transport's `RoundTrip` directly (no redirect, no cookie jar), validates the origin (https, port 443, a DNS name, optionally one
+  label under the profile's `collab_base_domain`), reads the Paperclip key only from a 0600 file or stdin, refuses workload
+  tokens, retries only `GET`/`HEAD` on 429/503 and any method on a failed connection, maps the edge's error envelope to
+  AWS-style errors and prints Paperclip's own errors as `HttpError` with the body on stdout. Debug lines carry no query string and no body.
+- Consequences: the generic executor stays free of edge rules; the credential never leaves the AFS API and the validated edge origin.
+
+## ADR-016 Open enums for values the pinned snapshot does not list
+
+- Status: Accepted (2026-11-22, release v1.0.1)
+- Context: the pinned snapshot lacks the `collab.*` setting keys that contract 1.3 defines (root contract follow-up RCF-5), and the collaboration report is not schedulable.
+- Decision: `put-setting --key` and `create/update-report-schedule --report` are open enums (`Override.OpenEnum`): help says "Known values" and any other value is sent for the API to judge. The CLI holds no list of server keys.

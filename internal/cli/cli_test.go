@@ -110,7 +110,7 @@ func TestVersionString(t *testing.T) {
 	if code := Run(context.Background(), []string{"--version"}, env, r); code != ExitOK {
 		t.Fatal(code)
 	}
-	if !strings.HasPrefix(out.String(), "afs-cli/") || !strings.Contains(out.String(), " contract/1.1 go") || c.inv != nil {
+	if !strings.HasPrefix(out.String(), "afs-cli/") || !strings.Contains(out.String(), " contract/1.3 go") || c.inv != nil {
 		t.Errorf("version = %q", out)
 	}
 }
@@ -273,6 +273,23 @@ func TestMissingCommandOrOperationExits252(t *testing.T) {
 		env, _, eb := testEnv()
 		if code := Run(context.Background(), args, env, reg); code != ExitOK {
 			t.Errorf("%v: code %d err %q", args, code, eb.String())
+		}
+	}
+}
+
+// FR-R3: an unknown option that starts a known one names it; a value after = is never echoed.
+func TestUnknownOptionSuggestsAndNeverEchoesValue(t *testing.T) {
+	r := testRegistry(t)
+	r.AddLocal(&Command{Service: "tool", Name: "run", Local: func(context.Context, *Invocation) int { return 0 },
+		Options: []Option{{Flag: "--key-file", Kind: String}, {Flag: "--other", Kind: String}}})
+	for args, want := range map[string]string{ //nolint:gosec // G101: a made-up value is the case under test
+		"--key":            "Did you mean --key-file?",
+		"--key=SECRET-VAL": "Did you mean --key-file?",
+		"--zzz=SECRET-VAL": "Unknown options: --zzz\n",
+	} {
+		env, _, eb := testEnv()
+		if code := Run(context.Background(), []string{"tool", "run", args}, env, r); code != ExitUsage || !strings.Contains(eb.String(), want) || strings.Contains(eb.String(), "SECRET-VAL") {
+			t.Errorf("%s: %d %q", args, code, eb.String())
 		}
 	}
 }

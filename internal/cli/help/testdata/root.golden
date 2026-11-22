@@ -12,6 +12,7 @@ SERVICES
        api-keys         Create and revoke API keys.
        audit            Search and export the audit log.
        budgets          Set budgets and read spend.
+       collaboration    
        completion       Print a shell completion script.
        configure        Create and edit profiles in ~/.afs/config.
        members          Manage team members and role bindings.

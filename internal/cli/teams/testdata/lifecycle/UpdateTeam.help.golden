@@ -31,6 +31,7 @@ OPTIONS
        --max-budget-usd (string)
           USD amount as a decimal string with at most 6 fraction digits; never a JSON number
        --may-add-external-systems (boolean)
+       --may-expose-collaboration (boolean)
        --may-manage-aws-accounts (boolean)
        --owner-email (string)
        --quotas (JSON)

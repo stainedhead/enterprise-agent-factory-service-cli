@@ -26,6 +26,9 @@ func WaitOptions() []cli.Option {
 	}
 }
 
+// UsageExit prints a usage error and returns exit 252; local commands use it for their own validation.
+func UsageExit(env *cli.Env, err error) int { return usageExit(env, err) }
+
 func usageExit(env *cli.Env, err error) int {
 	var ue *cli.UsageError
 	if errors.As(err, &ue) {
@@ -41,7 +44,11 @@ func Run(ctx context.Context, inv *cli.Invocation) int {
 	env, cmd, g := inv.Env, inv.Cmd, inv.P.G
 	op := cmd.Op
 	if g.GenerateSkeleton {
-		raw, _ := json.Marshal(Skeleton(op))
+		sk := Skeleton(op)
+		for k, v := range cmd.SkeletonMembers {
+			sk.Set(k, v)
+		}
+		raw, _ := json.Marshal(sk)
 		if err := output.WriteJSON(env.Stdout, raw); err != nil {
 			return cli.ExitOther
 		}
@@ -91,7 +98,9 @@ func Run(ctx context.Context, inv *cli.Invocation) int {
 	}
 
 	var body []byte
-	if b.Body != nil {
+	// For an operation that says so, an optional body with no member is no body: rotate-secret on an
+	// AFS-generated secret and rotate-collaboration-keys without --names send none (CLI-US-27.1, 29.3).
+	if b.Body != nil && (!cmd.OmitEmptyBody || op.Body.Required || b.Body.Len() > 0) {
 		if body, err = json.Marshal(b.Body); err != nil {
 			return fail(err)
 		}

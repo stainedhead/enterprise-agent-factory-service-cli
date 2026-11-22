@@ -7,6 +7,7 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/services"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/clitest"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/golden"
 )
@@ -160,5 +161,25 @@ func TestCreatePoolRoleLink(t *testing.T) {
 	}, "pools", "create-role-link", "--team-id", "team_1", "--pool-id", "pool_1", "--account-id", "111122223333", "--role-name", "afs-cve-reader", "--profile-name", "target", "--output", "table")
 	if r.Code != 0 || !strings.Contains(r.Out, "pending_trust") || !strings.Contains(r.Out, "afs-7Q2M9K") {
 		t.Fatalf("%+v", r)
+	}
+}
+
+// CLI-US-35.3: pools never connect to Paperclip, so no pool command has a collaboration option.
+func TestNoCollaborationOptionOnPoolCommands(t *testing.T) {
+	reg, err := services.NewRegistry()
+	if err != nil {
+		t.Fatal(err)
+	}
+	n := 0
+	for _, c := range reg.Commands("pools") {
+		n++
+		for _, o := range c.Options {
+			if n := strings.ToLower(o.Flag + o.Wire); strings.Contains(n, "collab") || strings.Contains(n, "paperclip") {
+				t.Errorf("%s has option %s", c.Key(), o.Flag)
+			}
+		}
+	}
+	if n == 0 {
+		t.Fatal("no pool commands found")
 	}
 }

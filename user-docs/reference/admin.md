@@ -35,6 +35,7 @@ OPERATIONS
        get-settings                   Get settings
        list-agent-templates           List admin agent templates
        list-api-keys                  List service API keys
+       list-collaboration-endpoints   List collaboration endpoints
        list-cost-reconciliations      List cost reconciliations
        list-cost-tag-status           List cost tag status
        list-exports                   List exports
@@ -337,6 +338,10 @@ SYNOPSIS
 OPTIONS
        --cli-client-id (string) (required)
        --client-secret-arn (string)
+       --collab-client-id (string)
+          The collaboration (Paperclip edge) client of this provider
+       --collab-client-secret-arn (string)
+          Reference only; needs collabClientId; never returned by ListSignInProviders
        --console-client-id (string) (required)
        --enabled (boolean)
        --groups-claim (string)
@@ -1171,6 +1176,60 @@ EXAMPLES
 
 ```
 
+## list-collaboration-endpoints
+
+```text
+AFS ADMIN LIST-COLLABORATION-ENDPOINTS
+
+NAME
+       admin list-collaboration-endpoints
+
+DESCRIPTION
+       List collaboration endpoints
+
+       Required permission: admin:settings
+
+SYNOPSIS
+       afs admin list-collaboration-endpoints [options]
+
+OPTIONS
+       --team-id (string)
+       --state (string)
+          Possible values: Ready, Degraded, Failed, Pending
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       List every team's Paperclip endpoint
+
+       afs admin list-collaboration-endpoints
+
+       List the endpoints that are not ready, as CSV
+
+       afs admin list-collaboration-endpoints --state Failed --output csv
+
+       Show one team's endpoint
+
+       afs admin list-collaboration-endpoints --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
+```
+
 ## list-cost-reconciliations
 
 ```text
@@ -1734,6 +1793,7 @@ SYNOPSIS
 OPTIONS
        --name (string) (required)
        --allowed-digests (list) (required)
+       --capabilities (list)
        --current-digest (string) (required)
        --default-resources (JSON)
        --description (string)
@@ -1841,7 +1901,7 @@ SYNOPSIS
 
 OPTIONS
        --key (string) (required)
-          Possible values: secrets.path_prefix, pricing.price_list_sync, billing.variance_alert_pct, api.idempotency_key_ttl_seconds, teams.ephemeral_max_days, work_orders.sla_warning_hours, billing.tag_activation_acknowledged, work_orders.notification_channel_id, reports.idle_cpu_millicores, egress.denied_spike_threshold, gateway.reservation_ttl_seconds, api.cors_origins
+          Possible values: secrets.path_prefix, pricing.price_list_sync, billing.variance_alert_pct, api.idempotency_key_ttl_seconds, teams.ephemeral_max_days, work_orders.sla_warning_hours, billing.tag_activation_acknowledged, work_orders.notification_channel_id, reports.idle_cpu_millicores, egress.denied_spike_threshold, gateway.reservation_ttl_seconds, api.cors_origins, collab.base_domain, collab.public_endpoints, collab.allowed_source_cidrs, collab.session_ttl_minutes, collab.content_scan, collab.max_body_mb, collab.denied_spike_threshold
        --value (string or JSON) (required)
           JSON value of the setting's type
        --if-match (string)
@@ -1866,6 +1926,14 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
+       Set the base domain of the Paperclip endpoints
+
+       afs admin put-setting --key collab.base_domain --value '"collab.example.com"'
+
+       Switch the public Paperclip endpoints on
+
+       afs admin put-setting --key collab.public_endpoints --value true
+
        Set a list value (JSON)
 
        afs admin put-setting --key api.cors_origins --value '["https://console.example.com"]'
@@ -2091,6 +2159,10 @@ OPTIONS
        --provider-id (string) (required)
        --cli-client-id (string)
        --client-secret-arn (string)
+       --collab-client-id (string)
+          The collaboration (Paperclip edge) client of this provider
+       --collab-client-secret-arn (string)
+          Reference only; needs collabClientId; never returned by ListSignInProviders
        --console-client-id (string)
        --enabled (boolean)
        --groups-claim (string)
@@ -2118,6 +2190,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
+       Register the collaboration sign-in client (a reference to the secret, never its value)
+
+       afs admin update-identity-provider --provider-id idp_01J9ZQ3ABCDEFGHJKMNPQRSTVW --collab-client-id paperclip-web --collab-client-secret-arn arn:aws:secretsmanager:eu-west-1:111122223333:secret:afs/collab-AbCdEf
+
        Disable a provider
 
        afs admin update-identity-provider --provider-id idp_01J9ZQ3ABCDEFGHJKMNPQRSTVW --no-enabled

@@ -3,10 +3,10 @@
 package spec
 
 // ContractVersion is info.version of the snapshot.
-const ContractVersion = "1.1.0"
+const ContractVersion = "1.3.1"
 
 // SnapshotSHA256 is the checksum of the snapshot these descriptors were generated from.
-const SnapshotSHA256 = "000118d7128e0ad3ab9172aebd86745645019d656afbdb4419691ca8e16c1403"
+const SnapshotSHA256 = "12bb52959d31141d6577a0487a3c40318a2a542423e1adc30c947ac57bcdb357"
 
 var operations = []Operation{
 	{ID: "AddMember", Method: "POST", Path: "/v1/teams/{teamId}/members", Service: "members", Command: "add-member", Summary: "Add member",
@@ -19,7 +19,7 @@ var operations = []Operation{
 			{Name: "email", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string"}},
 			{Name: "groupName", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string"}},
 			{Name: "identityProviderId", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", Pattern: "^idp_[0-9A-HJKMNP-TV-Z]{26}$"}},
-			{Name: "role", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", Enum: []string{"team_admin", "team_viewer"}}},
+			{Name: "role", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", Enum: []string{"team_admin", "team_collaborator", "team_viewer"}}},
 			{Name: "subjectType", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", Enum: []string{"user", "group"}}},
 			{Name: "userId", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", Pattern: "^usr_[0-9A-HJKMNP-TV-Z]{26}$"}},
 		}},
@@ -63,6 +63,19 @@ var operations = []Operation{
 		Success:  []int{200},
 		Produces: []string{"application/json"},
 	},
+	{ID: "ConnectAgentToCollaboration", Method: "POST", Path: "/v1/teams/{teamId}/collaboration/links/{agentId}:connect", Service: "collaboration", Command: "connect-agent", Summary: "Connect agent to collaboration",
+		Permission: "collaboration:manage", Scope: "team", Priority: "P0", CSV: false,
+		Params: []Param{
+			{Name: "teamId", In: "path", Required: true, Desc: "Team id; taken from the path only", Example: "team_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^team_[0-9A-HJKMNP-TV-Z]{26}$"}},
+			{Name: "agentId", In: "path", Required: true, Desc: "", Example: "agt_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^agt_[0-9A-HJKMNP-TV-Z]{26}$"}},
+		},
+		IfMatch: IfMatchNone, Idempotent: true, Paginated: false,
+		Body: &Body{Required: false, MediaType: "application/json", SchemaName: "ConnectAgentRequest", Fields: []Field{
+			{Name: "paperclipAgentId", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Accepted only while registrationMode is manual", Schema: Schema{Type: "string", Pattern: "^[A-Za-z0-9._:-]{1,128}$"}},
+		}},
+		Success:  []int{200},
+		Produces: []string{"application/json"},
+	},
 	{ID: "CreateAgent", Method: "POST", Path: "/v1/teams/{teamId}/agents", Service: "agents", Command: "create-agent", Summary: "Create agent",
 		Permission: "agents:write", Scope: "team", Priority: "P0", CSV: false,
 		Params: []Param{
@@ -70,12 +83,14 @@ var operations = []Operation{
 		},
 		IfMatch: IfMatchNone, Idempotent: true, Paginated: false,
 		Body: &Body{Required: true, MediaType: "application/json", SchemaName: "CreateAgentRequest", Fields: []Field{
+			{Name: "collaboration", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "object", Ref: "AgentCollaborationInput"}},
 			{Name: "description", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", MaxLen: i64(1000)}},
 			{Name: "iamIdentity", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", Enum: []string{"team_shared", "dedicated"}}},
 			{Name: "image", Required: true, WriteOnly: false, ReadOnly: false, Desc: "Container image pinned by digest", Schema: Schema{Type: "string", Pattern: "@sha256:[0-9a-f]{64}$", Ref: "ImageRef"}},
 			{Name: "modelId", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string"}},
 			{Name: "name", Required: true, WriteOnly: false, ReadOnly: false, Desc: "Immutable name (team slug, agent, pool, secret)", Schema: Schema{Type: "string", Pattern: "^[a-z][a-z0-9-]{1,38}[a-z0-9]$", Ref: "Name"}},
 			{Name: "resources", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "object", Ref: "Resources"}},
+			{Name: "role", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Set on create; immutable", Schema: Schema{Type: "string", Enum: []string{"worker", "collaboration"}}},
 			{Name: "secretBindings", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "array", Items: &Schema{Type: "object", Ref: "SecretBinding"}}},
 			{Name: "template", Required: true, WriteOnly: false, ReadOnly: false, Desc: "Agent template name", Schema: Schema{Type: "string"}},
 			{Name: "volume", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "object", Ref: "AgentVolume"}},
@@ -135,7 +150,7 @@ var operations = []Operation{
 		Body: &Body{Required: true, MediaType: "application/json", SchemaName: "CreateApiKeyRequest", Fields: []Field{
 			{Name: "expiresAt", Required: true, WriteOnly: false, ReadOnly: false, Desc: "At most 90 days ahead", Schema: Schema{Type: "string"}},
 			{Name: "name", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", MinLen: i64(1), MaxLen: i64(100)}},
-			{Name: "role", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", Enum: []string{"team_admin", "team_viewer"}}},
+			{Name: "role", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", Enum: []string{"team_admin", "team_collaborator", "team_viewer"}}},
 		}},
 		Success:  []int{201},
 		Produces: []string{"application/json"},
@@ -170,6 +185,8 @@ var operations = []Operation{
 		Body: &Body{Required: true, MediaType: "application/json", SchemaName: "CreateIdentityProviderRequest", Fields: []Field{
 			{Name: "cliClientId", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string"}},
 			{Name: "clientSecretArn", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string"}},
+			{Name: "collabClientId", Required: false, WriteOnly: false, ReadOnly: false, Desc: "The collaboration (Paperclip edge) client of this provider", Schema: Schema{Type: "string", Nullable: true}},
+			{Name: "collabClientSecretArn", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Reference only; needs collabClientId; never returned by ListSignInProviders", Schema: Schema{Type: "string", Nullable: true}},
 			{Name: "consoleClientId", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string"}},
 			{Name: "enabled", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "boolean"}},
 			{Name: "groupsClaim", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string"}},
@@ -403,6 +420,7 @@ var operations = []Operation{
 			{Name: "kind", Required: true, WriteOnly: false, ReadOnly: false, Desc: "Immutable after create", Schema: Schema{Type: "string", Enum: []string{"persistent", "ephemeral"}}},
 			{Name: "maxBudgetUsd", Required: true, WriteOnly: false, ReadOnly: false, Desc: "Guardrail field: needs teams:set-guardrails", Schema: Schema{Type: "string", Pattern: "^-?(0|[1-9][0-9]{0,11})(\\.[0-9]{1,6})?$", Ref: "Money"}},
 			{Name: "mayAddExternalSystems", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Guardrail field: needs teams:set-guardrails", Schema: Schema{Type: "boolean"}},
+			{Name: "mayExposeCollaboration", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Guardrail field: needs teams:set-guardrails.", Schema: Schema{Type: "boolean"}},
 			{Name: "mayManageAwsAccounts", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Guardrail field: needs teams:set-guardrails", Schema: Schema{Type: "boolean"}},
 			{Name: "models", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Model ids enabled for the team", Schema: Schema{Type: "array", Items: &Schema{Type: "string"}}},
 			{Name: "ownerEmail", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string"}},
@@ -676,6 +694,16 @@ var operations = []Operation{
 		Success:  []int{200},
 		Produces: []string{"application/json"},
 	},
+	{ID: "DisconnectAgentFromCollaboration", Method: "POST", Path: "/v1/teams/{teamId}/collaboration/links/{agentId}:disconnect", Service: "collaboration", Command: "disconnect-agent", Summary: "Disconnect agent from collaboration",
+		Permission: "collaboration:manage", Scope: "team", Priority: "P0", CSV: false,
+		Params: []Param{
+			{Name: "teamId", In: "path", Required: true, Desc: "Team id; taken from the path only", Example: "team_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^team_[0-9A-HJKMNP-TV-Z]{26}$"}},
+			{Name: "agentId", In: "path", Required: true, Desc: "", Example: "agt_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^agt_[0-9A-HJKMNP-TV-Z]{26}$"}},
+		},
+		IfMatch: IfMatchNone, Idempotent: true, Paginated: false,
+		Success:  []int{200},
+		Produces: []string{"application/json"},
+	},
 	{ID: "EnableSwarmTemplate", Method: "POST", Path: "/v1/admin/swarm-templates/{templateId}:enable", Service: "swarm-templates", Command: "enable-swarm-template", Summary: "Enable swarm template",
 		Permission: "admin:swarm-templates", Scope: "service", Priority: "P2", CSV: false,
 		Params: []Param{
@@ -704,7 +732,7 @@ var operations = []Operation{
 			{Name: "from", In: "query", Required: false, Desc: "", Example: "2026-11-21T18:00:00Z", Schema: Schema{Type: "string", Ref: "Timestamp"}},
 			{Name: "to", In: "query", Required: false, Desc: "", Example: "2026-11-21T18:00:00Z", Schema: Schema{Type: "string", Ref: "Timestamp"}},
 			{Name: "range", In: "query", Required: false, Desc: "Instead of from and to", Example: "", Schema: Schema{Type: "string", Enum: []string{"24h", "7d", "30d", "90d", "mtd"}}},
-			{Name: "groupBy", In: "query", Required: false, Desc: "Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams.", Example: "", Schema: Schema{Type: "string", Pattern: "^(team|agent|model|system|day|hour|pool|tag:[A-Za-z0-9_.:/=+@-]+)(,(team|agent|model|system|day|hour|pool|tag:[A-Za-z0-9_.:/=+@-]+))*$"}},
+			{Name: "groupBy", In: "query", Required: false, Desc: "Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams.", Example: "", Schema: Schema{Type: "string", Pattern: "^(team|agent|model|system|day|hour|pool|surface|reason|person|tag:[A-Za-z0-9_.:/=+@-]+)(,(team|agent|model|system|day|hour|pool|surface|reason|person|tag:[A-Za-z0-9_.:/=+@-]+))*$"}},
 			{Name: "modelId", In: "query", Required: false, Desc: "", Example: "", Schema: Schema{Type: "string"}},
 			{Name: "systemId", In: "query", Required: false, Desc: "", Example: "ext_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^ext_[0-9A-HJKMNP-TV-Z]{26}$"}},
 			{Name: "poolId", In: "query", Required: false, Desc: "Ephemeral teams only", Example: "pool_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^pool_[0-9A-HJKMNP-TV-Z]{26}$"}},
@@ -852,11 +880,11 @@ var operations = []Operation{
 	{ID: "GetServiceReport", Method: "GET", Path: "/v1/reports/{kind}", Service: "reports", Command: "get-service-report", Summary: "Get service report",
 		Permission: "admin:reports", Scope: "service", Priority: "P0", CSV: true,
 		Params: []Param{
-			{Name: "kind", In: "path", Required: true, Desc: "", Example: "", Schema: Schema{Type: "string", Enum: []string{"usage", "costs", "activity", "traffic"}}},
+			{Name: "kind", In: "path", Required: true, Desc: "", Example: "", Schema: Schema{Type: "string", Enum: []string{"usage", "costs", "activity", "traffic", "collaboration"}}},
 			{Name: "from", In: "query", Required: false, Desc: "", Example: "2026-11-21T18:00:00Z", Schema: Schema{Type: "string", Ref: "Timestamp"}},
 			{Name: "to", In: "query", Required: false, Desc: "", Example: "2026-11-21T18:00:00Z", Schema: Schema{Type: "string", Ref: "Timestamp"}},
 			{Name: "range", In: "query", Required: false, Desc: "Instead of from and to", Example: "", Schema: Schema{Type: "string", Enum: []string{"24h", "7d", "30d", "90d", "mtd"}}},
-			{Name: "groupBy", In: "query", Required: false, Desc: "Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams.", Example: "", Schema: Schema{Type: "string", Pattern: "^(team|agent|model|system|day|hour|pool|tag:[A-Za-z0-9_.:/=+@-]+)(,(team|agent|model|system|day|hour|pool|tag:[A-Za-z0-9_.:/=+@-]+))*$"}},
+			{Name: "groupBy", In: "query", Required: false, Desc: "Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams.", Example: "", Schema: Schema{Type: "string", Pattern: "^(team|agent|model|system|day|hour|pool|surface|reason|person|tag:[A-Za-z0-9_.:/=+@-]+)(,(team|agent|model|system|day|hour|pool|surface|reason|person|tag:[A-Za-z0-9_.:/=+@-]+))*$"}},
 			{Name: "teamId", In: "query", Required: false, Desc: "Filter (service reports only)", Example: "team_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^team_[0-9A-HJKMNP-TV-Z]{26}$"}},
 			{Name: "agentId", In: "query", Required: false, Desc: "", Example: "agt_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^agt_[0-9A-HJKMNP-TV-Z]{26}$"}},
 			{Name: "modelId", In: "query", Required: false, Desc: "", Example: "", Schema: Schema{Type: "string"}},
@@ -892,6 +920,15 @@ var operations = []Operation{
 		Success:  []int{200},
 		Produces: []string{"application/json"},
 	},
+	{ID: "GetTeamCollaboration", Method: "GET", Path: "/v1/teams/{teamId}/collaboration", Service: "collaboration", Command: "describe-collaboration", Summary: "Get team collaboration",
+		Permission: "collaboration:read", Scope: "team", Priority: "P0", CSV: false,
+		Params: []Param{
+			{Name: "teamId", In: "path", Required: true, Desc: "Team id; taken from the path only", Example: "team_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^team_[0-9A-HJKMNP-TV-Z]{26}$"}},
+		},
+		IfMatch: IfMatchNone, Idempotent: false, Paginated: false,
+		Success:  []int{200},
+		Produces: []string{"application/json"},
+	},
 	{ID: "GetTeamKubeconfig", Method: "GET", Path: "/v1/teams/{teamId}/kubeconfig", Service: "teams", Command: "get-kubeconfig", Summary: "Get team kubeconfig",
 		Permission: "teams:get-kubeconfig", Scope: "team", Priority: "P2", CSV: false,
 		Params: []Param{
@@ -905,11 +942,11 @@ var operations = []Operation{
 		Permission: "reports:read", Scope: "team", Priority: "P0", CSV: true,
 		Params: []Param{
 			{Name: "teamId", In: "path", Required: true, Desc: "Team id; taken from the path only", Example: "team_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^team_[0-9A-HJKMNP-TV-Z]{26}$"}},
-			{Name: "kind", In: "path", Required: true, Desc: "", Example: "", Schema: Schema{Type: "string", Enum: []string{"usage", "costs", "activity", "traffic"}}},
+			{Name: "kind", In: "path", Required: true, Desc: "", Example: "", Schema: Schema{Type: "string", Enum: []string{"usage", "costs", "activity", "traffic", "collaboration"}}},
 			{Name: "from", In: "query", Required: false, Desc: "", Example: "2026-11-21T18:00:00Z", Schema: Schema{Type: "string", Ref: "Timestamp"}},
 			{Name: "to", In: "query", Required: false, Desc: "", Example: "2026-11-21T18:00:00Z", Schema: Schema{Type: "string", Ref: "Timestamp"}},
 			{Name: "range", In: "query", Required: false, Desc: "Instead of from and to", Example: "", Schema: Schema{Type: "string", Enum: []string{"24h", "7d", "30d", "90d", "mtd"}}},
-			{Name: "groupBy", In: "query", Required: false, Desc: "Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams.", Example: "", Schema: Schema{Type: "string", Pattern: "^(team|agent|model|system|day|hour|pool|tag:[A-Za-z0-9_.:/=+@-]+)(,(team|agent|model|system|day|hour|pool|tag:[A-Za-z0-9_.:/=+@-]+))*$"}},
+			{Name: "groupBy", In: "query", Required: false, Desc: "Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams.", Example: "", Schema: Schema{Type: "string", Pattern: "^(team|agent|model|system|day|hour|pool|surface|reason|person|tag:[A-Za-z0-9_.:/=+@-]+)(,(team|agent|model|system|day|hour|pool|surface|reason|person|tag:[A-Za-z0-9_.:/=+@-]+))*$"}},
 			{Name: "agentId", In: "query", Required: false, Desc: "", Example: "agt_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^agt_[0-9A-HJKMNP-TV-Z]{26}$"}},
 			{Name: "modelId", In: "query", Required: false, Desc: "", Example: "", Schema: Schema{Type: "string"}},
 			{Name: "systemId", In: "query", Required: false, Desc: "", Example: "ext_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^ext_[0-9A-HJKMNP-TV-Z]{26}$"}},
@@ -1048,6 +1085,9 @@ var operations = []Operation{
 	},
 	{ID: "ListAgentTemplates", Method: "GET", Path: "/v1/agent-templates", Service: "agents", Command: "list-agent-templates", Summary: "List agent templates",
 		Permission: "models:read", Scope: "any", Priority: "P0", CSV: false,
+		Params: []Param{
+			{Name: "capability", In: "query", Required: false, Desc: "", Example: "", Schema: Schema{Type: "string", Enum: []string{"paperclip"}}},
+		},
 		IfMatch: IfMatchNone, Idempotent: false, Paginated: true,
 		ResultKey: "items",
 		Success:   []int{200},
@@ -1056,6 +1096,7 @@ var operations = []Operation{
 	{ID: "ListAgents", Method: "GET", Path: "/v1/teams/{teamId}/agents", Service: "agents", Command: "list-agents", Summary: "List agents",
 		Permission: "agents:read", Scope: "team", Priority: "P0", CSV: false,
 		Params: []Param{
+			{Name: "role", In: "query", Required: false, Desc: "", Example: "", Schema: Schema{Type: "string", Enum: []string{"worker", "collaboration"}}},
 			{Name: "teamId", In: "path", Required: true, Desc: "Team id; taken from the path only", Example: "team_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^team_[0-9A-HJKMNP-TV-Z]{26}$"}},
 		},
 		IfMatch: IfMatchNone, Idempotent: false, Paginated: true,
@@ -1102,6 +1143,29 @@ var operations = []Operation{
 	},
 	{ID: "ListCatalogSystems", Method: "GET", Path: "/v1/admin/external-systems", Service: "admin", Command: "list-external-systems", Summary: "List catalog systems",
 		Permission: "admin:external-systems", Scope: "service", Priority: "P0", CSV: false,
+		IfMatch: IfMatchNone, Idempotent: false, Paginated: true,
+		ResultKey: "items",
+		Success:   []int{200},
+		Produces:  []string{"application/json"},
+	},
+	{ID: "ListCollaborationEndpoints", Method: "GET", Path: "/v1/admin/collaboration-endpoints", Service: "admin", Command: "list-collaboration-endpoints", Summary: "List collaboration endpoints",
+		Permission: "admin:settings", Scope: "service", Priority: "P0", CSV: true,
+		Params: []Param{
+			{Name: "teamId", In: "query", Required: false, Desc: "", Example: "", Schema: Schema{Type: "string", Pattern: "^team_[0-9A-HJKMNP-TV-Z]{26}$"}},
+			{Name: "state", In: "query", Required: false, Desc: "", Example: "", Schema: Schema{Type: "string", Enum: []string{"Ready", "Degraded", "Failed", "Pending"}}},
+		},
+		IfMatch: IfMatchNone, Idempotent: false, Paginated: true,
+		ResultKey: "items",
+		Success:   []int{200},
+		Produces:  []string{"application/json", "text/csv"},
+	},
+	{ID: "ListCollaborationLinks", Method: "GET", Path: "/v1/teams/{teamId}/collaboration/links", Service: "collaboration", Command: "list-collaboration-links", Summary: "List collaboration links",
+		Permission: "collaboration:read", Scope: "team", Priority: "P0", CSV: false,
+		Params: []Param{
+			{Name: "teamId", In: "path", Required: true, Desc: "Team id; taken from the path only", Example: "team_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^team_[0-9A-HJKMNP-TV-Z]{26}$"}},
+			{Name: "linkState", In: "query", Required: false, Desc: "", Example: "", Schema: Schema{Type: "string", Enum: []string{"pending", "linked", "failed", "disabled"}}},
+			{Name: "connect", In: "query", Required: false, Desc: "", Example: "", Schema: Schema{Type: "boolean"}},
+		},
 		IfMatch: IfMatchNone, Idempotent: false, Paginated: true,
 		ResultKey: "items",
 		Success:   []int{200},
@@ -1312,6 +1376,7 @@ var operations = []Operation{
 	{ID: "ListSecrets", Method: "GET", Path: "/v1/teams/{teamId}/secrets", Service: "secrets", Command: "list-secrets", Summary: "List secrets",
 		Permission: "secrets:read-metadata", Scope: "team", Priority: "P0", CSV: false,
 		Params: []Param{
+			{Name: "managedBy", In: "query", Required: false, Desc: "", Example: "", Schema: Schema{Type: "string", Enum: []string{"user", "afs", "paperclip"}}},
 			{Name: "teamId", In: "path", Required: true, Desc: "Team id; taken from the path only", Example: "team_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^team_[0-9A-HJKMNP-TV-Z]{26}$"}},
 		},
 		IfMatch: IfMatchNone, Idempotent: false, Paginated: true,
@@ -1497,6 +1562,7 @@ var operations = []Operation{
 		IfMatch: IfMatchOptional, Idempotent: false, Paginated: false,
 		Body: &Body{Required: true, MediaType: "application/json", SchemaName: "PutAgentTemplateRequest", Fields: []Field{
 			{Name: "allowedDigests", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "array", Items: &Schema{Type: "string", Pattern: "^sha256:[0-9a-f]{64}$"}}},
+			{Name: "capabilities", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "array", Items: &Schema{Type: "string", Enum: []string{"paperclip"}}}},
 			{Name: "currentDigest", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", Pattern: "^sha256:[0-9a-f]{64}$"}},
 			{Name: "defaultResources", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "object", Ref: "Resources"}},
 			{Name: "description", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string"}},
@@ -1621,7 +1687,7 @@ var operations = []Operation{
 	{ID: "PutSetting", Method: "PUT", Path: "/v1/admin/settings/{key}", Service: "admin", Command: "put-setting", Summary: "Put setting",
 		Permission: "admin:settings", Scope: "service", Priority: "P0", CSV: false,
 		Params: []Param{
-			{Name: "key", In: "path", Required: true, Desc: "", Example: "", Schema: Schema{Type: "string", Enum: []string{"secrets.path_prefix", "pricing.price_list_sync", "billing.variance_alert_pct", "api.idempotency_key_ttl_seconds", "teams.ephemeral_max_days", "work_orders.sla_warning_hours", "billing.tag_activation_acknowledged", "work_orders.notification_channel_id", "reports.idle_cpu_millicores", "egress.denied_spike_threshold", "gateway.reservation_ttl_seconds", "api.cors_origins"}}},
+			{Name: "key", In: "path", Required: true, Desc: "", Example: "", Schema: Schema{Type: "string", Enum: []string{"secrets.path_prefix", "pricing.price_list_sync", "billing.variance_alert_pct", "api.idempotency_key_ttl_seconds", "teams.ephemeral_max_days", "work_orders.sla_warning_hours", "billing.tag_activation_acknowledged", "work_orders.notification_channel_id", "reports.idle_cpu_millicores", "egress.denied_spike_threshold", "gateway.reservation_ttl_seconds", "api.cors_origins", "collab.base_domain", "collab.public_endpoints", "collab.allowed_source_cidrs", "collab.session_ttl_minutes", "collab.content_scan", "collab.max_body_mb", "collab.denied_spike_threshold"}}},
 		},
 		IfMatch: IfMatchOptional, Idempotent: false, Paginated: false,
 		Body: &Body{Required: true, MediaType: "application/json", SchemaName: "PutSettingRequest", Fields: []Field{
@@ -1640,6 +1706,20 @@ var operations = []Operation{
 			{Name: "description", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string"}},
 			{Name: "enabled", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "boolean"}},
 			{Name: "volumeType", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", Enum: []string{"gp3", "io2"}}},
+		}},
+		Success:  []int{200},
+		Produces: []string{"application/json"},
+	},
+	{ID: "PutTeamCollaboration", Method: "PUT", Path: "/v1/teams/{teamId}/collaboration", Service: "collaboration", Command: "put-collaboration", Summary: "Put team collaboration",
+		Permission: "collaboration:manage", Scope: "team", Priority: "P0", CSV: false,
+		Params: []Param{
+			{Name: "teamId", In: "path", Required: true, Desc: "Team id; taken from the path only", Example: "team_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^team_[0-9A-HJKMNP-TV-Z]{26}$"}},
+		},
+		IfMatch: IfMatchOptional, Idempotent: false, Paginated: false,
+		Body: &Body{Required: true, MediaType: "application/json", SchemaName: "PutTeamCollaborationRequest", Fields: []Field{
+			{Name: "registrationMode", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Omitted keeps the current value", Schema: Schema{Type: "string", Enum: []string{"manual", "managed"}}},
+			{Name: "restApiEnabled", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "boolean"}},
+			{Name: "webUiEnabled", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "boolean"}},
 		}},
 		Success:  []int{200},
 		Produces: []string{"application/json"},
@@ -1749,6 +1829,18 @@ var operations = []Operation{
 		Success:  []int{200},
 		Produces: []string{"application/json"},
 	},
+	{ID: "RotateCollaborationKeys", Method: "POST", Path: "/v1/teams/{teamId}/collaboration:rotate-keys", Service: "collaboration", Command: "rotate-collaboration-keys", Summary: "Rotate collaboration keys",
+		Permission: "collaboration:manage", Scope: "team", Priority: "P1", CSV: false,
+		Params: []Param{
+			{Name: "teamId", In: "path", Required: true, Desc: "Team id; taken from the path only", Example: "team_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^team_[0-9A-HJKMNP-TV-Z]{26}$"}},
+		},
+		IfMatch: IfMatchNone, Idempotent: true, Paginated: false,
+		Body: &Body{Required: false, MediaType: "application/json", SchemaName: "RotateCollaborationKeysRequest", Fields: []Field{
+			{Name: "names", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Default is both.", Schema: Schema{Type: "array", Items: &Schema{Type: "string", Enum: []string{"paperclip-better-auth-secret", "paperclip-tool-action-signing-secret"}}}},
+		}},
+		Success:  []int{200},
+		Produces: []string{"application/json"},
+	},
 	{ID: "RotateSecret", Method: "POST", Path: "/v1/teams/{teamId}/secrets/{secretId}:rotate", Service: "secrets", Command: "rotate-secret", Summary: "Rotate secret",
 		Permission: "secrets:write", Scope: "team", Priority: "P1", CSV: false,
 		Params: []Param{
@@ -1756,8 +1848,8 @@ var operations = []Operation{
 			{Name: "secretId", In: "path", Required: true, Desc: "", Example: "sec_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^sec_[0-9A-HJKMNP-TV-Z]{26}$"}},
 		},
 		IfMatch: IfMatchNone, Idempotent: true, Paginated: false,
-		Body: &Body{Required: true, MediaType: "application/json", SchemaName: "RotateSecretRequest", Fields: []Field{
-			{Name: "value", Required: true, WriteOnly: true, ReadOnly: false, Desc: "Sent once, passed to Secrets Manager and dropped; never returned, logged or audited", Schema: Schema{Type: "string", MinLen: i64(1), MaxLen: i64(65536), Ref: "SecretValue"}},
+		Body: &Body{Required: false, MediaType: "application/json", SchemaName: "RotateSecretRequest", Fields: []Field{
+			{Name: "value", Required: false, WriteOnly: true, ReadOnly: false, Desc: "Sent once, passed to Secrets Manager and dropped; never returned, logged or audited", Schema: Schema{Type: "string", MinLen: i64(1), MaxLen: i64(65536), Ref: "SecretValue"}},
 		}},
 		Success:  []int{200},
 		Produces: []string{"application/json"},
@@ -1829,6 +1921,7 @@ var operations = []Operation{
 		},
 		IfMatch: IfMatchRequired, Idempotent: false, Paginated: false,
 		Body: &Body{Required: true, MediaType: "application/json", SchemaName: "UpdateAgentRequest", Fields: []Field{
+			{Name: "collaboration", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "object", Ref: "AgentCollaborationInput"}},
 			{Name: "description", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", MaxLen: i64(1000)}},
 			{Name: "iamIdentity", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", Enum: []string{"team_shared", "dedicated"}}},
 			{Name: "image", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Container image pinned by digest", Schema: Schema{Type: "string", Pattern: "@sha256:[0-9a-f]{64}$", Ref: "ImageRef"}},
@@ -1866,6 +1959,8 @@ var operations = []Operation{
 		Body: &Body{Required: true, MediaType: "application/json", SchemaName: "UpdateIdentityProviderRequest", Fields: []Field{
 			{Name: "cliClientId", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string"}},
 			{Name: "clientSecretArn", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", Nullable: true}},
+			{Name: "collabClientId", Required: false, WriteOnly: false, ReadOnly: false, Desc: "The collaboration (Paperclip edge) client of this provider", Schema: Schema{Type: "string", Nullable: true}},
+			{Name: "collabClientSecretArn", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Reference only; needs collabClientId; never returned by ListSignInProviders", Schema: Schema{Type: "string", Nullable: true}},
 			{Name: "consoleClientId", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string"}},
 			{Name: "enabled", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "boolean"}},
 			{Name: "groupsClaim", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string"}},
@@ -1899,7 +1994,7 @@ var operations = []Operation{
 		},
 		IfMatch: IfMatchRequired, Idempotent: false, Paginated: false,
 		Body: &Body{Required: true, MediaType: "application/json", SchemaName: "UpdateMemberRequest", Fields: []Field{
-			{Name: "role", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", Enum: []string{"team_admin", "team_viewer"}}},
+			{Name: "role", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", Enum: []string{"team_admin", "team_collaborator", "team_viewer"}}},
 		}},
 		Success:  []int{200},
 		Produces: []string{"application/json"},
@@ -2055,6 +2150,7 @@ var operations = []Operation{
 			{Name: "kind", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Immutable; a different value is a ValidationError", Schema: Schema{Type: "string", Enum: []string{"persistent", "ephemeral"}}},
 			{Name: "maxBudgetUsd", Required: false, WriteOnly: false, ReadOnly: false, Desc: "USD amount as a decimal string with at most 6 fraction digits; never a JSON number", Schema: Schema{Type: "string", Pattern: "^-?(0|[1-9][0-9]{0,11})(\\.[0-9]{1,6})?$", Ref: "Money"}},
 			{Name: "mayAddExternalSystems", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "boolean"}},
+			{Name: "mayExposeCollaboration", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "boolean"}},
 			{Name: "mayManageAwsAccounts", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "boolean"}},
 			{Name: "ownerEmail", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string"}},
 			{Name: "quotas", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "object", Ref: "Quotas"}},

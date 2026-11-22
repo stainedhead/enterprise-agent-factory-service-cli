@@ -32,7 +32,7 @@ OPTIONS
        --to (string)
           End of the report window (RFC 3339).
        --group-by (string)
-          Comma-separated dimensions: team, agent, model, system, day, hour, pool, tag:<key>.
+          Comma-separated dimensions: team, agent, model, system, day, hour, pool, tag:<key>; surface, reason and person for the collaboration report.
        --tag (list)
           Filter by a tag, key=value (several allowed); sent as tag.<key>=<value>.
 

@@ -12,6 +12,8 @@ SYNOPSIS
        afs agents list-agents [options]
 
 OPTIONS
+       --role (string)
+          Possible values: worker, collaboration
        --team-id (string) (required)
           Team id; taken from the path only
 
@@ -41,4 +43,8 @@ EXAMPLES
        Print agent ids and phases
 
        afs agents list-agents --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --query 'items[].[id,status.phase]' --output text
+
+       Find the team's collaboration agent
+
+       afs agents list-agents --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --role collaboration
 

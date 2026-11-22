@@ -26,6 +26,8 @@ pagination merges pages; `wait` polls for `--wait`; `internal/output` renders; e
 | `cmd/afs` | Entry point: calls `cli.Run` with the process streams and exits with its code |
 | `internal/cli` | Parser, global options, option derivation, registry, override merging, milestone table |
 | `internal/cli/<service>` | Per-service overrides (examples, columns, shorthands, validators, body builders) and local commands |
+| `internal/edge` | Client of a team's Paperclip edge for `invoke-api`: origin validation, Paperclip key reader, one request with narrow retries (no redirects, no cookies, streamed body, idle timeout) |
+| `internal/cli/collaboration` | The `collaboration` service: describe, put, links, connect, disconnect, rotate keys, and the local command `invoke-api` |
 | `internal/cli/services` | Composition: assembles every service into the registry and wires executor and help |
 | `internal/cli/exec` | Generic executor: build request, paginate, render, map errors to exit codes, skeletons |
 | `internal/cli/safeupdate` | Reader table for the 59 `If-Match` operations; read-then-write and `412` handling |

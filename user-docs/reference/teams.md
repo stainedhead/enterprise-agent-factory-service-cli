@@ -207,6 +207,8 @@ OPTIONS
           Guardrail field: needs teams:set-guardrails
        --may-add-external-systems (boolean)
           Guardrail field: needs teams:set-guardrails
+       --may-expose-collaboration (boolean)
+          Guardrail field: needs teams:set-guardrails.
        --may-manage-aws-accounts (boolean)
           Guardrail field: needs teams:set-guardrails
        --models (list)
@@ -1926,6 +1928,7 @@ OPTIONS
        --max-budget-usd (string)
           USD amount as a decimal string with at most 6 fraction digits; never a JSON number
        --may-add-external-systems (boolean)
+       --may-expose-collaboration (boolean)
        --may-manage-aws-accounts (boolean)
        --owner-email (string)
        --quotas (JSON)

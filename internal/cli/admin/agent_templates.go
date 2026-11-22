@@ -11,7 +11,7 @@ const exDigest = "sha256:4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4
 
 var agentTemplateColumns = []output.Column{
 	{Header: "Name", Path: "name"}, {Header: "Harness", Path: "harness"}, {Header: "Digest", Path: "currentDigest"},
-	{Header: "Enabled", Path: "enabled"}, {Header: "Version", Path: "version"},
+	{Header: "Capabilities", Path: "capabilities", Null: "-"}, {Header: "Enabled", Path: "enabled"}, {Header: "Version", Path: "version"},
 }
 
 func registerAgentTemplates(r *cli.Registry) {

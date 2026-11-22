@@ -133,3 +133,63 @@ func TestServiceReportAccessDeniedForTeamAdmin(t *testing.T) {
 		t.Fatalf("%+v", r)
 	}
 }
+
+const collabReport = `{"kind":"collaboration","range":"7d","groupBy":["day","person"],"rows":[{"day":"2026-11-20","principal":{"id":"usr_1","type":"user","name":"Ada"},"signIns":2,"uniquePeople":1,"requests":40,"deniedRequests":1,"secretDetections":0}],"totals":{"signIns":2,"requests":40},"notes":[]}`
+
+func collabOK(w http.ResponseWriter, _ *http.Request) { clitest.Reply(w, 200, collabReport) }
+
+// CLI-US-32.2
+func TestCollaborationReportGroupByAccepted(t *testing.T) {
+	r := clitest.Run(t, collabOK, "reports", "get-team-report", "--team-id", "team_1", "--kind", "collaboration", "--range", "7d", "--group-by", "day,person")
+	if r.Code != 0 || r.Req.URL.Path != "/v1/teams/team_1/reports/collaboration" || r.Req.URL.Query().Get("groupBy") != "day,person" || r.Out == "" {
+		t.Fatalf("%+v", r)
+	}
+	r = clitest.Run(t, collabOK, "reports", "get-service-report", "--kind", "collaboration", "--group-by", "team")
+	if r.Code != 0 || r.Req.URL.Path != "/v1/reports/collaboration" || r.Req.URL.Query().Get("groupBy") != "team" {
+		t.Fatalf("%+v", r)
+	}
+	for _, g := range []string{"surface", "reason", "surface,reason", "day,surface,person"} {
+		if r := clitest.Run(t, collabOK, "reports", "get-team-report", "--team-id", "team_1", "--kind", "collaboration", "--group-by", g); r.Code != 0 {
+			t.Errorf("%s: %+v", g, r)
+		}
+	}
+	// a dimension that does not suit the kind is the API's ValidationError, not a client-side refusal
+	r = clitest.Run(t, clitest.Fail(400, "ValidationError", "groupBy person is only valid with the collaboration report"), "reports", "get-team-report", "--team-id", "team_1", "--kind", "costs", "--group-by", "person")
+	if r.Code != 254 || len(r.Requests) != 1 || !strings.Contains(r.Err, "(ValidationError)") {
+		t.Errorf("%+v", r)
+	}
+}
+
+func TestGroupByPatternMessageListsNewDimensions(t *testing.T) {
+	r := clitest.Run(t, nil, "reports", "get-team-report", "--team-id", "team_1", "--kind", "collaboration", "--group-by", "planet")
+	if r.Code != 252 || !strings.Contains(r.Err, "surface, reason, person") {
+		t.Errorf("%+v", r)
+	}
+}
+
+func TestCollaborationReportScheduleRefused254(t *testing.T) {
+	r := clitest.Run(t, clitest.Fail(400, "ValidationError", "the collaboration report is not schedulable"), "reports", "create-report-schedule", "--team-id", "team_1",
+		"--name", "w", "--report", "collaboration", "--cadence", "weekly", "--channel-id", "nch_1")
+	if r.Code != 254 || len(r.Requests) != 1 || !strings.Contains(r.Err, "(ValidationError) when calling the CreateReportSchedule operation") {
+		t.Errorf("%+v", r)
+	}
+}
+
+func TestCollaborationReportCSV(t *testing.T) {
+	csv := "day,person,signIns,requests\r\n2026-11-20,usr_1,2,40\r\n"
+	r := clitest.Run(t, func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "text/csv")
+		_, _ = w.Write([]byte(csv))
+	}, "reports", "get-team-report", "--team-id", "team_1", "--kind", "collaboration", "--group-by", "day,person", "--output", "csv")
+	if r.Code != 0 || r.Out != csv || r.Req.Header.Get("Accept") != "text/csv" {
+		t.Errorf("%+v", r)
+	}
+}
+
+// CLI-US-32.3
+func TestCollaborationReportAccessDenied254(t *testing.T) {
+	r := clitest.Run(t, clitest.Denied("reports:team"), "reports", "get-team-report", "--team-id", "team_1", "--kind", "collaboration")
+	if r.Code != 254 || !strings.Contains(r.Err, "(AccessDenied) when calling the GetTeamReport operation") || !strings.Contains(r.Err, "reports:team") {
+		t.Errorf("%+v", r)
+	}
+}

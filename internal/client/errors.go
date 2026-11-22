@@ -73,6 +73,26 @@ func (e *APIError) AmbiguousRepos() []AmbiguousRepo {
 // UnownedRepos is details.unownedRepos: repositories no team owns, as host/owner/repo.
 func (e *APIError) UnownedRepos() []string { return e.detailList("unownedRepos") }
 
+// FieldError is one entry of details.fields of a ValidationError.
+type FieldError struct {
+	Field  string `json:"field"`
+	Reason string `json:"reason"`
+}
+
+// Fields is details.fields: the member and the reason of each validation failure.
+func (e *APIError) Fields() []FieldError {
+	var d struct {
+		F []FieldError `json:"fields"`
+	}
+	if json.Unmarshal(e.Details, &d) != nil {
+		return nil
+	}
+	return d.F
+}
+
+// Patterns is details.patterns of a SecretDetected answer: pattern types only, never content.
+func (e *APIError) Patterns() []string { return e.detailList("patterns") }
+
 // Reason is details.reason (for example idempotency_in_progress).
 func (e *APIError) Reason() string { return e.detail("reason") }
 
@@ -111,4 +131,29 @@ func decodeError(status int, h http.Header, body []byte) *APIError {
 func mediaType(ct string) string {
 	mt, _, _ := strings.Cut(ct, ";")
 	return strings.ToLower(strings.TrimSpace(mt))
+}
+
+// DecodeError turns an error response into an *APIError: the contract's envelope when the body is one,
+// otherwise a generic ServiceError or InternalError. The edge client of invoke-api uses it for responses
+// that carry the section 6 envelope.
+func DecodeError(status int, h http.Header, body []byte) *APIError {
+	return decodeError(status, h, body)
+}
+
+// IsEnvelope reports whether a body is the section 6 error envelope: a JSON object with a code and a
+// message, and a request id in the body or in X-Request-Id. A Paperclip error that merely has a "code"
+// member is not one.
+func IsEnvelope(h http.Header, body []byte) bool {
+	if !strings.Contains(mediaType(h.Get("Content-Type")), "json") {
+		return false
+	}
+	var env struct {
+		Code      string `json:"code"`
+		Message   string `json:"message"`
+		RequestID string `json:"requestId"`
+	}
+	if json.Unmarshal(body, &env) != nil || env.Code == "" || env.Message == "" {
+		return false
+	}
+	return env.RequestID != "" || h.Get("X-Request-Id") != ""
 }

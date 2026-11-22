@@ -76,3 +76,17 @@ func TestDeleteAPIKeyIfMatchOnlyWhenGiven(t *testing.T) {
 		t.Fatalf("%+v", r)
 	}
 }
+
+// CLI-US-32.1
+func TestCreateApiKeyTeamCollaborator(t *testing.T) {
+	r := clitest.Run(t, func(w http.ResponseWriter, _ *http.Request) {
+		clitest.Reply(w, 201, `{"id":"key_1","name":"pipeline","role":"team_collaborator","secretKey":"afsk_x"}`)
+	}, "api-keys", "create-api-key", "--team-id", "team_1", "--name", "pipeline", "--role", "team_collaborator", "--expires-at", "2027-02-19T18:00:00Z")
+	if r.Code != 0 || !strings.Contains(string(r.ReqBody), `"role":"team_collaborator"`) {
+		t.Errorf("%d %s %s", r.Code, r.ReqBody, r.Err)
+	}
+	h := clitest.Run(t, nil, "api-keys", "create-api-key", "help")
+	if !strings.Contains(h.Out, "team_admin") || !strings.Contains(h.Out, "team_collaborator") || !strings.Contains(h.Out, "team_viewer") {
+		t.Errorf("help must list the roles: %q", h.Out)
+	}
+}

@@ -95,3 +95,21 @@ func RetryAfter(h http.Header, now time.Time, readTimeout time.Duration) time.Du
 	}
 	return d
 }
+
+// Backoff is the full-jitter delay before retry number attempt+1; a longer Retry-After wins. It is shared
+// with the edge client of invoke-api so both retry alike (CLI-11, CLI-US-25.8).
+func Backoff(attempt int, rnd func() float64, retryAfter time.Duration) time.Duration {
+	return backoff(attempt, rnd, retryAfter)
+}
+
+// IsDialError reports a failure to establish the connection: the request was never sent.
+func IsDialError(err error) bool { return isDialError(err) }
+
+// MaxAttempts is the total number of tries of a request (CLI-11).
+const MaxAttempts = maxAttempts
+
+// RetryAfterExceedsCap reports a Retry-After longer than the client will wait (20 s, or the read timeout when
+// that is smaller): the caller must not retry, as client.Do does not.
+func RetryAfterExceedsCap(h http.Header, now time.Time, readTimeout time.Duration) bool {
+	return parseRetryAfter(h, now) > retryAfterCap(readTimeout)
+}

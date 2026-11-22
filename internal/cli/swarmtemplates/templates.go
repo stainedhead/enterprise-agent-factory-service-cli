@@ -1,6 +1,8 @@
 package swarmtemplates
 
 import (
+	"encoding/json"
+
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/output"
 )
@@ -15,7 +17,15 @@ var templateColumns = []output.Column{
 	{Header: "Version", Path: "version"},
 }
 
+// specSkeleton shows the optional spec.collaboration member (PC-D29) in --generate-cli-skeleton; the spec is
+// sent unchanged, so this is documentation only (CLI-US-35.1).
+var specSkeleton = map[string]json.RawMessage{"spec": json.RawMessage(`{"collaboration":{"templateId":""}}`)}
+
 func registerTemplates(r *cli.Registry) {
+	r.Override(cli.Override{Op: "CreateSwarmTemplate", SkeletonMembers: specSkeleton, Examples: []cli.Example{
+		{Title: "Give the remediation team a collaboration agent (spec.collaboration.templateId in the spec file)", Command: "afs swarm-templates create-swarm-template --name cve-collab --kind cve_remediation --budget-usd 250.00 --ttl-hours 72 --teardown-rule at_work_complete --spec file://swarm-spec-with-collaboration.json"},
+	}})
+	r.Override(cli.Override{Op: "UpdateSwarmTemplate", SkeletonMembers: specSkeleton})
 	r.Override(cli.Override{Op: "ListSwarmTemplates", Columns: templateColumns, Examples: []cli.Example{
 		{Title: "List the swarm templates", Command: "afs swarm-templates list-swarm-templates"},
 	}})

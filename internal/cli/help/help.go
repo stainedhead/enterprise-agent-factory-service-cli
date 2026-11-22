@@ -102,7 +102,11 @@ func operationHelp(w io.Writer, c *cli.Command) {
 				p("          %s\n", o.Desc)
 			}
 			if len(o.Enum) > 0 {
-				p("          Possible values: %s\n", strings.Join(o.Enum, ", "))
+				label := "Possible values"
+				if o.OpenEnum {
+					label = "Known values"
+				}
+				p("          %s: %s\n", label, strings.Join(o.Enum, ", "))
 			}
 			if o.Min != nil || o.Max != nil {
 				p("          Range: %s to %s\n", bound(o.Min), bound(o.Max))

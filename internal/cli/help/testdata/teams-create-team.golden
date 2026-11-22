@@ -34,6 +34,8 @@ OPTIONS
           Guardrail field: needs teams:set-guardrails
        --may-add-external-systems (boolean)
           Guardrail field: needs teams:set-guardrails
+       --may-expose-collaboration (boolean)
+          Guardrail field: needs teams:set-guardrails.
        --may-manage-aws-accounts (boolean)
           Guardrail field: needs teams:set-guardrails
        --models (list)

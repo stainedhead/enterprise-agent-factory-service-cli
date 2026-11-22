@@ -51,3 +51,38 @@ func TestNonJSONBodyIsNeverLogged(t *testing.T) {
 		t.Errorf("fields = %v", Fields())
 	}
 }
+
+// CLI-US-33.1: the edge credential header and the edge cookie are masked in every debug line.
+func TestRedactsEdgeHeaders(t *testing.T) {
+	h := http.Header{}
+	h.Set("X-Afs-Authorization", "Bearer afs-token-sentinel")
+	h.Set("Authorization", "Bearer paperclip-key-sentinel")
+	h.Set("Proxy-Authorization", "Basic proxy-sentinel")
+	h.Set("Cookie", "__Host-afs-collab=cookie-sentinel")
+	h.Add("Set-Cookie", "__Host-afs-collab=cookie-sentinel; Secure")
+	got := strings.Join(Headers(h), "\n")
+	for _, leak := range []string{"afs-token-sentinel", "paperclip-key-sentinel", "proxy-sentinel", "cookie-sentinel"} {
+		if strings.Contains(got, leak) {
+			t.Errorf("leaked %s in %s", leak, got)
+		}
+	}
+	if strings.Count(got, Mask) != 5 || HeaderValue("x-afs-authorization", "v") != Mask {
+		t.Errorf("headers = %s", got)
+	}
+}
+
+// CLI-US-31.2: an ARN reference is logged, a clientSecret and any ...Secret value is not.
+func TestCollabClientSecretArnNotRedactedButSecretIs(t *testing.T) {
+	in := `{"collabClientId":"cid","collabClientSecretArn":"arn:aws:secretsmanager:eu-west-1:000000000000:secret:x","clientSecret":"s1","otherSecret":"s2","refSecret":"arn:aws:secretsmanager:eu-west-1:000000000000:secret:y"}`
+	got := JSON([]byte(in))
+	for _, leak := range []string{`"s1"`, `"s2"`} {
+		if strings.Contains(got, leak) {
+			t.Errorf("leaked %s in %s", leak, got)
+		}
+	}
+	for _, keep := range []string{"arn:aws:secretsmanager:eu-west-1:000000000000:secret:x", "arn:aws:secretsmanager:eu-west-1:000000000000:secret:y", `"collabClientId":"cid"`} {
+		if !strings.Contains(got, keep) {
+			t.Errorf("lost %s in %s", keep, got)
+		}
+	}
+}

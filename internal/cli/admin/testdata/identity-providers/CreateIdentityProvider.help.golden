@@ -14,6 +14,10 @@ SYNOPSIS
 OPTIONS
        --cli-client-id (string) (required)
        --client-secret-arn (string)
+       --collab-client-id (string)
+          The collaboration (Paperclip edge) client of this provider
+       --collab-client-secret-arn (string)
+          Reference only; needs collabClientId; never returned by ListSignInProviders
        --console-client-id (string) (required)
        --enabled (boolean)
        --groups-claim (string)

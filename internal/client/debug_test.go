@@ -83,3 +83,23 @@ func TestDebugRequestLineRedactsUserinfo(t *testing.T) {
 		t.Errorf("%s", dbg.String())
 	}
 }
+
+// CLI-US-33.1: the edge credential header is masked by the debug writer like Authorization.
+func TestDebugRedactsXAfsAuthorization(t *testing.T) {
+	var buf bytes.Buffer
+	d := &debugLog{w: &buf, now: time.Now}
+	h := http.Header{}
+	h.Set("X-Afs-Authorization", "Bearer edge-sentinel")
+	h.Set("Authorization", "Bearer paperclip-sentinel")
+	h.Set("Cookie", "__Host-afs-collab=cookie-sentinel")
+	d.headers("client", h)
+	out := buf.String()
+	for _, leak := range []string{"edge-sentinel", "paperclip-sentinel", "cookie-sentinel"} {
+		if strings.Contains(out, leak) {
+			t.Errorf("leaked %s: %s", leak, out)
+		}
+	}
+	if strings.Count(out, "[redacted]") != 3 {
+		t.Errorf("out = %s", out)
+	}
+}

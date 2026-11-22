@@ -183,6 +183,13 @@ var milestoneOf = map[string]int{
 	"UpdateWorkOrderRepo":              6,
 	"VerifyAgentRoleLink":              4,
 	"VerifyPoolRoleLink":               5,
+	"GetTeamCollaboration":             7,
+	"PutTeamCollaboration":             7,
+	"ListCollaborationLinks":           7,
+	"ConnectAgentToCollaboration":      7,
+	"DisconnectAgentFromCollaboration": 7,
+	"ListCollaborationEndpoints":       8,
+	"RotateCollaborationKeys":          9,
 }
 
 var streamOf = map[string]string{
@@ -366,4 +373,11 @@ var streamOf = map[string]string{
 	"UpdateWorkOrderRepo":              "M6-A",
 	"VerifyAgentRoleLink":              "M4-B",
 	"VerifyPoolRoleLink":               "M5-A",
+	"GetTeamCollaboration":             "M7-A",
+	"PutTeamCollaboration":             "M7-A",
+	"ListCollaborationLinks":           "M7-A",
+	"ConnectAgentToCollaboration":      "M7-A",
+	"DisconnectAgentFromCollaboration": "M7-A",
+	"ListCollaborationEndpoints":       "M8-A",
+	"RotateCollaborationKeys":          "M9-B",
 }

@@ -42,7 +42,7 @@ OPTIONS
           At most 90 days ahead
        --name (string) (required)
        --role (string) (required)
-          Possible values: team_admin, team_viewer
+          Possible values: team_admin, team_collaborator, team_viewer
        --idempotency-key (string)
           Idempotency key (default: a new ULID per invocation).
 

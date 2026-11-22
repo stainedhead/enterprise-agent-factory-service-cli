@@ -31,7 +31,7 @@ agents everything the web console offers, from a shell, with the habits of the A
 
 ## Status
 
-Feature complete against contract 1.1 (milestones M0 to M6). The contract snapshot is pinned to the `-restapi`
+Feature complete against contract 1.3.1 (milestones M0 to M10, release v1.0.1). v1.0.1 adds Paperclip team collaboration: the `collaboration` service (settings, links, key rotation), `collaboration invoke-api` for pipelines, the collaboration agent role, managed secrets, the collaborator role and the collaboration report. The contract snapshot is pinned to the `-restapi`
 feature branch until that repository publishes a release tag, at which point it is re-pinned.
 
 See [product-details.md](product-details.md) for the service and operation inventory, and the root repository's PRD

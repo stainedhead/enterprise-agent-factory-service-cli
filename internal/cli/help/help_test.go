@@ -124,3 +124,21 @@ func TestSensitiveOptionHelpListsSafeFormsAndIsNotRequired(t *testing.T) {
 		}
 	}
 }
+
+// CLI-US-24.10: the collaboration service page lists its operations and its local command.
+func TestCollaborationHelpGolden(t *testing.T) {
+	code, out, _ := afs(t, "collaboration", "help")
+	if code != 0 || !strings.Contains(out, "invoke-api") {
+		t.Fatalf("exit %d\n%s", code, out)
+	}
+	golden.Check(t, "collaboration.golden", out)
+}
+
+// CLI-US-25.11: invoke-api has a golden help page, two examples and no option that takes the key itself.
+func TestInvokeAPIHelpGolden(t *testing.T) {
+	code, out, _ := afs(t, "collaboration", "invoke-api", "help")
+	if code != 0 || strings.Count(out, "afs collaboration invoke-api") < 2 || strings.Contains(out, "--paperclip-key ") {
+		t.Fatalf("exit %d\n%s", code, out)
+	}
+	golden.Check(t, "collaboration-invoke-api.golden", out)
+}

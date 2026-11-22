@@ -1,2 +1,2 @@
-Name         Harness      Digest                                Enabled  Version
-claude-code  claude-code  sha256:4f4f4f4f4f4f4f4f4f4f4f4f4f4f…  true     1
+Name         Harness      Digest                  Capabilities  Enabled  Version
+claude-code  claude-code  sha256:4f4f4f4f4f4f4f…  -             true     1

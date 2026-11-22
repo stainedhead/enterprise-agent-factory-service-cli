@@ -14,7 +14,13 @@ import (
 // Mask replaces a redacted value.
 const Mask = "[redacted]"
 
-var sensitiveHeaders = map[string]bool{"authorization": true, "cookie": true, "set-cookie": true, "proxy-authorization": true}
+// sensitiveHeaders are masked wherever headers are logged. x-afs-authorization carries the AFS
+// credential to the team's collaboration edge (CLI-25); the edge cookie __Host-afs-collab travels
+// in Cookie and Set-Cookie, so it is masked with them.
+var sensitiveHeaders = map[string]bool{
+	"authorization": true, "cookie": true, "set-cookie": true, "proxy-authorization": true,
+	"x-afs-authorization": true,
+}
 
 // sensitiveFields are JSON member names whose values are never logged, at any depth.
 var sensitiveFields = map[string]bool{
@@ -75,11 +81,26 @@ func JSON(body []byte) string {
 	return string(out)
 }
 
+// secretValue is true for a member whose name ends in "Secret" and whose value is not a reference:
+// collabClientSecretArn names a Secrets Manager secret and is safe to log, a "...Secret" that holds a
+// value is not (CLI-US-31.2). Members whose name ends in "Arn" are references by definition.
+func secretValue(name string, v any) bool {
+	lower := strings.ToLower(name)
+	if strings.HasSuffix(lower, "arn") || !strings.HasSuffix(lower, "secret") {
+		return false
+	}
+	s, ok := v.(string)
+	if ok && strings.HasPrefix(s, "arn:") {
+		return false
+	}
+	return true
+}
+
 func mask(v any) any {
 	switch x := v.(type) {
 	case map[string]any:
 		for k, val := range x {
-			if sensitiveFields[k] {
+			if sensitiveFields[k] || secretValue(k, val) {
 				x[k] = Mask
 				continue
 			}

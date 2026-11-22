@@ -9,6 +9,7 @@ import (
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/apikeys"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/audit"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/budgets"
+	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/collaboration"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/completion"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/configure"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/exec"
@@ -32,7 +33,7 @@ func Register(r *cli.Registry) {
 		teams.Register, members.Register, apikeys.Register, agents.Register, secrets.Register,
 		budgets.Register, reports.Register, models.Register, audit.Register, admin.Register,
 		pools.Register, swarmtemplates.Register, workorders.Register, sso.Register,
-		configure.Register, completion.Register,
+		configure.Register, completion.Register, collaboration.Register,
 	} {
 		f(r)
 	}

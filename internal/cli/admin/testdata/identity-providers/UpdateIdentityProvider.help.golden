@@ -15,6 +15,10 @@ OPTIONS
        --provider-id (string) (required)
        --cli-client-id (string)
        --client-secret-arn (string)
+       --collab-client-id (string)
+          The collaboration (Paperclip edge) client of this provider
+       --collab-client-secret-arn (string)
+          Reference only; needs collabClientId; never returned by ListSignInProviders
        --console-client-id (string)
        --enabled (boolean)
        --groups-claim (string)
@@ -42,6 +46,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
+       Register the collaboration sign-in client (a reference to the secret, never its value)
+
+       afs admin update-identity-provider --provider-id idp_01J9ZQ3ABCDEFGHJKMNPQRSTVW --collab-client-id paperclip-web --collab-client-secret-arn arn:aws:secretsmanager:eu-west-1:111122223333:secret:afs/collab-AbCdEf
+
        Disable a provider
 
        afs admin update-identity-provider --provider-id idp_01J9ZQ3ABCDEFGHJKMNPQRSTVW --no-enabled

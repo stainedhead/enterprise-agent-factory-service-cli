@@ -78,3 +78,51 @@ func TestCreateSwarmTemplateTypedSecrets(t *testing.T) {
 		t.Fatalf("%+v body=%s", r, r.ReqBody)
 	}
 }
+
+const collabSpec = `{"pools":[{"name":"fixers"}],"collaboration":{"templateId":"tpl_01JD2Q3R4S5T6V7W8X9Y0Z0001"}}`
+const tmplDoc = `{"id":"` + tmpl + `","name":"cve","kind":"general","enabled":true,"budgetUsd":"10.00","ttlHours":1,"teardownRule":"at_expiry","spec":` + collabSpec + `,"version":1}`
+
+func createTemplate(t *testing.T, h http.HandlerFunc) clitest.Result {
+	t.Helper()
+	return clitest.Run(t, h, "swarm-templates", "create-swarm-template", "--name", "cve", "--kind", "general", "--budget-usd", "10.00", "--ttl-hours", "1",
+		"--teardown-rule", "at_expiry", "--spec", collabSpec)
+}
+
+// CLI-US-35.1
+func TestCreateSwarmTemplateSpecCollaborationUnchanged(t *testing.T) {
+	r := createTemplate(t, func(w http.ResponseWriter, _ *http.Request) { clitest.Reply(w, 201, tmplDoc) })
+	if r.Code != 0 || !strings.Contains(string(r.ReqBody), `"spec":`+collabSpec) {
+		t.Fatalf("%+v body=%s", r, r.ReqBody)
+	}
+	r = clitest.Run(t, func(w http.ResponseWriter, _ *http.Request) { clitest.Reply(w, 200, tmplDoc) },
+		"swarm-templates", "describe-swarm-template", "--template-id", tmpl, "--output", "json")
+	if r.Code != 0 || !strings.Contains(r.Out, `"collaboration"`) || !strings.Contains(r.Out, `"templateId": "tpl_01JD2Q3R4S5T6V7W8X9Y0Z0001"`) {
+		t.Errorf("%+v", r)
+	}
+}
+
+func TestSwarmTemplateSkeletonHasCollaboration(t *testing.T) {
+	for _, op := range []string{"create-swarm-template", "update-swarm-template"} {
+		r := clitest.Run(t, nil, "swarm-templates", op, "--generate-cli-skeleton")
+		if r.Code != 0 || !strings.Contains(r.Out, `"collaboration"`) || !strings.Contains(r.Out, `"templateId"`) || len(r.Requests) != 0 {
+			t.Errorf("%s: %+v", op, r)
+		}
+	}
+}
+
+// CLI-US-35.2
+func TestSwarmTemplateCollaborationTemplateRefused254(t *testing.T) {
+	r := createTemplate(t, func(w http.ResponseWriter, _ *http.Request) {
+		clitest.Reply(w, 400, `{"code":"ValidationError","message":"invalid spec","requestId":"req_s","details":{"fields":[{"field":"spec.collaboration.templateId","reason":"collaboration_template_without_capability"}]}}`)
+	})
+	if r.Code != 254 || !strings.Contains(r.Err, "(ValidationError) when calling the CreateSwarmTemplate operation") || !strings.Contains(r.Err, "field: spec.collaboration.templateId reason: collaboration_template_without_capability") {
+		t.Errorf("%+v", r)
+	}
+}
+
+func TestSwarmTemplateCollaborationAccessDenied254(t *testing.T) {
+	r := createTemplate(t, clitest.Denied("swarm_templates:write"))
+	if r.Code != 254 || !strings.Contains(r.Err, "(AccessDenied) when calling the CreateSwarmTemplate operation") {
+		t.Errorf("%+v", r)
+	}
+}

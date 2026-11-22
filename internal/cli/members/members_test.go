@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/clitest"
+	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/golden"
 )
 
 func TestCommandsDone(t *testing.T) {
@@ -40,4 +41,36 @@ func TestUpdateMemberReadsVersionFromList(t *testing.T) {
 	if r.Code != 0 || r.Req.Header.Get("If-Match") != `"4"` || string(r.ReqBody) != `{"role":"team_viewer"}` {
 		t.Fatalf("%+v body=%s", r, r.ReqBody)
 	}
+}
+
+// CLI-US-32.1
+func TestAddMemberTeamCollaborator(t *testing.T) {
+	r := clitest.Run(t, func(w http.ResponseWriter, _ *http.Request) {
+		clitest.Reply(w, 201, `{"id":"mem_1","subjectType":"user","email":"bot@example.com","role":"team_collaborator","version":1}`)
+	}, "members", "add-member", "--team-id", "team_1", "--subject-type", "user", "--email", "bot@example.com", "--role", "team_collaborator")
+	if r.Code != 0 || !strings.Contains(string(r.ReqBody), `"role":"team_collaborator"`) {
+		t.Errorf("%d %s %s", r.Code, r.ReqBody, r.Err)
+	}
+	r = clitest.Run(t, nil, "members", "add-member", "--team-id", "team_1", "--subject-type", "user", "--email", "a@example.com", "--role", "team_boss")
+	if r.Code != 252 || len(r.Requests) != 0 {
+		t.Errorf("an unknown role must exit 252: %d", r.Code)
+	}
+	r = clitest.Run(t, func(w http.ResponseWriter, req *http.Request) {
+		if req.Method == "GET" {
+			clitest.Reply(w, 200, `{"items":[{"id":"mem_1","version":1}]}`)
+			return
+		}
+		clitest.Reply(w, 200, `{"id":"mem_1","role":"team_collaborator","version":2}`)
+	}, "members", "update-member", "--team-id", "team_1", "--binding-id", "mem_1", "--role", "team_collaborator")
+	if r.Code != 0 || string(r.ReqBody) != `{"role":"team_collaborator"}` {
+		t.Errorf("update-member: %d %s", r.Code, r.ReqBody)
+	}
+}
+
+func TestMemberRoleEnumHelpGolden(t *testing.T) {
+	r := clitest.Run(t, nil, "members", "add-member", "help")
+	if !strings.Contains(r.Out, "Possible values: team_admin, team_collaborator, team_viewer") {
+		t.Errorf("%q", r.Out)
+	}
+	golden.Check(t, "role-enum.help.golden", r.Out)
 }
