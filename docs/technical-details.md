@@ -47,7 +47,8 @@ pagination merges pages; `wait` polls for `--wait`; `internal/output` renders; e
 
 ## Security controls
 
-- **Transport:** `endpoint_url` must be `https://`; `http://` is accepted only for loopback hosts. Proxies come from
+- **Transport:** `endpoint_url` must be `https://`; `http://` is accepted only for loopback hosts; credentials, a query
+  or a fragment in the URL are refused. Proxies come from
   `HTTPS_PROXY`/`NO_PROXY`; custom roots from `SSL_CERT_FILE`/`SSL_CERT_DIR`.
 - **Redaction:** `--debug` logs pass through `internal/redact`, which masks `Authorization`, `Cookie`,
   `Set-Cookie` and `Proxy-Authorization` headers and secret-bearing JSON fields at any depth.
@@ -55,17 +56,25 @@ pagination merges pages; `wait` polls for `--wait`; `internal/output` renders; e
   value is refused (252).
 - **File modes:** the credentials file and SSO cache must be 0600 or they are refused; files the CLI creates are 0600
   in 0700 directories; the kubeconfig is written atomically (temp file, fsync, rename).
+- **Untrusted service data (ADR-012):** `config.File.Set` refuses control and structural characters, so no value can add
+  lines or sections to `~/.afs/config`; SSO provider fields are validated before they are stored; OIDC discovery must be
+  https (loopback http only), name the configured issuer, and return a Bearer access token; `table`, `text`, errors and
+  prompts pass through `output.Sanitize`; the service's kubeconfig is merged only when it runs `aws eks get-token` and its
+  entries start with `afs`.
 - **One-time secrets:** a created API key's `secretKey` is printed once with a stderr warning; a replay never prints it.
 
 ## Timeouts, retries and waits
 
 `--cli-connect-timeout` (default 30 s) bounds dial and TLS handshake; `--cli-read-timeout` (default 60 s) bounds the wait
 for headers and each body read; `0` disables either. Retries: at most 3 attempts, full-jitter backoff from 200 ms, or
-`Retry-After` when longer. `--wait` polls every 5 s (or `Retry-After`) until `--wait-timeout` (default `10m`).
+`Retry-After` when longer, capped at 20 s or the read timeout when smaller (over the cap the error is returned). Identity
+provider calls share the connect and read timeouts, and `--debug` logs them. `--wait` polls every 5 s (or `Retry-After`,
+capped) until `--wait-timeout` (default `10m`). Pagination stops with exit 255 on a repeated page token.
 
 ## Exit codes
 
-0 success · 130 interrupted · 252 usage/parse error · 254 service error · 255 other (AWS CLI compatible).
+0 success · 130 interrupted · 252 usage/parse error (including a missing operation) · 254 service error · 255 other
+(AWS CLI compatible).
 
 ## Configuration files
 

@@ -66,3 +66,10 @@ It is never used to fill an optional filter, so a list is not narrowed without y
 `--starting-token`, `--cli-input-json`, `--generate-cli-skeleton`, `--debug`, `--no-cli-pager`,
 `--color on|off|auto`, `--cli-connect-timeout`, `--cli-read-timeout`, `--version`. They are accepted anywhere
 on the command line. Timeouts are in seconds; `0` disables one (defaults: connect 30, read 60).
+
+## Values `afs` accepts
+
+`endpoint_url` (from any source) must be an `https` URL without credentials, a query or a fragment; plain `http` is
+accepted only for loopback hosts such as a port-forward. `sso_issuer` follows the same rule. Config values may not
+contain control characters, and `afs` refuses to write a profile value that does. See
+[Single sign-on](sso.md) for what is checked in the service's provider list.

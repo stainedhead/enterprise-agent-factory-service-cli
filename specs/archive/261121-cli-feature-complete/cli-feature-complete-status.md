@@ -22,8 +22,8 @@
 | 8  | Spec Review Fixes               | ✅ Complete | 2026-11-22T00:57:02Z | 2026-11-22T00:57:30Z | 0 |
 | 9  | Implement Review Fixes          | ✅ Complete | 2026-11-22T00:57:30Z | 2026-11-22T01:34:00Z | 37 |
 | 10 | Archive Fixes Spec              | ✅ Complete | 2026-11-22T01:34:00Z | 2026-11-22T01:36:00Z | 2 |
-| 11 | Final Quality Pass              | 🔄 In Progress | 2026-11-22T01:36:00Z | — | — |
-| 12 | Process Analysis Report         | ⬜ Pending | — | — | — |
+| 11 | Final Quality Pass              | ✅ Complete | 2026-11-22T01:36:00Z | 2026-11-22T01:35:27Z | — |
+| 12 | Process Analysis Report         | 🔄 In Progress | 2026-11-22T01:35:27Z | — | — |
 | 13 | Archive Spec                    | ⬜ Pending | — | — | — |
 | 14 | Open Pull Request               | ⬜ Pending | — | — | — |
 
@@ -46,3 +46,4 @@
 - Step 9: all 20 review findings handled in 8 commits (FR-001 alone first, then P1, then P2); FR-010 criterion 2 deferred (D-R9). Gate green, coverage 94.7%.
 - Times for steps 7-9 corrected to the git commit timestamps (git is authoritative).
 - Step 10: review spec archived and nested at specs/archive/261121-cli-feature-complete/261122-cli-feature-complete-auto-review/.
+- Step 11: make gate and make cover green (coverage 94.7%); docs, README and user-docs checked (no links into specs/, every user guide linked from README); specs/ holds only the archive. make vuln could not run here (the sandbox blocks vuln.go.dev), CI runs it.
