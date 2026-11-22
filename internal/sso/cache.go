@@ -91,7 +91,11 @@ func (c *Cache) Save(t *Token) error {
 		_ = os.Remove(name)
 		return err
 	}
-	return os.Rename(name, f.Path)
+	if err := os.Rename(name, f.Path); err != nil {
+		_ = os.Remove(name)
+		return err
+	}
+	return nil
 }
 
 // Delete removes a cached token; a missing one is not an error.

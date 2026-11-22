@@ -344,3 +344,52 @@ func TestValidateEndpointRefusesUserinfoQueryFragment(t *testing.T) {
 		t.Errorf("%v", err)
 	}
 }
+
+func dirEntries(t *testing.T, dir string) []string {
+	t.Helper()
+	es, err := os.ReadDir(dir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var names []string
+	for _, e := range es {
+		names = append(names, e.Name())
+	}
+	return names
+}
+
+// FR-019: a failed save leaves the original untouched and no temporary file behind.
+func TestSaveFailuresLeaveOriginalAndNoTempFile(t *testing.T) {
+	dir := t.TempDir()
+	path := filepath.Join(dir, "config")
+	if err := os.WriteFile(path, []byte("[default]\noutput = json\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	// the directory cannot be created: its parent is a file
+	f := &File{Path: filepath.Join(path, "sub", "config")}
+	_ = f.Set("default", "output", "table")
+	if err := f.Save(); err == nil {
+		t.Fatal("saved under a file")
+	}
+	if b, _ := os.ReadFile(path); string(b) != "[default]\noutput = json\n" { //nolint:gosec // test file
+		t.Errorf("original changed: %q", b)
+	}
+	// the final rename fails: the target is a non-empty directory
+	target := filepath.Join(dir, "target")
+	if err := os.MkdirAll(filepath.Join(target, "keep"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	g := &File{Path: target}
+	_ = g.Set("default", "output", "table")
+	if err := g.Save(); err == nil {
+		t.Fatal("renamed over a directory")
+	}
+	for _, n := range dirEntries(t, dir) {
+		if strings.HasPrefix(n, ".afs-") {
+			t.Errorf("temporary file left behind: %s", n)
+		}
+	}
+	if _, err := os.Stat(filepath.Join(target, "keep")); err != nil {
+		t.Errorf("target damaged: %v", err)
+	}
+}

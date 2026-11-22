@@ -177,7 +177,11 @@ func (f *File) Save() error {
 		_ = os.Remove(name)
 		return err
 	}
-	return os.Rename(name, f.Path)
+	if err := os.Rename(name, f.Path); err != nil {
+		_ = os.Remove(name)
+		return err
+	}
+	return nil
 }
 
 // CheckPrivate refuses a file readable or writable by group or others (CLI-5): the error

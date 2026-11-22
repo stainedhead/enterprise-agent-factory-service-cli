@@ -110,3 +110,88 @@ func TestOperationWithoutReader(t *testing.T) {
 		t.Fatal("no reader must mean no version")
 	}
 }
+
+func repoPath() map[string]string {
+	return map[string]string{"workOrderId": "wo_1", "host": "github.com", "owner": "acme", "repo": "ledger"}
+}
+
+// FR-019: the composite reader of a work order's repositories matches host and owner/repo across pages.
+func TestCompositeReaderFindsRepositoryAcrossPages(t *testing.T) {
+	op := spec.ByID("UpdateWorkOrderRepo")
+	f := &fake{byPath: map[string][]any{
+		"/v1/work-orders/wo_1/repos|":   {`{"items":[{"host":"github.com","repo":"acme/other","version":1}],"nextToken":"n2"}`},
+		"/v1/work-orders/wo_1/repos|n2": {`{"items":[{"host":"gitlab.com","repo":"acme/ledger","version":2},{"host":"github.com","repo":"acme/ledger","version":8}]}`},
+	}}
+	v, ok, err := Version(context.Background(), f, op, repoPath())
+	if err != nil || !ok || v != "8" || len(f.calls) != 2 {
+		t.Fatalf("%q %v %v %v", v, ok, err, f.calls)
+	}
+	// not in the list, an unusable page, and a gone work order send no If-Match
+	for name, f := range map[string]*fake{
+		"absent":   {byPath: map[string][]any{"/v1/work-orders/wo_1/repos|": {`{"items":[]}`}}},
+		"not json": {byPath: map[string][]any{"/v1/work-orders/wo_1/repos|": {`<html>`}}},
+		"404":      {},
+	} {
+		if v, ok, err := Version(context.Background(), f, op, repoPath()); ok || err != nil {
+			t.Errorf("%s: %q %v %v", name, v, ok, err)
+		}
+	}
+}
+
+func TestCompositeReaderDeniedAndFailed(t *testing.T) {
+	op := spec.ByID("UpdateWorkOrderRepo")
+	denied := &client.APIError{Status: 403, Code: "AccessDenied", Message: "not allowed"}
+	f := &fake{byPath: map[string][]any{"/v1/work-orders/wo_1/repos|": {denied}}}
+	_, _, err := Version(context.Background(), f, op, repoPath())
+	var rd *ReadDeniedError
+	if !errors.As(err, &rd) {
+		t.Fatalf("%v", err)
+	}
+	if rd.Error() != denied.Error() || rd.Unwrap() != error(denied) { //nolint:errorlint // comparing the unwrapped value itself
+		t.Errorf("Error/Unwrap: %q", rd.Error())
+	}
+	var ae *client.APIError
+	if !errors.As(err, &ae) || ae.Status != 403 {
+		t.Errorf("does not unwrap to the API error: %v", err)
+	}
+	f = &fake{byPath: map[string][]any{"/v1/work-orders/wo_1/repos|": {&client.APIError{Status: 500, Code: "InternalError"}}}}
+	if _, _, err := Version(context.Background(), f, op, repoPath()); err == nil || errors.As(err, &rd) {
+		t.Errorf("a 500 must be a plain error: %v", err)
+	}
+}
+
+// FR-019: when two items collide on different fields, the id beats the name, and two items with the
+// same id are an error rather than a guess.
+func TestListMatchPrefersIDAndRefusesAmbiguity(t *testing.T) {
+	path := map[string]string{"teamId": "team_1", "stageId": "s1"}
+	op := spec.ByID("DeleteStage")
+	f := &fake{byPath: map[string][]any{"/v1/teams/team_1/stages|": {`{"items":[{"id":"a","name":"s1","version":1},{"id":"s1","version":9}]}`}}}
+	if v, ok, err := Version(context.Background(), f, op, path); err != nil || !ok || v != "9" {
+		t.Fatalf("id must beat name: %q %v %v", v, ok, err)
+	}
+	f = &fake{byPath: map[string][]any{"/v1/teams/team_1/stages|": {`{"items":[{"id":"s1","version":1},{"id":"s1","version":2}]}`}}}
+	if _, ok, err := Version(context.Background(), f, op, path); err == nil || ok || !strings.Contains(err.Error(), "--if-match") {
+		t.Fatalf("ambiguous items must be an error naming --if-match: %v %v", ok, err)
+	}
+	// same name on two items, no id match: ambiguous as well
+	f = &fake{byPath: map[string][]any{"/v1/teams/team_1/stages|": {`{"items":[{"id":"a","name":"s1","version":1},{"id":"b","name":"s1","version":2}]}`}}}
+	if _, ok, err := Version(context.Background(), f, op, path); err == nil || ok {
+		t.Fatalf("ambiguous names: %v %v", ok, err)
+	}
+	// a single name match still works
+	f = &fake{byPath: map[string][]any{"/v1/teams/team_1/stages|": {`{"items":[{"id":"a","name":"s1","version":4},{"id":"b","name":"x","version":2}]}`}}}
+	if v, ok, err := Version(context.Background(), f, op, path); err != nil || !ok || v != "4" {
+		t.Fatalf("name match: %q %v %v", v, ok, err)
+	}
+}
+
+func TestListWithOddPagesSendsNoVersion(t *testing.T) {
+	path := map[string]string{"teamId": "team_1", "stageId": "s1"}
+	op := spec.ByID("DeleteStage")
+	for name, body := range map[string]string{"not json": `<html>`, "no items": `{}`, "item not an object": `{"items":["x",3]}`} {
+		f := &fake{byPath: map[string][]any{"/v1/teams/team_1/stages|": {body}}}
+		if v, ok, err := Version(context.Background(), f, op, path); ok || err != nil {
+			t.Errorf("%s: %q %v %v", name, v, ok, err)
+		}
+	}
+}

@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 	"testing"
@@ -236,4 +238,51 @@ func TestDebugLogsIdPCallsWithoutSecrets(t *testing.T) {
 	if strings.Contains(dbg.String(), "hunter2") || !strings.Contains(dbg.String(), "cancelled") {
 		t.Errorf("%q", dbg.String())
 	}
+}
+
+// FR-019: the token cache survives failed writes the same way.
+func TestCacheSaveFailuresLeaveOriginalAndNoTempFile(t *testing.T) {
+	home := t.TempDir()
+	c := NewCache(home)
+	tok := &Token{Issuer: "https://idp.example.com", ClientID: "c", AccessToken: "old", ExpiresAt: time.Now().Add(time.Hour)}
+	if err := c.Save(tok); err != nil {
+		t.Fatal(err)
+	}
+	p := c.Path(tok.Issuer, tok.ClientID)
+	before, _ := os.ReadFile(p) //nolint:gosec // test file
+	// the final rename fails: the cache path is a directory holding a file
+	other := &Token{Issuer: "https://other.example.com", ClientID: "c", AccessToken: "x"}
+	op := c.Path(other.Issuer, other.ClientID)
+	if err := os.MkdirAll(filepath.Join(op, "keep"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := c.Save(other); err == nil {
+		t.Fatal("renamed over a directory")
+	}
+	for _, e := range mustReadDir(t, c.Dir) {
+		if strings.HasPrefix(e, ".tok-") {
+			t.Errorf("temporary file left behind: %s", e)
+		}
+	}
+	if after, _ := os.ReadFile(p); string(after) != string(before) { //nolint:gosec // test file
+		t.Error("an unrelated cached token changed")
+	}
+	// the cache directory cannot be created: its parent is a file
+	blocked := &Cache{Dir: filepath.Join(p, "sub")}
+	if err := blocked.Save(tok); err == nil {
+		t.Fatal("saved under a file")
+	}
+}
+
+func mustReadDir(t *testing.T, dir string) []string {
+	t.Helper()
+	es, err := os.ReadDir(dir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var out []string
+	for _, e := range es {
+		out = append(out, e.Name())
+	}
+	return out
 }

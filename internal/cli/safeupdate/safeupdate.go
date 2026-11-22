@@ -162,17 +162,12 @@ func Version(ctx context.Context, d Doer, op *spec.Operation, path map[string]st
 			key = "items"
 		}
 		_ = json.Unmarshal(doc[key], &items)
-		for _, it := range items {
-			var m map[string]json.RawMessage
-			if json.Unmarshal(it, &m) != nil {
-				continue
-			}
-			for _, k := range []string{"id", "name", "key", r.Match} {
-				var s string
-				if json.Unmarshal(m[k], &s) == nil && s == want {
-					return versionOf(it)
-				}
-			}
+		it, err := pickItem(items, want, r.Match)
+		if err != nil {
+			return "", false, err
+		}
+		if it != nil {
+			return versionOf(it)
 		}
 		token = ""
 		_ = json.Unmarshal(doc["nextToken"], &token)
@@ -181,6 +176,41 @@ func Version(ctx context.Context, d Doer, op *spec.Operation, path map[string]st
 		}
 	}
 	return "", false, nil
+}
+
+// ErrAmbiguous is returned when more than one item of a list matches the resource.
+var ErrAmbiguous = errors.New("more than one item matches; pass --if-match <version> to name the version")
+
+// pickItem finds the item for want. Fields are tried in the order id, name, key, then the path parameter's
+// name, over the whole page, so an id match beats a name match on another item; two items that match on the
+// same field are ambiguous and no version is guessed.
+func pickItem(items []json.RawMessage, want, match string) (json.RawMessage, error) {
+	keys := []string{"id", "name", "key"}
+	if match != "" && match != "id" && match != "name" && match != "key" {
+		keys = append(keys, match)
+	}
+	for _, k := range keys {
+		var found json.RawMessage
+		n := 0
+		for _, it := range items {
+			var m map[string]json.RawMessage
+			if json.Unmarshal(it, &m) != nil {
+				continue
+			}
+			var s string
+			if json.Unmarshal(m[k], &s) == nil && s == want {
+				found = it
+				n++
+			}
+		}
+		switch {
+		case n == 1:
+			return found, nil
+		case n > 1:
+			return nil, ErrAmbiguous
+		}
+	}
+	return nil, nil
 }
 
 // versionInList pages through the collection of r and returns the version of the item that match accepts.
