@@ -181,6 +181,20 @@ Recorded during M6 (2026-11-22):
 
 M0 needs nothing else from `-restapi` or the root.
 
+## M6-X2 re-pin to the final API contract (2026-11-22)
+
+Done on branch `feat/cli-contract-final-pin`. `-restapi` merged to `main` at `d887609` (no release tag exists; `SOURCE.ref` is `main` and `commit` is the full sha). Snapshot sha256 `3456b9e9...` to `000118d7...`. Diff of the two snapshots and the CLI effect:
+
+| Contract change | Operations | CLI change |
+|---|---|---|
+| `proposalId` and the proposal `id` are `mpp_<ULID>` (was digits) | ApproveModelPriceProposal, RejectModelPriceProposal, ListModelPriceProposals | Examples, tests and goldens use `mpp_01JD2Q3R4S5T6V7W8X9Y0Z0042`; decision `note` max length 500 |
+| Stage `position` range 1 to 50 (was 0 to 100) | CreateStage, UpdateStage | Generated option help (`Range: 1 to 50`); goldens |
+| `maxResults`-style list bounds, `disabledAt` gains `pool`, `database: unavailable`, usage and report measure descriptions, pool pause/resume descriptions | generated | Regenerated only |
+| Swarm template spec `secrets` entries typed `{pool, name, description?, delivery?, target?}`, max 100 | Create/UpdateSwarmTemplate | `spec` is passed through unchanged; `TestCreateSwarmTemplateTypedSecrets` |
+| A workload may omit `If-Match` on UpdateWorkOrderRepo | UpdateWorkOrderRepo | Supersedes the D-C17 stop: when the version read is denied the PATCH is sent without `If-Match` (`safeupdate.ReadOptional`); a refused write still prints the `--if-match` hint |
+
+Regenerated: `internal/spec/operations_gen.go`, `internal/client/gen/types.gen.go`, `user-docs/reference/`. M6-X3 hand-offs remain open.
+
 ## Lessons learned
 
 None yet.

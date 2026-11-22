@@ -1532,8 +1532,8 @@ components:
         name:
           $ref: '#/components/schemas/Name'
         position:
-          maximum: 100
-          minimum: 0
+          maximum: 50
+          minimum: 1
           type: integer
       required:
         - name
@@ -1699,7 +1699,7 @@ components:
     DecidePriceProposalRequest:
       properties:
         note:
-          maxLength: 1000
+          maxLength: 500
           type: string
       type: object
     DeclareExternalSystemRequest:
@@ -1934,10 +1934,12 @@ components:
         description:
           type: string
         disabledAt:
+          description: The level whose switch has the system off; pool applies to the pool views only.
           enum:
             - service
             - team
             - agent
+            - pool
             - null
           readOnly: true
           type:
@@ -2903,6 +2905,7 @@ components:
           $ref: '#/components/schemas/Timestamp'
           readOnly: true
         id:
+          pattern: ^mpp_[0-9A-HJKMNP-TV-Z]{26}$
           readOnly: true
           type: string
         inputUsdPerMtok:
@@ -2910,6 +2913,7 @@ components:
         modelId:
           type: string
         note:
+          maxLength: 500
           type:
             - string
             - "null"
@@ -2924,6 +2928,7 @@ components:
           readOnly: true
           type: string
         version:
+          description: Derived from the status, not a row counter. 1 while the proposal is pending, 2 once it is approved, rejected or superseded. A proposal changes only once, so clients never need to send it (the approve and reject operations take no If-Match).
           readOnly: true
           type: integer
       required:
@@ -3170,7 +3175,7 @@ components:
         rows:
           items:
             additionalProperties: true
-            description: groupBy columns, then measures; traffic rows carry counts and bytes, never a cost
+            description: groupBy columns, then measures. usage rows carry calls, inputTokens, outputTokens and costUsd; costs rows carry estimatedUsd (the gateway's metering) and billedUsd (the AWS Cost and Usage Report, once reconciled); activity rows carry workingSeconds, idleSeconds, offSeconds, impairedSeconds, modelCalls and utilizationPct; traffic rows carry connections, deniedConnections, requests, errors, bytesOut and bytesIn, never a cost. A call is a gateway request whose outcome is ok or error.
             type: object
           type: array
         totals:
@@ -3289,7 +3294,7 @@ components:
           $ref: '#/components/schemas/Timestamp'
           readOnly: true
         version:
-          description: Optimistic-concurrency version; ETag is "<version>"
+          description: Optimistic-concurrency version; ETag is "<version>". A scheduled run records lastRunAt, lastStatus and lastError without changing the version.
           minimum: 1
           readOnly: true
           type: integer
@@ -3962,8 +3967,8 @@ components:
         name:
           $ref: '#/components/schemas/Name'
         position:
-          maximum: 100
-          minimum: 0
+          maximum: 50
+          minimum: 1
           type: integer
         updatedAt:
           $ref: '#/components/schemas/Timestamp'
@@ -4139,8 +4144,33 @@ components:
             type: object
           type: array
         secrets:
+          description: Secrets a remediation team gets, created empty (the team sets the value with PutSecretValue), each bound to one of the template's pools. A template never holds a value.
           items:
+            properties:
+              delivery:
+                default: env
+                enum:
+                  - env
+                  - file
+                type: string
+              description:
+                maxLength: 1000
+                type: string
+              name:
+                description: Unique within the template.
+                pattern: ^[a-z][a-z0-9-]{0,62}$
+                type: string
+              pool:
+                description: A pool the template defines.
+                type: string
+              target:
+                description: An env variable name (^[A-Z_][A-Z0-9_]{0,127}$, default the upper-case name with underscores) or, for file delivery, an absolute path (^/[A-Za-z0-9._/-]{1,255}$). Unique within the pool.
+                type: string
+            required:
+              - pool
+              - name
             type: object
+          maxItems: 100
           type: array
         stages:
           items:
@@ -4637,8 +4667,8 @@ components:
         description:
           type: string
         position:
-          maximum: 100
-          minimum: 0
+          maximum: 50
+          minimum: 1
           type: integer
       type: object
     UpdateSwarmTemplateRequest:
@@ -5172,12 +5202,12 @@ paths:
             application/json:
               example:
                 checks:
-                  database: connection refused
+                  database: unavailable
                   schema: ok
                 status: not ready
               schema:
                 $ref: '#/components/schemas/HealthStatus'
-          description: A dependency is not ready
+          description: A dependency is not ready. Each failing check reports only the word unavailable; the cause is logged with the request id
           headers:
             X-Afs-Contract-Version:
               $ref: '#/components/headers/XAfsContractVersion'
@@ -6489,7 +6519,7 @@ paths:
                     decidedBy: null
                     effectiveFrom: "2026-12-01T00:00:00Z"
                     fetchedAt: "2026-11-21T18:00:00Z"
-                    id: "1042"
+                    id: mpp_01JD2Q3R4S5T6V7W8X9Y0Z0042
                     inputUsdPerMtok: "3.00"
                     modelId: anthropic.claude-sonnet-4-5
                     note: null
@@ -6536,8 +6566,8 @@ paths:
           name: proposalId
           required: true
           schema:
-            example: "1042"
-            pattern: ^[0-9]+$
+            example: mpp_01JD2Q3R4S5T6V7W8X9Y0Z0042
+            pattern: ^mpp_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
         - $ref: '#/components/parameters/XRequestId'
         - $ref: '#/components/parameters/IdempotencyKey'
@@ -6560,7 +6590,7 @@ paths:
                 decidedBy: usr_01JD2Q3R4S5T6V7W8X9Y0Z0001
                 effectiveFrom: "2026-12-01T00:00:00Z"
                 fetchedAt: "2026-11-21T18:00:00Z"
-                id: "1042"
+                id: mpp_01JD2Q3R4S5T6V7W8X9Y0Z0042
                 inputUsdPerMtok: "3.00"
                 modelId: anthropic.claude-sonnet-4-5
                 note: Matches the AWS price list
@@ -6616,8 +6646,8 @@ paths:
           name: proposalId
           required: true
           schema:
-            example: "1042"
-            pattern: ^[0-9]+$
+            example: mpp_01JD2Q3R4S5T6V7W8X9Y0Z0042
+            pattern: ^mpp_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
         - $ref: '#/components/parameters/XRequestId'
         - $ref: '#/components/parameters/IdempotencyKey'
@@ -6640,7 +6670,7 @@ paths:
                 decidedBy: usr_01JD2Q3R4S5T6V7W8X9Y0Z0001
                 effectiveFrom: "2026-12-01T00:00:00Z"
                 fetchedAt: "2026-11-21T18:00:00Z"
-                id: "1042"
+                id: mpp_01JD2Q3R4S5T6V7W8X9Y0Z0042
                 inputUsdPerMtok: "3.00"
                 modelId: anthropic.claude-sonnet-4-5
                 note: Waiting for the contract rate
@@ -15130,7 +15160,7 @@ paths:
                 category: dev_tools
                 createdAt: "2026-11-21T18:00:00Z"
                 description: Source hosting
-                disabledAt: agent
+                disabledAt: pool
                 docsUrl: https://docs.github.com
                 enabled: true
                 endpoints:
@@ -15813,6 +15843,7 @@ paths:
       x-afs-sdk: pools.getStatus()
   /v1/teams/{teamId}/pools/{poolId}:pause:
     post:
+      description: Sets the pool's state to paused, which stops its workers (desired workers 0) and keeps the configured worker count. Emits `pool.updated` (the contract has no pause event). Pausing a paused pool changes nothing and emits nothing.
       operationId: PausePool
       parameters:
         - $ref: '#/components/parameters/TeamId'
@@ -15899,6 +15930,7 @@ paths:
       x-afs-sdk: pools.pause()
   /v1/teams/{teamId}/pools/{poolId}:resume:
     post:
+      description: Sets the pool's state to enabled, which restores the configured worker count. Emits `pool.updated` (the contract has no resume event). Resuming an enabled pool changes nothing and emits nothing.
       operationId: ResumePool
       parameters:
         - $ref: '#/components/parameters/TeamId'
@@ -18413,7 +18445,7 @@ paths:
       x-afs-sdk: workOrders.repos.list()
   /v1/work-orders/{workOrderId}/repos/{host}/{owner}/{repo}:
     patch:
-      description: '{status, prUrl?, prNumber?, detail?}'
+      description: '{status, prUrl?, prNumber?, detail?}. A workload principal (a worker of the assigned team) holds no read of the repository version, so it may omit If-Match: the update then applies to the current version. A version it does send is compared (412 when stale). Every other caller must send If-Match.'
       operationId: UpdateWorkOrderRepo
       parameters:
         - in: path

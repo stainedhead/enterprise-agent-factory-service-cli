@@ -197,11 +197,29 @@ func TestUpdateRepoWithIfMatch(t *testing.T) {
 	}
 }
 
-// D-C17: when the read is denied the API's answer is followed by the --if-match hint (254), and no PATCH is sent.
+// Final contract: a workload that cannot read the repository version omits If-Match; the PATCH is sent
+// without it and applies to the current version.
+func TestUpdateRepoReadDeniedSendsWithoutIfMatch(t *testing.T) {
+	r := clitest.RunWith(t, clitest.Options{Vars: map[string]string{"AFS_API_KEY": "", "AFS_API_TOKEN_FILE": tokenFile(t)}},
+		func(w http.ResponseWriter, q *http.Request) {
+			if q.Method == "GET" {
+				clitest.Reply(w, 403, `{"code":"AccessDenied","message":"no read","requestId":"r1"}`)
+				return
+			}
+			clitest.Reply(w, 200, `{"host":"github.com","repo":"acme/ledger","status":"pr_opened","version":5}`)
+		},
+		"work-orders", "update-repo", "--work-order-id", wo, "--repo", "github.com/acme/ledger", "--status", "pr_opened")
+	if r.Code != 0 || len(r.Requests) != 2 || r.Req.Method != "PATCH" || r.Req.Header.Get("If-Match") != "" {
+		t.Fatalf("%+v", r)
+	}
+}
+
+// D-C17: when the read is denied and the write is refused too, the API's answer is followed by the
+// --if-match hint (254).
 func TestUpdateRepoReadDeniedHint254(t *testing.T) {
 	r := clitest.Run(t, clitest.Denied("work-orders:read"), "work-orders", "update-repo", "--work-order-id", wo,
 		"--repo", "github.com/acme/ledger", "--status", "pr_opened")
-	if r.Code != 254 || len(r.Requests) != 1 || r.Req.Method != "GET" ||
+	if r.Code != 254 || len(r.Requests) != 2 || r.Req.Method != "PATCH" ||
 		!strings.Contains(r.Err, "(AccessDenied)") || !strings.Contains(r.Err, "Pass --if-match <version> (the version printed by the previous update-repo).") {
 		t.Fatalf("%+v", r)
 	}

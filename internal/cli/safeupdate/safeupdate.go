@@ -64,6 +64,11 @@ func getOps() map[string]*spec.Operation {
 	return m
 }
 
+// ReadOptional lists operations whose If-Match the service makes optional for a caller that cannot
+// read the version (a workload principal, final contract): when the version read is denied the
+// CLI sends the write without If-Match, and a rejected write still carries ReadDeniedHint.
+var ReadOptional = map[string]bool{"UpdateWorkOrderRepo": true}
+
 // versionless lists operations whose resource has no version: they send If-Match only when the
 // user passes --if-match, and read nothing first (D-C8).
 var versionless = map[string]bool{"PutTeamModels": true}

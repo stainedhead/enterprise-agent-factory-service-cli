@@ -6,7 +6,7 @@ package spec
 const ContractVersion = "1.1.0"
 
 // SnapshotSHA256 is the checksum of the snapshot these descriptors were generated from.
-const SnapshotSHA256 = "3456b9e9b0f2c138a3c92ded8edde0422dbe76b3198f93d501fbe74343fb2b0e"
+const SnapshotSHA256 = "000118d7128e0ad3ab9172aebd86745645019d656afbdb4419691ca8e16c1403"
 
 var operations = []Operation{
 	{ID: "AddMember", Method: "POST", Path: "/v1/teams/{teamId}/members", Service: "members", Command: "add-member", Summary: "Add member",
@@ -42,11 +42,11 @@ var operations = []Operation{
 	{ID: "ApproveModelPriceProposal", Method: "POST", Path: "/v1/admin/model-price-proposals/{proposalId}:approve", Service: "admin", Command: "approve-price-proposal", Summary: "Approve model price proposal",
 		Permission: "admin:pricing", Scope: "service", Priority: "P1", CSV: false,
 		Params: []Param{
-			{Name: "proposalId", In: "path", Required: true, Desc: "", Example: "1042", Schema: Schema{Type: "string", Pattern: "^[0-9]+$"}},
+			{Name: "proposalId", In: "path", Required: true, Desc: "", Example: "mpp_01JD2Q3R4S5T6V7W8X9Y0Z0042", Schema: Schema{Type: "string", Pattern: "^mpp_[0-9A-HJKMNP-TV-Z]{26}$"}},
 		},
 		IfMatch: IfMatchNone, Idempotent: true, Paginated: false,
 		Body: &Body{Required: true, MediaType: "application/json", SchemaName: "DecidePriceProposalRequest", Fields: []Field{
-			{Name: "note", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", MaxLen: i64(1000)}},
+			{Name: "note", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", MaxLen: i64(500)}},
 		}},
 		Success:  []int{200},
 		Produces: []string{"application/json"},
@@ -366,7 +366,7 @@ var operations = []Operation{
 		Body: &Body{Required: true, MediaType: "application/json", SchemaName: "CreateStageRequest", Fields: []Field{
 			{Name: "description", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string"}},
 			{Name: "name", Required: true, WriteOnly: false, ReadOnly: false, Desc: "Immutable name (team slug, agent, pool, secret)", Schema: Schema{Type: "string", Pattern: "^[a-z][a-z0-9-]{1,38}[a-z0-9]$", Ref: "Name"}},
-			{Name: "position", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "integer", Min: f64(0), Max: f64(100)}},
+			{Name: "position", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "integer", Min: f64(1), Max: f64(50)}},
 		}},
 		Success:  []int{201},
 		Produces: []string{"application/json"},
@@ -1671,11 +1671,11 @@ var operations = []Operation{
 	{ID: "RejectModelPriceProposal", Method: "POST", Path: "/v1/admin/model-price-proposals/{proposalId}:reject", Service: "admin", Command: "reject-price-proposal", Summary: "Reject model price proposal",
 		Permission: "admin:pricing", Scope: "service", Priority: "P1", CSV: false,
 		Params: []Param{
-			{Name: "proposalId", In: "path", Required: true, Desc: "", Example: "1042", Schema: Schema{Type: "string", Pattern: "^[0-9]+$"}},
+			{Name: "proposalId", In: "path", Required: true, Desc: "", Example: "mpp_01JD2Q3R4S5T6V7W8X9Y0Z0042", Schema: Schema{Type: "string", Pattern: "^mpp_[0-9A-HJKMNP-TV-Z]{26}$"}},
 		},
 		IfMatch: IfMatchNone, Idempotent: true, Paginated: false,
 		Body: &Body{Required: true, MediaType: "application/json", SchemaName: "DecidePriceProposalRequest", Fields: []Field{
-			{Name: "note", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", MaxLen: i64(1000)}},
+			{Name: "note", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", MaxLen: i64(500)}},
 		}},
 		Success:  []int{200},
 		Produces: []string{"application/json"},
@@ -2015,7 +2015,7 @@ var operations = []Operation{
 		IfMatch: IfMatchRequired, Idempotent: false, Paginated: false,
 		Body: &Body{Required: true, MediaType: "application/json", SchemaName: "UpdateStageRequest", Fields: []Field{
 			{Name: "description", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string"}},
-			{Name: "position", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "integer", Min: f64(0), Max: f64(100)}},
+			{Name: "position", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "integer", Min: f64(1), Max: f64(50)}},
 		}},
 		Success:  []int{200},
 		Produces: []string{"application/json"},

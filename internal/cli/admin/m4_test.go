@@ -59,7 +59,7 @@ func TestPutServiceTagModeAndAllowedValues(t *testing.T) {
 	}
 }
 
-const proposals = `{"items":[{"id":"1042","modelId":"anthropic.claude-sonnet-4-5","effectiveFrom":"2026-12-01T00:00:00Z","inputUsdPerMtok":"3.00","outputUsdPerMtok":"15.00","status":"pending","version":1},{"id":"1043","modelId":"anthropic.claude-haiku-4-5","effectiveFrom":"2026-12-01T00:00:00Z","inputUsdPerMtok":"1.00","outputUsdPerMtok":"5.00","status":"pending","version":1}]}`
+const proposals = `{"items":[{"id":"mpp_01JD2Q3R4S5T6V7W8X9Y0Z0042","modelId":"anthropic.claude-sonnet-4-5","effectiveFrom":"2026-12-01T00:00:00Z","inputUsdPerMtok":"3.00","outputUsdPerMtok":"15.00","status":"pending","version":1},{"id":"mpp_01JD2Q3R4S5T6V7W8X9Y0Z0043","modelId":"anthropic.claude-haiku-4-5","effectiveFrom":"2026-12-01T00:00:00Z","inputUsdPerMtok":"1.00","outputUsdPerMtok":"5.00","status":"pending","version":1}]}`
 
 // CLI-US-15.1: one table row per pending proposal.
 func TestListPriceProposalsTableGolden(t *testing.T) {
@@ -74,24 +74,24 @@ func TestListPriceProposalsTableGolden(t *testing.T) {
 // CLI-US-15.2: approve and reject send the note and print the decided proposal.
 func TestApprovePriceProposal(t *testing.T) {
 	r := clitest.Run(t, func(w http.ResponseWriter, _ *http.Request) {
-		clitest.Reply(w, 200, `{"id":"1042","status":"approved","note":"ok","decidedBy":"usr_1","version":2}`)
-	}, "admin", "approve-price-proposal", "--proposal-id", "1042", "--note", "ok", "--output", "table")
-	if r.Code != 0 || r.Req.URL.Path != "/v1/admin/model-price-proposals/1042:approve" || string(r.ReqBody) != `{"note":"ok"}` || !strings.Contains(r.Out, "approved") {
+		clitest.Reply(w, 200, `{"id":"mpp_01JD2Q3R4S5T6V7W8X9Y0Z0042","status":"approved","note":"ok","decidedBy":"usr_1","version":2}`)
+	}, "admin", "approve-price-proposal", "--proposal-id", "mpp_01JD2Q3R4S5T6V7W8X9Y0Z0042", "--note", "ok", "--output", "table")
+	if r.Code != 0 || r.Req.URL.Path != "/v1/admin/model-price-proposals/mpp_01JD2Q3R4S5T6V7W8X9Y0Z0042:approve" || string(r.ReqBody) != `{"note":"ok"}` || !strings.Contains(r.Out, "approved") {
 		t.Fatalf("%+v body=%s", r, r.ReqBody)
 	}
 }
 
 func TestRejectPriceProposal(t *testing.T) {
 	r := clitest.Run(t, func(w http.ResponseWriter, _ *http.Request) {
-		clitest.Reply(w, 200, `{"id":"1042","status":"rejected","note":"too high","version":2}`)
-	}, "admin", "reject-price-proposal", "--proposal-id", "1042", "--note", "too high", "--output", "table")
-	if r.Code != 0 || r.Req.URL.Path != "/v1/admin/model-price-proposals/1042:reject" || !strings.Contains(r.Out, "rejected") {
+		clitest.Reply(w, 200, `{"id":"mpp_01JD2Q3R4S5T6V7W8X9Y0Z0042","status":"rejected","note":"too high","version":2}`)
+	}, "admin", "reject-price-proposal", "--proposal-id", "mpp_01JD2Q3R4S5T6V7W8X9Y0Z0042", "--note", "too high", "--output", "table")
+	if r.Code != 0 || r.Req.URL.Path != "/v1/admin/model-price-proposals/mpp_01JD2Q3R4S5T6V7W8X9Y0Z0042:reject" || !strings.Contains(r.Out, "rejected") {
 		t.Fatalf("%+v", r)
 	}
 }
 
 func TestApproveAccessDeniedTeamAdmin(t *testing.T) {
-	r := clitest.Run(t, clitest.Denied("admin:pricing"), "admin", "approve-price-proposal", "--proposal-id", "1042")
+	r := clitest.Run(t, clitest.Denied("admin:pricing"), "admin", "approve-price-proposal", "--proposal-id", "mpp_01JD2Q3R4S5T6V7W8X9Y0Z0042")
 	if r.Code != 254 || !strings.Contains(r.Err, "(AccessDenied) when calling the ApproveModelPriceProposal operation") {
 		t.Fatalf("%+v", r)
 	}

@@ -160,7 +160,7 @@ GLOBAL OPTIONS
 EXAMPLES
        Approve a proposal
 
-       afs admin approve-price-proposal --proposal-id 1042 --note "Matches the AWS price list"
+       afs admin approve-price-proposal --proposal-id mpp_01JD2Q3R4S5T6V7W8X9Y0Z0042 --note "Matches the AWS price list"
 
 ```
 
@@ -1969,7 +1969,7 @@ GLOBAL OPTIONS
 EXAMPLES
        Reject a proposal
 
-       afs admin reject-price-proposal --proposal-id 1042 --note "Waiting for the contract rate"
+       afs admin reject-price-proposal --proposal-id mpp_01JD2Q3R4S5T6V7W8X9Y0Z0042 --note "Waiting for the contract rate"
 
 ```
 
