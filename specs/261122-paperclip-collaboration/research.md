@@ -35,7 +35,10 @@ PC-CLI-OQ5 (both surfaces required on put) is decided: required. All others reso
 
 ## Findings
 
-(filled during step 3)
+- The generic pipeline (enum checks, boolean `--no-` flags, generation-aware wait, If-Match readers, CSV, pagination) already satisfied most of the PRD; the work was overrides, columns, hints, one new local command and tests.
+- The pinned snapshot (99bfcfc) lacks the collaboration report kind and groupBy dimensions and the `collab.*` setting keys (RCF-5, RCF-6); open enums keep the CLI free of server lists.
+- `invoke-api` needs no new dependency: Go's `http.Transport.RoundTrip` gives no-redirect and no-cookie behaviour by construction.
+- A free-form object (`spec`) has no nested properties in the generated descriptors, so skeleton members are supplied per override (D-21).
 
 ## References
 

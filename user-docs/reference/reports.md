@@ -52,7 +52,7 @@ OPTIONS
        --query-json (JSON)
           Stored report query parameters
        --report (string) (required)
-          Possible values: usage, costs, activity, traffic
+          Known values: usage, costs, activity, traffic
        --idempotency-key (string)
           Idempotency key (default: a new ULID per invocation).
        --range (string)
@@ -63,7 +63,7 @@ OPTIONS
        --to (string)
           End of the report window (RFC 3339).
        --group-by (string)
-          Comma-separated dimensions: team, agent, model, system, day, hour, pool, tag:<key>.
+          Comma-separated dimensions: team, agent, model, system, day, hour, pool, tag:<key>; surface, reason and person for the collaboration report.
        --tag (list)
           Filter by a tag, key=value (several allowed); sent as tag.<key>=<value>.
 
@@ -219,7 +219,7 @@ SYNOPSIS
 
 OPTIONS
        --kind (string) (required)
-          Possible values: usage, costs, activity, traffic
+          Known values: usage, costs, activity, traffic
        --from (string)
        --to (string)
        --range (string)
@@ -260,6 +260,10 @@ EXAMPLES
 
        afs reports get-service-report --kind costs --range mtd --group-by team
 
+       Paperclip use by team (platform roles)
+
+       afs reports get-service-report --kind collaboration --group-by team
+
 ```
 
 ## get-team-report
@@ -282,7 +286,7 @@ OPTIONS
        --team-id (string) (required)
           Team id; taken from the path only
        --kind (string) (required)
-          Possible values: usage, costs, activity, traffic
+          Known values: usage, costs, activity, traffic
        --from (string)
        --to (string)
        --range (string)
@@ -324,6 +328,10 @@ EXAMPLES
        Usage by agent and model, filtered by tag
 
        afs reports get-team-report --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --kind usage --range 7d --group-by agent,model --tag project=checkout
+
+       Who used Paperclip in the last week, by day and person
+
+       afs reports get-team-report --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --kind collaboration --range 7d --group-by day,person
 
 ```
 
@@ -409,7 +417,7 @@ OPTIONS
        --to (string)
           End of the report window (RFC 3339).
        --group-by (string)
-          Comma-separated dimensions: team, agent, model, system, day, hour, pool, tag:<key>.
+          Comma-separated dimensions: team, agent, model, system, day, hour, pool, tag:<key>; surface, reason and person for the collaboration report.
        --tag (list)
           Filter by a tag, key=value (several allowed); sent as tag.<key>=<value>.
 

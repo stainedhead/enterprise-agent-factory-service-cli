@@ -102,6 +102,25 @@ afs collaboration invoke-api --team-id team_... --method POST --path /api/issues
 - **`--debug`** logs the method, host, path (no query string), status and timing. Credentials, bodies and
   cookies are never logged.
 
+## Who uses Paperclip: the collaboration report
+
+```bash
+afs reports get-team-report --team-id team_... --kind collaboration --range 7d --group-by day,person
+afs reports get-service-report --kind collaboration --group-by team     # platform roles
+afs reports get-team-report --team-id team_... --kind collaboration --group-by surface,reason --output csv
+```
+
+Besides the usual dimensions, `--group-by` accepts `surface` (web UI or REST API), `reason` (why requests were
+denied) and `person`. The report counts sign-ins, people, requests, denied requests and secret detections; it
+never contains what people wrote. It cannot be scheduled (`create-report-schedule --report collaboration` is
+refused by the API).
+
+## Swarm templates
+
+A swarm template's spec file may carry `"collaboration": {"templateId": "tpl_..."}` to give the remediation team a
+collaboration agent. `afs swarm-templates create-swarm-template --generate-cli-skeleton` shows the member. The
+template must be enabled and carry the `paperclip` capability, or the API refuses it. Pools never connect to Paperclip.
+
 ## Roles
 
 Give a person or a pipeline the **collaborator** role with `--role team_collaborator` on

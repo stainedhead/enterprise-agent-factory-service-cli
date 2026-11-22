@@ -44,7 +44,11 @@ func Run(ctx context.Context, inv *cli.Invocation) int {
 	env, cmd, g := inv.Env, inv.Cmd, inv.P.G
 	op := cmd.Op
 	if g.GenerateSkeleton {
-		raw, _ := json.Marshal(Skeleton(op))
+		sk := Skeleton(op)
+		for k, v := range cmd.SkeletonMembers {
+			sk.Set(k, v)
+		}
+		raw, _ := json.Marshal(sk)
 		if err := output.WriteJSON(env.Stdout, raw); err != nil {
 			return cli.ExitOther
 		}

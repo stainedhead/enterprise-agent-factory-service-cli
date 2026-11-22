@@ -112,7 +112,7 @@ func TestDoneOperationsHaveGoldens(t *testing.T) {
 }
 
 // wantMilestone is raised only by a milestone's exit task (PC-CLI-D9: M7 to M10).
-const wantMilestone = 9
+const wantMilestone = 10
 
 // M6-X1, CLI-US-7: the feature is complete: all 187 operations have a command, none is held back
 // by the milestone gate, and none lacks an example or columns.
@@ -139,5 +139,27 @@ func TestFeatureCompleteStrict(t *testing.T) {
 	}
 	if p := reg.Pending(); len(p) != 0 {
 		t.Errorf("pending: %v", p)
+	}
+}
+
+// CLI-US-25.11, 34.1: invoke-api is a local command: it has no operation and no operationId, it is listed
+// in the service, and the command-table comparison exempts it by name.
+func TestOperationTableExemptsLocalCommands(t *testing.T) {
+	reg, err := services.NewRegistry()
+	if err != nil {
+		t.Fatal(err)
+	}
+	c, ok := reg.Lookup("collaboration", "invoke-api")
+	if !ok || c.Op != nil || c.Local == nil {
+		t.Fatalf("invoke-api: %+v", c)
+	}
+	n := 0
+	for _, c := range reg.All() {
+		if c.Op == nil && c.Service == "collaboration" {
+			n++
+		}
+	}
+	if n != 1 {
+		t.Errorf("the collaboration service has %d local commands, want 1", n)
 	}
 }

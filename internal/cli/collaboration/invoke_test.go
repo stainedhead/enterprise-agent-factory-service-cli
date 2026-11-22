@@ -664,3 +664,19 @@ func TestNoSecretValueInAnyCollaborationOutput(t *testing.T) {
 		}
 	}
 }
+
+// CLI-US-33.2: a query string never reaches the --debug lines of invoke-api, whatever it carries.
+func TestInvokeAPIDebugDropsQuery(t *testing.T) {
+	e := newEdge(t, ok(`{}`))
+	r := clitest.Run(t, api(e.URL), invokeArgs("--path", "/api/x?code=CODE-SENTINEL&token=TOK-SENTINEL&key=KEY-SENTINEL&secret=SEC-SENTINEL&page=2", "--paperclip-key-file", keyFile(t, pcKey, 0o600), "--debug")...)
+	if r.Code != 0 || e.last.Load().URL.RawQuery == "" {
+		t.Fatalf("%d %q", r.Code, r.Err)
+	}
+	for _, s := range []string{"SENTINEL", "page=2", "?"} {
+		for _, l := range strings.Split(r.Err, "\n") {
+			if strings.Contains(l, "collab") && strings.Contains(l, s) {
+				t.Errorf("collab debug line has %q: %s", s, l)
+			}
+		}
+	}
+}

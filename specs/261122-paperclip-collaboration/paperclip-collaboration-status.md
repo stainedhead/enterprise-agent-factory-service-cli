@@ -35,4 +35,4 @@
 | M7 | C1: re-pin, collaboration describe/put/links/connect/disconnect, agents, secrets, teams, members, api-keys, redaction | Complete | see git log |
 | M8 | C2: admin endpoints, identity provider collab client, settings, notice | Complete | see git log |
 | M9 | C3: invoke-api, rotate keys, managed hints | Complete | see git log |
-| M10 | C4: swarm templates, reports, docs, skills, traceability, release | Pending | - |
+| M10 | C4: swarm templates, reports, docs, skills, traceability, release | Complete | see git log |

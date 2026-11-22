@@ -13,7 +13,7 @@ SYNOPSIS
 
 OPTIONS
        --kind (string) (required)
-          Possible values: usage, costs, activity, traffic
+          Known values: usage, costs, activity, traffic
        --from (string)
        --to (string)
        --range (string)
@@ -53,4 +53,8 @@ EXAMPLES
        Service-wide costs by team this month (platform roles)
 
        afs reports get-service-report --kind costs --range mtd --group-by team
+
+       Paperclip use by team (platform roles)
+
+       afs reports get-service-report --kind collaboration --group-by team
 

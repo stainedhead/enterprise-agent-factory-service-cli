@@ -107,7 +107,7 @@ API from a script, so that I publish only what we use.
   `provider_without_collab_client`, and `registrationMode managed` with `collaboration_agent_not_ready`.
   Each reason also prints the hint of PC-CLI-D6 (for example `Ask a service admin to set collab.base_domain
   (afs admin put-setting).`). Switching a surface off is never refused client-side. *Proven by*
-  `collaboration.TestPutCollaborationValidationFieldsPrinted`, `collaboration.TestCollaborationReasonHints`.
+  `collaboration.TestPutCollaborationValidationFieldsPrinted`, `exec.TestCollaborationReasonHints`.
 - 24.8 `AccessDenied`: a viewer or collaborator running `put-collaboration` gets the API's `403`, printed as
   `An error occurred (AccessDenied) when calling the PutTeamCollaboration operation: …` with
   `Required permission: collaboration:manage` and exit 254; a viewer running `describe-collaboration` is
@@ -428,13 +428,13 @@ contract has them, with help, examples, columns, goldens and docs.
   without a command or with a name that differs from the contract's `CLI` column:
   `collaboration describe-collaboration`, `put-collaboration`, `list-collaboration-links`, `connect-agent`,
   `disconnect-agent`, `rotate-collaboration-keys`, and `admin list-collaboration-endpoints`. `invoke-api` is
-  listed as a local command (not an operation). *Proven by* `services.TestOperationTableMatchesSnapshot`,
+  listed as a local command (not an operation). *Proven by* `services.TestCommandTableMatchesSnapshot`,
   `services.TestOperationTableExemptsLocalCommands`.
 - 34.2 Every new operation has at least one example, table columns (or `Dynamic`), a golden help page, a golden
   table and text rendering, and an `AccessDenied` test; `CurrentMilestone` is raised only by the exit task of the
   milestone (PC-CLI-D9: M7 to M10), and `Pending()` is empty at each. *Proven by*
-  `cli.TestPendingEmptyAtCurrentMilestone`, `services.TestEveryOperationHasAccessDeniedTest`,
-  `help.TestEveryOperationHasExample`.
+  `services.TestDoneUpToCurrentMilestone`, `services.TestDoneOperationsHaveGoldens`,
+  `help.TestOperationHelpShowsOptionsPermissionAndExample`.
 - 34.3 The `If-Match` reader table and the `--wait` table are checked against the snapshot (ADR-008): `PutTeamCollaboration`
   has a reader (`GetTeamCollaboration`, same path) and a wait entry (the resource's own `status`); the
   two new POST actions have neither. A test fails on any divergence. *Proven by*
@@ -443,14 +443,14 @@ contract has them, with help, examples, columns, goldens and docs.
   contract v1.3.0 (PC-CLI-D10), then `make generate`, `make docs`; `afs --version` prints `contract/1.3`; the
   snapshot test (`api/snapshot_test.go`) passes on the new sha256. Between the re-pin and the last milestone the
   operations of later milestones exist as generated commands but are not "done" (`milestoneOf`). *Proven by*
-  `api.TestSnapshotMatchesSource`, `buildinfo.TestVersionPrintsContractMinor`.
+  `api.TestSnapshotChecksumMatchesSource`, `buildinfo.TestVersionPrintsContractMinor`.
 - 34.5 Documentation: `user-docs/collaboration.md` (new: connect to Paperclip, the public endpoint, `invoke-api`
   with a team key, secrets in Paperclip, troubleshooting by edge error); `user-docs/agents-and-secrets.md`,
   `teams-and-members.md` and `delivery-and-admin.md` updated; `user-docs/reference/` regenerated
   (`collaboration.md`, and the changed `agents.md`, `secrets.md`, `admin.md`, `members.md`, `api-keys.md`,
   `reports.md`, `teams.md`); none of it links into `specs/`. The root repository's
   `skills/enterprise-agent-factory-service-cli.md` gains the new commands in the same cycle (CLI-14 workflow
-  step 6). *Proven by* `docs.TestReferenceUpToDate` (`make docs` leaves no diff).
+  step 6). *Proven by* `docs.TestDocgenMatchesHelp` (`make docs` leaves no diff).
 
 **CLI-US-35 · Swarm templates may carry a collaboration agent.** *(refines US-33 and PC-D29; `SwarmTemplate.spec.collaboration`)*
 The swarm template commands take the spec as a file (`--spec file://…`), so no new option is needed.
@@ -477,7 +477,7 @@ The swarm template commands take the spec as a file (`--spec file://…`), so no
 
 ### 4.1 Acceptance for the Paperclip cross-cutting requirements
 
-- **Hints (PC-CLI-D6).** One table-driven test, `collaboration.TestCollaborationReasonHints`, walks every
+- **Hints (PC-CLI-D6).** One table-driven test, `exec.TestCollaborationReasonHints`, walks every
   `details.reason` value of API contract §4.4b, §4.4c, §4.6 (`collaboration_agent_exists`,
   `collaboration_agent_missing`, `team_suspended`, `managed_secret`, `master_key_not_rotatable`, `reserved_name`,
   `managed_registration`, `surface_disabled`, `no_team_role`, `permission_required`, `ambiguous_credentials`,
@@ -496,9 +496,9 @@ The swarm template commands take the spec as a file (`--spec file://…`), so no
   stderr, `--debug` output and the recorded request line and arguments of the process.
 - **Exit codes.** A table in `collaboration` tests pins exit 0, 130, 252, 254 and 255 for each path above: usage and
   client-side validation 252, any API or edge answer 254, local credential, file, origin and network problems 255.
-- **Compatibility (CLI-27).** `api.TestSnapshotMatchesSource` and `make contract-check`, `make generate-check` pass on
+- **Compatibility (CLI-27).** `api.TestSnapshotChecksumMatchesSource` and `make contract-check`, `make generate-check` pass on
   the re-pinned snapshot; a snapshot from before the re-pin (contract 1.2) still builds in a test fixture so the
-  1.2 to 1.3 notice (D47) is proven; `services.TestOperationTableMatchesSnapshot` fails when a v1.3.0 operation is
+  1.2 to 1.3 notice (D47) is proven; `services.TestCommandTableMatchesSnapshot` fails when a v1.3.0 operation is
   removed from the snapshot.
 
 ## 5. Dependencies

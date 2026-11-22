@@ -74,6 +74,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
+       Give the remediation team a collaboration agent (spec.collaboration.templateId in the spec file)
+
+       afs swarm-templates create-swarm-template --name cve-collab --kind cve_remediation --budget-usd 250.00 --ttl-hours 72 --teardown-rule at_work_complete --spec file://swarm-spec-with-collaboration.json
+
        Create a CVE remediation template from a spec file
 
        afs swarm-templates create-swarm-template --name cve-remediation --kind cve_remediation --budget-usd 250.00 --ttl-hours 72 --teardown-rule at_work_complete --spec file://swarm-spec.json

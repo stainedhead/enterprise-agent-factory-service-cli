@@ -25,7 +25,7 @@ var queryOptions = []cli.Option{
 	{Flag: "--range", In: "local", Kind: cli.String, Enum: []string{"24h", "7d", "30d", "90d", "mtd"}, Desc: "Report range: 24h, 7d, 30d, 90d or mtd."},
 	{Flag: "--from", In: "local", Kind: cli.String, Desc: "Start of the report window (RFC 3339); use with --to instead of --range."},
 	{Flag: "--to", In: "local", Kind: cli.String, Desc: "End of the report window (RFC 3339)."},
-	{Flag: "--group-by", In: "local", Kind: cli.String, Desc: "Comma-separated dimensions: team, agent, model, system, day, hour, pool, tag:<key>."},
+	{Flag: "--group-by", In: "local", Kind: cli.String, Desc: "Comma-separated dimensions: team, agent, model, system, day, hour, pool, tag:<key>; surface, reason and person for the collaboration report."},
 	tagOption,
 }
 

@@ -4,7 +4,7 @@
 
 ## Progress summary
 
-25/38 tasks complete (M7, M8, M9 done).
+35/38 tasks complete (M7 to M10 done; X1 to X3 continue).
 
 ## M7 (C1)
 
@@ -42,12 +42,12 @@
 
 ## M10 (C4)
 
-- [ ] P10.1 swarm-templates passthrough tests and skeleton (FR-014)
-- [ ] P10.2 pools no collaboration option test
-- [ ] P10.3 Reports kind collaboration, group-by (FR-015)
-- [ ] P10.4 Traceability test over CLI-US-24..34
-- [ ] P10.5 Docs complete, CHANGELOG, `user-docs`
-- [ ] P10.6 `CurrentMilestone` 10; gate; commit; push
+- [x] P10.1 swarm-templates passthrough tests and skeleton (FR-014)
+- [x] P10.2 pools no collaboration option test
+- [x] P10.3 Reports kind collaboration, group-by (FR-015)
+- [x] P10.4 Traceability test over CLI-US-24..34
+- [x] P10.5 Docs complete, CHANGELOG, `user-docs`
+- [x] P10.6 `CurrentMilestone` 10; gate; commit; push
 
 ## Cross-cutting
 

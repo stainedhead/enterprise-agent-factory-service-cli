@@ -11,7 +11,7 @@
 | 2 | Research and data modeling | Complete |
 | 3 | Architecture and planning | Complete |
 | 4 | Task breakdown | Complete |
-| 5 | Implementation (M7 to M10) | In Progress: M7, M8, M9 done (25/38 tasks) |
+| 5 | Implementation (M7 to M10) | Complete: M7 to M10 (35/38 tasks; cross-cutting X1 to X3 continue) |
 | 6 | Completion and archival | Not Started |
 
 ## Phase 0 checklist
@@ -30,3 +30,4 @@ None.
 - 2026-11-22: M7 complete: re-pin to 99bfcfc, redaction, hints, collaboration service (5 operations), agents, secrets, teams, members, api-keys, docs first cut; gate green, coverage 94.7%.
 - 2026-11-22: M8 complete: admin list-collaboration-endpoints, identity provider collab client flags (ARN shape), collab.* settings pass-through (open enum), profile key collab_base_domain; gate green, coverage 94.8%.
 - 2026-11-22: M9 complete: `collaboration invoke-api` (origin safety, key reader, credential chain, workload refusal, no redirects or cookies, narrow retries, edge error mapping, redacted debug), `rotate-collaboration-keys`, did-you-mean for unknown options; sentinel tests green.
+- 2026-11-22: M10 complete: collaboration report (open kind, surface/reason/person), swarm template spec.collaboration skeleton, pools guard, traceability test over CLI-US-24..35, CHANGELOG v1.0.1, docs; CurrentMilestone 10.
