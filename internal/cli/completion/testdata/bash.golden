@@ -1,0 +1,48 @@
+# bash completion for afs; load with: source <(afs completion bash)
+_afs() {
+  local cur prev svc op i w
+  COMPREPLY=()
+  cur="${COMP_WORDS[COMP_CWORD]}"
+  prev="${COMP_WORDS[COMP_CWORD-1]}"
+  svc=""; op=""
+  for ((i=1; i<COMP_CWORD; i++)); do
+    w="${COMP_WORDS[i]}"
+    case "$w" in
+      -*) ;;
+      *) case "${COMP_WORDS[i-1]}" in
+           --profile|--endpoint-url|--output|--query|--max-items|--page-size|--starting-token|--cli-input-json|--color|--cli-connect-timeout|--cli-read-timeout) ;;
+           *) if [ -z "$svc" ]; then svc="$w"; elif [ -z "$op" ]; then op="$w"; fi ;;
+         esac ;;
+    esac
+  done
+  case "$svc $op $prev" in
+    "audit list-audit-events --outcome") COMPREPLY=($(compgen -W "allowed denied failed" -- "$cur")); return ;;
+    "teams list-teams --kind") COMPREPLY=($(compgen -W "persistent ephemeral" -- "$cur")); return ;;
+    "teams list-teams --state") COMPREPLY=($(compgen -W "active suspended deleting deleted" -- "$cur")); return ;;
+    *" --output") COMPREPLY=($(compgen -W "json yaml table text csv" -- "$cur")); return ;;
+    *" --color") COMPREPLY=($(compgen -W "on off auto" -- "$cur")); return ;;
+  esac
+  if [[ "$cur" == -* ]]; then
+    case "$svc $op" in
+      "audit list-audit-events") COMPREPLY=($(compgen -W "--action --actor-id --from --outcome --resource-id --resource-kind --team-id --to --profile --endpoint-url --output --query --no-paginate --max-items --page-size --starting-token --cli-input-json --generate-cli-skeleton --debug --no-cli-pager --color --cli-connect-timeout --cli-read-timeout --version" -- "$cur")) ;;
+      "completion bash") COMPREPLY=($(compgen -W " --profile --endpoint-url --output --query --no-paginate --max-items --page-size --starting-token --cli-input-json --generate-cli-skeleton --debug --no-cli-pager --color --cli-connect-timeout --cli-read-timeout --version" -- "$cur")) ;;
+      "completion zsh") COMPREPLY=($(compgen -W " --profile --endpoint-url --output --query --no-paginate --max-items --page-size --starting-token --cli-input-json --generate-cli-skeleton --debug --no-cli-pager --color --cli-connect-timeout --cli-read-timeout --version" -- "$cur")) ;;
+      "completion fish") COMPREPLY=($(compgen -W " --profile --endpoint-url --output --query --no-paginate --max-items --page-size --starting-token --cli-input-json --generate-cli-skeleton --debug --no-cli-pager --color --cli-connect-timeout --cli-read-timeout --version" -- "$cur")) ;;
+      "completion powershell") COMPREPLY=($(compgen -W " --profile --endpoint-url --output --query --no-paginate --max-items --page-size --starting-token --cli-input-json --generate-cli-skeleton --debug --no-cli-pager --color --cli-connect-timeout --cli-read-timeout --version" -- "$cur")) ;;
+      "teams list-teams") COMPREPLY=($(compgen -W "--kind --state --profile --endpoint-url --output --query --no-paginate --max-items --page-size --starting-token --cli-input-json --generate-cli-skeleton --debug --no-cli-pager --color --cli-connect-timeout --cli-read-timeout --version" -- "$cur")) ;;
+      "teams suspend-team") COMPREPLY=($(compgen -W "--idempotency-key --team-id --profile --endpoint-url --output --query --no-paginate --max-items --page-size --starting-token --cli-input-json --generate-cli-skeleton --debug --no-cli-pager --color --cli-connect-timeout --cli-read-timeout --version" -- "$cur")) ;;
+      *) COMPREPLY=($(compgen -W "--profile --endpoint-url --output --query --no-paginate --max-items --page-size --starting-token --cli-input-json --generate-cli-skeleton --debug --no-cli-pager --color --cli-connect-timeout --cli-read-timeout --version" -- "$cur")) ;;
+    esac
+    return
+  fi
+  if [ -z "$svc" ]; then
+    COMPREPLY=($(compgen -W "audit completion teams" -- "$cur"))
+  elif [ -z "$op" ]; then
+    case "$svc" in
+      audit) COMPREPLY=($(compgen -W "list-audit-events" -- "$cur")) ;;
+      completion) COMPREPLY=($(compgen -W "bash zsh fish powershell" -- "$cur")) ;;
+      teams) COMPREPLY=($(compgen -W "list-teams suspend-team" -- "$cur")) ;;
+    esac
+  fi
+}
+complete -F _afs afs

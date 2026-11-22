@@ -1,0 +1,9 @@
+Field     Value
+Id        log_01JD2Q3R4S5T6V7W8X9Y0Z0001
+Name      team-cloudwatch
+Kind      cloudwatch
+Enabled   true
+Phase     Deleting
+Config    {"logGroup":"/afs/payments","region":"us-east-1"}
+SecretId  
+Version   2

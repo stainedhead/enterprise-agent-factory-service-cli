@@ -3,3 +3,30 @@ module github.com/stainedhead/enterprise-agent-factory-service-cli
 go 1.27.0
 
 toolchain go1.27.4
+
+require (
+	github.com/jmespath-community/go-jmespath v1.1.1
+	github.com/oapi-codegen/runtime v1.9.1
+	github.com/oklog/ulid/v2 v2.1.2
+	github.com/pb33f/libopenapi v0.44.0
+	github.com/pb33f/libopenapi-validator v0.16.5
+	golang.org/x/term v0.47.0
+	gopkg.in/yaml.v3 v3.0.1
+)
+
+require (
+	github.com/bahlo/generic-list-go v0.2.0 // indirect
+	github.com/basgys/goxml2json v1.1.1-0.20231018121955-e66ee54ceaad // indirect
+	github.com/buger/jsonparser v1.6.1 // indirect
+	github.com/go-openapi/jsonpointer v1.0.2 // indirect
+	github.com/google/uuid v1.6.0 // indirect
+	github.com/pb33f/go-yaml v0.2.0 // indirect
+	github.com/pb33f/jsonpath v0.8.5 // indirect
+	github.com/pb33f/jsonschema/v6 v6.0.3 // indirect
+	github.com/pb33f/ordered-map/v2 v2.3.2 // indirect
+	golang.org/x/exp v0.0.0-20230314191032-db074128a8ec // indirect
+	golang.org/x/net v0.62.0 // indirect
+	golang.org/x/sync v0.25.0 // indirect
+	golang.org/x/sys v0.49.0 // indirect
+	golang.org/x/text v0.44.0 // indirect
+)

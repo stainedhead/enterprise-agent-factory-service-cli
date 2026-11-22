@@ -1,0 +1,1 @@
+41	true	[{"action":"update","fields":[{"field":"modelId","from":"anthropic.claude-haiku-4-5","to":"anthropic.claude-sonnet-4-5"}],"reason":null,"resourceId":"agt_01JD2Q3R4S5T6V7W8X9Y0Z0001","resourceKind":"agents"}]	

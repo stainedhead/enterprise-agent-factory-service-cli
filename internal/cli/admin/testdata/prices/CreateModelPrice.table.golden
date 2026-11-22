@@ -1,0 +1,8 @@
+Field             Value
+Model             anthropic.claude-sonnet-4-5
+EffectiveFrom     2026-11-01T00:00:00Z
+InputUsdPerMtok   3.00
+OutputUsdPerMtok  15.00
+CacheRead         0.30
+CacheWrite        3.75
+Source            manual

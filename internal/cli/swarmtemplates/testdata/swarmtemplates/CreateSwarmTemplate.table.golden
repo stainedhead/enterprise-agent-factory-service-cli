@@ -1,0 +1,9 @@
+Field         Value
+Id            swt_01JD2Q3R4S5T6V7W8X9Y0Z0001
+Name          cve-remediation
+Kind          cve_remediation
+Enabled       true
+BudgetUsd     500.00
+TtlHours      336
+TeardownRule  at_work_complete
+Version       1

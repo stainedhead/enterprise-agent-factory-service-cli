@@ -1,0 +1,82 @@
+# GoReleaser v2 (D-C14, CLI-15). Local check: goreleaser release --snapshot --clean --skip=sign,publish,notarize
+version: 2
+project_name: afs
+
+before:
+  hooks:
+    - go mod tidy
+    - make contract-check
+
+builds:
+  - id: afs
+    main: ./cmd/afs
+    binary: afs
+    env:
+      - CGO_ENABLED=0
+    goos: [darwin, linux, windows]
+    goarch: [amd64, arm64]
+    ignore:
+      - goos: windows
+        goarch: arm64
+    flags: [-trimpath]
+    ldflags:
+      - -s -w
+      - -X github.com/stainedhead/enterprise-agent-factory-service-cli/internal/buildinfo.Version={{ .Version }}
+      - -X github.com/stainedhead/enterprise-agent-factory-service-cli/internal/buildinfo.Commit={{ .ShortCommit }}
+      - -X github.com/stainedhead/enterprise-agent-factory-service-cli/internal/buildinfo.Date={{ .Date }}
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+archives:
+  - id: afs
+    formats: [tar.gz]
+    name_template: "afs_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    files:
+      - LICENSE*
+      - README.md
+
+checksum:
+  name_template: checksums.txt
+  algorithm: sha256
+
+# Keyless cosign signature of checksums.txt, from the release workflow's OIDC identity.
+# Skipped locally with --skip=sign.
+signs:
+  - id: checksums
+    cmd: cosign
+    artifacts: checksum
+    signature: "${artifact}.sig"
+    certificate: "${artifact}.pem"
+    args:
+      - sign-blob
+      - --yes
+      - --output-signature=${signature}
+      - --output-certificate=${certificate}
+      - ${artifact}
+
+# macOS notarization (quill) and Windows Authenticode (osslsigncode) run as workflow steps
+# when their secrets exist (OQ-S1); see .github/workflows/release.yml and user-docs/install.md.
+
+# The Homebrew cask is pushed to the tap (stainedhead/homebrew-tap, `brew install stainedhead/tap/afs`)
+# only when the tap repository and token exist.
+homebrew_casks:
+  - name: afs
+    binaries: [afs]
+    repository:
+      owner: stainedhead
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+    skip_upload: "{{ if .Env.HOMEBREW_TAP_TOKEN }}false{{ else }}true{{ end }}"
+    homepage: https://github.com/stainedhead/enterprise-agent-factory-service-cli
+    description: The afs command line for the Enterprise Agent Factory Service
+
+changelog:
+  sort: asc
+  filters:
+    exclude: ["^docs:", "^test:"]
+
+release:
+  draft: true
+  prerelease: auto

@@ -1,0 +1,96 @@
+AFS TEAMS CREATE-TEAM
+
+NAME
+       teams create-team
+
+DESCRIPTION
+       Create team
+
+       Required permission: teams:create
+
+SYNOPSIS
+       afs teams create-team [options]
+
+OPTIONS
+       --allowed-aws-accounts (list)
+          Needs teams:set-aws-accounts on update
+       --budget (JSON)
+          Lifetime budget of an ephemeral team, created with it
+       --cost-center (string)
+       --description (string)
+       --display-name (string) (required)
+       --expires-at (string)
+          RFC 3339 UTC with Z
+       --first-admin (JSON) (required)
+          The first team-admin binding: a user (userId or email) or an IdP group
+       --identity-provider-id (string)
+       --isolation-tier (string)
+          Guardrail field: needs teams:set-guardrails
+          Possible values: shared, dedicated
+       --kind (string) (required)
+          Immutable after create
+          Possible values: persistent, ephemeral
+       --max-budget-usd (string) (required)
+          Guardrail field: needs teams:set-guardrails
+       --may-add-external-systems (boolean)
+          Guardrail field: needs teams:set-guardrails
+       --may-manage-aws-accounts (boolean)
+          Guardrail field: needs teams:set-guardrails
+       --models (list)
+          Model ids enabled for the team
+       --owner-email (string)
+       --quotas (JSON)
+       --slug (string) (required)
+          Immutable name (team slug, agent, pool, secret)
+       --tags (key=value pairs or JSON)
+          Team-owned tag values, including required service tags
+       --teardown-rule (string)
+          Possible values: at_expiry, at_cap_or_expiry, at_work_complete
+       --viewer-kubectl (boolean)
+          Guardrail field: needs teams:set-guardrails
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+       --budget-usd (string)
+          Lifetime budget of an ephemeral team in USD, for example 500.00 (required with --kind ephemeral).
+       --budget-thresholds (list)
+          Percent-of-budget alert thresholds of an ephemeral team, for example 50 80 100.
+       --wait (boolean)
+          Wait until the resource is ready (or gone, for a delete).
+       --wait-timeout (duration)
+          How long --wait waits, for example 90s or 10m (default 10m).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       Create an ephemeral team with a lifetime budget
+
+       afs teams create-team --slug cve-sprint --display-name "CVE sprint" --kind ephemeral --max-budget-usd 500.00 --first-admin '{"email":"ada@example.com"}' --expires-at 2026-12-31T00:00:00Z --teardown-rule at_cap_or_expiry --budget-usd 500.00 --budget-thresholds 50 80 100
+
+       Create a persistent team and wait until it is ready
+
+       afs teams create-team --slug payments --display-name "Payments" --kind persistent --max-budget-usd 500.00 --first-admin '{"email":"ada@example.com"}' --tags project=checkout cost-center=CC-1001 --wait
+
+       Create a team from a file
+
+       afs teams create-team --cli-input-json file://team.json
+
+       Print the input skeleton
+
+       afs teams create-team --generate-cli-skeleton
+

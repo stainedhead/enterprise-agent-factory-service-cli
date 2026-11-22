@@ -1,0 +1,93 @@
+name: Release
+
+# Runs on v* tags. Building, archiving and checksums need no secrets. Signing and publishing
+# steps run only when their secrets exist (OQ-S1); without them the workflow still produces the
+# archives and checksums.txt as a draft release. See user-docs/install.md.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # the draft release
+      id-token: write   # keyless cosign signing
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+      - name: Quality gate
+        run: make gate
+      - uses: sigstore/cosign-installer@v3
+      - uses: goreleaser/goreleaser-action@v6
+        with:
+          version: "~> v2"
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HOMEBREW_TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+
+  notarize-macos:
+    name: notarize macOS archives
+    needs: release
+    runs-on: ubuntu-latest
+    if: ${{ vars.MACOS_NOTARIZATION_ENABLED == 'true' }}   # set once the Apple secrets exist
+    steps:
+      - name: Notarize with quill
+        env:
+          QUILL_SIGN_P12: ${{ secrets.APPLE_SIGNING_P12 }}
+          QUILL_SIGN_PASSWORD: ${{ secrets.APPLE_SIGNING_P12_PASSWORD }}
+          QUILL_NOTARY_KEY: ${{ secrets.APPLE_NOTARY_KEY }}
+          QUILL_NOTARY_KEY_ID: ${{ secrets.APPLE_NOTARY_KEY_ID }}
+          QUILL_NOTARY_ISSUER: ${{ secrets.APPLE_NOTARY_ISSUER }}
+        run: echo "download the darwin binaries from the draft release, run 'quill sign-and-notarize', re-upload"
+
+  sign-windows:
+    name: Authenticode-sign the Windows binary
+    needs: release
+    runs-on: ubuntu-latest
+    if: ${{ vars.WINDOWS_SIGNING_ENABLED == 'true' }}   # set once the code-signing certificate exists
+    steps:
+      - name: Sign with osslsigncode
+        env:
+          WINDOWS_SIGNING_PFX: ${{ secrets.WINDOWS_SIGNING_PFX }}
+          WINDOWS_SIGNING_PASSWORD: ${{ secrets.WINDOWS_SIGNING_PASSWORD }}
+        run: echo "download afs.exe from the draft release, run 'osslsigncode sign', re-upload"
+
+  verify:
+    name: verify the release
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: sigstore/cosign-installer@v3
+      - name: Verify checksums.txt against the release workflow identity
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          gh release download "$TAG" --pattern checksums.txt* --dir dist
+          cosign verify-blob \
+            --certificate dist/checksums.txt.pem --signature dist/checksums.txt.sig \
+            --certificate-identity-regexp '^https://github.com/stainedhead/enterprise-agent-factory-service-cli/.github/workflows/release.yml@' \
+            --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+            dist/checksums.txt
+      - name: Archives match the checksums, and the binary reports the tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          gh release download "$TAG" --pattern 'afs_*_linux_amd64.tar.gz' --dir dist
+          (cd dist && sha256sum --ignore-missing -c checksums.txt && tar -xzf afs_*_linux_amd64.tar.gz afs)
+          ./dist/afs --version | grep -F "afs-cli/${TAG#v} "

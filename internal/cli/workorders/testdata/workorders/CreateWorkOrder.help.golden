@@ -1,0 +1,56 @@
+AFS WORK-ORDERS CREATE-WORK-ORDER
+
+NAME
+       work-orders create-work-order
+
+DESCRIPTION
+       Create work order
+
+       Required permission: work-orders:write
+
+SYNOPSIS
+       afs work-orders create-work-order [options]
+
+OPTIONS
+       --budget-usd (string)
+          USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+       --cve-id (string)
+       --kind (string)
+          Possible values: cve_remediation, general
+       --repos (list) (required)
+       --severity (string) (required)
+          Possible values: critical, high, medium, low
+       --sla-due-at (string) (required)
+          RFC 3339 UTC with Z
+       --template-id (string) (required)
+       --title (string) (required)
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       Open a CVE work order; the team configuration decides who owns the first repository
+
+       afs work-orders create-work-order --template-id swt_01J9ZQ3ABCDEFGHJKMNPQRSTVW --title "Patch CVE-2026-1234" --kind cve_remediation --cve-id CVE-2026-1234 --severity critical --sla-due-at 2026-12-01T00:00:00Z --repos github.com/acme/ledger github.com/acme/billing=team_01J9ZQ3ABCDEFGHJKMNPQRSTVX
+
+       Name an owning contact by email; retry safely with an idempotency key
+
+       afs work-orders create-work-order --template-id swt_01J9ZQ3ABCDEFGHJKMNPQRSTVW --title "Upgrade the runtime" --severity medium --sla-due-at 2026-12-15T00:00:00Z --repos github.com/acme/ledger=ledger-team@example.com --idempotency-key upgrade-2026-12
+

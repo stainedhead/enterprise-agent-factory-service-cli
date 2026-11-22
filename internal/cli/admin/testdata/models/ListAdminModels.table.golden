@@ -1,0 +1,3 @@
+Id                           Provi…  Name     Enabled  Context  MaxOut…  Version
+anthropic.claude-sonnet-4-5  anthr…  Claude…  true     200000   64000    1
+anthropic.claude-haiku-4-5   anthr…  Claude…  false    200000   64000    1

@@ -1,0 +1,9 @@
+Field     Value
+Id        pool_01JD2Q3R4S5T6V7W8X9Y0Z0001
+Name      fixer
+Stage     stg_01JD2Q3R4S5T6V7W8X9Y0Z0001
+Template  claude-code
+Workers   10
+State     enabled
+Phase     Ready
+Version   1

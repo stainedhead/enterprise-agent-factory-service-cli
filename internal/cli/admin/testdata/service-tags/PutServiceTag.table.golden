@@ -1,0 +1,8 @@
+Field          Value
+Key            cost-center
+Mode           required
+Value          
+DefaultValue   
+AllowedValues  
+Description    Finance cost center
+Version        1

@@ -1,0 +1,13 @@
+Key                                  Value  Type     Default  Version
+secrets.path_prefix                  afs    string   afs      1
+pricing.price_list_sync              true   boolean  true     1
+billing.variance_alert_pct           5      integer  5        1
+api.idempotency_key_ttl_seconds      3600   integer  3600     1
+teams.ephemeral_max_days             90     integer  90       1
+work_orders.sla_warning_hours        48     integer  48       1
+billing.tag_activation_acknowledged  false  boolean  false    1
+work_orders.notification_channel_id         string            1
+reports.idle_cpu_millicores          50     integer  50       1
+egress.denied_spike_threshold        20     integer  20       1
+gateway.reservation_ttl_seconds      900    integer  900      1
+api.cors_origins                            array             1

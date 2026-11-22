@@ -1,0 +1,15 @@
+AFS SSO
+
+DESCRIPTION
+       Sign in with single sign-on and show who you are.
+
+SYNOPSIS
+       afs sso <operation> [parameters]
+
+OPERATIONS
+       get-caller-identity            Get me
+       list-providers                 List sign in providers
+       login                          Sign in with single sign-on (device authorization) and cache the session.
+       logout                         Delete the cached single sign-on session of the profile.
+
+To see help text for an operation, run: afs sso <operation> help

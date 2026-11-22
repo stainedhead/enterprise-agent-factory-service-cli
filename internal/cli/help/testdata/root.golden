@@ -1,0 +1,45 @@
+AFS(1)
+
+NAME
+       afs - the Enterprise Agent Factory Service command line
+
+SYNOPSIS
+       afs [options] <service> <operation> [parameters]
+
+SERVICES
+       admin            Service administration: settings, templates, tags, channels, storage and security operators.
+       agents           Create and operate agents, their identities, configuration and external systems.
+       api-keys         Create and revoke API keys.
+       audit            Search and export the audit log.
+       budgets          Set budgets and read spend.
+       completion       Print a shell completion script.
+       configure        Create and edit profiles in ~/.afs/config.
+       members          Manage team members and role bindings.
+       models           List and manage models and their prices.
+       pools            Manage worker pools.
+       reports          Run and schedule reports.
+       secrets          Manage secret references and write secret values.
+       sso              Sign in with single sign-on and show who you are.
+       swarm-templates  Manage swarm templates.
+       teams            Create and manage teams.
+       work-orders      Manage work orders and their repositories.
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+To see help text for a service, run: afs <service> help

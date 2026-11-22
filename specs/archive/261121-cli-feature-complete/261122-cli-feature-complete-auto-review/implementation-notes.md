@@ -1,0 +1,13 @@
+# Implementation notes: cli-feature-complete-auto-review
+
+Decisions are recorded as D-R<n>; J authorized the whole flow, so open questions were decided here.
+
+- D-R1 (OQ-1): control characters render as `\xNN` (`\u0085` style for C1), keeping values diagnosable.
+- D-R2 (OQ-2): `Retry-After` cap is 20 s, or the read timeout when smaller.
+- D-R4 (OQ-4): the safe-update notice follows the source PRD (after the write).
+- D-R6 (FR-001/002): provider and issuer validation lives in `config` (`ValidateIssuer`, `ValidateIdentifier`, `IsLoopbackHost`); `config.File.Set` is the single INI choke point and returns an error. An https token or device endpoint on a different host than the issuer is accepted (the PRD requires scheme and issuer equality, not same host).
+- D-R7 (FR-003): `output.Sanitize` covers `table`, `text`, error output (via a sanitizing writer in `ReportError`), the device prompt and the provider list. `json` keeps the service's bytes (ADR-005). JSON encoders escape C0 but not DEL or C1, so those two classes can still pass through `--output json`; this is the contract's stable-bytes rule and is documented in `user-docs/output.md`.
+- D-R8 (FR-004): a resumed CSV run (--starting-token) omits the header so appended pages form one file; the next token is Sanitized on stderr.
+- D-R9 (FR-010, partial deferral): criterion 1 (empty, '.' and '..' path values are usage errors before any request) is done. Criterion 2 (check path ids against the snapshot's pattern) is deferred: about sixty existing command tests and fixtures use abbreviated ids (team_1, idp_1); rewriting them changes goldens and column widths for little security gain, because PathEscape already encodes every other special character and the service validates ids. Revisit when the fixtures move to ULID-shaped ids.
+- D-R3 (FR-014): the AFS prefix is 'afs' (names 'afs' and 'afs-<team>'), taken from the snapshot's GetTeamKubeconfig example; users without an exec plugin and env names outside AWS_* are refused as well. D-R5 (FR-017): option (a). The generated types stay and are referenced at compile time by the packages that read response members by hand (ADR-014). Removal of the package was attempted but the sandbox refused the recursive git rm; (a) satisfies the PRD criteria and is recorded as the decision. OQ-6: completion scripts are static and never invoke bare afs, so exit 252 for a bare afs breaks none.
+- D-R10 (FR-019): list-match now prefers id, then name, key, the path parameter, over the whole page; two items matching on the same field are ErrAmbiguous (255, names --if-match). Found by the collision test. Save failures in config.File and sso.Cache leaked their temporary file when the final rename failed; both now remove it.

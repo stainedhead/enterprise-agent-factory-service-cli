@@ -1,0 +1,47 @@
+AFS WORK-ORDERS UPDATE-WORK-ORDER
+
+NAME
+       work-orders update-work-order
+
+DESCRIPTION
+       Update work order
+
+       Required permission: work-orders:write
+
+SYNOPSIS
+       afs work-orders update-work-order [options]
+
+OPTIONS
+       --work-order-id (string) (required)
+       --add-repos (list)
+       --budget-usd (string)
+          USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+       --sla-due-at (string)
+          RFC 3339 UTC with Z
+       --title (string)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       Move the SLA date and add a repository
+
+       afs work-orders update-work-order --work-order-id wo_01J9ZQ3ABCDEFGHJKMNPQRSTVW --sla-due-at 2026-12-20T00:00:00Z --add-repos github.com/acme/gateway=team_01J9ZQ3ABCDEFGHJKMNPQRSTVX
+

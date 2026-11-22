@@ -1,0 +1,9 @@
+Field     Value
+Id        wo_01JD2Q3R4S5T6V7W8X9Y0Z0001
+Title     OpenSSL remote code execution
+Severity  critical
+Status    cancelled
+SlaState  on_track
+SlaDueAt  2026-11-28T18:00:00Z
+TeamId    team_01JD2Q3R4S5T6V7W8X9Y0Z0002
+Version   2
