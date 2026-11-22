@@ -59,9 +59,11 @@ signs:
 # macOS notarization (quill) and Windows Authenticode (osslsigncode) run as workflow steps
 # when their secrets exist (OQ-S1); see .github/workflows/release.yml and user-docs/install.md.
 
-# The Homebrew formula is pushed to the tap only when the tap repository and token exist.
-brews:
+# The Homebrew cask is pushed to the tap (stainedhead/homebrew-tap, `brew install stainedhead/tap/afs`)
+# only when the tap repository and token exist.
+homebrew_casks:
   - name: afs
+    binaries: [afs]
     repository:
       owner: stainedhead
       name: homebrew-tap
@@ -69,8 +71,6 @@ brews:
     skip_upload: "{{ if .Env.HOMEBREW_TAP_TOKEN }}false{{ else }}true{{ end }}"
     homepage: https://github.com/stainedhead/enterprise-agent-factory-service-cli
     description: The afs command line for the Enterprise Agent Factory Service
-    test: |
-      assert_match "afs-cli/#{version}", shell_output("#{bin}/afs --version")
 
 changelog:
   sort: asc
