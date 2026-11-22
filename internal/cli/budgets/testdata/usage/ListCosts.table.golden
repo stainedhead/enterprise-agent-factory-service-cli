@@ -1,0 +1,3 @@
+Day         Source       Agent            Pool  Model             CostUsd  Calls
+2026-11-20  gateway      agt_01JD2Q3R4S…        anthropic.claud…  25.35    1200
+2026-11-20  cur_bedrock                                           25.41    0

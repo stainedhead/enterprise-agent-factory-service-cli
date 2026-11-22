@@ -1,0 +1,3 @@
+Id              Provider   Name             Enabled  Context  MaxOutput  Version
+anthropic.cla…  anthropic  Claude Sonnet …  true     200000   64000      1
+anthropic.cla…  anthropic  Claude Haiku 4…  false    200000   64000      1

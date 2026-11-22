@@ -449,7 +449,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin create-model help
+       Add a model
+
+       afs admin create-model --id anthropic.claude-sonnet-4-5 --provider anthropic --display-name "Claude Sonnet 4.5" --context-window 200000 --max-output-tokens 64000
+
 ```
 
 ## create-model-price
@@ -502,7 +505,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin create-model-price help
+       Record a new price (USD per million tokens, as strings)
+
+       afs admin create-model-price --model-id anthropic.claude-sonnet-4-5 --effective-from 2026-12-01T00:00:00Z --input-usd-per-mtok 3.00 --output-usd-per-mtok 15.00 --cache-read-usd-per-mtok 0.30 --cache-write-usd-per-mtok 3.75
+
 ```
 
 ## create-notification-channel
@@ -1358,7 +1364,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin list-model-prices help
+       Show a model's price history
+
+       afs admin list-model-prices --model-id anthropic.claude-sonnet-4-5
+
 ```
 
 ## list-models
@@ -1396,7 +1405,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin list-models help
+       List every model, enabled or not
+
+       afs admin list-models
+
 ```
 
 ## list-notification-channels
@@ -2076,7 +2088,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin update-model help
+       Disable a model
+
+       afs admin update-model --model-id anthropic.claude-sonnet-4-5 --no-enabled
+
 ```
 
 ## update-notification-channel

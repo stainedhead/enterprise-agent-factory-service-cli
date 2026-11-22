@@ -156,6 +156,8 @@ OPTIONS
        --system-id (string)
        --pool-id (string)
           Ephemeral teams only
+       --tag (list)
+          Filter by a tag, key=value (several allowed); sent as tag.<key>=<value>.
 
 GLOBAL OPTIONS
        --profile                Use a specific profile from ~/.afs/config.
@@ -176,7 +178,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs reports get-agent-report help
+       One agent's activity over 24 hours
+
+       afs reports get-agent-report --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --kind activity --range 24h
+
 ```
 
 ## get-service-report
@@ -212,6 +217,8 @@ OPTIONS
        --system-id (string)
        --pool-id (string)
           Ephemeral teams only
+       --tag (list)
+          Filter by a tag, key=value (several allowed); sent as tag.<key>=<value>.
 
 GLOBAL OPTIONS
        --profile                Use a specific profile from ~/.afs/config.
@@ -232,7 +239,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs reports get-service-report help
+       Service-wide costs by team this month (platform roles)
+
+       afs reports get-service-report --kind costs --range mtd --group-by team
+
 ```
 
 ## get-team-report
@@ -268,6 +278,8 @@ OPTIONS
        --system-id (string)
        --pool-id (string)
           Ephemeral teams only
+       --tag (list)
+          Filter by a tag, key=value (several allowed); sent as tag.<key>=<value>.
 
 GLOBAL OPTIONS
        --profile                Use a specific profile from ~/.afs/config.
@@ -288,7 +300,14 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs reports get-team-report help
+       Cost by project tag over 30 days, as CSV
+
+       afs reports get-team-report --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --kind costs --range 30d --group-by tag:project --output csv
+
+       Usage by agent and model, filtered by tag
+
+       afs reports get-team-report --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --kind usage --range 7d --group-by agent,model --tag project=checkout
+
 ```
 
 ## list-report-schedules

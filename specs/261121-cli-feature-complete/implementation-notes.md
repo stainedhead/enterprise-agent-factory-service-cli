@@ -126,6 +126,14 @@ Recorded during M2 (2026-11-22):
 - **Help for sensitive options** now also says that leaving the option out prompts on a terminal.
 - `Secret` columns show names and metadata only (never `secretsManagerArn`).
 
+Recorded during M3 (2026-11-22):
+
+- **Contract re-sync M1-0..M3-0: no change.** `-restapi` `feat/restapi-feature-complete` advanced from `bfe8b05` to `e5f1c5c` during the run; `api/openapi.yaml` at both is byte-identical to the pinned snapshot (sha256 `3456b9e9...`).
+- **`Override.Dynamic`**: report and usage rows are shaped by `--group-by`, so their table columns follow the response (generic columns). `Pending()` and `clitest` accept `Dynamic` in place of a column list. The generic column picker spreads a usage row's `key` object into `key.<member>` columns.
+- **Report flags** (`reports/flags.go`): `--tag key=value` (list option, each pair sent as `tag.<key>=<value>`, CLI-CD-4), `--range` with `--from`/`--to` is 252, `--group-by` is checked against the contract's pattern client-side (252), `--tag` without `=` is 252.
+- **`test-notification-channel`** follows D-C20 through an `After` hook; the `DeliveryFailed` code is CLI-side.
+- Notification channel path parameter `id` is `--channel-id`.
+
 ## Contract deltas found in M0
 
 | Id | Delta | CLI behaviour |

@@ -38,12 +38,16 @@ type Override struct {
 	Build    BuildFunc
 	Validate ValidateFunc
 	Columns  []output.Column
-	After    AfterFunc
+	// Dynamic says the table columns follow the response (report rows are shaped by --group-by),
+	// so the operation is done without a fixed column list.
+	Dynamic bool
+	After   AfterFunc
 }
 
 // merge folds b into a; two registrations setting Columns, After or the same Rename key conflict.
 func (a *Override) merge(b Override) error {
 	a.Examples = append(a.Examples, b.Examples...)
+	a.Dynamic = a.Dynamic || b.Dynamic
 	a.Extra = append(a.Extra, b.Extra...)
 	for k, v := range b.Rename {
 		if _, dup := a.Rename[k]; dup {

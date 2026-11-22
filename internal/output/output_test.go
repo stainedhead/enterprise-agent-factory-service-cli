@@ -381,3 +381,19 @@ func TestNumbersToFloatEdges(t *testing.T) {
 		t.Errorf("inf = %v", got)
 	}
 }
+
+// CLI-13: a usage row's group key is spread into key.<member> columns.
+func TestGenericColumnsSpreadUsageKey(t *testing.T) {
+	tree, err := ParseTree([]byte(`{"rows":[{"calls":2,"key":{"agent":"agt_1","model":"m1"},"other":{"x":1}}]}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var b strings.Builder
+	if err := WriteTable(&b, tree, Options{}); err != nil {
+		t.Fatal(err)
+	}
+	head := strings.SplitN(b.String(), "\n", 2)[0]
+	if !strings.Contains(head, "key.agent") || !strings.Contains(head, "key.model") || strings.Contains(head, "other") {
+		t.Errorf("header %q", head)
+	}
+}

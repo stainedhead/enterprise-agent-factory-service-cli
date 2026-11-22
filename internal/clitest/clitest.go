@@ -330,13 +330,19 @@ func CheckOperations(t *testing.T, group string, ids ...string) {
 					t.Errorf("example %q does not call %s", ex.Command, cmd.Key())
 					continue
 				}
+				for i, w := range words { // a shell redirect or pipe is not part of the command
+					if w == ">" || w == "|" {
+						words = words[:i]
+						break
+					}
+				}
 				if _, _, err := reg.Parse(words[1:]); err != nil {
 					t.Errorf("example %q does not parse: %v", ex.Command, err)
 				}
 			}
 			status, body := ExampleResponse(t, op)
 			hasBody := len(body) > 0 && status != 204
-			if hasBody && len(cmd.Columns) == 0 {
+			if hasBody && len(cmd.Columns) == 0 && !cmd.Dynamic {
 				t.Fatalf("%s has no table columns", id)
 			}
 			in := InputJSON(t, op, t.TempDir())

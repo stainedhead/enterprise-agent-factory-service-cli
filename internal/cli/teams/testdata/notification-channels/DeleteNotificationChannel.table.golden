@@ -1,0 +1,10 @@
+Field          Value
+Id             nch_01JD2Q3R4S5T6V7W8X9Y0Z0001
+Name           payments-slack
+Kind           slack
+Enabled        true
+Phase          Deleting
+Healthy        true
+LastDelivered  2026-11-21T18:00:00Z
+LastError      
+Version        2

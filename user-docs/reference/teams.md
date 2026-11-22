@@ -159,7 +159,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams create-notification-channel help
+       Create a Slack channel and wait until it is ready
+
+       afs teams create-notification-channel --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name payments-slack --kind slack --config '{"channel":"#payments-alerts"}' --event-types 'budget.*' 'agent.status_changed' --secret-id sec_01JD2Q3R4S5T6V7W8X9Y0Z0003 --wait
+
 ```
 
 ## create-team
@@ -475,7 +478,7 @@ SYNOPSIS
 OPTIONS
        --team-id (string) (required)
           Team id; taken from the path only
-       --id (string) (required)
+       --channel-id (string) (required)
        --if-match (string)
           Apply only if the resource is at this version (safe update).
        --wait (boolean)
@@ -502,7 +505,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams delete-notification-channel help
+       Delete a channel and wait until it is gone
+
+       afs teams delete-notification-channel --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --channel-id nch_01JD2Q3R4S5T6V7W8X9Y0Z0001 --wait
+
 ```
 
 ## delete-team
@@ -618,7 +624,7 @@ SYNOPSIS
 OPTIONS
        --team-id (string) (required)
           Team id; taken from the path only
-       --id (string) (required)
+       --channel-id (string) (required)
 
 GLOBAL OPTIONS
        --profile                Use a specific profile from ~/.afs/config.
@@ -639,7 +645,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams describe-notification-channel help
+       Show a channel's configuration and delivery status (never a credential)
+
+       afs teams describe-notification-channel --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --channel-id nch_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
 ```
 
 ## describe-revision
@@ -1076,7 +1085,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams list-notification-channels help
+       List the team's notification channels
+
+       afs teams list-notification-channels --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
 ```
 
 ## list-revisions
@@ -1624,7 +1636,7 @@ SYNOPSIS
 OPTIONS
        --team-id (string) (required)
           Team id; taken from the path only
-       --id (string) (required)
+       --channel-id (string) (required)
        --idempotency-key (string)
           Idempotency key (default: a new ULID per invocation).
 
@@ -1647,7 +1659,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams test-notification-channel help
+       Send a test notification (exits 254 when delivery fails)
+
+       afs teams test-notification-channel --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --channel-id nch_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
 ```
 
 ## update-external-system
@@ -1776,7 +1791,7 @@ SYNOPSIS
 OPTIONS
        --team-id (string) (required)
           Team id; taken from the path only
-       --id (string) (required)
+       --channel-id (string) (required)
        --config (JSON)
        --enabled (boolean)
        --event-types (list)
@@ -1808,7 +1823,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams update-notification-channel help
+       Disable a channel
+
+       afs teams update-notification-channel --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --channel-id nch_01JD2Q3R4S5T6V7W8X9Y0Z0001 --no-enabled
+
 ```
 
 ## update-team

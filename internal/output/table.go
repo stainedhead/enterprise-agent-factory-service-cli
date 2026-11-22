@@ -109,8 +109,21 @@ func genericColumns(rows []any) []Column {
 	}
 	var cols []Column
 	for _, k := range o.Keys {
-		if IsScalar(o.Vals[k]) {
-			cols = append(cols, Column{Header: k, Path: k})
+		switch v := o.Vals[k].(type) {
+		case *Object:
+			if k != "key" {
+				continue
+			}
+			// a usage row's group "key" becomes one column per member (key.agent, key.model)
+			for _, sub := range v.Keys {
+				if IsScalar(v.Vals[sub]) {
+					cols = append(cols, Column{Header: k + "." + sub, Path: k + "." + sub})
+				}
+			}
+		default:
+			if IsScalar(v) {
+				cols = append(cols, Column{Header: k, Path: k})
+			}
 		}
 	}
 	return cols

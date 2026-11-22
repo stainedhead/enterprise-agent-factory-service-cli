@@ -7,7 +7,7 @@ decides what each user can do.
 
 Part of [enterprise-agent-factory-service](https://github.com/stainedhead/enterprise-agent-factory-service).
 
-**Status:** milestones M0 (foundation), M1 (teams, members, team audit, settings, identity providers) and M2 (agents, secrets, configuration values, external systems, catalogs) done. All 180 operations of the pinned API contract are callable through
+**Status:** milestones M0 (foundation), M1 (teams, members, team audit, settings, identity providers) M2 (agents, secrets, configuration values, external systems, catalogs) and M3 (budgets, usage, reports and CSV, notification channels, models and prices) done. All 180 operations of the pinned API contract are callable through
 the generic executor (`--cli-input-json`, `--generate-cli-skeleton`, pagination, safe updates with `If-Match`,
 `--wait`, retries and idempotency keys); `afs configure`, `afs configure sso`, `afs sso login`, `afs sso logout`,
 `afs sso get-caller-identity` and `afs sso list-providers` are finished. Per-service polish (examples, table

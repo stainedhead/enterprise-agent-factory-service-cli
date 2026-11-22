@@ -59,7 +59,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs budgets get-budget help
+       Show the team's budget and how much is used
+
+       afs budgets get-budget --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --output table
+
 ```
 
 ## get-usage
@@ -105,7 +108,14 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs budgets get-usage help
+       Usage by agent since the first of the month
+
+       afs budgets get-usage --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --from 2026-11-01T00:00:00Z --group-by agent
+
+       Daily usage as CSV
+
+       afs budgets get-usage --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --group-by day --output csv > usage.csv
+
 ```
 
 ## list-costs
@@ -149,7 +159,14 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs budgets list-costs help
+       List daily costs (gateway spend and the AWS cost and usage report)
+
+       afs budgets list-costs --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --from 2026-11-01T00:00:00Z --to 2026-11-21T00:00:00Z
+
+       Export costs as CSV
+
+       afs budgets list-costs --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --output csv > costs.csv
+
 ```
 
 ## put-budget
@@ -202,5 +219,12 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs budgets put-budget help
+       Set a monthly budget with alert thresholds (percent)
+
+       afs budgets put-budget --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --period monthly --amount-usd 100.50 --thresholds 50 80 100
+
+       Replace the budget only if it is still at version 3
+
+       afs budgets put-budget --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --period monthly --amount-usd 250.00 --on-exhaust notify --if-match 3
+
 ```

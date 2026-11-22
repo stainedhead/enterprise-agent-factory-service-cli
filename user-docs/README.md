@@ -10,6 +10,7 @@ How to install, configure and use the `afs` CLI.
 | [Credentials](credentials.md) | API keys, the credential order, keeping secrets out of history |
 | [Teams and members](teams-and-members.md) | Teams, members, team audit events, service settings, identity providers |
 | [Agents and secrets](agents-and-secrets.md) | Agents, secret input rules, configuration values, external systems, platform catalogs |
+| [Budgets and reports](budgets-and-reports.md) | Budgets, usage, costs, reports and CSV, notification channels, models and prices |
 | [Output](output.md) | `--output json|yaml|table|text|csv`, `--query`, the pager, colour |
 | [Pagination](pagination.md) | Auto-pagination, `--max-items`, `--starting-token`, `--page-size`, CSV |
 | [Errors and exit codes](errors-and-exit-codes.md) | Error format, exit codes, retries, `--debug` |
