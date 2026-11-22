@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | Draft for review, feature-complete scope (2026-11-21); revised after `review-prd`. **Extended 2026-11-22 for the Paperclip team collaboration change** ([change PRD](https://github.com/stainedhead/enterprise-agent-factory-service/blob/main/paperclip-team-collaboration-PRD.md), contract v1.3.0): requirements CLI-19 to CLI-27, stories CLI-US-24 to CLI-US-34, milestones M7 to M10, decisions PC-CLI-D1 to D11, open questions PC-CLI-OQ1 to OQ5; revised after a second `review-prd` pass (section 10). Not started |
+| **Status** | Draft for review, feature-complete scope (2026-11-21); revised after `review-prd`. **Extended 2026-11-22 for the Paperclip team collaboration change** ([change PRD](https://github.com/stainedhead/enterprise-agent-factory-service/blob/main/paperclip-team-collaboration-PRD.md), contract v1.3.0): requirements CLI-19 to CLI-27, stories CLI-US-24 to CLI-US-35, milestones M7 to M10, decisions PC-CLI-D1 to D11, open questions PC-CLI-OQ1 to OQ5; revised after a second `review-prd` pass (section 10). Not started |
 | **Author** | J (Enterprise Architecture), drafted with Claude |
 | **Parent** | [Root PRD](https://github.com/stainedhead/enterprise-agent-factory-service/blob/main/enterprise-agent-factory-service-initial-PRD.md) (stories US-1..US-26; IF-2; decisions D23–D57); solution design §11. Change PRD: [Paperclip team collaboration](https://github.com/stainedhead/enterprise-agent-factory-service/blob/main/paperclip-team-collaboration-PRD.md) (stories US-27..US-33, COL-*, SEC-7, decisions PC-D1..PC-D19; its §7.6 assigns CLI-US-24 and CLI-US-25 to this repository) |
 | **Consumes** | [API contract](https://github.com/stainedhead/enterprise-agent-factory-service/blob/main/docs/contracts/api-contract.md) (v1.3.0 for the Paperclip change: §2.1, §3, §4.4, §4.4b, §4.4c, §4.6, §7) via `-restapi/api/openapi.yaml` at a release tag; for the one local command `invoke-api`, also the public edge of §4.4c |
@@ -66,11 +66,11 @@ command's priority is its operation's priority in the contract.
 | CLI-16 | `afs teams get-kubeconfig --team-id … [--kubeconfig PATH] [--aws-profile NAME]`: the API returns the kubeconfig content (context `afs-<team-slug>`, exec credential plugin `aws eks get-token` with the role the team's IdP federates to, no token). The CLI merges it as returned into `PATH` (default: first path of `$KUBECONFIG`, else `~/.kube/config`), replacing only entries with the same names, writing atomically. `--aws-profile` adds `AWS_PROFILE=<NAME>` to the exec `env` block. A new file is created 0600; an existing file keeps its mode, with a warning when wider than 0600. `--kubeconfig -` writes the API's YAML unchanged to stdout. A missing `aws` v2 on `PATH` is a warning, not an error | ACC-5 | P2 |
 | CLI-17 | Swarm commands: `pools` service (stages, pools, scale, handoffs, pool secret bindings, configuration, external systems, role links) and `swarm-templates` service. `teams create-team --kind ephemeral` requires `--expires-at`, `--teardown-rule` and `--budget-usd` (sent as a lifetime budget with `onExhaust: block`; optional `--budget-thresholds 50 80 100`); the full object is available through `--cli-input-json` | AGT-8, TEAM-7 | P2 |
 | CLI-18 | `work-orders` service, including `--repos` shorthand `host/owner/repo[=<owners>]`. With `=`, owners are a team id, an email or both comma-separated (`=team_…,ops@example.com`): contains `@` → `owningContact`, starts `team_` → `owningTeamId`, anything else (such as a slug) → exit 252 before any call. Without `=` (`host/owner/repo` alone) the repository is sent with no owner and `afs-api` resolves it from the teams' `AFS_OWNED_REPOS` configuration (D38); an explicit owner always wins. An ambiguous or unowned repository is the API's `ValidationError` (exit 254) with `details.ambiguousRepos` or `details.unownedRepos` printed. No slug lookup; `--output csv` on `list-work-orders` | WO-1..6 | P2 |
-| CLI-19 | The `collaboration` service: `describe-collaboration` (`GetTeamCollaboration`), `put-collaboration` (`PutTeamCollaboration`), `list-collaboration-links` (`ListCollaborationLinks`), `connect-agent` (`ConnectAgentToCollaboration`), `disconnect-agent` (`DisconnectAgentFromCollaboration`), `rotate-collaboration-keys` (`RotateCollaborationKeys`), and `admin list-collaboration-endpoints` (`ListCollaborationEndpoints`), named exactly by the contract's `CLI` column (CLI-1). Priorities per operation from the contract: P0 describe, put, connect, disconnect; P1 links, rotate; P2 endpoints. The two connect actions and the rotate action send an `Idempotency-Key` (CLI-11) and have no `--wait` | COL-34, COL-10, COL-7 | P0 |
+| CLI-19 | The `collaboration` service: `describe-collaboration` (`GetTeamCollaboration`), `put-collaboration` (`PutTeamCollaboration`), `list-collaboration-links` (`ListCollaborationLinks`), `connect-agent` (`ConnectAgentToCollaboration`), `disconnect-agent` (`DisconnectAgentFromCollaboration`), `rotate-collaboration-keys` (`RotateCollaborationKeys`), and `admin list-collaboration-endpoints` (`ListCollaborationEndpoints`), named exactly by the contract's `CLI` column (CLI-1). Priorities per contract v1.3.1 (PC-D28): P0 in C1 describe, put, list-links, connect, disconnect; P1 rotate; P0 in C2 endpoints. The two connect actions and the rotate action send an `Idempotency-Key` (CLI-11) and have no `--wait` | COL-34, COL-10, COL-7 | P0 |
 | CLI-20 | `put-collaboration` takes `--web-ui-enabled \| --no-web-ui-enabled` and `--rest-api-enabled \| --no-rest-api-enabled` (both required unless `--cli-input-json` supplies them: the PUT replaces both) and `--registration-mode manual\|managed`. It follows CLI-10 (If-Match from a read of `GetTeamCollaboration`; a `404` on that read sends no `If-Match`, PC-CLI-D2) and `--wait` (CLI-12) polls `GetTeamCollaboration` until `status.phase` is `Ready` at or above the PUT's `generation`. Every `details.fields[].reason` and every `details.reason` of §4.4b prints with a one-line hint from a small table of hints (PC-CLI-D6); the hints add words, never decisions | COL-20, COL-34 | P0 |
 | CLI-21 | `agents create-agent` and `update-agent`: `--role worker\|collaboration` (create only), `--collaboration-connect \| --no-collaboration-connect`, `--paperclip-agent-id`; `--role collaboration` with any of the other three exits 252; `list-agents --role`; `list-agent-templates --capability`; `admin put-agent-template --capabilities`. Agent tables gain `Role` and `Paperclip` columns; templates a `Capabilities` column | COL-1, COL-2, COL-10, AGT-11 | P0 |
 | CLI-22 | `secrets list-secrets --managed-by user\|afs\|paperclip`; a `ManagedBy` column; the API's `409 managed_secret`, `master_key_not_rotatable` and `reserved_name` errors print with hints. The CLI never reads `managedBy` to decide anything and never prints a secret value (CLI-9 unchanged) | SEC-7, COL-7 | P0 |
-| CLI-23 | `admin list-collaboration-endpoints --team-id --state`, table columns, `--output csv` (the operation is *CSV*, CLI-6) | COL-23, COL-36 | P2 |
+| CLI-23 | `admin list-collaboration-endpoints --team-id --state`, table columns, `--output csv` (the operation is *CSV*, CLI-6) | COL-23, COL-36 | P0 (C2) |
 | CLI-24 | Local command `afs collaboration invoke-api` (CLI-US-25): one request to the team's edge with the profile's AFS credential in `X-Afs-Authorization` and the Paperclip key (file or stdin, never an argument) in `Authorization`; origin from `GetTeamCollaboration.restApiUrl` or `--collab-url`, validated; no redirects, no cookies; edge errors map to AWS-style messages and exit 254; Paperclip's own errors exit 254 with the body on stdout; workload tokens refused locally | COL-19, COL-27 | P1 |
 | CLI-25 | Redaction for the edge: `X-Afs-Authorization` joins the masked headers everywhere; `invoke-api --debug` logs no body and no query string; the AFS token, API key and Paperclip key never reach stdout, stderr, logs, the process arguments or shell history. `SecretDetected` errors print pattern types only | SEC-1, COL-26 | P0 |
 | CLI-26 | The generated surface that the contract changes without new operations: `--may-expose-collaboration \| --no-may-expose-collaboration` on `teams create-team` and `update-team`; `--collab-client-id` and `--collab-client-secret-arn` (an ARN, validated as one, never a value) on `admin create-identity-provider` and `update-identity-provider`; role `team_collaborator` on `members` and `api-keys`; report kind `collaboration` with `--group-by surface\|reason\|person`; the seven `collab.*` settings through `admin put-setting` (no client-side keys or ranges) | ACC-2, COL-17, COL-23, COL-36 | P0 |
@@ -435,9 +435,9 @@ override of the host, PC-CLI-D1), `--include` (print the status line and respons
   `collaboration.TestInvokeAPIValidation252`, `collaboration.TestInvokeAPIReservedPathRefused252`,
   `collaboration.TestInvokeAPIBodyTooLargeFromEdge254`.
 - 25.5 Where the request goes. The origin comes from `restApiUrl` of the `GetTeamCollaboration` answer, or from
-  `--collab-url` (then no `GetTeamCollaboration` is made). It must be `https://` (an `http://` loopback host is
+  `--collab-url` (then no `GetTeamCollaboration` is made). `restApiUrl` is `https://<hostname>/api`, the base of Paperclip's REST API, so a full `--path /api/…` equals it plus a suffix (PC-D31). It must be `https://` (an `http://` loopback host is
   accepted for tests, as for `endpoint_url`), carry no userinfo, query, fragment or port other than 443, and a
-  DNS name (not an IP literal); if the profile sets `collab_base_domain` the host must be `<label>.<that
+  DNS name (not an IP literal; the apex `<collab.base_domain>` serves only the OIDC callback and is not a team host); if the profile sets `collab_base_domain` the host must be `<label>.<that
   domain>` (PC-CLI-D5). A `null` `restApiUrl` (service base domain unset) exits 255 with `Public
   collaboration is not configured for this service (collab.base_domain is unset).` Only the URL's scheme and
   host are used; `--path` is appended to the origin and the URL's own path (`/api`) is not (PC-CLI-D4).
@@ -454,8 +454,8 @@ override of the host, PC-CLI-D1), `--include` (print the status line and respons
   collaboration put-collaboration --team-id <id> --rest-api-enabled …`; `403 permission_required` prints
   `Required permission: <details.requiredPermission>`; `403 no_team_role`; `401 Unauthenticated` with
   `token_expired`, `token_invalid`, `key_expired`, `key_revoked` prints the login or key hint (D41);
-  `400` with `ambiguous_credentials`, `malformed_credential`, `host_mismatch`, `unsupported_encoding`;
-  `404 NotFound` (no detail, ever) prints `The team's Paperclip is not reachable through the public endpoint.`;
+  `400` with `ambiguous_credentials`, `malformed_credential`, `unsupported_encoding` (`host_mismatch` no longer exists, PC-D23);
+  `404 NotFound` (no detail, ever; only for an unknown host or both surfaces not effective, PC-D31) prints `The team's Paperclip is not reachable through the public endpoint; run afs collaboration describe-collaboration to see why.`; a caller with a binding gets `403 surface_disabled` instead when exactly one surface is off;
   `422 SecretDetected` prints the message and `Patterns: <details.patterns joined>` (pattern types only) and
   the hint `Store the credential as an AFS secret instead (afs secrets create-secret).`; `429 Throttled`
   and `503 Unavailable` (`paused`, `team_suspended`, `starting`, `upstream_unavailable`) print the reason.
@@ -601,9 +601,9 @@ cannot.
   `put-secret-value` still reads the value only from a file, stdin or the prompt (CLI-9) and never echoes it
   even when the call is refused. *Proven by* `secrets.TestManagedSecretMutations409`,
   `secrets.TestManagedSecretRefusalNeverEchoesValue`.
-- 29.3 `rotate-secret` on a `paperclip`-managed secret, and on `paperclip-secrets-master-key`
-  (`reason: master_key_not_rotatable`), is the API's error (exit 254); on the other `afs` secrets it succeeds
-  and prints the rotation. *Proven by* `secrets.TestRotateManagedSecret`, `secrets.TestRotateMasterKey254`.
+- 29.3 `rotate-secret` on an `afs` secret sends no body (AFS generates the value, PC-D30) and prints the rotation; on
+  `paperclip-secrets-master-key` it is the API's `ValidationError` (`reason: master_key_not_rotatable`), and on a
+  `paperclip`-managed secret the API's `409 Conflict` (`managed_secret`); both exit 254. *Proven by* `secrets.TestRotateManagedSecret`, `secrets.TestRotateMasterKey254`.
 - 29.4 `create-secret --name paperclip` or any `paperclip-…` name other than `paperclip-agent-api-key` on an
   agent-scope secret prints the API's `ValidationError` (`reason: reserved_name`) and exits 254 (the CLI keeps
   no copy of the reserved list); `create-secret --name paperclip-agent-api-key --scope agent --agent-id agt_…
@@ -635,7 +635,10 @@ As a service admin, I want to switch collaboration per team, register the collab
 - 31.1 `afs teams create-team` and `afs teams update-team` accept `--may-expose-collaboration` and
   `--no-may-expose-collaboration` (sent as `mayExposeCollaboration`; omitted when neither is given); a team-admin
   using them gets the API's `403 AccessDenied` with `Required permission: teams:set-guardrails` (exit 254).
-  `describe-team --output json` prints `mayExposeCollaboration` unchanged. *Proven by* `teams.TestUpdateTeamMayExposeCollaborationBody`,
+  `describe-team --output json` prints `mayExposeCollaboration` unchanged. `create-team` with a slug whose hostname is
+  held prints the API's `409 Conflict` (`details.reason = hostname_held`) with the hint `That slug's collaboration
+  hostname is held for 30 days after the deletion of a team that had one; choose another slug.` (exit 254), proven by
+  `teams.TestCreateTeamHostnameHeld409`. *Proven by* `teams.TestUpdateTeamMayExposeCollaborationBody`,
   `teams.TestCreateTeamMayExposeCollaborationBody`, `teams.TestUpdateTeamMayExposeCollaborationAccessDenied254`.
 - 31.2 `afs admin create-identity-provider` and `update-identity-provider` accept `--collab-client-id <id>` and
   `--collab-client-secret-arn <arn>` (an ARN of a Secrets Manager secret, never the value; the option name says
@@ -717,6 +720,18 @@ contract has them, with help, examples, columns, goldens and docs.
   `skills/enterprise-agent-factory-service-cli.md` gains the new commands in the same cycle (CLI-14 workflow
   step 6). *Proven by* `docs.TestReferenceUpToDate` (`make docs` leaves no diff).
 
+**CLI-US-35 · Swarm templates may carry a collaboration agent.** *(refines US-33 and PC-D29; `SwarmTemplate.spec.collaboration`)*
+The swarm template commands take the spec as a file (`--spec file://…`), so no new option is needed.
+- 35.1 `afs swarm-templates create-swarm-template … --spec file://spec.json` with `"collaboration":{"templateId":"…"}` in the
+  spec sends the spec unchanged, and `describe-swarm-template --output json` prints `spec.collaboration` unchanged;
+  `--generate-cli-skeleton` shows the optional member. *Proven by* `swarmtemplates.TestCreateSwarmTemplateSpecCollaborationUnchanged`,
+  `swarmtemplates.TestSwarmTemplateSkeletonHasCollaboration`.
+- 35.2 A template without the `paperclip` capability is the API's `ValidationError` (`field: spec.collaboration.templateId`),
+  printed AWS-style with exit 254; a security operator gets `AccessDenied` as for every swarm template write. *Proven by*
+  `swarmtemplates.TestSwarmTemplateCollaborationTemplateRefused254`, `swarmtemplates.TestSwarmTemplateCollaborationAccessDenied254`.
+- 35.3 Pools never connect to Paperclip: `pools` commands gain no collaboration option. Priority P1, M10 (C4). *Proven by*
+  `pools.TestNoCollaborationOptionOnPoolCommands`.
+
 ## 5. Non-functional requirements
 
 | Area | Requirement |
@@ -772,7 +787,7 @@ The Paperclip rows are in section 5.2 below the original rows.
   `details.reason` value of API contract §4.4b, §4.4c, §4.6 (`collaboration_agent_exists`,
   `collaboration_agent_missing`, `team_suspended`, `managed_secret`, `master_key_not_rotatable`, `reserved_name`,
   `managed_registration`, `surface_disabled`, `no_team_role`, `permission_required`, `ambiguous_credentials`,
-  `malformed_credential`, `host_mismatch`, `body_too_large`, `unsupported_encoding`, `token_invalid`,
+  `malformed_credential`, `body_too_large`, `unsupported_encoding`, `token_invalid`,
   `token_expired`, `key_expired`, `key_revoked`, `session_expired`, `paused`, `starting`, `upstream_unavailable`) and
   `details.fields[].reason` values, and fails when a value has no hint or a hint contains text not in the table (a
   hint never includes server-supplied text). An unknown reason prints no hint and still exits 254.
@@ -805,7 +820,7 @@ The Paperclip rows are in section 5.2 below the original rows.
 | Homebrew tap repository | CLI-15 | Created before the first release; linked only once it exists |
 | `-restapi` release whose `api/openapi.yaml` carries contract v1.3.0 (the seven §4.4b operations, `role` and `collaboration` on agents, `managedBy`, `capabilities`, `collabClientId`, `mayExposeCollaboration`, `team_collaborator`, report kind `collaboration`) | CLI-19 to CLI-27 | Not available until `-restapi` merges its C1 work; this repository re-pins then (PC-CLI-D10). The pinned snapshot, `api/SOURCE`, `internal/client/gen`, `internal/spec/operations_gen.go`, `user-docs/reference/` and every golden file that lists operations must be resynced and regenerated at that point; **do not hand-edit them now** |
 | `-restapi` `afs-edge` deployed in a dev environment, with `collab.base_domain` set, a team provider that has a collaboration client, and a team with a collaboration agent | End-to-end proof of `invoke-api` (CLI-US-25) in C3; unit tests use a fake edge | Change PRD C2 and C3 exit criteria |
-| Contract §4.4b/§4.4c clarifications (this PRD's section 8, PC-CLI-OQ1 to OQ3) | `invoke-api` origin and path rules | Root; the defaults here are built until it answers |
+| Contract v1.3.1 (PC-D20 to PC-D31), which answers PC-CLI-OQ1 to OQ4 | `invoke-api` origin, path and error rules | Root; merged (1f60ecd) |
 | Root `skills/enterprise-agent-factory-service-cli.md` | New commands for agents | Updated in the same cycle as the release (workflow step 6) |
 | Console's T16 shows the equivalent `afs collaboration put-collaboration` command (change PRD §5) | Parity of examples | `-website`; the example text in CLI-US-24.10 is the source |
 
@@ -827,10 +842,10 @@ the `-restapi` release that provides its operations (the re-pin is the first tas
 
 | Milestone | Change PRD | This repository | Exit criteria |
 |---|---|---|---|
-| M7 | C1 Collaboration agent | Re-pin to contract v1.3.0 (CLI-27, CLI-US-34); `collaboration describe-collaboration`, `put-collaboration` (If-Match, `--wait`), `connect-agent`, `disconnect-agent` (CLI-US-24, CLI-US-26 minus links); `agents` flags, columns, `--role`, `--capability`, `admin put-agent-template --capabilities` (CLI-US-28); `secrets --managed-by` and hints (CLI-US-29); `teams --may-expose-collaboration`, `members` and `api-keys` `team_collaborator` (CLI-US-31.1, CLI-US-32.1); redaction of `X-Afs-Authorization` (CLI-US-33.1); reference docs and `user-docs/collaboration.md` first cut | `make gate` green; every P0 operation of §4.4b has example, columns, goldens and `AccessDenied` test; the end-to-end script of the change PRD (create the collaboration agent, connect two agents) passes against dev with `afs` only; `Pending()` empty at milestone 7 |
-| M8 | C2 Public web UI | `admin create-identity-provider` and `update-identity-provider` `--collab-client-id`, `--collab-client-secret-arn`; `collab.*` settings through `put-setting` verified (CLI-US-31.2 to 31.4); help text for the effective-surface notice (CLI-US-24.2); docs for the public endpoint | Gate green; a service admin sets the base domain, the collaboration client and a team guardrail from the CLI in dev; `Pending()` empty at milestone 8 |
-| M9 | C3 REST API and managed mode | `collaboration invoke-api` (CLI-US-25, CLI-US-33.2); `list-collaboration-links` and `rotate-collaboration-keys` (CLI-US-26.4, CLI-US-27); managed-mode hints (`managed_registration`) | Gate green; a pipeline creates a Paperclip issue with a collaborator team key against the dev edge; all redaction tests green; `Pending()` empty at milestone 9 |
-| M10 | C4 People and reports | `admin list-collaboration-endpoints` (CLI-US-30); report kind `collaboration` and the `--group-by` additions (CLI-US-32.2, 32.3); final docs, root `skills/` entry, traceability test over CLI-US-24 to CLI-US-34; release | Gate green; `CurrentMilestone` is 10; every acceptance criterion of CLI-US-24 to CLI-US-34 names a passing test |
+| M7 | C1 Collaboration agent | Re-pin to contract v1.3.0 (CLI-27, CLI-US-34); `collaboration describe-collaboration`, `put-collaboration` (If-Match, `--wait`), `list-collaboration-links`, `connect-agent`, `disconnect-agent` (CLI-US-24, CLI-US-26: all P0 in C1, PC-D28); `agents` flags, columns, `--role`, `--capability`, `admin put-agent-template --capabilities` (CLI-US-28); `secrets --managed-by` and hints (CLI-US-29); `teams --may-expose-collaboration`, `members` and `api-keys` `team_collaborator` (CLI-US-31.1, CLI-US-32.1); redaction of `X-Afs-Authorization` (CLI-US-33.1); reference docs and `user-docs/collaboration.md` first cut | `make gate` green; every P0 operation of §4.4b has example, columns, goldens and `AccessDenied` test; the end-to-end script of the change PRD (create the collaboration agent, connect two agents) passes against dev with `afs` only; `Pending()` empty at milestone 7 |
+| M8 | C2 Public web UI | `admin list-collaboration-endpoints` (CLI-US-30, P0 in C2, PC-D28); `admin create-identity-provider` and `update-identity-provider` `--collab-client-id`, `--collab-client-secret-arn`; `collab.*` settings through `put-setting` verified (CLI-US-31.2 to 31.4); help text for the effective-surface notice (CLI-US-24.2); docs for the public endpoint | Gate green; a service admin sets the base domain, the collaboration client and a team guardrail from the CLI in dev; `Pending()` empty at milestone 8 |
+| M9 | C3 REST API and managed mode | `collaboration invoke-api` (CLI-US-25, CLI-US-33.2); `rotate-collaboration-keys` (CLI-US-27); managed-mode hints (`managed_registration`) | Gate green; a pipeline creates a Paperclip issue with a collaborator team key against the dev edge; all redaction tests green; `Pending()` empty at milestone 9 |
+| M10 | C4 People and reports | swarm-template `spec.collaboration` goldens (CLI-US-35); report kind `collaboration` and the `--group-by` additions (CLI-US-32.2, 32.3); final docs, root `skills/` entry, traceability test over CLI-US-24 to CLI-US-34; release | Gate green; `CurrentMilestone` is 10; every acceptance criterion of CLI-US-24 to CLI-US-34 names a passing test |
 
 ## 8. Open questions
 
@@ -843,13 +858,13 @@ the `-restapi` release that provides its operations (the re-pin is the first tas
 | OQ-C5 | Shell completion (`afs completion bash\|zsh\|fish\|powershell`) in or out of v1 | J | Resolved: accepted. `completion` is in, M4, a local command |
 | OQ-C6 | Token storage: 0600 files (current) or OS keychains (macOS Keychain, Windows Credential Manager, Secret Service) | J | Files in v1; keychain as an opt-in profile key later |
 | OQ-9 | Which IAM role the IdP federates to for viewer kubectl (affects the exec block of CLI-16) | J | From root |
-| PC-CLI-OQ1 | API contract §4.4b says `invoke-api` "calls no `/v1` operation", but it needs the team's hostname, which only `GetTeamCollaboration.restApiUrl` carries | root (contract owner) | Built: one `GetTeamCollaboration` read unless `--collab-url` is given (PC-CLI-D1). Ask the contract to say so, or to add `hostname` to a source the CLI already has |
-| PC-CLI-OQ2 | `restApiUrl` is `https://<host>/api` while §4.4c says the edge forwards Paperclip's own paths unchanged: is `/api` Paperclip's REST prefix, and is `--path` meant to include it? | root, Agentic Teammates | Built: `--path` is the full path as Paperclip serves it (for example `/api/issues`); only the origin of `restApiUrl` is used (PC-CLI-D4). Ask the contract to state that `restApiUrl` is a convenience link, not a base path |
-| PC-CLI-OQ3 | The edge answers `404` with no detail when both surfaces are not effective, so `invoke-api` cannot say whether the REST API is off, the team has no Paperclip, or the host is wrong | root | Built: the generic `404` message; users run `describe-collaboration` (its `effective.reasons`) for the cause. Accepted, because the contract forbids detail on purpose |
-| PC-CLI-OQ4 | Does any Paperclip response carry a once-only key that `invoke-api` should treat like `secretKey` (stderr warning, never replayed)? | Agentic Teammates | Built: no special case; the response body is printed as returned and is the caller's to protect; docs warn. Revisit if Paperclip returns agent keys in the response of an API users script |
+| PC-CLI-OQ1 | Contract said `invoke-api` calls no `/v1` operation but needs the hostname | root | **Resolved, PC-D31 (contract v1.3.1):** one `GetTeamCollaboration` read unless `--collab-url`, then only the edge (PC-CLI-D1) |
+| PC-CLI-OQ2 | Is `/api` Paperclip's REST prefix, and does `--path` include it? | root | **Resolved, PC-D31:** `restApiUrl` is `https://<hostname>/api`; `--path` is the full path; the CLI uses only the origin (PC-CLI-D4) |
+| PC-CLI-OQ3 | Can `invoke-api` tell why a request failed when the edge answers `404`? | root | **Resolved, PC-D31:** `404` only for an unknown host or both surfaces off; with one surface off a bound caller gets `403 surface_disabled`. The `404` message points to `describe-collaboration` |
+| PC-CLI-OQ4 | Do once-only Paperclip keys need special handling in `invoke-api`? | Agentic Teammates | **Resolved, PC-D31:** the edge passes them through unchanged and never logs bodies; the CLI prints the response as returned (no special case), docs warn |
 | PC-CLI-OQ5 | Should `put-collaboration` fill an omitted surface from the current value instead of requiring both flags? | J | Built: both required (explicit, one API call, no hidden read). Revisit after the console and CLI are used together |
 
-### 8.1 Decisions for the Paperclip change (Claude, for J's review)
+### 8.1 Decisions for the Paperclip change (aligned to contract v1.3.1) (Claude, for J's review)
 
 | # | Question | Decision |
 |---|---|---|
@@ -863,6 +878,7 @@ the `-restapi` release that provides its operations (the re-pin is the first tas
 | PC-CLI-D8 | Confirmation before `rotate-collaboration-keys`? | None. The CLI has no interactive confirmations (scripts first); the effects are printed on stderr afterwards and the API audits the call |
 | PC-CLI-D9 | Milestone numbering | M7 to M10 map to C1 to C4 so `milestoneOf`, `CurrentMilestone` and `Pending()` keep working per milestone; operations of later milestones exist as generated commands from the re-pin but are not "done" until their milestone |
 | PC-CLI-D10 | When is the snapshot re-pinned? | Once, at the start of M7, from the first `-restapi` ref whose `api/openapi.yaml` carries all seven §4.4b operations (the provider lands them together); later `-restapi` releases are re-pinned in their own PRs as usual (contract §8). Until `-restapi` merges, this repository changes no code |
+| PC-CLI-D12 | Alignment to contract v1.3.1 | PC-CLI-OQ1 to OQ4 closed by PC-D31; `host_mismatch` removed (PC-D23); priorities of links, connect, disconnect and endpoints per PC-D28; `rotate-secret` per PC-D30; `hostname_held` and swarm `spec.collaboration` added (CLI-US-31.1, CLI-US-35); the apex serves only the callback, so it is never a valid `invoke-api` origin |
 | PC-CLI-D11 | Where does this PRD live? | The repository's root `enterprise-agent-factory-service-cli-PRD.md` is a stub that points to the archived spec, so the stub stays and this PRD is extended where it is, in `specs/archive/261121-cli-feature-complete/`. The implementation spec for the change is a new `specs/YYMMDD-paperclip-collaboration/` that links here, and when it starts the PRD moves with it (the stub's own rule) |
 
 ## 9. Definition of done (every change)
@@ -906,8 +922,14 @@ Findings from the first read of the draft, all fixed in this pass:
 - **Warning, dependencies:** no statement that the pinned snapshot and everything generated from it must be resynced;
   added to section 6 with the do-not-hand-edit rule, plus PC-CLI-D10 (when to re-pin) and PC-CLI-D9 (milestones).
 - **Warning, open questions:** three contract gaps affect `invoke-api` (hostname source, `/api` prefix, undetailed `404`);
-  recorded as PC-CLI-OQ1 to OQ3 with the defaults built.
+  recorded as PC-CLI-OQ1 to OQ3 with the defaults built (all four since resolved by contract v1.3.1, see below).
 - **Warning, NFR coverage:** the credential-handling risks of a command that sends two credentials to a public host
   were not stated; added the security NFR, the workload-token refusal (PC-CLI-D3), origin validation and no redirects
   (PC-CLI-D5, CLI-US-25.5) and the sentinel redaction tests (section 5.2).
 - **Info:** the stub at the repository root is kept and this PRD is extended where it lives (PC-CLI-D11).
+
+**Aligned to v1.3.1 (2026-11-22).** The root contracts were corrected (API contract v1.3.1, PC-D20 to PC-D31). This PRD
+was updated to match: open questions PC-CLI-OQ1 to OQ4 closed (PC-D31), `host_mismatch` dropped (PC-D23), 404 versus
+403 `surface_disabled` stated, priorities of links, connect, disconnect and endpoints moved (PC-D28), `rotate-secret`
+and `hostname_held` criteria added (PC-D30), CLI-US-35 added for swarm template collaboration (PC-D29), decision
+PC-CLI-D12. Remaining open: PC-CLI-OQ5 only. Dimensions unchanged: all Pass.
