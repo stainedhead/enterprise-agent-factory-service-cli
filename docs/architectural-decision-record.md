@@ -54,3 +54,48 @@ Decisions local to this repository. Cross-repo decisions live in the root reposi
 - Consequences: no client-side ownership decisions beyond the syntax; workers must pass `--if-match` until the API grants
   the read (contract delta CLI-CD-1).
 
+
+## ADR-007 Own descriptor generator; oapi-codegen for types only
+
+- Status: Accepted (2026-11-21, M0)
+- Context: operation descriptors carry `x-afs-*` facts that oapi-codegen does not model, and tool dependencies would
+  widen `govulncheck`'s scope.
+- Decision: a dedicated generator (`tools/afsgen`) writes the descriptors; oapi-codegen v2.8.2 is used for types only and
+  runs from the Makefile, not from `go.mod`. `make generate-check` fails on drift.
+- Consequences: the runtime module graph holds only what the binary uses; a contract change is `make contract-sync` and a
+  regeneration diff.
+
+## ADR-008 Safe updates and `--wait` are tables, checked against the contract
+
+- Status: Accepted (2026-11-21, M0)
+- Context: 59 operations require `If-Match`, and many mutations are asynchronous.
+- Decision: a reader table maps each `If-Match` operation to the read that returns its version; a wait table maps each
+  waitable mutation to its status read. Tests check both tables against the snapshot. A wait ends at `Ready` with
+  `observedGeneration` at or above the mutation's `generation`, so a stale `Ready` does not end it.
+- Consequences: a new update or async operation in the contract fails a test until it has a table entry.
+
+## ADR-009 Credentials in files, not the OS keychain, in v1
+
+- Status: Accepted (2026-11-21, M0; OQ-C6)
+- Context: `afs` runs on laptops, in CI and in minimal agent containers with no keychain.
+- Decision: API keys in `~/.afs/credentials` and SSO tokens in `~/.afs/sso/cache/`, both required to be 0600; the
+  workload token is read from its mounted file for every request. No `GetMe` cache (D-C12): `AccessDenied` already names the
+  required permission.
+- Consequences: one code path on every platform; keychain storage can be added later as an extra credential source.
+
+## ADR-010 CLI pagination token wraps the server token
+
+- Status: Accepted (2026-11-21, M0)
+- Context: `--max-items` can stop mid-page, which a server `nextToken` cannot express.
+- Decision: the printed `NextToken` is `base64url({"t": <server token>, "s": <items to skip>})`. `--max-items` with
+  `--output csv` is a usage error because CSV pages cannot be cut without re-parsing.
+- Consequences: `--starting-token` resumes exactly; the token is opaque to users, as in the AWS CLI.
+
+## ADR-011 Signed releases with GoReleaser and keyless cosign
+
+- Status: Accepted (2026-11-21, M4)
+- Context: CLI-15 requires signed binaries on five platforms and a Homebrew tap without long-lived signing keys in CI.
+- Decision: GoReleaser v2; `checksums.txt` signed keyless with cosign from the release workflow's OIDC identity; quill for
+  macOS notarization; `osslsigncode` for Authenticode; jobs gated on their secrets.
+- Consequences: releases are verifiable with `cosign verify-blob` against the workflow identity; notarization, Authenticode
+  and the tap switch on when their secrets are provisioned.

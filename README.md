@@ -7,10 +7,20 @@ decides what each user can do.
 
 Part of [enterprise-agent-factory-service](https://github.com/stainedhead/enterprise-agent-factory-service).
 
-**Status:** feature complete (M0 to M6). Milestones M0 (foundation), M1 (teams, members, team audit, settings, identity providers), M2 (agents, secrets, configuration values, external systems, catalogs), M3 (budgets, usage, reports and CSV, notification channels, models and prices) and M4 (API keys, role links, identities, tags, log destinations, restore, report schedules, service administration, exports and imports, `afs completion`, release configuration) and M5 (pools, stages, ephemeral teams, `afs teams get-kubeconfig`, cost-tag status) and M6 (work orders, the workload-token credential, swarm templates, the team directory, service-level API keys and security operators) done. All 180 operations of the pinned API contract are callable through
-the generic executor (`--cli-input-json`, `--generate-cli-skeleton`, pagination, safe updates with `If-Match`,
-`--wait`, retries and idempotency keys); `afs configure`, `afs configure sso`, `afs sso login`, `afs sso logout`,
-`afs sso get-caller-identity` and `afs sso list-providers` are finished. Every operation has an example, table columns, golden help and table output, and an `AccessDenied` test. Work orders: [user-docs/work-orders.md](user-docs/work-orders.md).
+**Status:** feature complete against API contract 1.1 (milestones M0 to M6). All 180 operations of the pinned
+contract are commands, with examples, table columns, golden help and output, and an `AccessDenied` test each, plus the
+local commands `configure`, `configure sso`, `sso login`, `sso logout` and `completion`. The contract snapshot is pinned to
+the `-restapi` feature branch until that repository publishes a release tag.
+
+What every command gets: AWS-style global options, profiles, five output formats and `--query`, automatic pagination,
+`--cli-input-json` and `--generate-cli-skeleton`, safe updates with `If-Match`, idempotent retries, `--wait`, a redacted
+`--debug` log and AWS CLI exit codes. See [docs/product-summary.md](docs/product-summary.md) and
+[docs/product-details.md](docs/product-details.md).
+
+## Install
+
+Download a signed release archive or build from source; see [Install](user-docs/install.md). Then follow
+[Getting started](user-docs/getting-started.md).
 
 ## Examples
 
@@ -39,7 +49,29 @@ cosign-signed `checksums.txt`, and notarization, Authenticode signing and the Ho
 
 ## Documentation
 
-[user-docs/](user-docs/README.md): install and release verification, getting started, configuration, single sign-on, credentials, output,
-pagination, errors and exit codes, troubleshooting, and the generated command reference.
+User guides ([index](user-docs/README.md)):
+
+| Guide | For |
+|---|---|
+| [Getting started](user-docs/getting-started.md) | Install, point `afs` at a service, sign in, first commands |
+| [Install](user-docs/install.md) | Releases, verification, Homebrew, shell completion |
+| [Configuration](user-docs/configuration.md) | Profiles, files, environment variables, precedence |
+| [Single sign-on](user-docs/sso.md) | `afs configure sso`, `afs sso login`, refresh, logout |
+| [Credentials](user-docs/credentials.md) | API keys, the credential order, the workload token |
+| [Output](user-docs/output.md) | Output formats, `--query`, pager, colour |
+| [Pagination](user-docs/pagination.md) | `--max-items`, `--starting-token`, `--page-size`, CSV |
+| [Errors and exit codes](user-docs/errors-and-exit-codes.md) | Error format, exit codes, retries, `--debug` |
+| [Troubleshooting](user-docs/troubleshooting.md) | Common problems and fixes |
+| [Teams and members](user-docs/teams-and-members.md) | Usage examples: teams, members, audit, settings, identity providers |
+| [Agents and secrets](user-docs/agents-and-secrets.md) | Usage examples: agents, secrets, configuration values, external systems |
+| [Budgets and reports](user-docs/budgets-and-reports.md) | Usage examples: budgets, usage, reports and CSV, notification channels, models and prices |
+| [Keys, tags, logs and administration](user-docs/delivery-and-admin.md) | Usage examples: API keys, role links, tags, log destinations, restore, schedules, exports |
+| [Swarms](user-docs/swarms.md) | Usage examples: ephemeral teams, stages, pools, handoffs |
+| [Work orders](user-docs/work-orders.md) | Usage examples: work orders, workers and the workload token, swarm templates |
+| [kubectl access](user-docs/kubectl.md) | `afs teams get-kubeconfig` |
+| [Command reference](user-docs/reference/README.md) | Every service and operation, generated from `afs help` |
+
+Technical documentation: [product summary](docs/product-summary.md), [product details](docs/product-details.md),
+[technical details](docs/technical-details.md), [architectural decisions](docs/architectural-decision-record.md).
 
 Contributor and agent rules: [AGENTS.md](AGENTS.md). Why this repository exists: [INTENT.md](INTENT.md).

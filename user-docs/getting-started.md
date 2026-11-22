@@ -12,7 +12,7 @@ make build            # writes bin/afs
 ./bin/afs --version   # afs-cli/<version> contract/<major.minor> <go> <os>/<arch>
 ```
 
-Put `bin/afs` on your `PATH`. Release archives and a Homebrew formula are planned.
+Put `bin/afs` on your `PATH`. Signed release archives and Homebrew are described in [Install](install.md).
 
 ## Point afs at the service
 

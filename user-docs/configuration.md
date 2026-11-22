@@ -37,6 +37,24 @@ Highest first: command-line option, environment variable, profile in `~/.afs/con
 
 An unknown profile name is an error (`The config profile (name) could not be found`, exit 255).
 
+## Environment variables
+
+| Variable | Effect |
+|---|---|
+| `AFS_PROFILE` | Profile to use when `--profile` is absent |
+| `AFS_ENDPOINT_URL` | API endpoint (host root, for example `https://afs.example.com`) |
+| `AFS_DEFAULT_OUTPUT` | Output format when `--output` is absent |
+| `AFS_API_KEY` | API key; first in the credential order |
+| `AFS_API_TOKEN_FILE` | Workload token file (default `/var/run/secrets/afs/api/token` when present); last in the credential order |
+| `AFS_CONFIG_FILE` | Path of the config file (default `~/.afs/config`) |
+| `AFS_SHARED_CREDENTIALS_FILE` | Path of the credentials file (default `~/.afs/credentials`) |
+| `AFS_PAGER` | Pager command; empty disables the pager. Falls back to `PAGER`, then `less -R` |
+| `HTTPS_PROXY`, `NO_PROXY` | Outbound proxy |
+| `SSL_CERT_FILE`, `SSL_CERT_DIR` | Extra trusted certificate authorities (Linux and macOS) |
+
+An invalid value on the command line is a usage error (exit 252); the same invalid value from the environment or a
+profile is a configuration error (exit 255) that names where it came from.
+
 ## The profile team
 
 When a command needs a team id in its path and you leave `--team-id` out, the profile's `team_id` is used.
