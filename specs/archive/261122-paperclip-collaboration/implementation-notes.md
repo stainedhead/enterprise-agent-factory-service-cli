@@ -51,7 +51,9 @@ Inherited decisions PC-CLI-D1..D12 are in the PRD section 7.1. Decisions taken w
 
 ## Lessons learned
 
-(at completion)
+- Open enums keep the CLI free of server lists but need a test that proves the value reaches the API.
+- A generic checker (traceability test over PRD criteria) caught seven PRD test names that did not exist.
+- Do not overwrite an existing test file: check `git status` before `cat >`.
 
 ## Review of the spec (step 2)
 

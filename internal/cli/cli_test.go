@@ -282,7 +282,7 @@ func TestUnknownOptionSuggestsAndNeverEchoesValue(t *testing.T) {
 	r := testRegistry(t)
 	r.AddLocal(&Command{Service: "tool", Name: "run", Local: func(context.Context, *Invocation) int { return 0 },
 		Options: []Option{{Flag: "--key-file", Kind: String}, {Flag: "--other", Kind: String}}})
-	for args, want := range map[string]string{
+	for args, want := range map[string]string{ //nolint:gosec // G101: a made-up value is the case under test
 		"--key":            "Did you mean --key-file?",
 		"--key=SECRET-VAL": "Did you mean --key-file?",
 		"--zzz=SECRET-VAL": "Unknown options: --zzz\n",

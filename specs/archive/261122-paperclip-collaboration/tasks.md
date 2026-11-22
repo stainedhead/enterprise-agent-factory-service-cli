@@ -4,7 +4,7 @@
 
 ## Progress summary
 
-35/38 tasks complete (M7 to M10 done; X1 to X3 continue).
+37/38 tasks complete; X3 is a post-merge follow-up.
 
 ## M7 (C1)
 
@@ -51,6 +51,6 @@
 
 ## Cross-cutting
 
-- [ ] X1 `make gate` green and coverage >= 90% at each milestone
-- [ ] X2 status.md and dashboard updated after each task
-- [ ] X3 Follow-up: re-pin SOURCE to the restapi merge commit
+- [x] X1 `make gate` green and coverage >= 90% at each milestone
+- [x] X2 status.md and dashboard updated after each task
+- [ ] X3 Follow-up for J after the restapi PR merges: re-pin `api/SOURCE` to the merge commit (api/openapi.yaml expected unchanged)
