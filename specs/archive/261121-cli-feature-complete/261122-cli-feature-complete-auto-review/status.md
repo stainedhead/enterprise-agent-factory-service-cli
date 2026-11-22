@@ -5,7 +5,7 @@
 | **Feature** | Review fixes for the `afs` CLI feature-complete branch |
 | **Created** | 2026-11-22 |
 | **Branch** | `feat/cli-feature-complete` |
-| **Dashboard** | [cli-feature-complete-status.md](../archive/261121-cli-feature-complete/cli-feature-complete-status.md) |
+| **Dashboard** | [cli-feature-complete-status.md](../cli-feature-complete-status.md) |
 
 **MANDATORY:** update after every task.
 
@@ -18,8 +18,8 @@
 | 2 | Research and data modelling | Complete | research.md, data-dictionary.md |
 | 3 | Architecture and planning | Complete | architecture.md, plan.md |
 | 4 | Task breakdown | Complete | tasks.md, one task per FR |
-| 5 | Implementation | In Progress | 20 / 20 FRs |
-| 6 | Completion and archival | Not Started | |
+| 5 | Implementation | Complete | 20 / 20 findings handled: 19 fixed in full, FR-010 fixed except criterion 2 (id pattern check), deferred with rationale D-R9 |
+| 6 | Completion and archival | Complete | Archived under the parent spec in step 10 |
 
 ## Task log
 Updated after every fix: FR, commit, tests added, review note.
@@ -36,3 +36,11 @@ Updated after every fix: FR, commit, tests added, review note.
 | FR-018,FR-020 | P2 | Done | sensitive option help lists safe forms and is not required; pager runs under the command context | FR-018 help.go + goldens + reference regenerated; FR-020 OpenPager(ctx), pager gets SIGINT on cancel (not killed, so the terminal is restored). 94.1%. |
 | FR-014,FR-015,FR-017 | P2 | Done | kubeconfig merge validation, exit 252 for a missing operation, compile-time contract references | FR-014 validateIncoming (aws eks get-token, afs prefix, AWS_ env); FR-015 252 + usage on stderr (completion unaffected); FR-017 option (a) with ADR-014. Review: non-AFS entries never replaced. 94.1%. |
 | FR-019 | P2 | Done | close test gaps; ambiguous list match is an error; temp files removed after a failed save | safeupdate 95.8%, exec 90.9% from own tests; collision test found id-vs-name guess (fixed, ErrAmbiguous); two temp-file leaks on rename failure fixed. Gate green, 94.7%. |
+
+## Deferred
+
+| Item | Rationale |
+|---|---|
+| FR-010 criterion 2 (check path ids against the snapshot pattern) | D-R9: about sixty existing tests and fixtures use abbreviated ids; the `.`/`..` check closes the attack and the service validates ids. Revisit when fixtures use ULID-shaped ids |
+
+No other finding is deferred. FR-017 took option (a) (ADR-014); the `git rm` of the generated package was not possible in this environment and option (a) meets the criteria.
