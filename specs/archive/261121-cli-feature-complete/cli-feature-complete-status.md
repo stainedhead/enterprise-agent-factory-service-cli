@@ -1,7 +1,7 @@
 # Dev-Flow Implementation Status
 
 **PRD:** enterprise-agent-factory-service-cli-PRD.md
-**Spec:** specs/261121-cli-feature-complete
+**Spec:** specs/archive/261121-cli-feature-complete
 **Branch:** feat/cli-feature-complete
 **Review PRD:** cli-feature-complete-auto-review-PRD.md
 **Process Start:** 2026-11-21T22:01:20Z
@@ -18,7 +18,7 @@
 | 4  | Documentation and User Docs     | ✅ Complete | 2026-11-22T00:45:02Z | 2026-11-22T00:47:19Z | 2 |
 | 5  | Code and Design Review          | ✅ Complete | 2026-11-22T00:47:19Z | 2026-11-22T00:54:52Z | 8 |
 | 6  | Prepare Review PRD              | ✅ Complete | 2026-11-22T00:54:52Z | 2026-11-22T00:55:54Z | 1 |
-| 7  | Archive Original Spec           | ⬜ Pending | — | — | — |
+| 7  | Archive Original Spec           | ✅ Complete | 2026-11-22T01:00:00Z | 2026-11-22T01:01:00Z | 1 |
 | 8  | Spec Review Fixes               | ⬜ Pending | — | — | — |
 | 9  | Implement Review Fixes          | ⬜ Pending | — | — | — |
 | 10 | Archive Fixes Spec              | ⬜ Pending | — | — | — |
@@ -41,3 +41,4 @@
 - Step 4: docs/product-summary.md and product-details.md filled; technical-details gains package map, security controls, timeouts, releases; ADR-007..ADR-011; README links every user guide; configuration.md env-var table; credentials.md workload token. Follow-up correction 45dfe46 (README secret example, notice wording) made during Step 5.
 - Step 5: review findings in `cli-feature-complete-auto-review-PRD.md`: 1 P0 (FR-001 config-file injection, reproduced), 4 P1, 15 P2. Verdict: request changes.
 - Step 6: review-prd verdict Ready for spec. Added problem/goals/non-goals, NFRs, dependencies, implementation guidance (TDD, review per fix, five worker streams in git worktrees), open questions and a review record. Endpoint-userinfo finding moved from P1 to P2 (now FR-005); CSV NextToken is now FR-004 (P1). Final counts: 1 P0, 3 P1, 16 P2.
+- Step 7: spec archived to specs/archive/261121-cli-feature-complete/ (status.md Phase 6 left as recorded; two tasks M6-X2/M6-X3 open for J, so archived with explicit authorization from J). Decision: archive-spec confirmation prompts skipped, J authorized the whole flow.
