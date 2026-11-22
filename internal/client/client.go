@@ -118,8 +118,16 @@ func (c *Client) Do(ctx context.Context, req Request) (*Response, error) {
 		if fail.apiErr != nil {
 			ra = parseRetryAfter(fail.apiErr.Header, c.cfg.Now())
 		}
+		if limit := retryAfterCap(c.cfg.ReadTimeout); ra > limit {
+			c.dbg.printf("client", "Retry-After %s is over the limit of %s; not retrying: %v", ra, limit, last)
+			return nil, last
+		}
 		d := backoff(attempt, c.cfg.Rand, ra)
-		c.dbg.printf("client", "retrying in %s (attempt %d of %d): %v", d, attempt+1, maxAttempts, last)
+		why := ""
+		if ra > 0 {
+			why = fmt.Sprintf(", Retry-After %s", ra)
+		}
+		c.dbg.printf("client", "retrying in %s (attempt %d of %d%s): %v", d, attempt+1, maxAttempts, why, last)
 		if err := c.cfg.Sleep(ctx, d); err != nil {
 			return nil, err
 		}
@@ -130,7 +138,7 @@ func (c *Client) Do(ctx context.Context, req Request) (*Response, error) {
 func (c *Client) buildURL(req *Request) (string, error) {
 	base, err := url.Parse(strings.TrimRight(c.cfg.Endpoint, "/"))
 	if err != nil || base.Host == "" {
-		return "", fmt.Errorf("invalid endpoint URL %q", c.cfg.Endpoint)
+		return "", fmt.Errorf("invalid endpoint URL")
 	}
 	u := base.String() + req.Path
 	if len(req.Query) > 0 {
@@ -189,7 +197,7 @@ func (c *Client) once(ctx context.Context, req *Request, key string, cred Creden
 		hr.Header.Set("Idempotency-Key", key)
 	}
 	start := c.cfg.Now()
-	c.dbg.printf("client", "request: %s %s operation=%s attempt=%d", req.Method, u, req.Operation, attempt)
+	c.dbg.printf("client", "request: %s %s operation=%s attempt=%d", req.Method, redactURL(u), req.Operation, attempt)
 	if c.dbg != nil {
 		for _, l := range redact.Headers(hr.Header) {
 			c.dbg.printf("client", "request header: %s", l)
@@ -261,4 +269,15 @@ func (c *Client) noteVersion(server string) {
 		c.noted = true
 		_, _ = fmt.Fprintln(c.cfg.Stderr, msg)
 	}
+}
+
+// redactURL hides the password of a URL's userinfo for the --debug log.
+func redactURL(raw string) string {
+	if u, err := url.Parse(raw); err == nil {
+		if u.User != nil {
+			u.User = url.User("xxxxx") // the user name can be a token too
+		}
+		return u.String()
+	}
+	return "[invalid URL]"
 }

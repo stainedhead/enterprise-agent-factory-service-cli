@@ -502,3 +502,61 @@ func TestDefaultsAreWired(t *testing.T) {
 		t.Error("keys equal")
 	}
 }
+
+// FR-011: Retry-After is capped (20 s, or the read timeout when smaller); over the cap the client gives up.
+func TestRetryAfterOverCapGivesUpWithTheAPIError(t *testing.T) {
+	future := time.Now().Add(26 * time.Hour).UTC().Format(http.TimeFormat)
+	for name, c := range map[string]struct {
+		header      string
+		readTimeout time.Duration
+	}{
+		"delta seconds":       {"86400", 0},
+		"HTTP date":           {future, 0},
+		"just over 20s":       {"21", 0},
+		"over the read limit": {"5", 3 * time.Second},
+	} {
+		t.Run(name, func(t *testing.T) {
+			var n atomic.Int32
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				n.Add(1)
+				w.Header().Set("Retry-After", c.header)
+				jsonReply(w, 429, errBody("Throttled", ""))
+			}))
+			defer srv.Close()
+			var dbg bytes.Buffer
+			cl, sl, _ := newClient(t, srv, func(cfg *Config) { cfg.ReadTimeout = c.readTimeout; cfg.Debug = &dbg; cfg.Now = time.Now })
+			_, err := cl.Do(context.Background(), Request{Method: "GET", Path: "/x"})
+			var ae *APIError
+			if !errors.As(err, &ae) || ae.Status != 429 {
+				t.Fatalf("err = %v", err)
+			}
+			if n.Load() != 1 || len(sl.d) != 0 {
+				t.Errorf("attempts=%d sleeps=%v", n.Load(), sl.d)
+			}
+			if !strings.Contains(dbg.String(), "Retry-After") || !strings.Contains(dbg.String(), "not retrying") {
+				t.Errorf("debug does not say why:\n%s", dbg.String())
+			}
+		})
+	}
+}
+
+func TestRetryAfterWithinCapIsHonouredAndLogged(t *testing.T) {
+	var n atomic.Int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if n.Add(1) == 1 {
+			w.Header().Set("Retry-After", "20")
+			jsonReply(w, 429, errBody("Throttled", ""))
+			return
+		}
+		jsonReply(w, 200, `{}`)
+	}))
+	defer srv.Close()
+	var dbg bytes.Buffer
+	cl, sl, _ := newClient(t, srv, func(cfg *Config) { cfg.Debug = &dbg; cfg.Now = time.Now })
+	if _, err := cl.Do(context.Background(), Request{Method: "GET", Path: "/x"}); err != nil {
+		t.Fatal(err)
+	}
+	if len(sl.d) != 1 || sl.d[0] != 20*time.Second || !strings.Contains(dbg.String(), "Retry-After 20s") {
+		t.Errorf("sleeps=%v\n%s", sl.d, dbg.String())
+	}
+}

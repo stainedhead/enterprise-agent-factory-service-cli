@@ -7,8 +7,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"math"
 	"net/url"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -189,6 +191,9 @@ func Build(cmd *cli.Command, p *cli.Parsed, src Sources, profileTeamID string) (
 			return nil, usage(cmd, "%v", err)
 		}
 	}
+	if err := checkPathParams(cmd, b); err != nil {
+		return nil, usage(cmd, "%v", err)
+	}
 	var missing []string
 	for _, o := range cmd.Options {
 		if !o.Required {
@@ -242,6 +247,13 @@ func setParam(b *Built, o cli.Option, text string) error {
 		return fmt.Errorf("argument %s: %w", o.Flag, err)
 	}
 	if o.Kind == cli.Int || o.Kind == cli.Number {
+		strict := strictNumber
+		if o.Kind == cli.Int {
+			strict = strictInt
+		}
+		if err := strict(text); err != nil {
+			return fmt.Errorf("argument %s: %w", o.Flag, err)
+		}
 		if err := checkRange(o, text); err != nil {
 			return fmt.Errorf("argument %s: %w", o.Flag, err)
 		}
@@ -250,6 +262,29 @@ func setParam(b *Built, o cli.Option, text string) error {
 		b.Path[o.Wire] = text
 	} else {
 		b.Query.Set(o.Wire, text)
+	}
+	return nil
+}
+
+// checkPathParams refuses a path parameter that is "." or "..", which a server or proxy could normalise
+// into another route (FR-010). Empty values are reported as missing arguments. The snapshot's id patterns
+// are not checked here: see D-R9.
+func checkPathParams(cmd *cli.Command, b *Built) error {
+	flags := map[string]string{}
+	for _, o := range cmd.Options {
+		if o.In == "path" {
+			flags[o.Wire] = o.Flag
+		}
+	}
+	for wire, v := range b.Path {
+		if v != "." && v != ".." {
+			continue
+		}
+		flag, ok := flags[wire]
+		if !ok {
+			flag = "--" + cli.Kebab(wire)
+		}
+		return fmt.Errorf("argument %s: %q is not a valid value", flag, v)
 	}
 	return nil
 }
@@ -273,6 +308,34 @@ func checkEnum(o cli.Option, v string) error {
 		}
 	}
 	return fmt.Errorf("invalid choice %q (choose from %s)", v, strings.Join(o.Enum, ", "))
+}
+
+var (
+	jsonInteger = regexp.MustCompile(`^-?(0|[1-9][0-9]*)$`)
+	jsonNumber  = regexp.MustCompile(`^-?(0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]+)?$`)
+)
+
+// strictInt accepts only a JSON integer that fits in int64: no sign, leading zeros, hex, exponent or
+// fraction (FR-009).
+func strictInt(v string) error {
+	if !jsonInteger.MatchString(v) {
+		return fmt.Errorf("expected an integer, got %q", v)
+	}
+	if _, err := strconv.ParseInt(v, 10, 64); err != nil {
+		return fmt.Errorf("expected an integer, got %q", v)
+	}
+	return nil
+}
+
+// strictNumber accepts only a finite JSON number.
+func strictNumber(v string) error {
+	if !jsonNumber.MatchString(v) {
+		return fmt.Errorf("expected a number, got %q", v)
+	}
+	if f, err := strconv.ParseFloat(v, 64); err != nil || math.IsInf(f, 0) || math.IsNaN(f) {
+		return fmt.Errorf("expected a number, got %q", v)
+	}
+	return nil
 }
 
 func checkRange(o cli.Option, v string) error {
@@ -308,14 +371,17 @@ func convert(o cli.Option, vals []string, src Sources, p *cli.Parsed) (json.RawM
 		raw, _ := json.Marshal(first)
 		return raw, first, nil
 	case cli.Int:
-		if _, err := strconv.ParseInt(first, 10, 64); err != nil {
-			return nil, "", fmt.Errorf("expected an integer, got %q", first)
+		if err := strictInt(first); err != nil {
+			return nil, "", err
 		}
 		if err := checkRange(o, first); err != nil {
 			return nil, "", err
 		}
 		return json.RawMessage(first), first, nil
 	case cli.Number:
+		if err := strictNumber(first); err != nil {
+			return nil, "", err
+		}
 		if err := checkRange(o, first); err != nil {
 			return nil, "", err
 		}
@@ -327,12 +393,12 @@ func convert(o cli.Option, vals []string, src Sources, p *cli.Parsed) (json.RawM
 		for i, v := range vals {
 			switch o.Elem {
 			case "integer":
-				if _, err := strconv.ParseInt(v, 10, 64); err != nil {
+				if strictInt(v) != nil {
 					return nil, "", fmt.Errorf("expected integers, got %q", v)
 				}
 				items[i] = json.RawMessage(v)
 			case "number":
-				if _, err := strconv.ParseFloat(v, 64); err != nil {
+				if strictNumber(v) != nil {
 					return nil, "", fmt.Errorf("expected numbers, got %q", v)
 				}
 				items[i] = json.RawMessage(v)

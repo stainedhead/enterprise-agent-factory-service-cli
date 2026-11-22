@@ -178,3 +178,47 @@ func TestUsageErrorText(t *testing.T) {
 		t.Fatal("Value")
 	}
 }
+
+// FR-009 (reproduced): forms that are not JSON numbers are usage errors (252), not an internal marshalling failure.
+func TestIntegerFormsAreUsageErrors(t *testing.T) {
+	for _, bad := range []string{"+3", "03", "0x10", "1e3"} {
+		r, _, _ := capture(t, "", "pools", "scale-pool", "--team-id", "team_1", "--pool-id", "pool_1", "--workers", bad)
+		if r.code != 252 || !strings.Contains(r.errOut, `argument --workers: expected an integer, got "`+bad+`"`) || strings.Contains(r.errOut, "MarshalJSON") {
+			t.Errorf("%s: %+v", bad, r)
+		}
+	}
+	r, _, _ := capture(t, "", "budgets", "put-budget", "--team-id", "team_1", "--amount-usd", "10", "--period", "monthly", "--thresholds", "050", "80")
+	if r.code != 252 || strings.Contains(r.errOut, "MarshalJSON") {
+		t.Errorf("thresholds: %+v", r)
+	}
+}
+
+// FR-010: "." and ".." never reach the server as a path segment.
+func TestPathParametersAreCheckedBeforeAnyRequest(t *testing.T) {
+	const team = "team_01JD2Q3R4S5T6V7W8X9Y0Z0001"
+	cases := [][]string{
+		{"teams", "describe-team", "--team-id", ".."},
+		{"teams", "describe-team", "--team-id", "."},
+		{"agents", "describe-agent", "--team-id", team, "--agent-id", ".."},
+		{"work-orders", "update-repo", "--work-order-id", "wo_1", "--host", "github.com", "--owner", "..", "--repo", "r", "--status", "merged"},
+		{"work-orders", "update-repo", "--work-order-id", "wo_1", "--repo", "github.com/acme/..", "--status", "merged"},
+		{"work-orders", "update-repo", "--work-order-id", "wo_1", "--host", ".", "--owner", "o", "--repo", "r", "--status", "merged"},
+	}
+	for _, args := range cases {
+		hits := 0
+		r := run(t, func(w http.ResponseWriter, _ *http.Request) { hits++; jsonReply(w, 200, `{}`) }, args...)
+		if r.code != 252 || hits != 0 || !strings.Contains(r.errOut, "argument --") {
+			t.Errorf("%v: %+v hits=%d", args, r, hits)
+		}
+	}
+	// an empty value is a missing argument, not a request for the collection
+	if r := run(t, func(w http.ResponseWriter, _ *http.Request) { jsonReply(w, 200, `{}`) }, "teams", "describe-team", "--team-id", ""); r.code != 252 {
+		t.Errorf("empty: %+v", r)
+	}
+	// a valid id is still sent
+	hits := 0
+	r := run(t, func(w http.ResponseWriter, _ *http.Request) { hits++; jsonReply(w, 200, `{"id":"`+team+`"}`) }, "teams", "describe-team", "--team-id", team)
+	if r.code != 0 || hits != 1 {
+		t.Errorf("valid: %+v", r)
+	}
+}

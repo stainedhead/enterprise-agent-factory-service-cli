@@ -2,6 +2,7 @@
 
 | Symptom | Cause and fix |
 |---|---|
+| `endpoint_url must not contain credentials, a query or a fragment` (255) | Remove `user:pass@`, `?...` or `#...` from the endpoint URL; credentials belong in `AFS_API_KEY` or the credentials file |
 | `no endpoint is configured` (255) | Run `afs configure`, set `AFS_ENDPOINT_URL`, or pass `--endpoint-url` |
 | `endpoint_url must use https` (255) | Use an `https://` endpoint; `http://` works only for loopback hosts |
 | `the service returned an invalid sign-in provider (<field>)` (255) | The service's provider settings are malformed or not https; nothing was written. Ask the service administrator to correct the identity provider |

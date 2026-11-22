@@ -14,6 +14,17 @@ const maxAttempts = 3
 
 const baseDelay = 200 * time.Millisecond
 
+// maxRetryAfter caps a server-requested delay (FR-011, D-R2); the read timeout lowers it further.
+const maxRetryAfter = 20 * time.Second
+
+// retryAfterCap is the longest Retry-After the client waits for.
+func retryAfterCap(readTimeout time.Duration) time.Duration {
+	if readTimeout > 0 && readTimeout < maxRetryAfter {
+		return readTimeout
+	}
+	return maxRetryAfter
+}
+
 // backoff is full jitter: rand(0, 200ms * 2^(attempt-1)); a longer Retry-After wins (D-C24).
 func backoff(attempt int, rnd func() float64, retryAfter time.Duration) time.Duration {
 	ceiling := baseDelay << (attempt - 1)

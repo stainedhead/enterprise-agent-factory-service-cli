@@ -66,3 +66,20 @@ func TestNoQueryParamCarriesSecret(t *testing.T) {
 		}
 	}
 }
+
+// FR-005 (defence in depth): a request URL with credentials is logged redacted.
+func TestDebugRequestLineRedactsUserinfo(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) { jsonReply(w, 200, `{}`) }))
+	defer srv.Close()
+	var dbg bytes.Buffer
+	c, _, _ := newClient(t, srv, func(cfg *Config) {
+		cfg.Debug = &dbg
+		cfg.Endpoint = strings.Replace(srv.URL, "http://", "http://user:hunter2@", 1)
+	})
+	if _, err := c.Do(context.Background(), Request{Method: "GET", Path: "/v1/teams", Operation: "ListTeams"}); err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(dbg.String(), "hunter2") || !strings.Contains(dbg.String(), "xxxxx@") {
+		t.Errorf("%s", dbg.String())
+	}
+}

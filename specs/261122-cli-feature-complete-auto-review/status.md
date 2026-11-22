@@ -18,7 +18,7 @@
 | 2 | Research and data modelling | Complete | research.md, data-dictionary.md |
 | 3 | Architecture and planning | Complete | architecture.md, plan.md |
 | 4 | Task breakdown | Complete | tasks.md, one task per FR |
-| 5 | Implementation | In Progress | 7 / 20 FRs |
+| 5 | Implementation | In Progress | 11 / 20 FRs |
 | 6 | Completion and archival | Not Started | |
 
 ## Task log
@@ -31,3 +31,4 @@ Updated after every fix: FR, commit, tests added, review note.
 | FR-003 | P1 | Done | sanitize terminal control characters in table, text, errors and prompts | output.Sanitize + sanitizing writer in ReportError; device prompt and provider list sanitized; json/yaml unchanged (D-R7). Review: bypass attempts with C1, DEL, invalid UTF-8 covered. 93.6%. |
 | FR-004 | P1 | Done | print NextToken on stderr for CSV with --no-paginate; resume without header | fetchCSV reports X-Afs-Next-Token; CSVWriter.Resume. Review: stdout stays clean CSV. 93.6%. |
 | FR-006,FR-007,FR-008 | P2 | Done | IdP timeouts, access-token validation, --debug for OIDC traffic | FR-006 IdPClient (transport + read timeout); FR-007 token()/ErrNoAccessToken, Bearer only; FR-008 sso.WithDebug logs method, redacted URL, status, duration, never bodies. Review: no secret reaches debug output. 93.7%. |
+| FR-005,FR-009,FR-010,FR-011 | P2 | Done (FR-010 criterion 2 deferred, D-R9) | endpoint userinfo refused and redacted, strict number options, dot path segments refused, Retry-After cap | FR-005 ValidateEndpoint + redactURL (user name masked too); FR-009 strictInt/strictNumber (252); FR-010 '.'/'..' refused, id-pattern check deferred (about 60 tests use abbreviated ids); FR-011 20s or read-timeout cap, debug log reason. Review: all hostile cases tested. 94.0%. |

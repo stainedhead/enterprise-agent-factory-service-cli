@@ -134,16 +134,20 @@ func contains(l []string, s string) bool {
 	return false
 }
 
-// ValidateEndpoint requires https; http is accepted only for loopback hosts (D-C33).
+// ValidateEndpoint requires https; http is accepted only for loopback hosts (D-C33). Credentials, a query
+// or a fragment in the URL are refused, and no message echoes them (FR-005).
 func ValidateEndpoint(raw string) error {
 	if raw == "" {
 		return fmt.Errorf("no endpoint configured; run afs configure, set AFS_ENDPOINT_URL or pass --endpoint-url")
 	}
 	u, err := url.Parse(raw)
 	if err != nil || u.Host == "" {
-		return fmt.Errorf("endpoint_url %q is not a valid URL", raw)
+		return fmt.Errorf("endpoint_url is not a valid URL")
 	}
-	return checkScheme("endpoint_url", raw, u)
+	if u.User != nil || u.RawQuery != "" || u.Fragment != "" || strings.ContainsAny(raw, "?#") {
+		return fmt.Errorf("endpoint_url must not contain credentials, a query or a fragment")
+	}
+	return checkScheme("endpoint_url", u.Redacted(), u)
 }
 
 // IsLoopbackHost reports whether a host name is localhost or a loopback address.

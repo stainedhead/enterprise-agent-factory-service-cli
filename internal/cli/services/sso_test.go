@@ -396,3 +396,30 @@ func TestSSOLoginDebugCoversIdPTraffic(t *testing.T) {
 		}
 	}
 }
+
+// FR-005: the endpoint option, the environment and the profile all refuse credentials in the URL.
+func TestEndpointWithCredentialsIsRefusedFromEverySource(t *testing.T) {
+	srv := fakeAPI(t, oneProvider)
+	bad := strings.Replace(srv.URL, "http://", "http://user:hunter2@", 1)
+	home := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(home, ".afs"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(home, ".afs", "config"), []byte("[profile viaprofile]\nendpoint_url = "+bad+"\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	runs := [][]string{
+		{"sso", "list-providers", "--endpoint-url", bad, "--debug"},
+		{"sso", "list-providers", "--profile", "viaprofile", "--debug"},
+	}
+	for _, args := range runs {
+		r := afs(t, home, map[string]string{}, "", args...)
+		if r.code != 255 || strings.Contains(r.err+r.out, "hunter2") || !strings.Contains(r.err, "must not contain credentials") {
+			t.Errorf("%v: %+v", args, r)
+		}
+	}
+	r := afs(t, home, map[string]string{"AFS_ENDPOINT_URL": bad}, "", "sso", "list-providers", "--debug")
+	if r.code != 255 || strings.Contains(r.err+r.out, "hunter2") {
+		t.Errorf("env: %+v", r)
+	}
+}

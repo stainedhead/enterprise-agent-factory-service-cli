@@ -323,3 +323,24 @@ func TestWriteProfileRefusesUnsafeIssuer(t *testing.T) {
 		t.Error("config written")
 	}
 }
+
+// FR-005: an endpoint with credentials, a query or a fragment is refused, and the message never echoes them.
+func TestValidateEndpointRefusesUserinfoQueryFragment(t *testing.T) {
+	for _, raw := range []string{"https://user:hunter2@afs.example.com", "https://hunter2@afs.example.com", "http://user:hunter2@127.0.0.1:8080", "https://afs.example.com?token=hunter2", "https://afs.example.com#hunter2"} {
+		err := ValidateEndpoint(raw)
+		if err == nil {
+			t.Errorf("%q accepted", raw)
+			continue
+		}
+		if strings.Contains(err.Error(), "hunter2") {
+			t.Errorf("%q: message echoes the secret: %v", raw, err)
+		}
+		if !strings.Contains(err.Error(), "endpoint_url must not contain credentials, a query or a fragment") {
+			t.Errorf("%q: %v", raw, err)
+		}
+	}
+	// other rejections do not echo userinfo either
+	if err := ValidateEndpoint("http://user:hunter2@afs.example.com"); err == nil || strings.Contains(err.Error(), "hunter2") {
+		t.Errorf("%v", err)
+	}
+}
