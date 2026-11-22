@@ -35,7 +35,7 @@ directions.
 | Global options | `--profile`, `--endpoint-url`, `--output`, `--query`, `--no-paginate`, `--max-items`, `--page-size`, `--starting-token`, `--cli-input-json`, `--generate-cli-skeleton`, `--debug`, `--no-cli-pager`, `--color`, `--cli-connect-timeout`, `--cli-read-timeout`, `--version`, accepted anywhere on the line |
 | Output | `json` is the API's body re-indented (field names, order, `null`s and unknown fields preserved); `yaml`, `table`, `text`, `csv` for people and spreadsheets; `--query` (JMESPath) applies before rendering |
 | Pagination | Automatic; `--max-items` prints a `NextToken` that `--starting-token` resumes; `--page-size` 1 to 100 |
-| Safe updates | `If-Match` on every update; without `--if-match` the CLI reads the current version and prints `Applied to version N`; `412` reports the current version |
+| Safe updates | `If-Match` on every update; without `--if-match` the CLI reads the current version and prints `Read the current version N; sending If-Match: "N"` on stderr; `412` reports the current version |
 | Idempotency and retries | Creates send an `Idempotency-Key` (ULID); at most 3 attempts with full-jitter backoff or `Retry-After`; a request is re-sent after a dropped connection only when it is a `GET` or carries an idempotency key |
 | `--wait` | Polls until `Ready` at the mutation's generation; `Failed` or `Degraded` exits 254; `--wait-timeout` (default 10m) |
 | Errors | `An error occurred (<Code>) when calling the <Operation> operation: <message>` and `Request ID:` on stderr |

@@ -30,7 +30,7 @@ afs sso login --profile prod
 afs teams list-teams --output table
 afs agents list-agents --team-id team_01J... --query "items[?status.phase=='Running'].name"
 afs budgets put-budget --team-id team_01J... --amount-usd 40000 --period monthly --thresholds 50 80 100
-afs secrets create-secret --team-id team_01J... --name github-bot-key --secret-string file://key.pem
+afs secrets create-secret --team-id team_01J... --name github-bot-key --scope team --secret-value file://key.pem
 ```
 
 ## Build and test
