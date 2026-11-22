@@ -312,3 +312,14 @@ func TestValidateIdentifier(t *testing.T) {
 		}
 	}
 }
+
+func TestWriteProfileRefusesUnsafeIssuer(t *testing.T) {
+	home := t.TempDir()
+	s := Source{Getenv: func(string) string { return "" }, Home: home}
+	if _, err := WriteProfile(s, "p", map[string]string{"sso_issuer": "http://idp.example.com"}, []string{"sso_issuer"}); err == nil || !strings.Contains(err.Error(), "sso_issuer") {
+		t.Fatalf("%v", err)
+	}
+	if _, err := os.Stat(configPath(s)); err == nil {
+		t.Error("config written")
+	}
+}

@@ -146,16 +146,21 @@ func ValidateEndpoint(raw string) error {
 	return checkScheme("endpoint_url", raw, u)
 }
 
+// IsLoopbackHost reports whether a host name is localhost or a loopback address.
+func IsLoopbackHost(h string) bool {
+	if h == "localhost" {
+		return true
+	}
+	ip := net.ParseIP(h)
+	return ip != nil && ip.IsLoopback()
+}
+
 func checkScheme(key, raw string, u *url.URL) error {
 	switch u.Scheme {
 	case "https":
 		return nil
 	case "http":
-		h := u.Hostname()
-		if h == "localhost" {
-			return nil
-		}
-		if ip := net.ParseIP(h); ip != nil && ip.IsLoopback() {
+		if IsLoopbackHost(u.Hostname()) {
 			return nil
 		}
 		return fmt.Errorf("%s must use https (http is allowed only for loopback hosts): %s", key, raw)
@@ -205,6 +210,11 @@ func WriteProfile(s Source, profile string, kv map[string]string, order []string
 	}
 	for _, k := range order {
 		if v, ok := kv[k]; ok && v != "" {
+			if k == "sso_issuer" {
+				if err := ValidateIssuer(k, v); err != nil {
+					return path, err
+				}
+			}
 			if err := f.Set(ConfigSection(profile), k, v); err != nil {
 				return path, fmt.Errorf("not writing %s: %w", k, err)
 			}

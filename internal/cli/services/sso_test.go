@@ -178,7 +178,7 @@ func idpServer(t *testing.T) *httptest.Server {
 		case "/v1/identity-providers":
 			_, _ = w.Write([]byte(`{"items":[{"id":"idp_1","kind":"okta","name":"Okta","issuerUrl":"` + srv.URL + `","cliClientId":"cli1","isDefault":true}]}`))
 		case "/.well-known/openid-configuration":
-			_, _ = w.Write([]byte(`{"device_authorization_endpoint":"` + srv.URL + `/device","token_endpoint":"` + srv.URL + `/token"}`))
+			_, _ = w.Write([]byte(`{"issuer":"` + srv.URL + `","device_authorization_endpoint":"` + srv.URL + `/device","token_endpoint":"` + srv.URL + `/token"}`))
 		case "/device":
 			_, _ = w.Write([]byte(`{"device_code":"dc","user_code":"ABCD-1234","verification_uri":"https://v.example.com","expires_in":600,"interval":1}`))
 		case "/token":
@@ -293,5 +293,22 @@ func TestConfigureRejectsControlCharactersInTypedValues(t *testing.T) {
 	}
 	if _, err := os.Stat(filepath.Join(home, ".afs", "config")); err == nil {
 		t.Error("config written")
+	}
+}
+
+// FR-002: a profile whose sso_issuer is plain http (not loopback) is refused before any request.
+func TestProfileWithInsecureIssuerIsRefused(t *testing.T) {
+	srv := fakeAPI(t, oneProvider)
+	home := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(home, ".afs"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	cfg := "[default]\nsso_issuer = http://idp.example.com\nsso_client_id = c\n"
+	if err := os.WriteFile(filepath.Join(home, ".afs", "config"), []byte(cfg), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	r := afs(t, home, map[string]string{"AFS_ENDPOINT_URL": srv.URL}, "", "sso", "get-caller-identity")
+	if r.code != 255 || !strings.Contains(r.err, "sso_issuer") {
+		t.Fatalf("%+v", r)
 	}
 }

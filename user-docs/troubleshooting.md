@@ -4,6 +4,8 @@
 |---|---|
 | `no endpoint is configured` (255) | Run `afs configure`, set `AFS_ENDPOINT_URL`, or pass `--endpoint-url` |
 | `endpoint_url must use https` (255) | Use an `https://` endpoint; `http://` works only for loopback hosts |
+| `the service returned an invalid sign-in provider (<field>)` (255) | The service's provider settings are malformed or not https; nothing was written. Ask the service administrator to correct the identity provider |
+| `sso_issuer must use https` or `names a different issuer` (255) | The profile's `sso_issuer`, or what the identity provider reports, is not a safe https issuer. Fix the profile with `afs configure sso` or the provider's settings |
 | `Run afs sso login --profile <name>` (255) | The sign-in session is missing or expired. Run the command it names |
 | `An error occurred (Unauthenticated)` (254) | The credential was rejected. Check `AFS_API_KEY`, the credentials file and `afs sso get-caller-identity` |
 | `An error occurred (AccessDenied)` (254) | Your role lacks the permission shown on the `Required permission` line |

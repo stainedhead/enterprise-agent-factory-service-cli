@@ -45,7 +45,7 @@ func newIdP(t *testing.T, clk *clock) *idp {
 	p := &idp{clk: clk, refreshOK: true}
 	mux := http.NewServeMux()
 	mux.HandleFunc("/.well-known/openid-configuration", func(w http.ResponseWriter, r *http.Request) {
-		d := map[string]string{"token_endpoint": p.srv.URL + "/token"}
+		d := map[string]string{"issuer": p.srv.URL, "token_endpoint": p.srv.URL + "/token"}
 		if !p.noDevice {
 			d["device_authorization_endpoint"] = p.srv.URL + "/device"
 		}
@@ -189,7 +189,7 @@ func TestLoginDiscoveryFailures(t *testing.T) {
 	if _, err := Login(context.Background(), loginOpts(clk, &bytes.Buffer{}), bad.URL, "c"); err == nil || !strings.Contains(err.Error(), "discovery") {
 		t.Errorf("404 discovery: %v", err)
 	}
-	empty := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { _, _ = w.Write([]byte(`{}`)) }))
+	empty := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { _, _ = fmt.Fprintf(w, `{"issuer":"http://%s"}`, r.Host) })) //nolint:gosec // test server echoing its own host
 	defer empty.Close()
 	if _, err := Discover(context.Background(), http.DefaultClient, empty.URL); err == nil {
 		t.Error("discovery without token_endpoint accepted")
@@ -206,7 +206,7 @@ func TestLoginVerificationURIComplete(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case "/.well-known/openid-configuration":
-			_, _ = fmt.Fprintf(w, `{"device_authorization_endpoint":"http://%s/device","token_endpoint":"http://%s/token"}`, r.Host, r.Host) //nolint:gosec // test server echoing its own host
+			_, _ = fmt.Fprintf(w, `{"issuer":"http://%s","device_authorization_endpoint":"http://%s/device","token_endpoint":"http://%s/token"}`, r.Host, r.Host, r.Host) //nolint:gosec // test server echoing its own host
 		case "/device":
 			_, _ = w.Write([]byte(`{"device_code":"d","user_code":"U","verification_uri":"https://v","verification_uri_complete":"https://v?c=U"}`))
 		default:

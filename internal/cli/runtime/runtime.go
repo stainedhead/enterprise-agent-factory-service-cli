@@ -3,6 +3,7 @@ package runtime
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -62,6 +63,11 @@ func open(env *cli.Env, g cli.Globals, noAuth, lenient bool) (*Session, error) {
 	}
 	if err := config.ValidateEndpoint(st.EndpointURL); err != nil {
 		return nil, err
+	}
+	if !lenient && st.SSOIssuer != "" {
+		if err := config.ValidateIssuer("sso_issuer", st.SSOIssuer); err != nil {
+			return nil, fmt.Errorf("profile %s: %w", st.Profile, err)
+		}
 	}
 	src := Source(env)
 	rt := env.RoundTripper
