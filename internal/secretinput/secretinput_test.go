@@ -47,3 +47,40 @@ func TestReadRejectsBadValues(t *testing.T) {
 		t.Error("missing real file accepted")
 	}
 }
+
+// CLI-9: the no-echo prompt returns what the terminal reader returns, within the same limits.
+func TestPromptNoEcho(t *testing.T) {
+	r := Reader{ReadPassword: func() ([]byte, error) { return []byte("typed"), nil }}
+	got, err := r.Prompt()
+	if err != nil || string(got) != "typed" {
+		t.Fatalf("%q %v", got, err)
+	}
+}
+
+// CLI-9: with no terminal and no value there is nothing to prompt on.
+func TestNoTTYNoValue(t *testing.T) {
+	if _, err := (Reader{}).Prompt(); !errors.Is(err, ErrNoValue) {
+		t.Fatalf("err = %v", err)
+	}
+}
+
+func TestPromptRejectsBadValues(t *testing.T) {
+	for name, v := range map[string][]byte{"empty": {}, "binary": {0xff}, "big": []byte(strings.Repeat("x", MaxSecretBytes+1))} {
+		if _, err := (Reader{ReadPassword: func() ([]byte, error) { return v, nil }}).Prompt(); err == nil {
+			t.Errorf("%s accepted", name)
+		}
+	}
+	if _, err := (Reader{ReadPassword: func() ([]byte, error) { return nil, errors.New("closed") }}).Prompt(); err == nil {
+		t.Error("terminal error swallowed")
+	}
+}
+
+// D-C16: file:// and fileb:// are verbatim, including a trailing newline.
+func TestFileAndFilebVerbatim(t *testing.T) {
+	r := Reader{ReadFile: func(string) ([]byte, error) { return []byte("line\n"), nil }}
+	for _, a := range []string{"file://x", "fileb://x"} {
+		if b, err := r.Read(a); err != nil || string(b) != "line\n" {
+			t.Errorf("%s: %q %v", a, b, err)
+		}
+	}
+}

@@ -2,6 +2,7 @@ package cli
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"net"
 	"net/http"
@@ -9,6 +10,8 @@ import (
 	"os/exec"
 	"strings"
 	"time"
+
+	"golang.org/x/term"
 )
 
 // Env is everything a command touches outside its arguments, injected so tests run without a
@@ -32,6 +35,9 @@ type Env struct {
 	Dial func(ctx context.Context, network, addr string) (net.Conn, error)
 	// LookPath finds a program on PATH.
 	LookPath func(string) (string, error)
+	// ReadPassword reads a line from the terminal without echo, writing the prompt to stderr;
+	// nil when stdin is not a terminal.
+	ReadPassword func(prompt string) ([]byte, error)
 	// StartPager starts the pager command writing to out; nil uses os/exec.
 	StartPager func(command string, out io.Writer) (io.WriteCloser, func() error, error)
 }
@@ -77,5 +83,21 @@ func NewEnv(stdin io.Reader, stdout, stderr io.Writer) *Env {
 		}
 	}
 	home, _ := os.UserHomeDir()
-	return &Env{Stdin: stdin, Stdout: stdout, Stderr: stderr, Vars: vars, Home: home, LookPath: exec.LookPath}
+	e := &Env{Stdin: stdin, Stdout: stdout, Stderr: stderr, Vars: vars, Home: home, LookPath: exec.LookPath}
+	e.StdinTTY, e.StdoutTTY = isTerminal(stdin), isTerminal(stdout)
+	if f, ok := stdin.(*os.File); ok && e.StdinTTY {
+		e.ReadPassword = func(prompt string) ([]byte, error) {
+			_, _ = fmt.Fprint(stderr, prompt)
+			b, err := term.ReadPassword(int(f.Fd())) //nolint:gosec // a file descriptor fits an int
+			_, _ = fmt.Fprintln(stderr)
+			return b, err
+		}
+	}
+	return e
+}
+
+// isTerminal reports whether a stream is an interactive terminal.
+func isTerminal(v any) bool {
+	f, ok := v.(*os.File)
+	return ok && term.IsTerminal(int(f.Fd())) //nolint:gosec // a file descriptor fits an int
 }

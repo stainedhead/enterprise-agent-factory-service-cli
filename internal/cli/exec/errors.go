@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"strings"
 
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/auth"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli"
@@ -24,13 +25,22 @@ func ReportError(w io.Writer, opID, profile string, err error) int {
 		if p := ae.RequiredPermission(); p != "" {
 			_, _ = fmt.Fprintf(w, "Required permission: %s\n", p)
 		}
+		if d := ae.Dependents(); len(d) > 0 {
+			_, _ = fmt.Fprintf(w, "Dependents: %s\n", strings.Join(d, ", "))
+		}
+		if m := ae.MissingTags(); len(m) > 0 {
+			_, _ = fmt.Fprintf(w, "Missing tags: %s\n", strings.Join(m, ", "))
+		}
 		if ae.Status == 401 {
 			_, _ = fmt.Fprintf(w, "%s.\n", auth.LoginHint(profile))
 		}
 		if ae.Status == 412 {
-			if v := ae.Header.Get("ETag"); v != "" {
-				_, _ = fmt.Fprintf(w, "The current version is %s. Read the resource again and retry.\n", v)
+			if v := strings.Trim(ae.Header.Get("ETag"), `"`); v != "" {
+				_, _ = fmt.Fprintf(w, "The resource changed (version %s). Re-run with --if-match %s to apply your change to the latest version.\n", v, v)
 			}
+		}
+		if ae.Status == 428 {
+			_, _ = fmt.Fprintln(w, "The service requires a version: pass --if-match <version> (see the resource's current version with its describe or list operation).")
 		}
 		if ae.RequestID != "" {
 			_, _ = fmt.Fprintf(w, "Request ID: %s\n", ae.RequestID)

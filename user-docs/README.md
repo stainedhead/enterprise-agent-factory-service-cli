@@ -9,6 +9,7 @@ How to install, configure and use the `afs` CLI.
 | [Single sign-on](sso.md) | `afs configure sso`, `afs sso login`, refresh and `afs sso logout` |
 | [Credentials](credentials.md) | API keys, the credential order, keeping secrets out of history |
 | [Teams and members](teams-and-members.md) | Teams, members, team audit events, service settings, identity providers |
+| [Agents and secrets](agents-and-secrets.md) | Agents, secret input rules, configuration values, external systems, platform catalogs |
 | [Output](output.md) | `--output json|yaml|table|text|csv`, `--query`, the pager, colour |
 | [Pagination](pagination.md) | Auto-pagination, `--max-items`, `--starting-token`, `--page-size`, CSV |
 | [Errors and exit codes](errors-and-exit-codes.md) | Error format, exit codes, retries, `--debug` |

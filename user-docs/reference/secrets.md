@@ -52,7 +52,7 @@ OPTIONS
           Possible values: team, agent, pool
        --secret-value (string) (required)
           Sent once, passed to Secrets Manager and dropped; never returned, logged or audited
-          Give file://PATH, fileb://PATH or - (standard input); never the value itself.
+          Give file://PATH, fileb://PATH or - (standard input), or leave the option out to be prompted without echo on a terminal; never the value itself.
        --idempotency-key (string)
           Idempotency key (default: a new ULID per invocation).
 
@@ -75,7 +75,18 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs secrets create-secret help
+       Create a secret from a file
+
+       afs secrets create-secret --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name github-pat --scope team --secret-value file://token.txt
+
+       Create a secret from standard input (printf '%s' "$TOKEN" | ...)
+
+       afs secrets create-secret --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name github-pat --scope team --secret-value -
+
+       Create a secret and type the value at a hidden prompt
+
+       afs secrets create-secret --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name github-pat --scope team
+
 ```
 
 ## delete-secret
@@ -120,7 +131,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs secrets delete-secret help
+       Delete a secret that nothing uses
+
+       afs secrets delete-secret --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --secret-id sec_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
 ```
 
 ## describe-secret
@@ -163,7 +177,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs secrets describe-secret help
+       Show one secret's metadata
+
+       afs secrets describe-secret --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --secret-id sec_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
 ```
 
 ## list-secrets
@@ -205,7 +222,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs secrets list-secrets help
+       List a team's secrets (names and metadata, never values)
+
+       afs secrets list-secrets --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
 ```
 
 ## put-secret-value
@@ -230,7 +250,7 @@ OPTIONS
        --secret-id (string) (required)
        --secret-value (string) (required)
           Sent once, passed to Secrets Manager and dropped; never returned, logged or audited
-          Give file://PATH, fileb://PATH or - (standard input); never the value itself.
+          Give file://PATH, fileb://PATH or - (standard input), or leave the option out to be prompted without echo on a terminal; never the value itself.
        --if-match (string)
           Apply only if the resource is at this version (safe update).
 
@@ -253,7 +273,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs secrets put-secret-value help
+       Replace a secret's value from a file (prints nothing)
+
+       afs secrets put-secret-value --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --secret-id sec_01JD2Q3R4S5T6V7W8X9Y0Z0001 --secret-value file://token.txt
+
 ```
 
 ## rotate-secret
@@ -278,7 +301,7 @@ OPTIONS
        --secret-id (string) (required)
        --secret-value (string) (required)
           Sent once, passed to Secrets Manager and dropped; never returned, logged or audited
-          Give file://PATH, fileb://PATH or - (standard input); never the value itself.
+          Give file://PATH, fileb://PATH or - (standard input), or leave the option out to be prompted without echo on a terminal; never the value itself.
        --idempotency-key (string)
           Idempotency key (default: a new ULID per invocation).
 
@@ -301,7 +324,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs secrets rotate-secret help
+       Rotate a secret to a new value
+
+       afs secrets rotate-secret --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --secret-id sec_01JD2Q3R4S5T6V7W8X9Y0Z0001 --secret-value file://new-token.txt
+
 ```
 
 ## update-secret
@@ -349,5 +375,8 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs secrets update-secret help
+       Change a secret's description
+
+       afs secrets update-secret --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --secret-id sec_01JD2Q3R4S5T6V7W8X9Y0Z0001 --description "Token for the build bot"
+
 ```

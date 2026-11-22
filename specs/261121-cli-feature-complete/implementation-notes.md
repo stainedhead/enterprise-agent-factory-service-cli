@@ -116,6 +116,16 @@ Recorded during M1 (2026-11-22):
 - **Enumerations are enforced client-side**, so examples use the API's values: roles `team_admin`/`team_viewer`, identity provider kinds `okta`/`entra_id`, setting keys from the `PutSetting` enum (for example `api.cors_origins`).
 - **Table width:** at 80 columns the widest column shrinks first, so a ULID `Id` can show truncated with a `…` in `table`; `json`, `text` and `csv` are untouched.
 
+Recorded during M2 (2026-11-22):
+
+- **`internal/secretinput` prompt** (M2-B1): `Reader.Prompt` with an injectable `ReadPassword`; `ErrNoValue` when there is no terminal. `cli.Env.ReadPassword` is set by `NewEnv` with `golang.org/x/term` v0.47.0 (spec 7.3) only when stdin is a terminal; the exec `Build` prompts for a missing *required* sensitive body field, so `--secret-value` can be left out on a terminal. Prompt text goes to stderr, the typed value is never echoed.
+- **`NewEnv` now detects terminals** (`StdinTTY`, `StdoutTTY`). M0 never set them in the real binary, so the pager and colour auto-detection were inert outside tests.
+- **412 message (CLI-US-6.1, D-C8):** `exec.currentVersionOn412` takes the version from the response `ETag`, else one more read; `ReportError` prints `The resource changed (version N). Re-run with --if-match N to apply your change to the latest version.` A 428 prints a hint to pass `--if-match`.
+- **Error details:** `ReportError` prints `Dependents: a, b` (`details.dependents`) and `Missing tags: ...` (`details.missingTags`).
+- **CLI-US-12.4** (same name in two teams) needs no override: agents are addressed by `--agent-id`; the test proves both creates and an id-addressed describe.
+- **Help for sensitive options** now also says that leaving the option out prompts on a terminal.
+- `Secret` columns show names and metadata only (never `secretsManagerArn`).
+
 ## Contract deltas found in M0
 
 | Id | Delta | CLI behaviour |

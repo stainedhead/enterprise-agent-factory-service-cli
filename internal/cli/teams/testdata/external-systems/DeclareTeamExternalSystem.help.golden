@@ -1,0 +1,51 @@
+AFS TEAMS DECLARE-EXTERNAL-SYSTEM
+
+NAME
+       teams declare-external-system
+
+DESCRIPTION
+       Declare team external system
+
+       Required permission: external-systems:write
+
+SYNOPSIS
+       afs teams declare-external-system [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --category (string) (required)
+          Possible values: dev_tools, collaboration, email, cloud, identity, llm, other
+       --description (string)
+       --docs-url (string)
+       --endpoints (list) (required)
+       --name (string) (required)
+       --owner (string) (required)
+       --purpose (string) (required)
+       --slug (string) (required)
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       Declare a team-owned external system
+
+       afs teams declare-external-system --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --slug payments-ledger --name "Ledger API" --category other --owner ledger-team@example.com --purpose "Reconcile payouts" --endpoints ledger.example.com:443
+

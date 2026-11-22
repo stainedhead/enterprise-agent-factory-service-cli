@@ -32,6 +32,8 @@ type Built struct {
 type Sources struct {
 	Stdin    io.Reader
 	ReadFile func(string) ([]byte, error)
+	// ReadPassword reads a secret from the terminal without echo; nil when there is no terminal.
+	ReadPassword func(prompt string) ([]byte, error)
 }
 
 func (s Sources) readFile(p string) ([]byte, error) {
@@ -198,6 +200,14 @@ func Build(cmd *cli.Command, p *cli.Parsed, src Sources, profileTeamID string) (
 			}
 		case "body":
 			if _, ok := b.Body.Get(o.Wire); !ok {
+				if o.Sensitive {
+					raw, err := promptSecret(src, o)
+					if err != nil {
+						return nil, usage(cmd, "argument %s: %v", o.Flag, err)
+					}
+					b.Body.Set(o.Wire, raw)
+					continue
+				}
 				missing = append(missing, o.Flag)
 			}
 		}
@@ -206,6 +216,20 @@ func Build(cmd *cli.Command, p *cli.Parsed, src Sources, profileTeamID string) (
 		return nil, usage(cmd, "the following arguments are required: %s", strings.Join(missing, ", "))
 	}
 	return b, nil
+}
+
+// promptSecret asks for a missing required secret on the terminal (CLI-9); without a terminal
+// it fails with the ways to give the value.
+func promptSecret(src Sources, o cli.Option) (json.RawMessage, error) {
+	r := secretinput.Reader{}
+	if src.ReadPassword != nil {
+		r.ReadPassword = func() ([]byte, error) { return src.ReadPassword("Secret value (input is hidden): ") }
+	}
+	b, err := r.Prompt()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(string(b))
 }
 
 func setParam(b *Built, o cli.Option, text string) error {

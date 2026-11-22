@@ -1,0 +1,3 @@
+Id             Slug           Name        Category   Enabled  TeamState  Version
+ext_01JD2Q3R…  github         GitHub      dev_tools  true     on         1
+ext_01JD2Q3R…  payments-led…  Ledger API  other      true     on         1

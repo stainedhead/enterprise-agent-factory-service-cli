@@ -305,7 +305,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams declare-external-system help
+       Declare a team-owned external system
+
+       afs teams declare-external-system --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --slug payments-ledger --name "Ledger API" --category other --owner ledger-team@example.com --purpose "Reconcile payouts" --endpoints ledger.example.com:443
+
 ```
 
 ## delete-config-value
@@ -350,7 +353,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams delete-config-value help
+       Remove a team-wide value
+
+       afs teams delete-config-value --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name REGION
+
 ```
 
 ## delete-external-system
@@ -395,7 +401,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams delete-external-system help
+       Delete a team-owned external system
+
+       afs teams delete-external-system --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --system-id ext_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
 ```
 
 ## delete-log-destination
@@ -935,7 +944,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams list-config-values help
+       List the team's namespace configuration values
+
+       afs teams list-config-values --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
 ```
 
 ## list-external-systems
@@ -977,7 +989,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams list-external-systems help
+       List the external systems the team may use
+
+       afs teams list-external-systems --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
 ```
 
 ## list-log-destinations
@@ -1288,7 +1303,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams put-config-value help
+       Set a team-wide value (reads the version first; a missing value is created)
+
+       afs teams put-config-value --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name REGION --value eu-west-1
+
 ```
 
 ## put-team-models
@@ -1530,7 +1548,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams set-external-system-state help
+       Enable an external system for the team
+
+       afs teams set-external-system-state --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --system-id ext_01JD2Q3R4S5T6V7W8X9Y0Z0001 --enabled
+
 ```
 
 ## suspend-team
@@ -1677,7 +1698,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams update-external-system help
+       Change an external system's endpoints
+
+       afs teams update-external-system --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --system-id ext_01JD2Q3R4S5T6V7W8X9Y0Z0001 --endpoints ledger.example.com:443 ledger-eu.example.com:443
+
 ```
 
 ## update-log-destination

@@ -43,6 +43,10 @@ type Options struct {
 	Stdin string
 	Vars  map[string]string
 	TTY   bool
+	// Password, when set, is what the no-echo prompt returns (the terminal is faked).
+	Password *string
+	// Prompts receives the text of each prompt shown.
+	Prompts *[]string
 }
 
 // Reply writes a JSON response with a request id.
@@ -84,6 +88,15 @@ func RunWith(t *testing.T, o Options, h http.HandlerFunc, args ...string) Result
 	}
 	env.Home = t.TempDir()
 	env.StdinTTY = o.TTY
+	if o.Password != nil {
+		env.StdinTTY = true
+		env.ReadPassword = func(prompt string) ([]byte, error) {
+			if o.Prompts != nil {
+				*o.Prompts = append(*o.Prompts, prompt)
+			}
+			return []byte(*o.Password), nil
+		}
+	}
 	env.Sleep = func(context.Context, time.Duration) error { return nil }
 	res.Code = cli.Run(context.Background(), args, env, reg)
 	res.Out, res.Err = out.String(), eb.String()

@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
 	"net/url"
 
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli"
@@ -50,7 +51,7 @@ func Run(ctx context.Context, inv *cli.Invocation) int {
 	if err != nil {
 		return ReportError(env.Stderr, op.ID, "default", err)
 	}
-	b, err := Build(cmd, inv.P, Sources{Stdin: env.Stdin}, st.TeamID)
+	b, err := Build(cmd, inv.P, Sources{Stdin: env.Stdin, ReadPassword: env.ReadPassword}, st.TeamID)
 	if err != nil {
 		return usageExit(env, err)
 	}
@@ -63,7 +64,9 @@ func Run(ctx context.Context, inv *cli.Invocation) int {
 		return ReportError(env.Stderr, op.ID, st.Profile, err)
 	}
 	c := sess.Client
-	fail := func(err error) int { return ReportError(env.Stderr, op.ID, st.Profile, err) }
+	fail := func(err error) int {
+		return ReportError(env.Stderr, op.ID, st.Profile, currentVersionOn412(ctx, c, op, b.Path, err))
+	}
 
 	if op.IfMatch != spec.IfMatchNone && b.IfMatch == "" {
 		v, ok, err := safeupdate.Version(ctx, c, op, b.Path)
@@ -157,6 +160,22 @@ func Run(ctx context.Context, inv *cli.Invocation) int {
 		}
 	}
 	return finish(inv, resp)
+}
+
+// currentVersionOn412 makes a 412 carry the resource's current version in its ETag header: the
+// response's own when present, else one more read (D-C8). Any failure leaves err unchanged.
+func currentVersionOn412(ctx context.Context, c safeupdate.Doer, op *spec.Operation, path map[string]string, err error) error {
+	var ae *client.APIError
+	if !errors.As(err, &ae) || ae.Status != 412 || ae.Header.Get("ETag") != "" {
+		return err
+	}
+	if v, ok, rerr := safeupdate.Version(ctx, c, op, path); rerr == nil && ok {
+		if ae.Header == nil {
+			ae.Header = http.Header{}
+		}
+		ae.Header.Set("ETag", `"`+v+`"`)
+	}
+	return err
 }
 
 // finish runs the command's After hook.

@@ -52,5 +52,12 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs models list-models help
+       List the models the service offers
+
+       afs models list-models
+
+       Print only the model ids
+
+       afs models list-models --query 'items[].id' --output text
+
 ```

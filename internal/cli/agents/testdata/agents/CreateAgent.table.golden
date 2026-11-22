@@ -1,0 +1,8 @@
+Field     Value
+Id        agt_01JD2Q3R4S5T6V7W8X9Y0Z0001
+Name      coder
+Template  claude-code
+Model     anthropic.claude-sonnet-4-5
+Paused    false
+Phase     Pending
+Version   1

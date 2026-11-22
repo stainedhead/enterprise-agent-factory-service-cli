@@ -1,4 +1,4 @@
-// Package secretinput reads secret values only from a file, standard input or (M2) a no-echo
+// Package secretinput reads secret values only from a file, standard input or a no-echo
 // prompt, never from a plain argument (CLI-9, D-C16).
 package secretinput
 
@@ -21,6 +21,23 @@ var ErrPlainArgument = errors.New("a secret value must not be passed as an argum
 type Reader struct {
 	Stdin    io.Reader
 	ReadFile func(string) ([]byte, error)
+	// ReadPassword reads one line from the terminal without echo; nil when there is no terminal.
+	ReadPassword func() ([]byte, error)
+}
+
+// ErrNoValue is returned by Prompt when no terminal is available to ask on.
+var ErrNoValue = errors.New("no secret value given and no terminal to prompt on: use file://PATH, fileb://PATH or - (standard input)")
+
+// Prompt asks for the value on the terminal without echo (CLI-9); the same limits apply as for files.
+func (r Reader) Prompt() ([]byte, error) {
+	if r.ReadPassword == nil {
+		return nil, ErrNoValue
+	}
+	b, err := r.ReadPassword()
+	if err != nil {
+		return nil, fmt.Errorf("cannot read the secret value: %w", err)
+	}
+	return check(b)
 }
 
 // Read returns the secret named by arg: file://PATH or fileb://PATH read the file, "-" reads stdin.
@@ -45,6 +62,11 @@ func (r Reader) Read(arg string) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("cannot read the secret value: %w", err)
 	}
+	return check(b)
+}
+
+// check applies the limits of the SecretValue schema.
+func check(b []byte) ([]byte, error) {
 	switch {
 	case len(b) == 0:
 		return nil, errors.New("the secret value is empty")

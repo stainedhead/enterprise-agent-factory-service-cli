@@ -100,7 +100,14 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents create-agent help
+       Create an agent with a volume and wait until it is ready
+
+       afs agents create-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name coder --template claude-code --image registry.example.com/agents/coder@sha256:4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f --model-id anthropic.claude-sonnet-4-5 --volume '{"sizeGiB":20,"storageClass":"gp3-standard","onDelete":"snapshot_then_delete"}' --wait
+
+       Create an agent from a file
+
+       afs agents create-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --cli-input-json file://agent.json
+
 ```
 
 ## create-identity
@@ -244,7 +251,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents create-snapshot help
+       Take a snapshot of the agent's volume
+
+       afs agents create-snapshot --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --description "before upgrade"
+
 ```
 
 ## delete-agent
@@ -293,7 +303,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents delete-agent help
+       Delete an agent and wait until it is gone
+
+       afs agents delete-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --wait
+
 ```
 
 ## delete-config-value
@@ -339,7 +352,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents delete-config-value help
+       Remove a configuration value
+
+       afs agents delete-config-value --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name LOG_LEVEL
+
 ```
 
 ## delete-identity
@@ -474,7 +490,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents describe-agent help
+       Show one agent
+
+       afs agents describe-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
 ```
 
 ## describe-role-link
@@ -561,7 +580,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents get-agent-status help
+       Show reconcile status
+
+       afs agents get-agent-status --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
 ```
 
 ## list-agent-templates
@@ -599,7 +621,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents list-agent-templates help
+       List the agent templates
+
+       afs agents list-agent-templates
+
 ```
 
 ## list-agents
@@ -641,7 +666,14 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents list-agents help
+       List a team's agents
+
+       afs agents list-agents --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
+       Print agent ids and phases
+
+       afs agents list-agents --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --query 'items[].[id,status.phase]' --output text
+
 ```
 
 ## list-config-values
@@ -684,7 +716,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents list-config-values help
+       List an agent's configuration values
+
+       afs agents list-config-values --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
 ```
 
 ## list-external-systems
@@ -727,7 +762,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents list-external-systems help
+       List the external systems an agent may reach
+
+       afs agents list-external-systems --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
 ```
 
 ## list-identities
@@ -856,7 +894,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents list-snapshots help
+       List an agent's volume snapshots
+
+       afs agents list-snapshots --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
 ```
 
 ## list-storage-classes
@@ -894,7 +935,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents list-storage-classes help
+       List the storage classes agents may use
+
+       afs agents list-storage-classes
+
 ```
 
 ## pause-agent
@@ -943,7 +987,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents pause-agent help
+       Pause an agent
+
+       afs agents pause-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
 ```
 
 ## put-config-value
@@ -993,7 +1040,14 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents put-config-value help
+       Set a literal value
+
+       afs agents put-config-value --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name LOG_LEVEL --source literal --value debug
+
+       Take the value from the team's namespace values
+
+       afs agents put-config-value --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name REGION --source namespace
+
 ```
 
 ## restart-agent
@@ -1042,7 +1096,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents restart-agent help
+       Restart an agent's pods
+
+       afs agents restart-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --wait
+
 ```
 
 ## resume-agent
@@ -1091,7 +1148,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents resume-agent help
+       Resume a paused agent
+
+       afs agents resume-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
 ```
 
 ## set-external-system-state
@@ -1138,7 +1198,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents set-external-system-state help
+       Disable an external system for one agent
+
+       afs agents set-external-system-state --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --system-id ext_01JD2Q3R4S5T6V7W8X9Y0Z0001 --no-enabled
+
 ```
 
 ## update-agent
@@ -1198,7 +1261,14 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs agents update-agent help
+       Change the model (reads the current version, sends If-Match)
+
+       afs agents update-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --model-id anthropic.claude-haiku-4-5
+
+       Apply a change only if the agent is still at version 7
+
+       afs agents update-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --description 'Reviews pull requests' --if-match 7
+
 ```
 
 ## verify-role-link

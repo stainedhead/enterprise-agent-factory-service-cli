@@ -34,6 +34,25 @@ func (e *APIError) detail(key string) string {
 	return s
 }
 
+// detailList reads one string-array member of details.
+func (e *APIError) detailList(key string) []string {
+	var d map[string]json.RawMessage
+	if json.Unmarshal(e.Details, &d) != nil {
+		return nil
+	}
+	var l []string
+	if json.Unmarshal(d[key], &l) != nil {
+		return nil
+	}
+	return l
+}
+
+// Dependents is details.dependents: ids of the objects that block a delete.
+func (e *APIError) Dependents() []string { return e.detailList("dependents") }
+
+// MissingTags is details.missingTags of a ValidationError.
+func (e *APIError) MissingTags() []string { return e.detailList("missingTags") }
+
 // Reason is details.reason (for example idempotency_in_progress).
 func (e *APIError) Reason() string { return e.detail("reason") }
 

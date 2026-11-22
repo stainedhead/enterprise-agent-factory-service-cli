@@ -292,7 +292,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin create-external-system help
+       Add a system to the catalog
+
+       afs admin create-external-system --slug jira --name Jira --category collaboration --endpoints example.atlassian.net:443 --docs-url https://support.atlassian.com/jira
+
 ```
 
 ## create-identity-provider
@@ -591,7 +594,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin delete-agent-template help
+       Delete a template no agent uses
+
+       afs admin delete-agent-template --name claude-code
+
 ```
 
 ## delete-api-key
@@ -677,7 +683,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin delete-external-system help
+       Delete a catalog system (built-in ones are refused with 409)
+
+       afs admin delete-external-system --system-id ext_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
 ```
 
 ## delete-identity-provider
@@ -852,7 +861,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin delete-storage-class help
+       Delete a storage class no volume uses
+
+       afs admin delete-storage-class --name gp3-standard
+
 ```
 
 ## describe-export
@@ -934,7 +946,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin describe-external-system help
+       Show one catalog system
+
+       afs admin describe-external-system --system-id ext_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
 ```
 
 ## describe-identity-provider
@@ -1061,7 +1076,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin list-agent-templates help
+       List every agent template
+
+       afs admin list-agent-templates
+
 ```
 
 ## list-api-keys
@@ -1255,7 +1273,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin list-external-systems help
+       List the catalog of external systems
+
+       afs admin list-external-systems
+
 ```
 
 ## list-identity-providers
@@ -1607,7 +1628,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin list-storage-classes help
+       List every storage class
+
+       afs admin list-storage-classes
+
 ```
 
 ## put-agent-template
@@ -1656,7 +1680,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin put-agent-template help
+       Create or replace a template
+
+       afs admin put-agent-template --name claude-code --harness claude-code --current-digest sha256:4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f --allowed-digests sha256:4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f --default-resources '{"cpu":"1","memory":"2Gi"}'
+
 ```
 
 ## put-service-tag
@@ -1805,7 +1832,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin put-storage-class help
+       Create or replace a storage class
+
+       afs admin put-storage-class --name gp3-standard --volume-type gp3 --description "General purpose SSD"
+
 ```
 
 ## reject-price-proposal
@@ -1941,7 +1971,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin update-external-system help
+       Disable a catalog system
+
+       afs admin update-external-system --system-id ext_01JD2Q3R4S5T6V7W8X9Y0Z0001 --no-enabled
+
 ```
 
 ## update-identity-provider

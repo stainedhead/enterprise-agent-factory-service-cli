@@ -103,7 +103,7 @@ func operationHelp(w io.Writer, c *cli.Command) {
 				p("          Range: %s to %s\n", bound(o.Min), bound(o.Max))
 			}
 			if o.Sensitive {
-				p("          Give file://PATH, fileb://PATH or - (standard input); never the value itself.\n")
+				p("          Give file://PATH, fileb://PATH or - (standard input), or leave the option out to be prompted without echo on a terminal; never the value itself.\n")
 			}
 		}
 	}
