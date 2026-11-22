@@ -53,6 +53,26 @@ func (e *APIError) Dependents() []string { return e.detailList("dependents") }
 // MissingTags is details.missingTags of a ValidationError.
 func (e *APIError) MissingTags() []string { return e.detailList("missingTags") }
 
+// AmbiguousRepo is one repository that more than one team owns.
+type AmbiguousRepo struct {
+	Repo    string   `json:"repo"`
+	TeamIDs []string `json:"teamIds"`
+}
+
+// AmbiguousRepos is details.ambiguousRepos of a ValidationError from CreateWorkOrder.
+func (e *APIError) AmbiguousRepos() []AmbiguousRepo {
+	var d struct {
+		A []AmbiguousRepo `json:"ambiguousRepos"`
+	}
+	if json.Unmarshal(e.Details, &d) != nil {
+		return nil
+	}
+	return d.A
+}
+
+// UnownedRepos is details.unownedRepos: repositories no team owns, as host/owner/repo.
+func (e *APIError) UnownedRepos() []string { return e.detailList("unownedRepos") }
+
 // Reason is details.reason (for example idempotency_in_progress).
 func (e *APIError) Reason() string { return e.detail("reason") }
 

@@ -25,6 +25,7 @@ func afs(t *testing.T, args ...string) (int, string, string) {
 	return code, out.String(), eb.String()
 }
 
+// 5.1-help: help text for every form is held in golden files.
 func TestHelpGoldens(t *testing.T) {
 	for name, args := range map[string][]string{
 		"root.golden":                    {"help"},

@@ -107,7 +107,14 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin add-security-operator help
+       Make a user a security operator
+
+       afs admin add-security-operator --subject-type user --email ana@example.com --identity-provider-id idp_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
+       Make an identity provider group security operators
+
+       afs admin add-security-operator --subject-type group --group-name security-ops --identity-provider-id idp_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## approve-price-proposal
@@ -201,7 +208,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin create-api-key help
+       Create a security operator key (the secret is shown once)
+
+       afs admin create-api-key --name cve-pipeline --role security_operator --expires-at 2027-02-19T18:00:00Z
+
 ```
 
 ## create-export
@@ -666,7 +676,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin delete-api-key help
+       Delete a service-level API key
+
+       afs admin delete-api-key --key-id key_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## delete-external-system
@@ -1152,7 +1165,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin list-api-keys help
+       List the service-level API keys
+
+       afs admin list-api-keys
+
 ```
 
 ## list-cost-reconciliations
@@ -1611,7 +1627,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin list-security-operators help
+       List the security operators
+
+       afs admin list-security-operators
+
 ```
 
 ## list-service-tags
@@ -1994,7 +2013,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs admin remove-security-operator help
+       Remove a security operator
+
+       afs admin remove-security-operator --binding-id rb_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## update-external-system

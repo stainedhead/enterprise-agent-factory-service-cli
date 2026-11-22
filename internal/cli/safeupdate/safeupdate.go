@@ -27,6 +27,26 @@ type Reader struct {
 	Get   *spec.Operation // the GET operation
 	Match string          // "" for a direct read; else the path parameter whose value matches an item
 	Path  string          // path template to read
+	// Composite names the path parameters (host, owner, repo) that together identify an item of the
+	// collection as host == first and repo == "second/third" (a work order's repository, D-C17).
+	Composite []string
+}
+
+// ReadDeniedError is a failure to read the current version because the caller may not read the
+// resource. It unwraps to the API error.
+type ReadDeniedError struct{ Err *client.APIError }
+
+func (e *ReadDeniedError) Error() string { return e.Err.Error() }
+
+// Unwrap returns the API error.
+func (e *ReadDeniedError) Unwrap() error { return e.Err }
+
+// ReadDeniedHint is printed after the API's answer when the version read was denied.
+const ReadDeniedHint = "Pass --if-match <version> (the version printed by the previous update-repo)."
+
+// composite lists operations whose resource is one item of a list identified by several path parameters.
+var composite = map[string]Reader{
+	"UpdateWorkOrderRepo": {Path: "/v1/work-orders/{workOrderId}/repos", Composite: []string{"host", "owner", "repo"}},
 }
 
 func segments(p string) []string { return strings.Split(strings.Trim(p, "/"), "/") }
@@ -55,6 +75,13 @@ func ReaderFor(op *spec.Operation) *Reader {
 		return nil
 	}
 	gets := getOps()
+	if c, ok := composite[op.ID]; ok {
+		if g, ok := gets[c.Path]; ok {
+			c.Get = g
+			return &c
+		}
+		return nil
+	}
 	segs := segments(op.Path)
 	// a trailing literal such as /value or /state belongs to the parent resource
 	for len(segs) > 1 && !isParam(segs[len(segs)-1]) {
@@ -88,6 +115,14 @@ func Version(ctx context.Context, d Doer, op *spec.Operation, path map[string]st
 		pp[k] = v
 	}
 	var want string
+	if r.Composite != nil {
+		return versionInList(ctx, d, r, pp, func(m map[string]json.RawMessage) bool {
+			var host, repo string
+			_ = json.Unmarshal(m["host"], &host)
+			_ = json.Unmarshal(m["repo"], &repo)
+			return host == pp[r.Composite[0]] && repo == pp[r.Composite[1]]+"/"+pp[r.Composite[2]]
+		})
+	}
 	if r.Match != "" {
 		want = pp[r.Match]
 		delete(pp, r.Match)
@@ -142,6 +177,53 @@ func Version(ctx context.Context, d Doer, op *spec.Operation, path map[string]st
 		token = ""
 		_ = json.Unmarshal(doc["nextToken"], &token)
 		if token == "" {
+			break
+		}
+	}
+	return "", false, nil
+}
+
+// versionInList pages through the collection of r and returns the version of the item that match accepts.
+func versionInList(ctx context.Context, d Doer, r *Reader, pp map[string]string, match func(map[string]json.RawMessage) bool) (string, bool, error) {
+	listPath := map[string]string{}
+	for k, v := range pp {
+		if strings.Contains(r.Path, "{"+k+"}") {
+			listPath[k] = v
+		}
+	}
+	token := ""
+	for page := 0; page < maxListPages; page++ {
+		q := url.Values{}
+		if token != "" {
+			q.Set("nextToken", token)
+		}
+		resp, err := d.Do(ctx, client.Request{Method: "GET", Path: client.BuildPath(r.Path, listPath), Query: q, Operation: r.Get.ID})
+		if err != nil {
+			var ae *client.APIError
+			if errors.As(err, &ae) {
+				if ae.Status == 404 {
+					return "", false, nil
+				}
+				if ae.Status == 403 {
+					return "", false, &ReadDeniedError{Err: ae}
+				}
+			}
+			return "", false, err
+		}
+		var doc struct {
+			Items     []json.RawMessage `json:"items"`
+			NextToken string            `json:"nextToken"`
+		}
+		if json.Unmarshal(resp.Body, &doc) != nil {
+			return "", false, nil
+		}
+		for _, it := range doc.Items {
+			var m map[string]json.RawMessage
+			if json.Unmarshal(it, &m) == nil && match(m) {
+				return versionOf(it)
+			}
+		}
+		if token = doc.NextToken; token == "" {
 			break
 		}
 	}

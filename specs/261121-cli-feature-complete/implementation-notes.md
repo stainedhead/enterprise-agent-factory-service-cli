@@ -159,6 +159,17 @@ Recorded during M5 (2026-11-22):
 - **`--scratch-size-gib`** replaces the derived `--scratch-size-gi-b` on `create-pool` and `update-pool`.
 - `clitest.Options` gained `Home` and `LookPath` (the kubeconfig tests).
 
+Recorded during M6 (2026-11-22):
+
+- **M6-0 re-sync: no change** (sha256 `3456b9e9...`).
+- **`--repos` / `--add-repos`** are list options whose items `Build` (`workorders.expandRepos`) turns into `WorkOrderRepoInput` objects; items already JSON objects (from `--cli-input-json`) pass through. Owners are comma separated after `=`.
+- **`Override.Optional`** names wire names whose option is not required on the command line because a hook fills it (update-repo's `--host` and `--owner`). `--repo host/owner/repo` fills the three path segments; mixing it with `--host` or `--owner` is a usage error.
+- **D-C17 implemented** in `safeupdate` (`Reader.Composite`): `ListWorkOrderRepos` is paged and the item with `host` equal and `repo` equal `owner/repo` gives the version. A 403 on that read becomes `ReadDeniedError`; `exec.ReportError` prints the API's answer and `Pass --if-match <version> (the version printed by the previous update-repo).`, exit 254. No PATCH is sent then.
+- **Errors**: `details.ambiguousRepos` and `details.unownedRepos` are printed (`client.APIError.AmbiguousRepos`, `UnownedRepos`) with the instruction to name owners as `host/owner/repo=<team_id or email>`.
+- **Workload token** (`auth.WorkloadToken`): `AFS_API_TOKEN_FILE`, else `/var/run/secrets/afs/api/token` when it exists; an explicit missing file is an error; empty content means no credential.
+- **`TestEveryStoryCriterionHasATest`** parses the traceability table of `tasks.md` and skips when the spec directory is absent (archived); archive-time the test keeps its value in the comments only.
+- **M6-X2** not done: `-restapi` has not tagged a release (OQ-S3). **M6-X3** hand-offs for J: tell `-restapi` of CLI-CD-1..6 (CLI-CD-1 matters most: workload principals cannot read repository versions), correct PRD CLI-17/CLI-US-8 per CLI-CD-5/6, ask the root to update `skills/enterprise-agent-factory-service-cli.md` with the release tag, supply signing material and the Homebrew tap (OQ-S1), and re-pin the snapshot to the release tag.
+
 ## Contract deltas found in M0
 
 | Id | Delta | CLI behaviour |

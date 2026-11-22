@@ -74,7 +74,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs swarm-templates create-swarm-template help
+       Create a CVE remediation template from a spec file
+
+       afs swarm-templates create-swarm-template --name cve-remediation --kind cve_remediation --budget-usd 250.00 --ttl-hours 72 --teardown-rule at_work_complete --spec file://swarm-spec.json
+
 ```
 
 ## delete-swarm-template
@@ -117,7 +120,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs swarm-templates delete-swarm-template help
+       Delete a template that no open work order uses
+
+       afs swarm-templates delete-swarm-template --template-id swt_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## describe-swarm-template
@@ -158,7 +164,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs swarm-templates describe-swarm-template help
+       Show a swarm template with its spec
+
+       afs swarm-templates describe-swarm-template --template-id swt_01J9ZQ3ABCDEFGHJKMNPQRSTVW --output json
+
 ```
 
 ## disable-swarm-template
@@ -201,7 +210,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs swarm-templates disable-swarm-template help
+       Stop new work orders from using a template
+
+       afs swarm-templates disable-swarm-template --template-id swt_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## enable-swarm-template
@@ -244,7 +256,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs swarm-templates enable-swarm-template help
+       Allow new work orders to use a template
+
+       afs swarm-templates enable-swarm-template --template-id swt_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## list-swarm-templates
@@ -282,7 +297,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs swarm-templates list-swarm-templates help
+       List the swarm templates
+
+       afs swarm-templates list-swarm-templates
+
 ```
 
 ## update-swarm-template
@@ -333,5 +351,8 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs swarm-templates update-swarm-template help
+       Raise a template's budget
+
+       afs swarm-templates update-swarm-template --template-id swt_01J9ZQ3ABCDEFGHJKMNPQRSTVW --budget-usd 500.00
+
 ```

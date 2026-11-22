@@ -13,6 +13,7 @@ How to install, configure and use the `afs` CLI.
 | [Budgets and reports](budgets-and-reports.md) | Budgets, usage, costs, reports and CSV, notification channels, models and prices |
 | [Keys, tags, logs, schedules and service administration](delivery-and-admin.md) | API keys, role links, identities, team tags, log destinations, restore, report schedules, service audit, price proposals, exports and imports |
 | [Swarms](swarms.md) | Ephemeral teams, stages, pools, scaling, handoffs, pool secrets and role links, cost-tag status |
+| [Work orders](work-orders.md) | Work orders, `--repos` owners, reporting from workers with the workload token, swarm templates, the team directory, service keys, security operators |
 | [kubectl access](kubectl.md) | `afs teams get-kubeconfig`: merging, `--kubeconfig`, `--aws-profile` |
 | [Install](install.md) | Releases, verifying them, Homebrew, shell completion |
 | [Output](output.md) | `--output json|yaml|table|text|csv`, `--query`, the pager, colour |

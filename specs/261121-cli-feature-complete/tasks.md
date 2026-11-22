@@ -4,11 +4,11 @@
 |---|---|
 | **Feature** | cli-feature-complete |
 | **Date** | 2026-11-21 |
-| **Status** | Planning complete |
+| **Status** | Feature complete (M0-M6 implemented); M6-X2 and M6-X3 open |
 
 ## Progress summary
 
-90 / 101 tasks complete. M0 28/28 · M1 10/10 · M2 14/14 · M3 10/10 · M4 17/17 · M5 11/11 · M6 0/11.
+99 / 101 tasks complete. M0 28/28 · M1 10/10 · M2 14/14 · M3 10/10 · M4 17/17 · M5 11/11 · M6 9/11 (M6-X2 blocked on OQ-S3; M6-X3 hand-offs listed in implementation-notes for J).
 
 ## Parallel work rules
 

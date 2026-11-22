@@ -136,6 +136,13 @@ func DeriveOptions(op *spec.Operation, ov *Override) []Option {
 	}
 	if ov != nil {
 		out = append(out, ov.Extra...)
+		for i := range out {
+			for _, w := range ov.Optional {
+				if out[i].Wire == w {
+					out[i].Required = false
+				}
+			}
+		}
 	}
 	return out
 }

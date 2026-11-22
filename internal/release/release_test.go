@@ -50,6 +50,7 @@ func load(t *testing.T) config {
 }
 
 // CLI-15: archives for darwin/arm64, darwin/amd64, linux/arm64, linux/amd64 and windows/amd64.
+// 5.1-distribution: the release produces the five platform archives (see also the signing tests).
 func TestReleaseTargets(t *testing.T) {
 	c := load(t)
 	if len(c.Builds) != 1 || c.Builds[0].Main != "./cmd/afs" {

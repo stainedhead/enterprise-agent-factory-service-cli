@@ -65,7 +65,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs work-orders cancel-work-order help
+       Cancel a work order
+
+       afs work-orders cancel-work-order --work-order-id wo_01J9ZQ3ABCDEFGHJKMNPQRSTVW --reason "CVE withdrawn upstream"
+
 ```
 
 ## create-work-order
@@ -90,7 +93,7 @@ OPTIONS
        --cve-id (string)
        --kind (string)
           Possible values: cve_remediation, general
-       --repos (JSON) (required)
+       --repos (list) (required)
        --severity (string) (required)
           Possible values: critical, high, medium, low
        --sla-due-at (string) (required)
@@ -119,7 +122,14 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs work-orders create-work-order help
+       Open a CVE work order; the team configuration decides who owns the first repository
+
+       afs work-orders create-work-order --template-id swt_01J9ZQ3ABCDEFGHJKMNPQRSTVW --title "Patch CVE-2026-1234" --kind cve_remediation --cve-id CVE-2026-1234 --severity critical --sla-due-at 2026-12-01T00:00:00Z --repos github.com/acme/ledger github.com/acme/billing=team_01J9ZQ3ABCDEFGHJKMNPQRSTVX
+
+       Name an owning contact by email; retry safely with an idempotency key
+
+       afs work-orders create-work-order --template-id swt_01J9ZQ3ABCDEFGHJKMNPQRSTVW --title "Upgrade the runtime" --severity medium --sla-due-at 2026-12-15T00:00:00Z --repos github.com/acme/ledger=ledger-team@example.com --idempotency-key upgrade-2026-12
+
 ```
 
 ## describe-work-order
@@ -160,7 +170,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs work-orders describe-work-order help
+       Show a work order and its repositories
+
+       afs work-orders describe-work-order --work-order-id wo_01J9ZQ3ABCDEFGHJKMNPQRSTVW --output json
+
 ```
 
 ## list-repos
@@ -201,7 +214,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs work-orders list-repos help
+       List the repositories of a work order
+
+       afs work-orders list-repos --work-order-id wo_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
 ```
 
 ## list-team-work-orders
@@ -243,7 +259,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs work-orders list-team-work-orders help
+       List a team's work orders
+
+       afs work-orders list-team-work-orders --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --output json
+
 ```
 
 ## list-work-orders
@@ -290,7 +309,14 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs work-orders list-work-orders help
+       List open critical work orders
+
+       afs work-orders list-work-orders --status open --severity critical
+
+       Export every work order as CSV
+
+       afs work-orders list-work-orders --output csv
+
 ```
 
 ## update-repo
@@ -311,8 +337,8 @@ SYNOPSIS
 
 OPTIONS
        --work-order-id (string) (required)
-       --host (string) (required)
-       --owner (string) (required)
+       --host (string)
+       --owner (string)
        --repo (string) (required)
        --detail (string)
        --pr-number (integer)
@@ -342,7 +368,14 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs work-orders update-repo help
+       Report a pull request for one repository
+
+       afs work-orders update-repo --work-order-id wo_01J9ZQ3ABCDEFGHJKMNPQRSTVW --repo github.com/acme/ledger --status pr_opened --pr-url https://github.com/acme/ledger/pull/42 --pr-number 42
+
+       Report with the version printed by the previous update (a workload token cannot read it)
+
+       afs work-orders update-repo --work-order-id wo_01J9ZQ3ABCDEFGHJKMNPQRSTVW --repo github.com/acme/ledger --status merged --if-match 3
+
 ```
 
 ## update-work-order
@@ -363,7 +396,7 @@ SYNOPSIS
 
 OPTIONS
        --work-order-id (string) (required)
-       --add-repos (JSON)
+       --add-repos (list)
        --budget-usd (string)
           USD amount as a decimal string with at most 6 fraction digits; never a JSON number
        --sla-due-at (string)
@@ -391,5 +424,8 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs work-orders update-work-order help
+       Move the SLA date and add a repository
+
+       afs work-orders update-work-order --work-order-id wo_01J9ZQ3ABCDEFGHJKMNPQRSTVW --sla-due-at 2026-12-20T00:00:00Z --add-repos github.com/acme/gateway=team_01J9ZQ3ABCDEFGHJKMNPQRSTVX
+
 ```

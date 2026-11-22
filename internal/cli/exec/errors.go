@@ -9,6 +9,7 @@ import (
 
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/auth"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli"
+	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/safeupdate"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/wait"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/client"
 )
@@ -30,6 +31,19 @@ func ReportError(w io.Writer, opID, profile string, err error) int {
 		}
 		if m := ae.MissingTags(); len(m) > 0 {
 			_, _ = fmt.Fprintf(w, "Missing tags: %s\n", strings.Join(m, ", "))
+		}
+		for _, a := range ae.AmbiguousRepos() {
+			_, _ = fmt.Fprintf(w, "Ambiguous repository: %s is owned by more than one team (%s)\n", a.Repo, strings.Join(a.TeamIDs, ", "))
+		}
+		if u := ae.UnownedRepos(); len(u) > 0 {
+			_, _ = fmt.Fprintf(w, "Unowned repositories: %s\n", strings.Join(u, ", "))
+		}
+		if len(ae.AmbiguousRepos()) > 0 || len(ae.UnownedRepos()) > 0 {
+			_, _ = fmt.Fprintln(w, "Name the owner of each in --repos as host/owner/repo=<team_id or email> (for example github.com/acme/ledger=team_01J9ZQ3ABCDEFGHJKMNPQRSTVW).")
+		}
+		var rd *safeupdate.ReadDeniedError
+		if errors.As(err, &rd) {
+			_, _ = fmt.Fprintln(w, safeupdate.ReadDeniedHint)
 		}
 		if ae.Status == 401 {
 			_, _ = fmt.Fprintf(w, "%s.\n", auth.LoginHint(profile))

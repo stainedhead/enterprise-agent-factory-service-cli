@@ -57,6 +57,7 @@ func fakeAPI(t *testing.T, providers string) *httptest.Server {
 
 const oneProvider = `{"items":[{"id":"idp_1","kind":"okta","name":"Okta","issuerUrl":"https://idp.example.com","cliClientId":"cli1","consoleClientId":"c","isDefault":true}]}`
 
+// CLI-US-1.4: get-caller-identity prints the API's GetMe response unchanged.
 func TestGetCallerIdentityJSONUnchanged(t *testing.T) {
 	srv := fakeAPI(t, oneProvider)
 	r := afs(t, t.TempDir(), map[string]string{"AFS_ENDPOINT_URL": srv.URL, "AFS_API_KEY": "k"}, "", "sso", "get-caller-identity")
@@ -136,6 +137,7 @@ func TestConfigureSSOListsProvidersAndWritesKeys(t *testing.T) {
 	}
 }
 
+// CLI-US-1.5: logout deletes the cache; the next command exits 255 with the hint.
 func TestLogoutDeletesCacheThenNextCommandExit255(t *testing.T) {
 	srv := fakeAPI(t, oneProvider)
 	home := t.TempDir()

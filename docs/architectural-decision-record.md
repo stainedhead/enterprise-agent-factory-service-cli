@@ -40,3 +40,17 @@ Decisions local to this repository. Cross-repo decisions live in the root reposi
 - Decision: print the response body re-indented; decode into an ordered tree only for yaml, table, text and
   `--query`.
 - Consequences: `json` output is the API's, byte-stable apart from indentation.
+
+## ADR-006 Work-order repositories are classified on the client; the version read is composite
+
+- Status: Accepted (2026-11-22, M6)
+- Context: `--repos` takes `host/owner/repo[=owners]`; the API wants `WorkOrderRepoInput` objects. `UpdateWorkOrderRepo` needs
+  `If-Match`, but a repository has no single `GET`, and a workload principal cannot list a work order's repositories.
+- Decision: the CLI splits and classifies owners (`@` is an owning contact, `team_` an owning team id, anything else is a
+  usage error, exit 252) and sends no owner when there is no `=`, leaving the team configuration to the service.
+  Without `--if-match`, `update-repo` reads `ListWorkOrderRepos` and matches `host` and `owner/repo`; when that read is
+  denied it prints the API's answer and `Pass --if-match <version> ...`, exit 254. The workload token is the last
+  credential in the chain and is re-read for every request.
+- Consequences: no client-side ownership decisions beyond the syntax; workers must pass `--if-match` until the API grants
+  the read (contract delta CLI-CD-1).
+

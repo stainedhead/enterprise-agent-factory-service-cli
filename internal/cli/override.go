@@ -50,6 +50,9 @@ type Override struct {
 	// so the operation is done without a fixed column list.
 	Dynamic bool
 	After   AfterFunc
+	// Optional lists wire names whose option is not required on the command line because a Build
+	// hook fills it from another option (update-repo's --repo host/owner/repo).
+	Optional []string
 	// Accept is the media type to ask for when the operation answers in something other than JSON
 	// (application/yaml for a kubeconfig); the response is then given to Handle.
 	Accept string
@@ -62,6 +65,7 @@ func (a *Override) merge(b Override) error {
 	a.Examples = append(a.Examples, b.Examples...)
 	a.Dynamic = a.Dynamic || b.Dynamic
 	a.Extra = append(a.Extra, b.Extra...)
+	a.Optional = append(a.Optional, b.Optional...)
 	if b.ResultKey != "" {
 		a.ResultKey = b.ResultKey
 	}

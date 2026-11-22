@@ -1,0 +1,49 @@
+AFS SWARM-TEMPLATES UPDATE-SWARM-TEMPLATE
+
+NAME
+       swarm-templates update-swarm-template
+
+DESCRIPTION
+       Update swarm template
+
+       Required permission: admin:swarm-templates
+
+SYNOPSIS
+       afs swarm-templates update-swarm-template [options]
+
+OPTIONS
+       --template-id (string) (required)
+       --budget-usd (string)
+          USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+       --description (string)
+       --spec (JSON)
+       --teardown-rule (string)
+          Possible values: at_expiry, at_cap_or_expiry, at_work_complete
+       --ttl-hours (integer)
+          Range: 1 to 8760
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       Raise a template's budget
+
+       afs swarm-templates update-swarm-template --template-id swt_01J9ZQ3ABCDEFGHJKMNPQRSTVW --budget-usd 500.00
+

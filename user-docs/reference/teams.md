@@ -1218,7 +1218,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       afs teams list-team-directory help
+       Look up team ids to name as repository owners
+
+       afs teams list-team-directory
+
 ```
 
 ## list-team-models

@@ -80,6 +80,7 @@ func teamsPages(mu *sync.Mutex, queries *[]string) http.HandlerFunc {
 
 func count(out string) int { return strings.Count(out, `"id"`) }
 
+// 5.1-pagination: auto-pagination merges every page.
 func TestAutoPaginateMergesItems(t *testing.T) {
 	var mu sync.Mutex
 	var q []string
@@ -182,6 +183,7 @@ func TestCSVRules252(t *testing.T) {
 	}
 }
 
+// CLI-US-5.2: an API error names the operation, the required permission and the Request ID; exit 254.
 func TestAccessDeniedExit254(t *testing.T) {
 	r := run(t, func(w http.ResponseWriter, _ *http.Request) {
 		jsonReply(w, 403, `{"code":"AccessDenied","message":"not allowed","requestId":"req_9","details":{"requiredPermission":"teams:read"}}`)

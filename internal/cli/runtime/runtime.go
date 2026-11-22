@@ -80,6 +80,7 @@ func open(env *cli.Env, g cli.Globals, noAuth, lenient bool) (*Session, error) {
 	if st.SSOIssuer != "" && st.SSOClientID != "" {
 		in.SSO = &sso.Source{Cache: sso.NewCache(env.Home), Issuer: st.SSOIssuer, ClientID: st.SSOClientID, Profile: st.Profile, HTTP: &http.Client{Transport: rt}, Now: env.Clock}
 	}
+	in.Workload = auth.WorkloadToken{Getenv: env.Getenv}
 	cfg := client.Config{
 		Endpoint: st.EndpointURL, HTTP: rt, ReadTimeout: rto, Stderr: env.Stderr,
 		UserAgent: buildinfo.UserAgent(), ContractVersion: spec.ContractVersion,

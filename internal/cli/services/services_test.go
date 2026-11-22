@@ -13,7 +13,7 @@ import (
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/services"
 )
 
-// CLI-US-7: the command table and the OpenAPI snapshot agree in both directions, and names
+// CLI-US-7.1: the command table and the OpenAPI snapshot agree in both directions, and names
 // equal the x-afs-cli value of each operation.
 func TestCommandTableMatchesSnapshot(t *testing.T) {
 	var doc struct {
@@ -108,5 +108,33 @@ func TestDoneOperationsHaveGoldens(t *testing.T) {
 		if len(c.Columns) > 0 && !have[c.Op.ID+".table.golden"] {
 			t.Errorf("%s: no table golden", c.Op.ID)
 		}
+	}
+}
+
+// M6-X1, CLI-US-7: the feature is complete: all 180 operations have a command, none is held back
+// by the milestone gate, and none lacks an example or columns.
+func TestFeatureCompleteStrict(t *testing.T) {
+	reg, err := services.NewRegistry()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if cli.CurrentMilestone != 6 {
+		t.Fatalf("CurrentMilestone = %d, want 6", cli.CurrentMilestone)
+	}
+	n := 0
+	for _, c := range reg.All() {
+		if c.Op == nil {
+			continue
+		}
+		n++
+		if cli.MilestoneOf(c.Op.ID) > 6 {
+			t.Errorf("%s has milestone %d", c.Op.ID, cli.MilestoneOf(c.Op.ID))
+		}
+	}
+	if n != 180 {
+		t.Errorf("%d operation commands, want 180", n)
+	}
+	if p := reg.Pending(); len(p) != 0 {
+		t.Errorf("pending: %v", p)
 	}
 }
