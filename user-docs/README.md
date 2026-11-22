@@ -21,3 +21,9 @@ How to install, configure and use the `afs` CLI.
 | [Errors and exit codes](errors-and-exit-codes.md) | Error format, exit codes, retries, `--debug` |
 | [Troubleshooting](troubleshooting.md) | Common problems and what to do |
 | [Command reference](reference/README.md) | Every service and operation (generated from `afs help`) |
+
+## The rest of the product
+
+These guides cover this repository only. For the service as a whole, start with the
+[service overview](https://github.com/stainedhead/enterprise-agent-factory-service#readme) and the
+[adoption guide](https://github.com/stainedhead/enterprise-agent-factory-service/blob/main/user-docs/adoption-guide.md).
