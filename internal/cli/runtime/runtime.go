@@ -72,24 +72,41 @@ func open(env *cli.Env, g cli.Globals, noAuth, lenient bool) (*Session, error) {
 	src := Source(env)
 	rt := transport(env, g)
 	rto := readTimeout(g)
-	in := auth.Inputs{Source: src, Settings: st}
-	if st.SSOIssuer != "" && st.SSOClientID != "" {
-		in.SSO = &sso.Source{Cache: sso.NewCache(env.Home), Issuer: st.SSOIssuer, ClientID: st.SSOClientID, Profile: st.Profile, HTTP: idpClient(env, g, rt, rto), Now: env.Clock}
-	}
-	in.Workload = auth.WorkloadToken{Getenv: env.Getenv}
 	cfg := client.Config{
 		Endpoint: st.EndpointURL, HTTP: rt, ReadTimeout: rto, Stderr: env.Stderr,
 		UserAgent: buildinfo.UserAgent(), ContractVersion: spec.ContractVersion,
 		Now: env.Now, Sleep: env.Sleep, Rand: env.Rand,
 	}
 	if !noAuth {
-		cfg.Credentials = auth.Chain(in)
+		cfg.Credentials = credentials(env, g, st, rt, rto)
 	}
 	if g.Debug {
 		cfg.Debug = env.Stderr
 	}
 	return &Session{Settings: st, Client: client.New(cfg), Source: src}, nil
 }
+
+// Credentials resolves the settings and the credential chain of an invocation without needing an endpoint
+// (invoke-api with --collab-url makes no call to the API).
+func Credentials(env *cli.Env, g cli.Globals) (config.Settings, client.CredentialFunc, error) {
+	st, err := settings(env, g, false)
+	if err != nil {
+		return st, nil, err
+	}
+	return st, credentials(env, g, st, transport(env, g), readTimeout(g)), nil
+}
+
+func credentials(env *cli.Env, g cli.Globals, st config.Settings, rt http.RoundTripper, rto time.Duration) client.CredentialFunc {
+	in := auth.Inputs{Source: Source(env), Settings: st}
+	if st.SSOIssuer != "" && st.SSOClientID != "" {
+		in.SSO = &sso.Source{Cache: sso.NewCache(env.Home), Issuer: st.SSOIssuer, ClientID: st.SSOClientID, Profile: st.Profile, HTTP: idpClient(env, g, rt, rto), Now: env.Clock}
+	}
+	in.Workload = auth.WorkloadToken{Getenv: env.Getenv}
+	return auth.Chain(in)
+}
+
+// Transport is the HTTP transport of an invocation (the connect timeout of --cli-connect-timeout).
+func Transport(env *cli.Env, g cli.Globals) http.RoundTripper { return transport(env, g) }
 
 // transport is the HTTP transport with the connect timeout of --cli-connect-timeout.
 func transport(env *cli.Env, g cli.Globals) http.RoundTripper {

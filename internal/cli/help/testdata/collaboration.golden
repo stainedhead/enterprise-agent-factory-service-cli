@@ -1,0 +1,18 @@
+AFS COLLABORATION
+
+DESCRIPTION
+       
+
+SYNOPSIS
+       afs collaboration <operation> [parameters]
+
+OPERATIONS
+       connect-agent                  Connect agent to collaboration
+       describe-collaboration         Get team collaboration
+       disconnect-agent               Disconnect agent from collaboration
+       invoke-api                     Call a team's Paperclip REST API with your AFS credential and a Paperclip key.
+       list-collaboration-links       List collaboration links
+       put-collaboration              Put team collaboration
+       rotate-collaboration-keys      Rotate collaboration keys
+
+To see help text for an operation, run: afs collaboration <operation> help

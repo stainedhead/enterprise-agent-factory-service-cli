@@ -26,6 +26,9 @@ func WaitOptions() []cli.Option {
 	}
 }
 
+// UsageExit prints a usage error and returns exit 252; local commands use it for their own validation.
+func UsageExit(env *cli.Env, err error) int { return usageExit(env, err) }
+
 func usageExit(env *cli.Env, err error) int {
 	var ue *cli.UsageError
 	if errors.As(err, &ue) {

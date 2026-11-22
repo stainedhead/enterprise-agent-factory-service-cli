@@ -1,0 +1,58 @@
+AFS COLLABORATION INVOKE-API
+
+NAME
+       collaboration invoke-api
+
+DESCRIPTION
+       Call a team's Paperclip REST API with your AFS credential and a Paperclip key.
+
+SYNOPSIS
+       afs collaboration invoke-api [options]
+
+OPTIONS
+       --team-id (string)
+          The team (or the profile's team_id). Not needed with --collab-url.
+       --method (string)
+          GET, HEAD, POST, PUT, PATCH or DELETE (default GET).
+       --path (string) (required)
+          The Paperclip path, starting with / (for example /api/issues).
+       --body (string)
+          The request body: file://PATH or fileb://PATH.
+       --content-type (string)
+          The body's media type (default application/json).
+       --paperclip-key-file (string) (required)
+          A file (mode 0600) holding the Paperclip key, or - for standard input. The key is never an argument.
+       --collab-url (string)
+          Use this https origin instead of reading the team's restApiUrl.
+       --include (boolean)
+          Print the status line and response headers before the body.
+       --wait (boolean)
+          Not supported: invoke-api prints the response unchanged.
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       Read the team's issues through the public Paperclip API
+
+       afs collaboration invoke-api --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --path /api/companies --paperclip-key-file ./pc.key
+
+       Create an issue from a pipeline
+
+       afs collaboration invoke-api --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --method POST --path /api/issues --body file://issue.json --paperclip-key-file ./pc.key
+

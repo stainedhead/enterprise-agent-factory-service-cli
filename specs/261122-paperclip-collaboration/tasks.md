@@ -4,7 +4,7 @@
 
 ## Progress summary
 
-16/38 tasks complete (M7, M8 done).
+25/38 tasks complete (M7, M8, M9 done).
 
 ## M7 (C1)
 
@@ -30,15 +30,15 @@
 
 ## M9 (C3)
 
-- [ ] P9.1 Origin validation (FR-012)
-- [ ] P9.2 Paperclip key reader (file mode, stdin, shape)
-- [ ] P9.3 Credential chain and workload refusal
-- [ ] P9.4 Request transport: no redirects, no cookies, retries, streaming, timeouts
-- [ ] P9.5 Edge error mapping, HttpError, hints
-- [ ] P9.6 Debug logging with redaction, query dropped
-- [ ] P9.7 Global option refusals; help, examples, goldens
-- [ ] P9.8 `rotate-collaboration-keys` (FR-013)
-- [ ] P9.9 Sentinel tests; docs; `CurrentMilestone` 9; gate; commit; push
+- [x] P9.1 Origin validation (FR-012)
+- [x] P9.2 Paperclip key reader (file mode, stdin, shape)
+- [x] P9.3 Credential chain and workload refusal
+- [x] P9.4 Request transport: no redirects, no cookies, retries, streaming, timeouts
+- [x] P9.5 Edge error mapping, HttpError, hints
+- [x] P9.6 Debug logging with redaction, query dropped
+- [x] P9.7 Global option refusals; help, examples, goldens
+- [x] P9.8 `rotate-collaboration-keys` (FR-013)
+- [x] P9.9 Sentinel tests; docs; `CurrentMilestone` 9; gate; commit; push
 
 ## M10 (C4)
 

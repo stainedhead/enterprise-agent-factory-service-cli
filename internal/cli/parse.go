@@ -156,7 +156,8 @@ func (r *Registry) Parse(args []string) (*Parsed, *Command, error) {
 		}
 		o, negated, ok := findOption(opts, name)
 		if !ok {
-			return p, cmd, r.cmdUsage(cmd, "Unknown options: %s", tok)
+			// only the option name is echoed: a value after "=" could be a credential given in the wrong place
+			return p, cmd, r.cmdUsage(cmd, "Unknown options: --%s%s", name, didYouMean(opts, name))
 		}
 		switch o.Kind {
 		case Bool:
@@ -230,4 +231,19 @@ func (r *Registry) cmdUsage(c *Command, format string, a ...any) *UsageError {
 		u = fmt.Sprintf("usage: afs %s [options]\n\nTo see help text, run: afs %s help\n", c.Key(), c.Key())
 	}
 	return &UsageError{Msg: fmt.Sprintf(format, a...), Usage: u}
+}
+
+// didYouMean suggests the options whose name starts with the unknown one (--paperclip-key for
+// --paperclip-key-file), so a typo or a half-remembered flag points at the safe spelling.
+func didYouMean(opts []Option, name string) string {
+	var m []string
+	for _, o := range opts {
+		if name != "" && strings.HasPrefix(o.Name(), name) {
+			m = append(m, o.Flag)
+		}
+	}
+	if len(m) == 0 {
+		return ""
+	}
+	return ". Did you mean " + strings.Join(m, " or ") + "?"
 }

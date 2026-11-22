@@ -46,6 +46,9 @@ type Inputs struct {
 	Workload TokenSource
 }
 
+// WorkloadSource is the Credential.Source of a projected ServiceAccount token.
+const WorkloadSource = "workload token file"
+
 // Chain returns the credential function for a client.
 func Chain(in Inputs) client.CredentialFunc {
 	return func(ctx context.Context) (client.Credential, error) {
@@ -77,7 +80,7 @@ func Chain(in Inputs) client.CredentialFunc {
 			if tok, ok, err := in.Workload.Token(ctx); err != nil {
 				return client.Credential{}, err
 			} else if ok {
-				return client.Credential{Header: "Bearer " + tok, Source: "workload token file"}, nil
+				return client.Credential{Header: "Bearer " + tok, Source: WorkloadSource}, nil
 			}
 		}
 		return client.Credential{}, pending

@@ -69,6 +69,39 @@ deleted or given a new value with `update-secret`, `delete-secret` or `put-secre
 The master key `paperclip-secrets-master-key` cannot be rotated. The names `paperclip` and `paperclip-...` are
 reserved, except `paperclip-agent-api-key` on a worker agent (manual registration).
 
+## Call the Paperclip API from a pipeline
+
+`afs collaboration invoke-api` sends one request to your team's Paperclip REST API. Your AFS credential
+(an API key in `AFS_API_KEY`, or your `afs sso login` session) proves who you are to AFS; a Paperclip key
+proves what you may do inside Paperclip. The REST API must be switched on for the team
+(`afs collaboration put-collaboration --rest-api-enabled`).
+
+```bash
+# read
+afs collaboration invoke-api --team-id team_... --path /api/companies --paperclip-key-file ./pc.key
+
+# create an issue
+afs collaboration invoke-api --team-id team_... --method POST --path /api/issues \
+  --body file://issue.json --paperclip-key-file ./pc.key
+```
+
+- **The Paperclip key never goes on the command line.** Put it in a file with mode `0600` (`chmod 600 pc.key`)
+  or pass `--paperclip-key-file -` and pipe it in. `--paperclip-key <value>` does not exist.
+- **The response is printed unchanged**, so pipe it to `jq`. `--include` adds the status line and headers.
+  `--query`, `--output`, `--wait` and the pagination options do not apply and exit 252.
+- **Exit codes.** 0 for a 2xx or 3xx answer; 254 for any error answer (AFS's own errors print
+  `An error occurred (<Code>) when calling the InvokeApi operation`, Paperclip's own errors print
+  `HTTP <status>` and leave Paperclip's body on stdout); 252 for a bad option; 255 for a local problem
+  (key file mode, origin, network, no credential).
+- **Where it goes.** The host comes from the team's `restApiUrl`, one read of `describe-collaboration`. Use
+  `--collab-url https://<team>.<base domain>` to skip the read. Only `https` on port 443 and a DNS name are
+  accepted; set `collab_base_domain` in your profile to pin the host to your service's domain. Redirects are
+  not followed and cookies are never kept.
+- **Workload tokens are refused.** A pipeline inside the cluster must use an API key.
+- **Retries.** `GET` and `HEAD` retry `429`/`503` up to three tries; other methods retry only a failed connection.
+- **`--debug`** logs the method, host, path (no query string), status and timing. Credentials, bodies and
+  cookies are never logged.
+
 ## Roles
 
 Give a person or a pipeline the **collaborator** role with `--role team_collaborator` on

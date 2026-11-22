@@ -30,7 +30,7 @@ func collab(host string, webUI, restAPI bool, reasons string, version, generatio
 
 func TestCommandsDoneCollaboration(t *testing.T) { // CLI-US-24.10, 26.1, 34.2
 	clitest.CheckOperations(t, "collaboration", "GetTeamCollaboration", "PutTeamCollaboration",
-		"ListCollaborationLinks", "ConnectAgentToCollaboration", "DisconnectAgentFromCollaboration")
+		"ListCollaborationLinks", "ConnectAgentToCollaboration", "DisconnectAgentFromCollaboration", "RotateCollaborationKeys")
 }
 
 func reply(body string) http.HandlerFunc {

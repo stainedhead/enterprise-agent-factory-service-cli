@@ -51,7 +51,7 @@ func TestCommandTableMatchesSnapshot(t *testing.T) {
 			t.Errorf("%s: command %q, contract says %q", id, c.Key(), name)
 		}
 	}
-	local := map[string]bool{"configure": true, "configure sso": true, "sso login": true, "sso logout": true, "completion": true}
+	local := map[string]bool{"configure": true, "configure sso": true, "sso login": true, "sso logout": true, "completion": true, "collaboration invoke-api": true}
 	for _, c := range reg.All() {
 		if c.Op == nil && !local[c.Key()] {
 			t.Errorf("command %q has no operation", c.Key())
@@ -112,7 +112,7 @@ func TestDoneOperationsHaveGoldens(t *testing.T) {
 }
 
 // wantMilestone is raised only by a milestone's exit task (PC-CLI-D9: M7 to M10).
-const wantMilestone = 8
+const wantMilestone = 9
 
 // M6-X1, CLI-US-7: the feature is complete: all 187 operations have a command, none is held back
 // by the milestone gate, and none lacks an example or columns.

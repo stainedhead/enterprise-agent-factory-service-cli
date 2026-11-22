@@ -132,3 +132,28 @@ func mediaType(ct string) string {
 	mt, _, _ := strings.Cut(ct, ";")
 	return strings.ToLower(strings.TrimSpace(mt))
 }
+
+// DecodeError turns an error response into an *APIError: the contract's envelope when the body is one,
+// otherwise a generic ServiceError or InternalError. The edge client of invoke-api uses it for responses
+// that carry the section 6 envelope.
+func DecodeError(status int, h http.Header, body []byte) *APIError {
+	return decodeError(status, h, body)
+}
+
+// IsEnvelope reports whether a body is the section 6 error envelope: a JSON object with a code and a
+// message, and a request id in the body or in X-Request-Id. A Paperclip error that merely has a "code"
+// member is not one.
+func IsEnvelope(h http.Header, body []byte) bool {
+	if !strings.Contains(mediaType(h.Get("Content-Type")), "json") {
+		return false
+	}
+	var env struct {
+		Code      string `json:"code"`
+		Message   string `json:"message"`
+		RequestID string `json:"requestId"`
+	}
+	if json.Unmarshal(body, &env) != nil || env.Code == "" || env.Message == "" {
+		return false
+	}
+	return env.RequestID != "" || h.Get("X-Request-Id") != ""
+}

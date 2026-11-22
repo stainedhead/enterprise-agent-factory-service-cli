@@ -64,3 +64,12 @@ Inherited decisions PC-CLI-D1..D12 are in the PRD section 7.1. Decisions taken w
 | Status initialization | Pass | Phase 0 in progress |
 
 Verdict: implementation-ready.
+
+## M9 notes
+
+- D-14 Edge package. `invoke-api` lives in `internal/edge` (origin, key, request) plus `internal/cli/collaboration/invoke.go`; the edge client uses `RoundTrip` directly, so no redirect is followed and no cookie jar exists. It sends `Accept-Encoding: identity` and streams the body with an idle read timeout.
+- D-15 Envelope test. A response is the edge's section 6 envelope only when it is JSON with `code`, `message` and a request id (body or `X-Request-Id`); Paperclip's own `{"code": ...}` bodies stay Paperclip's (HttpError, body on stdout). Error bodies are held up to 1 MiB for that test.
+- D-16 Loopback exemption. An `http://` loopback origin is exempt from the port, address and `collab_base_domain` rules (as `endpoint_url` is exempt from https), so tests and local stubs work. Anything else is strict.
+- D-17 Local problems. An unreadable `--body` file, a key file wider than 0600, a missing credential, a refused origin and a null `restApiUrl` exit 255; bad shapes exit 252.
+- D-18 `--wait` is declared as an option only so it can be refused with the PC-CLI-D7 sentence instead of a generic unknown-option error.
+- D-19 Unknown options echo only the option name (never `=value`) and suggest options that start with it, so `--paperclip-key=<value>` cannot reach stderr and points at `--paperclip-key-file`.
