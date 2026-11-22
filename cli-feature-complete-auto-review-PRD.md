@@ -6,7 +6,7 @@
 | **Reviewed spec** | `specs/261121-cli-feature-complete/` (spec.md, implementation-notes.md D-C1..D-C36, the moved PRD) |
 | **Rules** | `AGENTS.md` (command design, security and RBAC, architecture, TDD, quality gate, design review checklist) |
 | **Review date** | 2026-11-22 |
-| **Status** | Draft from review; fixes not started |
+| **Status** | Reviewed (step 6, `review-prd`); ready for `create-spec`. Fixes not started |
 
 ## 1. Executive summary
 
@@ -24,25 +24,49 @@ The weak spot is **data that comes from the service or the identity provider and
 much**. One finding is a blocker. It was reproduced against a fake service: a sign-in provider whose
 `issuerUrl` contains a newline injects lines into `~/.afs/config` and changes **another** profile's
 `endpoint_url`, so that profile's API key or token goes to a host the attacker picks (FR-001). Related
-high findings: the OIDC issuer and the endpoints it discovers may be plain `http` (FR-002), service-supplied
-strings reach the terminal with escape sequences intact (FR-003), and credentials in an endpoint URL's
-userinfo are printed by `--debug` (FR-004). One PRD requirement is unmet: CSV with `--no-paginate` never
-prints `NextToken` (FR-005). The remaining findings are medium: reliability (timeouts, `Retry-After`,
+high findings: the OIDC issuer and the endpoints it discovers may be plain `http` (FR-002), and
+service-supplied strings reach the terminal with escape sequences intact (FR-003). One PRD requirement is
+unmet: CSV with `--no-paginate` never prints `NextToken` (FR-004). The remaining findings are medium:
+credentials in an endpoint URL's userinfo are echoed by `--debug`, reliability (timeouts, `Retry-After`,
 pagination loops), input validation, AWS convention details, observability, dead generated code and test
 gaps.
 
 | Priority | Count | Findings |
 |---|---|---|
 | P0 | 1 | FR-001 |
-| P1 | 4 | FR-002, FR-003, FR-004, FR-005 |
-| P2 | 15 | FR-006 to FR-020 |
+| P1 | 3 | FR-002, FR-003, FR-004 |
+| P2 | 16 | FR-005 to FR-020 |
 
 Out of scope: tasks M6-X2 (re-pin the snapshot to a `-restapi` release tag) and M6-X3 (hand-offs to other
 repositories) are blocked outside this repository and stay tracked in the original spec.
 
 **Verdict:** request changes. Fix FR-001 before merge; fix the P1 findings before the first release.
 
-## 2. Functional requirements
+## 2. Problem, goals and non-goals
+
+**Problem.** The `afs` feature-complete branch trusts some data from the service and the identity provider
+too much, misses one pagination requirement, and has several reliability, validation and convention gaps.
+The people affected are every CLI user who signs in with SSO or keeps several profiles (FR-001, FR-002),
+anyone who lists data that other principals write (FR-003), FinOps users exporting CSV (FR-004), and
+maintainers (FR-016 to FR-020).
+
+**Goals.**
+- G1. No service or IdP response can change local configuration beyond the fields it is meant to set, or
+  send a credential over clear text or to another host (FR-001, FR-002, FR-005).
+- G2. Untrusted text is safe to print on a terminal (FR-003).
+- G3. PRD CLI-7 holds for every output format (FR-004).
+- G4. Every network wait is bounded, and every malformed answer is an error with an exit code, never a hang or
+  silent empty output (FR-006, FR-007, FR-009, FR-011 to FR-013).
+- G5. AWS CLI conventions, the design checklist, the docs and the tests match the code (FR-008, FR-010,
+  FR-014 to FR-020).
+
+**Non-goals.**
+- New commands, options or services; contract changes (CLI-CD-1..6 stay with `-restapi`).
+- M6-X2 (re-pin the snapshot to a `-restapi` release tag) and M6-X3 (cross-repository hand-offs).
+- OS keychain storage, a `GetMe` cache, `--ca-bundle` (decided out in ADR-009, D-C12, D-C34).
+- Changing `--output json` bytes (ADR-005).
+
+## 3. Functional requirements
 
 Each requirement is one finding. Evidence is `file:line` on commit `45dfe46`. "Reproduced" means the
 behaviour was observed by running `bin/afs` against a local fake server.
@@ -120,24 +144,7 @@ principals.
    0x20 (except `\n`, `\t`) and no 0x7F to 0x9F code point reaches the writer.
 4. Golden files are unchanged for ordinary data.
 
-### FR-004 (P1) Credentials in an endpoint URL's userinfo are accepted and printed
-
-**Finding.** `ValidateEndpoint` accepts `https://user:pass@host`. The client keeps the userinfo in the
-request URL, and `--debug` prints the full URL. Reproduced: `--endpoint-url http://user:hunter2@127.0.0.1:...
---debug` logs `request: GET http://user:hunter2@127.0.0.1:.../v1/teams`. Error messages also echo the raw
-endpoint (`config.go:143, 156, 158`).
-
-**Evidence.** `internal/config/config.go:137-159`; `internal/client/client.go:130-139, 192`.
-
-**Acceptance criteria.**
-1. `ValidateEndpoint` rejects an endpoint with userinfo, a query or a fragment (exit 255,
-   `endpoint_url must not contain credentials, a query or a fragment`). The message does not echo the
-   userinfo.
-2. Defence in depth: the `--debug` request line prints `URL.Redacted()`.
-3. Tests cover the option, environment and profile sources and assert that the password never appears on
-   stderr.
-
-### FR-005 (P1) CSV with `--no-paginate` does not print `NextToken`
+### FR-004 (P1) CSV with `--no-paginate` does not print `NextToken`
 
 **Finding.** PRD CLI-7 (P0 in the source PRD) says `--no-paginate` returns one page with its next token.
 D-C7 says CSV prints the page and writes `NextToken: <X-Afs-Next-Token>` to stderr. `fetchCSV` stops after
@@ -152,6 +159,25 @@ no way to resume. No test covers it.
 2. `--starting-token <that token>` with `--output csv` resumes on the next page and writes no second header.
 3. With no next token, nothing extra is printed.
 4. `user-docs/pagination.md` documents the CSV token and that CSV tokens and JSON tokens cannot be swapped.
+
+### FR-005 (P2) Credentials in an endpoint URL's userinfo are accepted and printed
+
+**Finding.** `ValidateEndpoint` accepts `https://user:pass@host`. The client keeps the userinfo in the
+request URL, and `--debug` prints the full URL. Reproduced: `--endpoint-url http://user:hunter2@127.0.0.1:...
+--debug` logs `request: GET http://user:hunter2@127.0.0.1:.../v1/teams`. Error messages also echo the raw
+endpoint (`config.go:143, 156, 158`). Priority P2, not P1 (step 6): the user supplies the credential, it
+reaches only their own stderr, and only with `--debug`. It is still a security fix because debug logs are
+often pasted into tickets.
+
+**Evidence.** `internal/config/config.go:137-159`; `internal/client/client.go:130-139, 192`.
+
+**Acceptance criteria.**
+1. `ValidateEndpoint` rejects an endpoint with userinfo, a query or a fragment (exit 255,
+   `endpoint_url must not contain credentials, a query or a fragment`). The message does not echo the
+   userinfo.
+2. Defence in depth: the `--debug` request line prints `URL.Redacted()`.
+3. Tests cover the option, environment and profile sources and assert that the password never appears on
+   stderr.
 
 ### FR-006 (P2) SSO HTTP calls ignore the CLI timeouts
 
@@ -377,3 +403,82 @@ delivers SIGINT to the pager anyway, so the effect is small, but the rule is bro
 **Acceptance criteria.**
 1. `OpenPager` takes the command context and starts the pager with it.
 2. A test with a fake `StartPager` sees the context passed through.
+
+## 4. Non-functional requirements
+
+| Area | Requirement |
+|---|---|
+| Security | After the fixes, the AGENTS.md design checklist item "No token, API key or secret value can reach stdout, stderr, logs or shell history" holds for SSO traffic and endpoint URLs too. Each security fix has a test of the denied or hostile case. `make vuln` stays clean |
+| Compatibility | `--output json` stays byte-stable. Exit-code changes (FR-009, FR-012, FR-013, FR-015) are listed in the release notes and in `user-docs/errors-and-exit-codes.md` |
+| Reliability | No code path waits on the network longer than the configured connect and read timeouts, or the `Retry-After` cap, without the user seeing why |
+| Performance | Startup stays under 100 ms (`startup_bench_test.go`). The sanitizer (FR-003) adds no measurable cost on a 10,000-row table |
+| Observability | `--debug` covers every outbound HTTP request the CLI makes, API or IdP, with the same redaction |
+| Quality | `make gate` is green after every merged fix. `internal/...` coverage stays at or above 90%; `safeupdate` and `exec` reach 90% on their own (FR-019) |
+
+## 5. Dependencies
+
+- **`-restapi`:** none of the fixes need a contract change. FR-001 and FR-002 assume `issuerUrl` is an
+  https URL and `cliClientId` an opaque id with no whitespace. Tell `-restapi` to validate these at
+  `CreateIdentityProvider`/`UpdateIdentityProvider` too, as defence in depth (a message, not a blocker).
+- **Root repository:** FR-016 may change the PRD text of CLI-10. Report the deviation to the root PRD
+  owner.
+- **Kubernetes/EKS:** FR-014 depends on the exec plugin shape `-restapi` returns (`aws eks get-token`) and on
+  the AFS naming prefix for kubeconfig entries. Confirm both from `GetTeamKubeconfig` examples in the snapshot.
+
+## 6. Implementation guidance
+
+- **TDD for every fix.** Red: a failing test that reproduces the finding (use the payloads in FR-001,
+  FR-003, FR-005, FR-009). Green: the smallest change. Refactor: rerun the tests. No fix merges without its
+  failing-first test.
+- **Review each fix before starting the next.** Run the AGENTS.md design checklist on the diff. A security
+  fix (FR-001, FR-002, FR-003, FR-005, FR-014) gets a second reviewer pass that tries to bypass it.
+- **Order.** FR-001 first, alone, merged before anything else. Then the P1 findings. Then the P2 findings.
+- **Worker streams and git worktrees.** After FR-001 lands, run parallel streams with agent teammates, one
+  per stream, each in its own `git worktree` off the branch (`git worktree add ../afs-cli-<stream>
+  -b fix/<stream>`). Streams own disjoint files, so merges stay clean:
+
+| Stream | Findings | Files owned |
+|---|---|---|
+| A config and SSO | FR-001 (lands first), FR-002, FR-006, FR-007, FR-008 | `internal/config/`, `internal/sso/`, `internal/cli/sso/`, `internal/cli/configure/`, `internal/cli/runtime/` |
+| B output safety | FR-003, FR-018, FR-020 | `internal/output/`, `internal/cli/exec/errors.go`, `internal/cli/options.go`, help goldens |
+| C transport and input | FR-005, FR-009, FR-010, FR-011 | `internal/client/`, `internal/cli/exec/build.go` |
+| D pagination and wait | FR-004, FR-012, FR-013, FR-016 | `internal/cli/exec/paginate.go`, `internal/cli/exec/run.go`, `internal/cli/wait/`, `internal/cli/safeupdate/` |
+| E kubeconfig, conventions, cleanup | FR-014, FR-015, FR-017, FR-019 | `internal/kubeconfig/`, `internal/cli/cli.go`, `internal/client/gen/`, tests in `safeupdate` and `exec` (with D's agreement) |
+
+  Shared files (`Makefile`, `go.mod`, goldens, `user-docs/reference/`) are regenerated by the orchestrator
+  after each merge. A stream rebases on the branch before it opens its merge.
+- **Status.** Update the review spec's `status.md` after every fix, as AGENTS.md requires.
+- **Docs.** Each behaviour change updates `user-docs/` in the same commit (errors and exit codes, pagination,
+  SSO, troubleshooting).
+
+## 7. Open questions
+
+| # | Question | Proposed default |
+|---|---|---|
+| OQ-1 | FR-003: escape style for control characters, `\x1b` (readable) or U+FFFD (compact)? | `\x1b` style, so values stay diagnosable |
+| OQ-2 | FR-011: the `Retry-After` cap value | 20 s, or the read timeout when it is smaller |
+| OQ-3 | FR-014: the exact AFS prefix for kubeconfig entry names | Take it from the snapshot's `GetTeamKubeconfig` example; ask `-restapi` if absent |
+| OQ-4 | FR-016: align the code to the PRD, or the PRD to the code? | Align the code to the PRD (notice after the write), since CLI-10 is P0 in the source PRD |
+| OQ-5 | FR-017: use or remove the generated types? | Remove them and amend ADR-002/007, unless stream E finds a field drift the types would have caught |
+| OQ-6 | FR-015: does exiting 252 for a bare `afs` break any documented script or completion? | No; completion calls `afs help`-style paths. Verify with the completion tests |
+
+## 8. Review record (step 6, `review-prd`)
+
+| Dimension | Status | Note |
+|---|---|---|
+| Problem clarity | Pass | Section 2 names the problem and the affected users |
+| Scope definition | Pass | Goals G1 to G5 and non-goals added in step 6 |
+| Functional completeness | Pass | 20 atomic FRs, each tied to a goal |
+| NFR coverage | Pass | Security, compatibility, reliability, performance, observability, quality (section 4, added in step 6) |
+| Acceptance criteria | Pass | Every FR has numbered, testable criteria |
+| Dependency identification | Pass | Section 5, added in step 6 |
+| Open questions | Pass | Section 7, added in step 6, each with a proposed default |
+| Review-PRD guidance | Pass | TDD, review per fix, agent teammates in worker streams, git worktrees (section 6) |
+
+Priority changes in step 6: the endpoint-userinfo finding moved from P1 to P2 (user-supplied, own stderr,
+`--debug` only) and became FR-005. The CSV `NextToken` finding moved up to FR-004 (P1, an unmet source-PRD
+requirement). FR-001 stays P0: it was reproduced, it sends credentials to a host the attacker chooses, and the
+fix is small. FR-014 stays P2: the response comes from the authenticated control plane over https, so this
+is defence in depth.
+
+**Verdict:** ready for spec.

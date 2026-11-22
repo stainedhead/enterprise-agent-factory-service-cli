@@ -16,8 +16,8 @@
 | 2  | Review Spec                     | ✅ Complete | 2026-11-21T22:11:44Z | 2026-11-21T22:13:33Z | 1 |
 | 3  | Implement Product               | ✅ Complete (M0-M6 done; M6-X2 re-pin and M6-X3 hand-offs open for J) | 2026-11-21T22:30:00Z | 2026-11-22 | — |
 | 4  | Documentation and User Docs     | ✅ Complete | 2026-11-22T00:45:02Z | 2026-11-22T00:47:19Z | 2 |
-| 5  | Code and Design Review          | ✅ Complete | 2026-11-22T00:47:19Z | 2026-11-22T00:56:00Z | 9 |
-| 6  | Prepare Review PRD              | ⬜ Pending | — | — | — |
+| 5  | Code and Design Review          | ✅ Complete | 2026-11-22T00:47:19Z | 2026-11-22T00:54:52Z | 8 |
+| 6  | Prepare Review PRD              | ✅ Complete | 2026-11-22T00:54:52Z | 2026-11-22T00:55:54Z | 3 |
 | 7  | Archive Original Spec           | ⬜ Pending | — | — | — |
 | 8  | Spec Review Fixes               | ⬜ Pending | — | — | — |
 | 9  | Implement Review Fixes          | ⬜ Pending | — | — | — |
@@ -40,3 +40,4 @@
 - Step 3: M0 complete (28/28 tasks, `make gate` green, coverage 90.8%); see `status.md` M0 task log.
 - Step 4: docs/product-summary.md and product-details.md filled; technical-details gains package map, security controls, timeouts, releases; ADR-007..ADR-011; README links every user guide; configuration.md env-var table; credentials.md workload token. Follow-up correction 45dfe46 (README secret example, notice wording) made during Step 5.
 - Step 5: review findings in `cli-feature-complete-auto-review-PRD.md`: 1 P0 (FR-001 config-file injection, reproduced), 4 P1, 15 P2. Verdict: request changes.
+- Step 6: review-prd verdict Ready for spec. Added problem/goals/non-goals, NFRs, dependencies, implementation guidance (TDD, review per fix, five worker streams in git worktrees), open questions and a review record. Endpoint-userinfo finding moved from P1 to P2 (now FR-005); CSV NextToken is now FR-004 (P1). Final counts: 1 P0, 3 P1, 16 P2.
