@@ -37,7 +37,7 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       Disconnect an agent from the team's Paperclip
+       Disconnect an agent from the team's collaboration tool
 
        afs collaboration disconnect-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001
 

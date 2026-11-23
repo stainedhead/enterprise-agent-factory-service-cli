@@ -6,6 +6,8 @@ NAME
 DESCRIPTION
        Get team collaboration
 
+       Deprecated: kept until 2.0.0; use afs orchestration describe-orchestration instead.
+
        Required permission: collaboration:read
 
 SYNOPSIS

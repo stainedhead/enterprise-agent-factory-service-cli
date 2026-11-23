@@ -39,7 +39,7 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       Connect an agent to the team's Paperclip
+       Connect an agent to the team's collaboration tool
 
        afs collaboration connect-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001
 

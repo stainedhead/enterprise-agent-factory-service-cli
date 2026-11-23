@@ -152,3 +152,17 @@ Decisions local to this repository. Cross-repo decisions live in the root reposi
 - Status: Accepted (2026-11-22, release v1.0.1)
 - Context: the pinned snapshot lacks the `collab.*` setting keys that contract 1.3 defines (root contract follow-up RCF-5), and the collaboration report is not schedulable.
 - Decision: `put-setting --key` and `create/update-report-schedule --report` are open enums (`Override.OpenEnum`): help says "Known values" and any other value is sent for the API to judge. The CLI holds no list of server keys.
+
+## ADR-017 Deprecations are declared on overrides and warned on stderr
+
+- Status: Accepted (2026-11-23, release v1.1.0, spec `261123-orchestration-and-model-access`)
+- Context: contract 1.4 replaces the collaboration operations and `--model-id`, and keeps them until 2.0.0.
+- Decision: `Override.Deprecated`, `DeprecatedOptions`, `Hidden`, `Desc`, `Enum` and `Notes` describe a deprecation once; help prints it and `exec/deprecation.go` prints one stderr line per call (by option too, also from `--cli-input-json`). When no static line applies, the service's `Deprecation`/`Sunset` headers produce one. Output on stdout is unchanged.
+- Consequences: scripts keep working and parse the same stdout; removal in 2.0.0 is a table edit.
+
+## ADR-018 Orchestration exposure is two local options folded into the body; model access is one builder
+
+- Status: Accepted (2026-11-23, release v1.1.0)
+- Context: the API takes `webUi`/`webApi` objects and `{access, modelIds}`; one operation maps to one call, with no client-side workflow.
+- Decision: `--web-ui-exposure` and `--web-api-exposure` (both required unless `--cli-input-json` supplies them) and `--models all|ids` plus `--default-model-id` are built into the request body by hooks (`orchestration.buildExposure`, `modelaccess.Build`); the JSON-shaped options stay available but hidden. Snapshot gaps (setting keys, agent role enum) are handled with open enums. `output.Column.NAUnless` renders `N/A` for Buzz surfaces.
+- Consequences: no policy is predicted client-side; the API's refusal reasons are explained by `exec/hints.go`.

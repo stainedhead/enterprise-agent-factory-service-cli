@@ -38,3 +38,7 @@ EXAMPLES
 
        afs teams list-team-models --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW
 
+       List the ids of the models the gateway can call for the team
+
+       afs teams list-team-models --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --query 'items[?callable].id' --output text
+

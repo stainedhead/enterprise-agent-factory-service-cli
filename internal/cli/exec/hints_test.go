@@ -20,6 +20,12 @@ var contractReasons = []string{
 	"paused", "starting", "upstream_unavailable", "hostname_held",
 	"collab_base_domain_unset", "collab_public_endpoints_off", "collaboration_not_allowed_for_team",
 	"provider_without_collab_client", "collaboration_agent_not_ready",
+	// API contract section 4.4d and section 4.4 (v1.4.0): ORC-29, MOD-8, CLI-US-26 to CLI-US-28
+	"orchestration_agent_pending", "orchestration_agent_exists", "orchestration_agent_required", "orchestration_field_fixed",
+	"orchestration_runtime_unset", "tool_not_enabled", "tool_unchanged", "tool_change_in_progress", "exposure_above_limit",
+	"surface_not_supported_by_tool", "registration_mode_not_supported", "role_reserved", "name_reserved",
+	"no_model_available", "model_not_enabled_for_service", "model_not_enabled_for_team", "models_selection_empty",
+	"default_model_not_allowed", "model_ids_not_allowed_for_all", "conflicting_fields", "setting_renamed", "service_model_access_all",
 }
 
 // CLI-US-24.7, PC-CLI-D6, 5.2 hints: every reason of the contract has a hint, the table has no
@@ -58,7 +64,7 @@ func TestReportErrorPrintsFieldsAndHints(t *testing.T) {
 	if code := ReportError(&b, "PutTeamCollaboration", "default", e); code != 254 {
 		t.Fatalf("exit %d", code)
 	}
-	want := "Request ID: req_9\nfield: webUiEnabled reason: collab_base_domain_unset\nfield: restApiEnabled reason: collab_base_domain_unset\nfield: x reason: unknown_reason\nAsk a service admin to set collab.base_domain (afs admin put-setting).\n"
+	want := "Request ID: req_9\nfield: webUiEnabled reason: collab_base_domain_unset\nfield: restApiEnabled reason: collab_base_domain_unset\nfield: x reason: unknown_reason\nAsk a service admin to set orchestration.public_base_domain (afs admin put-setting).\n"
 	if !strings.HasSuffix(b.String(), want) {
 		t.Errorf("got %q", b.String())
 	}

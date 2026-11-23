@@ -17,8 +17,8 @@ agents everything the web console offers, from a shell, with the habits of the A
 
 ## What it does
 
-- **Every API operation is a command.** All 180 operations of the pinned API contract (`api/openapi.yaml`,
-  contract 1.1) are callable, plus the local commands `configure`, `configure sso`, `sso login`, `sso logout`,
+- **Every API operation is a command.** All 194 operations of the pinned API contract (`api/openapi.yaml`,
+  contract 1.4) are callable, plus the local commands `configure`, `configure sso`, `sso login`, `sso logout`,
   `completion` and `help`.
 - **Safe by default.** Updates send `If-Match` (read-then-write when you do not pass `--if-match`); creates send an
   `Idempotency-Key` so retries never duplicate; secret values are accepted only from a file, stdin or a no-echo
@@ -31,7 +31,7 @@ agents everything the web console offers, from a shell, with the habits of the A
 
 ## Status
 
-Feature complete against contract 1.3.1 (milestones M0 to M10, release v1.0.1). v1.0.1 adds Paperclip team collaboration: the `collaboration` service (settings, links, key rotation), `collaboration invoke-api` for pipelines, the collaboration agent role, managed secrets, the collaborator role and the collaboration report. The contract snapshot is pinned to the `-restapi`
+Feature complete against contract 1.4.0 (milestones M0 to M12, release v1.1.0). v1.1.0 adds the team orchestration agent (`orchestration` service, exposure off/private/public, tool paperclip/buzz, `admin list-orchestration-endpoints`) and model access (`all`/`selected`) at service, team, agent and pool level; the 1.0 collaboration commands are deprecated until 2.0.0. Earlier, v1.0.1 (contract 1.3.1). v1.0.1 adds Paperclip team collaboration: the `collaboration` service (settings, links, key rotation), `collaboration invoke-api` for pipelines, the collaboration agent role, managed secrets, the collaborator role and the collaboration report. The contract snapshot is pinned to the `-restapi`
 feature branch until that repository publishes a release tag, at which point it is re-pinned.
 
 See [product-details.md](product-details.md) for the service and operation inventory, and the root repository's PRD

@@ -6,7 +6,7 @@ func init() { registrations = append(registrations, registerLifecycle) }
 
 func registerLifecycle(r *cli.Registry) {
 	r.Override(cli.Override{Op: "UpdateAgent", Columns: agentColumns, Examples: []cli.Example{
-		{Title: "Change the model (reads the current version, sends If-Match)", Command: "afs agents update-agent --team-id " + exTeam + " --agent-id " + exAgent + " --model-id anthropic.claude-haiku-4-5"},
+		{Title: "Change the default model (reads the current version, sends If-Match)", Command: "afs agents update-agent --team-id " + exTeam + " --agent-id " + exAgent + " --default-model-id anthropic.claude-haiku-4-5"},
 		{Title: "Apply a change only if the agent is still at version 7", Command: "afs agents update-agent --team-id " + exTeam + " --agent-id " + exAgent + " --description 'Reviews pull requests' --if-match 7"},
 	}})
 	r.Override(cli.Override{Op: "DeleteAgent", Columns: agentColumns, Examples: []cli.Example{

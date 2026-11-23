@@ -6,6 +6,8 @@ NAME
 DESCRIPTION
        List collaboration endpoints
 
+       Deprecated: kept until 2.0.0; use afs admin list-orchestration-endpoints instead.
+
        Required permission: admin:settings
 
 SYNOPSIS

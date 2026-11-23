@@ -41,7 +41,7 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       Disable a model
+       Disable a model (refused while service model access is all)
 
        afs admin update-model --model-id anthropic.claude-sonnet-4-5 --no-enabled
 

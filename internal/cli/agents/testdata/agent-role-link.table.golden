@@ -1,0 +1,4 @@
+Id     Name     DefaultModel  Models    Paused  Phase  Role      Link    Version
+agt_1  orches…  m1            all       false   Ready  orchest…  -       2
+agt_2  coder    m1            selected  false   Ready  worker    linked  5
+agt_3  fixer    m1            selected  false   Ready  worker    -       1

@@ -60,4 +60,8 @@ EXAMPLES
 
        afs models list-models --query 'items[].id' --output text
 
+       Print the models the gateway can call (enabled and priced)
+
+       afs models list-models --query 'items[?callable].id' --output text
+
 ```

@@ -5,6 +5,9 @@ Every team may run one **collaboration agent**, Paperclip, and connect its other
 each worker agent, and (for a service administrator) list every team's endpoint. They call the AFS API; the
 API decides what you may do.
 
+> **Deprecated in 1.1.0.** Paperclip is now one of two tools of the team orchestration agent. Use
+> [Team orchestration and model access](orchestration.md); the commands below keep working until 2.0.0 and print a warning.
+
 Contract: API version 1.3. A CLI built for 1.3 against an older service answers `404` on the new paths; a
 service newer than the CLI prints a one-time notice and keeps working.
 

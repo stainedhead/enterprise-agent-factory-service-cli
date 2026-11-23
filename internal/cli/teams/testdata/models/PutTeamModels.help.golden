@@ -6,6 +6,8 @@ NAME
 DESCRIPTION
        Put team models
 
+       Only service admins change a team's models (teams:set-guardrails). Narrowing never edits an agent's stored selection: restoring a model restores access (MOD-6).
+
        Required permission: teams:set-guardrails
 
 SYNOPSIS
@@ -14,7 +16,11 @@ SYNOPSIS
 OPTIONS
        --team-id (string) (required)
           Team id; taken from the path only
-       --model-ids (list) (required)
+       --access (string)
+          all (every model enabled for the service, now and later) or selected (the list in --model-ids). A body with only --model-ids is read as selected (deprecated form).
+          Possible values: all, selected
+       --model-ids (list)
+          The team's list: 0 to 100 distinct model ids, each enabled for the service. Not accepted with --access all.
        --if-match (string)
           Apply only if the resource is at this version (safe update).
        --wait (boolean)
@@ -41,7 +47,11 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       Replace the team's model list
+       Let the team use every model enabled for the service
 
-       afs teams put-team-models --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --model-ids claude-sonnet claude-haiku
+       afs teams put-team-models --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --access all
+
+       Limit the team to two models
+
+       afs teams put-team-models --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --access selected --model-ids anthropic.claude-sonnet-4-5 anthropic.claude-haiku-4-5
 

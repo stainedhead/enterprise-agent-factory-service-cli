@@ -14,6 +14,7 @@ Generated from `afs help` by `make docs`; do not edit by hand.
 | [configure](configure.md) | Create and edit profiles in ~/.afs/config. |
 | [members](members.md) | Manage team members and role bindings. |
 | [models](models.md) | List and manage models and their prices. |
+| [orchestration](orchestration.md) | Manage a team's orchestration agent: its collaboration tool and who can reach it. |
 | [pools](pools.md) | Manage worker pools. |
 | [reports](reports.md) | Run and schedule reports. |
 | [secrets](secrets.md) | Manage secret references and write secret values. |

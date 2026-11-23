@@ -67,6 +67,22 @@ type Override struct {
 	SkeletonMembers map[string]json.RawMessage
 	// Handle takes over a successful response instead of the generic rendering (kubeconfig).
 	Handle AfterFunc
+	// Deprecated names the replacement of an operation that stays until 2.0.0 (for example
+	// "afs orchestration describe-orchestration"). Help says so and each run prints one stderr line (ORC-30).
+	Deprecated string
+	// DeprecatedOptions maps the wire name of a member to the text that replaces its description and names
+	// what to use instead; giving the option prints one stderr line (CLI-US-28).
+	DeprecatedOptions map[string]string
+	// Hidden lists wire names whose option is accepted but left out of help (a member the API no longer
+	// takes, or one the service's own options replace).
+	Hidden []string
+	// Desc replaces the description of a derived option (wire name -> text).
+	Desc map[string]string
+	// Enum replaces the values a derived option lists (wire name -> values), for a snapshot whose enum lags
+	// the contract text; with OpenEnum the values are only the ones help names.
+	Enum map[string][]string
+	// Notes are extra paragraphs of the operation's help description.
+	Notes []string
 }
 
 // merge folds b into a; two registrations setting Columns, After or the same Rename key conflict.
@@ -77,6 +93,29 @@ func (a *Override) merge(b Override) error {
 	a.Extra = append(a.Extra, b.Extra...)
 	a.Optional = append(a.Optional, b.Optional...)
 	a.OpenEnum = append(a.OpenEnum, b.OpenEnum...)
+	a.Hidden = append(a.Hidden, b.Hidden...)
+	a.Notes = append(a.Notes, b.Notes...)
+	if b.Deprecated != "" {
+		a.Deprecated = b.Deprecated
+	}
+	for k, v := range b.DeprecatedOptions {
+		if a.DeprecatedOptions == nil {
+			a.DeprecatedOptions = map[string]string{}
+		}
+		a.DeprecatedOptions[k] = v
+	}
+	for k, v := range b.Enum {
+		if a.Enum == nil {
+			a.Enum = map[string][]string{}
+		}
+		a.Enum[k] = v
+	}
+	for k, v := range b.Desc {
+		if a.Desc == nil {
+			a.Desc = map[string]string{}
+		}
+		a.Desc[k] = v
+	}
 	if b.ResultKey != "" {
 		a.ResultKey = b.ResultKey
 	}

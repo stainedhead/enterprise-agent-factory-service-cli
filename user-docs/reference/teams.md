@@ -205,14 +205,21 @@ OPTIONS
           Possible values: persistent, ephemeral
        --max-budget-usd (string) (required)
           Guardrail field: needs teams:set-guardrails
+       --max-collaboration-exposure (string)
+          Default off
+          Possible values: off, private, public
        --may-add-external-systems (boolean)
           Guardrail field: needs teams:set-guardrails
        --may-expose-collaboration (boolean)
-          Guardrail field: needs teams:set-guardrails.
+          Deprecated: use --max-collaboration-exposure (off, private or public) instead.
        --may-manage-aws-accounts (boolean)
           Guardrail field: needs teams:set-guardrails
+       --model-access (string)
+          Possible values: all, selected
        --models (list)
           Model ids enabled for the team
+       --orchestration (string or JSON)
+          The team's orchestration agent, all optional: Tool=paperclip|buzz,WebUiExposure=off|private|public,WebApiExposure=off|private|public,RegistrationMode=manual|managed,ModelId=<model id>, or JSON (file://PATH). Defaults come from the orchestration.* settings.
        --owner-email (string)
        --quotas (JSON)
        --slug (string) (required)
@@ -256,6 +263,14 @@ EXAMPLES
        Create an ephemeral team with a lifetime budget
 
        afs teams create-team --slug cve-sprint --display-name "CVE sprint" --kind ephemeral --max-budget-usd 500.00 --first-admin '{"email":"ada@example.com"}' --expires-at 2026-12-31T00:00:00Z --teardown-rule at_cap_or_expiry --budget-usd 500.00 --budget-thresholds 50 80 100
+
+       Create a team whose orchestration agent runs Buzz
+
+       afs teams create-team --slug payments --display-name "Payments" --kind persistent --max-budget-usd 500.00 --first-admin '{"email":"ada@example.com"}' --orchestration Tool=buzz --wait
+
+       Create a team that may expose its Web UI privately, and serve it that way
+
+       afs teams create-team --slug billing --display-name "Billing" --kind persistent --max-budget-usd 300.00 --first-admin '{"email":"ada@example.com"}' --max-collaboration-exposure private --orchestration Tool=paperclip,WebUiExposure=private,WebApiExposure=off,ModelId=anthropic.claude-sonnet-4-5
 
        Create a persistent team and wait until it is ready
 
@@ -1269,6 +1284,10 @@ EXAMPLES
 
        afs teams list-team-models --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW
 
+       List the ids of the models the gateway can call for the team
+
+       afs teams list-team-models --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --query 'items[?callable].id' --output text
+
 ```
 
 ## list-teams
@@ -1382,6 +1401,8 @@ NAME
 DESCRIPTION
        Put team models
 
+       Only service admins change a team's models (teams:set-guardrails). Narrowing never edits an agent's stored selection: restoring a model restores access (MOD-6).
+
        Required permission: teams:set-guardrails
 
 SYNOPSIS
@@ -1390,7 +1411,11 @@ SYNOPSIS
 OPTIONS
        --team-id (string) (required)
           Team id; taken from the path only
-       --model-ids (list) (required)
+       --access (string)
+          all (every model enabled for the service, now and later) or selected (the list in --model-ids). A body with only --model-ids is read as selected (deprecated form).
+          Possible values: all, selected
+       --model-ids (list)
+          The team's list: 0 to 100 distinct model ids, each enabled for the service. Not accepted with --access all.
        --if-match (string)
           Apply only if the resource is at this version (safe update).
        --wait (boolean)
@@ -1417,9 +1442,13 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       Replace the team's model list
+       Let the team use every model enabled for the service
 
-       afs teams put-team-models --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --model-ids claude-sonnet claude-haiku
+       afs teams put-team-models --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --access all
+
+       Limit the team to two models
+
+       afs teams put-team-models --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --access selected --model-ids anthropic.claude-sonnet-4-5 anthropic.claude-haiku-4-5
 
 ```
 
@@ -1927,8 +1956,11 @@ OPTIONS
           Possible values: persistent, ephemeral
        --max-budget-usd (string)
           USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+       --max-collaboration-exposure (string)
+          Possible values: off, private, public
        --may-add-external-systems (boolean)
        --may-expose-collaboration (boolean)
+          Deprecated: use --max-collaboration-exposure (off, private or public) instead.
        --may-manage-aws-accounts (boolean)
        --owner-email (string)
        --quotas (JSON)
@@ -1966,5 +1998,9 @@ EXAMPLES
        Apply a change only if the team is still at version 7
 
        afs teams update-team --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --viewer-kubectl --if-match 7
+
+       Cap how far the team's orchestration agent may be exposed (service admins)
+
+       afs teams update-team --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --max-collaboration-exposure private
 
 ```

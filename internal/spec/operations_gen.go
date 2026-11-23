@@ -3,10 +3,10 @@
 package spec
 
 // ContractVersion is info.version of the snapshot.
-const ContractVersion = "1.3.1"
+const ContractVersion = "1.4.0"
 
 // SnapshotSHA256 is the checksum of the snapshot these descriptors were generated from.
-const SnapshotSHA256 = "12bb52959d31141d6577a0487a3c40318a2a542423e1adc30c947ac57bcdb357"
+const SnapshotSHA256 = "b9e9cac718c2f69906d7dcf5a14d137a244485a4d51baaf6add8e04e139f7697"
 
 var operations = []Operation{
 	{ID: "AddMember", Method: "POST", Path: "/v1/teams/{teamId}/members", Service: "members", Command: "add-member", Summary: "Add member",
@@ -63,6 +63,18 @@ var operations = []Operation{
 		Success:  []int{200},
 		Produces: []string{"application/json"},
 	},
+	{ID: "ChangeCollaborationTool", Method: "POST", Path: "/v1/teams/{teamId}/orchestration:change-tool", Service: "orchestration", Command: "change-collaboration-tool", Summary: "Change collaboration tool",
+		Permission: "collaboration:manage", Scope: "team", Priority: "P1", CSV: false,
+		Params: []Param{
+			{Name: "teamId", In: "path", Required: true, Desc: "Team id; taken from the path only", Example: "team_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^team_[0-9A-HJKMNP-TV-Z]{26}$"}},
+		},
+		IfMatch: IfMatchNone, Idempotent: true, Paginated: false,
+		Body: &Body{Required: true, MediaType: "application/json", SchemaName: "ChangeCollaborationToolRequest", Fields: []Field{
+			{Name: "tool", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", Enum: []string{"paperclip", "buzz"}}},
+		}},
+		Success:  []int{202},
+		Produces: []string{"application/json"},
+	},
 	{ID: "ConnectAgentToCollaboration", Method: "POST", Path: "/v1/teams/{teamId}/collaboration/links/{agentId}:connect", Service: "collaboration", Command: "connect-agent", Summary: "Connect agent to collaboration",
 		Permission: "collaboration:manage", Scope: "team", Priority: "P0", CSV: false,
 		Params: []Param{
@@ -87,10 +99,11 @@ var operations = []Operation{
 			{Name: "description", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", MaxLen: i64(1000)}},
 			{Name: "iamIdentity", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", Enum: []string{"team_shared", "dedicated"}}},
 			{Name: "image", Required: true, WriteOnly: false, ReadOnly: false, Desc: "Container image pinned by digest", Schema: Schema{Type: "string", Pattern: "@sha256:[0-9a-f]{64}$", Ref: "ImageRef"}},
-			{Name: "modelId", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string"}},
-			{Name: "name", Required: true, WriteOnly: false, ReadOnly: false, Desc: "Immutable name (team slug, agent, pool, secret)", Schema: Schema{Type: "string", Pattern: "^[a-z][a-z0-9-]{1,38}[a-z0-9]$", Ref: "Name"}},
+			{Name: "modelId", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Deprecated: models.defaultModelId", Schema: Schema{Type: "string"}},
+			{Name: "models", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "object", Ref: "AgentModelsInput"}},
+			{Name: "name", Required: true, WriteOnly: false, ReadOnly: false, Desc: "The name orchestrator is reserved (name_reserved)", Schema: Schema{Type: "string", Pattern: "^[a-z][a-z0-9-]{1,38}[a-z0-9]$", Ref: "Name"}},
 			{Name: "resources", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "object", Ref: "Resources"}},
-			{Name: "role", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Set on create; immutable", Schema: Schema{Type: "string", Enum: []string{"worker", "collaboration"}}},
+			{Name: "role", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Workers only; any other value is refused (role_reserved)", Schema: Schema{Type: "string", Enum: []string{"worker"}}},
 			{Name: "secretBindings", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "array", Items: &Schema{Type: "object", Ref: "SecretBinding"}}},
 			{Name: "template", Required: true, WriteOnly: false, ReadOnly: false, Desc: "Agent template name", Schema: Schema{Type: "string"}},
 			{Name: "volume", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "object", Ref: "AgentVolume"}},
@@ -283,7 +296,8 @@ var operations = []Operation{
 		Body: &Body{Required: true, MediaType: "application/json", SchemaName: "CreatePoolRequest", Fields: []Field{
 			{Name: "description", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", MaxLen: i64(1000)}},
 			{Name: "image", Required: true, WriteOnly: false, ReadOnly: false, Desc: "Container image pinned by digest", Schema: Schema{Type: "string", Pattern: "@sha256:[0-9a-f]{64}$", Ref: "ImageRef"}},
-			{Name: "modelId", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string"}},
+			{Name: "modelId", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Deprecated: models.defaultModelId", Schema: Schema{Type: "string"}},
+			{Name: "models", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "object", Ref: "AgentModelsInput"}},
 			{Name: "name", Required: true, WriteOnly: false, ReadOnly: false, Desc: "Immutable name (team slug, agent, pool, secret)", Schema: Schema{Type: "string", Pattern: "^[a-z][a-z0-9-]{1,38}[a-z0-9]$", Ref: "Name"}},
 			{Name: "persona", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string"}},
 			{Name: "resources", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "object", Ref: "Resources"}},
@@ -419,10 +433,13 @@ var operations = []Operation{
 			{Name: "isolationTier", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Guardrail field: needs teams:set-guardrails", Schema: Schema{Type: "string", Enum: []string{"shared", "dedicated"}}},
 			{Name: "kind", Required: true, WriteOnly: false, ReadOnly: false, Desc: "Immutable after create", Schema: Schema{Type: "string", Enum: []string{"persistent", "ephemeral"}}},
 			{Name: "maxBudgetUsd", Required: true, WriteOnly: false, ReadOnly: false, Desc: "Guardrail field: needs teams:set-guardrails", Schema: Schema{Type: "string", Pattern: "^-?(0|[1-9][0-9]{0,11})(\\.[0-9]{1,6})?$", Ref: "Money"}},
+			{Name: "maxCollaborationExposure", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Default off", Schema: Schema{Type: "string", Enum: []string{"off", "private", "public"}}},
 			{Name: "mayAddExternalSystems", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Guardrail field: needs teams:set-guardrails", Schema: Schema{Type: "boolean"}},
 			{Name: "mayExposeCollaboration", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Guardrail field: needs teams:set-guardrails.", Schema: Schema{Type: "boolean"}},
 			{Name: "mayManageAwsAccounts", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Guardrail field: needs teams:set-guardrails", Schema: Schema{Type: "boolean"}},
+			{Name: "modelAccess", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", Enum: []string{"all", "selected"}}},
 			{Name: "models", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Model ids enabled for the team", Schema: Schema{Type: "array", Items: &Schema{Type: "string"}}},
+			{Name: "orchestration", Required: false, WriteOnly: false, ReadOnly: false, Desc: "The orchestration agent created with the team; every field optional", Schema: Schema{Type: "object"}},
 			{Name: "ownerEmail", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string"}},
 			{Name: "quotas", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "object", Ref: "Quotas"}},
 			{Name: "slug", Required: true, WriteOnly: false, ReadOnly: false, Desc: "Immutable name (team slug, agent, pool, secret)", Schema: Schema{Type: "string", Pattern: "^[a-z][a-z0-9-]{1,38}[a-z0-9]$", Ref: "Name"}},
@@ -938,6 +955,15 @@ var operations = []Operation{
 		Success:  []int{200},
 		Produces: []string{"application/yaml"},
 	},
+	{ID: "GetTeamOrchestration", Method: "GET", Path: "/v1/teams/{teamId}/orchestration", Service: "orchestration", Command: "describe-orchestration", Summary: "Get team orchestration",
+		Permission: "collaboration:read", Scope: "team", Priority: "P0", CSV: false,
+		Params: []Param{
+			{Name: "teamId", In: "path", Required: true, Desc: "Team id; taken from the path only", Example: "team_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^team_[0-9A-HJKMNP-TV-Z]{26}$"}},
+		},
+		IfMatch: IfMatchNone, Idempotent: false, Paginated: false,
+		Success:  []int{200},
+		Produces: []string{"application/json"},
+	},
 	{ID: "GetTeamReport", Method: "GET", Path: "/v1/teams/{teamId}/reports/{kind}", Service: "reports", Command: "get-team-report", Summary: "Get team report",
 		Permission: "reports:read", Scope: "team", Priority: "P0", CSV: true,
 		Params: []Param{
@@ -1280,6 +1306,19 @@ var operations = []Operation{
 		ResultKey: "items",
 		Success:   []int{200},
 		Produces:  []string{"application/json"},
+	},
+	{ID: "ListOrchestrationEndpoints", Method: "GET", Path: "/v1/admin/orchestration-endpoints", Service: "admin", Command: "list-orchestration-endpoints", Summary: "List orchestration endpoints",
+		Permission: "admin:settings", Scope: "service", Priority: "P0", CSV: true,
+		Params: []Param{
+			{Name: "exposure", In: "query", Required: false, Desc: "", Example: "", Schema: Schema{Type: "string", Enum: []string{"private", "public"}}},
+			{Name: "tool", In: "query", Required: false, Desc: "", Example: "", Schema: Schema{Type: "string", Enum: []string{"paperclip", "buzz"}}},
+			{Name: "teamId", In: "query", Required: false, Desc: "", Example: "", Schema: Schema{Type: "string", Pattern: "^team_[0-9A-HJKMNP-TV-Z]{26}$"}},
+			{Name: "state", In: "query", Required: false, Desc: "", Example: "", Schema: Schema{Type: "string", Enum: []string{"Ready", "Degraded", "Failed", "Pending"}}},
+		},
+		IfMatch: IfMatchNone, Idempotent: false, Paginated: true,
+		ResultKey: "items",
+		Success:   []int{200},
+		Produces:  []string{"application/json", "text/csv"},
 	},
 	{ID: "ListOrgAccounts", Method: "GET", Path: "/v1/admin/org-accounts", Service: "admin", Command: "list-org-accounts", Summary: "List org accounts",
 		Permission: "admin:accounts", Scope: "service", Priority: "P1", CSV: false,
@@ -1668,6 +1707,15 @@ var operations = []Operation{
 		}},
 		Success: []int{204},
 	},
+	{ID: "PutServiceModelAccess", Method: "PUT", Path: "/v1/admin/model-access", Service: "admin", Command: "put-service-model-access", Summary: "Put service model access",
+		Permission: "admin:models", Scope: "service", Priority: "P0", CSV: false,
+		IfMatch: IfMatchOptional, Idempotent: false, Paginated: false,
+		Body: &Body{Required: true, MediaType: "application/json", SchemaName: "PutServiceModelAccessRequest", Fields: []Field{
+			{Name: "access", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", Enum: []string{"all", "selected"}}},
+		}},
+		Success:  []int{200},
+		Produces: []string{"application/json"},
+	},
 	{ID: "PutServiceTag", Method: "PUT", Path: "/v1/admin/service-tags/{key}", Service: "admin", Command: "put-service-tag", Summary: "Put service tag",
 		Permission: "admin:service-tags", Scope: "service", Priority: "P1", CSV: false,
 		Params: []Param{
@@ -1731,7 +1779,22 @@ var operations = []Operation{
 		},
 		IfMatch: IfMatchOptional, Idempotent: false, Paginated: false,
 		Body: &Body{Required: true, MediaType: "application/json", SchemaName: "PutTeamModelsRequest", Fields: []Field{
-			{Name: "modelIds", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "array", Items: &Schema{Type: "string"}}},
+			{Name: "access", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", Enum: []string{"all", "selected"}}},
+			{Name: "modelIds", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "array", Items: &Schema{Type: "string"}}},
+		}},
+		Success:  []int{200},
+		Produces: []string{"application/json"},
+	},
+	{ID: "PutTeamOrchestration", Method: "PUT", Path: "/v1/teams/{teamId}/orchestration", Service: "orchestration", Command: "put-orchestration", Summary: "Put team orchestration",
+		Permission: "collaboration:manage", Scope: "team", Priority: "P0", CSV: false,
+		Params: []Param{
+			{Name: "teamId", In: "path", Required: true, Desc: "Team id; taken from the path only", Example: "team_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^team_[0-9A-HJKMNP-TV-Z]{26}$"}},
+		},
+		IfMatch: IfMatchOptional, Idempotent: false, Paginated: false,
+		Body: &Body{Required: true, MediaType: "application/json", SchemaName: "PutTeamOrchestrationRequest", Fields: []Field{
+			{Name: "registrationMode", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Omitted keeps the current value", Schema: Schema{Type: "string", Enum: []string{"manual", "managed"}}},
+			{Name: "webApi", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "object"}},
+			{Name: "webUi", Required: true, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "object"}},
 		}},
 		Success:  []int{200},
 		Produces: []string{"application/json"},
@@ -1925,7 +1988,9 @@ var operations = []Operation{
 			{Name: "description", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", MaxLen: i64(1000)}},
 			{Name: "iamIdentity", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", Enum: []string{"team_shared", "dedicated"}}},
 			{Name: "image", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Container image pinned by digest", Schema: Schema{Type: "string", Pattern: "@sha256:[0-9a-f]{64}$", Ref: "ImageRef"}},
-			{Name: "modelId", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string"}},
+			{Name: "modelId", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Deprecated: models.defaultModelId", Schema: Schema{Type: "string"}},
+			{Name: "models", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "object", Ref: "AgentModelsInput"}},
+			{Name: "name", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Refused on the orchestration agent (orchestration_field_fixed)", Schema: Schema{Type: "string", Pattern: "^[a-z][a-z0-9-]{1,38}[a-z0-9]$", Ref: "Name"}},
 			{Name: "resources", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "object", Ref: "Resources"}},
 			{Name: "secretBindings", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "array", Items: &Schema{Type: "object", Ref: "SecretBinding"}}},
 			{Name: "template", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Agent template name", Schema: Schema{Type: "string"}},
@@ -2041,7 +2106,8 @@ var operations = []Operation{
 		Body: &Body{Required: true, MediaType: "application/json", SchemaName: "UpdatePoolRequest", Fields: []Field{
 			{Name: "description", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", MaxLen: i64(1000)}},
 			{Name: "image", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Container image pinned by digest", Schema: Schema{Type: "string", Pattern: "@sha256:[0-9a-f]{64}$", Ref: "ImageRef"}},
-			{Name: "modelId", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string"}},
+			{Name: "modelId", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Deprecated: models.defaultModelId", Schema: Schema{Type: "string"}},
+			{Name: "models", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "object", Ref: "AgentModelsInput"}},
 			{Name: "persona", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string"}},
 			{Name: "resources", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "object", Ref: "Resources"}},
 			{Name: "scratchSizeGiB", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "integer", Min: f64(1), Max: f64(500)}},
@@ -2149,6 +2215,7 @@ var operations = []Operation{
 			{Name: "isolationTier", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", Enum: []string{"shared", "dedicated"}}},
 			{Name: "kind", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Immutable; a different value is a ValidationError", Schema: Schema{Type: "string", Enum: []string{"persistent", "ephemeral"}}},
 			{Name: "maxBudgetUsd", Required: false, WriteOnly: false, ReadOnly: false, Desc: "USD amount as a decimal string with at most 6 fraction digits; never a JSON number", Schema: Schema{Type: "string", Pattern: "^-?(0|[1-9][0-9]{0,11})(\\.[0-9]{1,6})?$", Ref: "Money"}},
+			{Name: "maxCollaborationExposure", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "string", Enum: []string{"off", "private", "public"}}},
 			{Name: "mayAddExternalSystems", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "boolean"}},
 			{Name: "mayExposeCollaboration", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "boolean"}},
 			{Name: "mayManageAwsAccounts", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "boolean"}},

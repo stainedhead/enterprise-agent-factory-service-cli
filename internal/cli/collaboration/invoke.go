@@ -15,6 +15,7 @@ import (
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/buildinfo"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/exec"
+	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/orchestration"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/runtime"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/client"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/edge"
@@ -44,7 +45,7 @@ var refusedGlobals = []string{"query", "output", "no-paginate", "max-items", "pa
 func registerInvoke(r *cli.Registry) {
 	r.AddLocal(&cli.Command{
 		Service: "collaboration", Name: "invoke-api",
-		Summary: "Call a team's Paperclip REST API with your AFS credential and a Paperclip key.",
+		Summary: "Call a team's Paperclip REST API (the orchestration agent's Web API) with your AFS credential and a Paperclip key.",
 		Options: []cli.Option{
 			{Flag: "--team-id", In: "local", Kind: cli.String, Desc: "The team (or the profile's team_id). Not needed with --collab-url."},
 			{Flag: "--method", In: "local", Kind: cli.String, Desc: "GET, HEAD, POST, PUT, PATCH or DELETE (default GET)."},
@@ -52,13 +53,13 @@ func registerInvoke(r *cli.Registry) {
 			{Flag: "--body", In: "local", Kind: cli.String, Desc: "The request body: file://PATH or fileb://PATH."},
 			{Flag: "--content-type", In: "local", Kind: cli.String, Desc: "The body's media type (default application/json)."},
 			{Flag: "--paperclip-key-file", In: "local", Kind: cli.String, Required: true, Desc: "A file (mode 0600) holding the Paperclip key, or - for standard input. The key is never an argument."},
-			{Flag: "--collab-url", In: "local", Kind: cli.String, Desc: "Use this https origin instead of reading the team's restApiUrl."},
+			{Flag: "--collab-url", In: "local", Kind: cli.String, Desc: "Use this https origin instead of the Web API address of the team's orchestration agent."},
 			{Flag: "--include", In: "local", Kind: cli.Bool, Desc: "Print the status line and response headers before the body."},
 			{Flag: "--wait", In: "local", Kind: cli.Bool, Desc: "Not supported: invoke-api prints the response unchanged."},
 		},
 		Local: invoke,
 		Override: cli.Override{Examples: []cli.Example{
-			{Title: "Read the team's issues through the public Paperclip API", Command: "afs collaboration invoke-api --team-id " + exTeam + " --path /api/companies --paperclip-key-file ./pc.key"},
+			{Title: "Read the team's companies through the Web API at its effective level (private or public)", Command: "afs collaboration invoke-api --team-id " + exTeam + " --path /api/companies --paperclip-key-file ./pc.key"},
 			{Title: "Create an issue from a pipeline", Command: "afs collaboration invoke-api --team-id " + exTeam + " --method POST --path /api/issues --body file://issue.json --paperclip-key-file ./pc.key"},
 		}},
 	})
@@ -120,12 +121,12 @@ func invoke(ctx context.Context, inv *cli.Invocation) int {
 	rawOrigin := args.collabURL
 	if rawOrigin == "" {
 		var rerr error
-		if rawOrigin, rerr = restAPIURL(ctx, inv, args.teamID); rerr != nil {
-			var ne *notConfiguredError
-			if errors.As(rerr, &ne) {
-				return localFail(env, edge.ErrNotConfigured)
+		if rawOrigin, rerr = webAPIURL(ctx, inv, args.teamID); rerr != nil {
+			var off *surfaceOffError
+			if errors.As(rerr, &off) {
+				return exec.ReportError(env.Stderr, invokeOp, st.Profile, off.apiError())
 			}
-			return exec.ReportError(env.Stderr, "GetTeamCollaboration", st.Profile, rerr)
+			return exec.ReportError(env.Stderr, "GetTeamOrchestration", st.Profile, rerr)
 		}
 	}
 	origin, err := edge.Origin(rawOrigin, st.CollabBaseDomain)
@@ -189,30 +190,58 @@ func localFail(env *cli.Env, err error) int {
 	return cli.ExitOther
 }
 
-type notConfiguredError struct{}
+// surfaceOffError is a Web API that has no address to call: the tool has none (Buzz), or the team's exposure
+// (or the service's switches) leaves it off. It is reported as an answer of the service would be, exit 254.
+type surfaceOffError struct {
+	message string
+	reason  string // details.reason for the hint ("" when the tool has no Web API)
+}
 
-func (*notConfiguredError) Error() string { return edge.ErrNotConfigured.Error() }
+func (e *surfaceOffError) Error() string { return e.message }
 
-// restAPIURL reads restApiUrl with one GetTeamCollaboration (CLI-US-25.5).
-func restAPIURL(ctx context.Context, inv *cli.Invocation, teamID string) (string, error) {
+func (e *surfaceOffError) apiError() *client.APIError {
+	ae := &client.APIError{Status: http.StatusConflict, Code: "SurfaceOff", Message: e.message}
+	if e.reason != "" {
+		ae.Details, _ = json.Marshal(map[string]string{"reason": e.reason})
+	}
+	return ae
+}
+
+// webAPIURL reads the address of the Web API's effective level with one GetTeamOrchestration (ORC-30): a tool
+// without a Web API (Buzz) and a surface that is off are refused with "Web API is off" before any key is sent.
+func webAPIURL(ctx context.Context, inv *cli.Invocation, teamID string) (string, error) {
 	sess, err := runtime.New(inv.Env, inv.P.G, false)
 	if err != nil {
 		return "", err
 	}
-	resp, err := sess.Client.Do(ctx, client.Request{Method: http.MethodGet, Path: "/v1/teams/" + url.PathEscape(teamID) + "/collaboration", Operation: "GetTeamCollaboration"})
+	resp, err := sess.Client.Do(ctx, client.Request{Method: http.MethodGet, Path: "/v1/teams/" + url.PathEscape(teamID) + "/orchestration", Operation: "GetTeamOrchestration"})
 	if err != nil {
 		return "", err
 	}
 	var doc struct {
-		RestAPIURL *string `json:"restApiUrl"`
+		Tool   string `json:"tool"`
+		WebAPI struct {
+			Supported *bool    `json:"supported"`
+			Effective string   `json:"effective"`
+			Reasons   []string `json:"reasons"`
+			URL       *string  `json:"url"`
+		} `json:"webApi"`
 	}
 	if err := json.Unmarshal(resp.Body, &doc); err != nil {
-		return "", fmt.Errorf("the collaboration answer is not valid JSON: %w", err)
+		return "", fmt.Errorf("the orchestration answer is not valid JSON: %w", err)
 	}
-	if doc.RestAPIURL == nil || *doc.RestAPIURL == "" {
-		return "", &notConfiguredError{}
+	w := doc.WebAPI
+	switch {
+	case w.Supported != nil && !*w.Supported:
+		return "", &surfaceOffError{message: "Web API is off (N/A for " + orchestration.ToolName(doc.Tool) + ")"}
+	case w.URL == nil || *w.URL == "":
+		msg := "Web API is off for this team"
+		if len(w.Reasons) > 0 {
+			msg += " (" + strings.Join(w.Reasons, ", ") + ")"
+		}
+		return "", &surfaceOffError{message: msg, reason: "surface_disabled"}
 	}
-	return *doc.RestAPIURL, nil
+	return *w.URL, nil
 }
 
 // parseInvoke checks everything that can be checked before any call (CLI-US-25.3, 25.4, 25.9).

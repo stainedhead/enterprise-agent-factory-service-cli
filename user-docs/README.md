@@ -11,6 +11,7 @@ How to install, configure and use the `afs` CLI.
 | [Teams and members](teams-and-members.md) | Teams, members, team audit events, service settings, identity providers |
 | [Agents and secrets](agents-and-secrets.md) | Agents, secret input rules, configuration values, external systems, platform catalogs |
 | [Team collaboration (Paperclip)](collaboration.md) | The collaboration agent, its public endpoint settings, links, collaborator role, managed secrets |
+| [Team orchestration and model access](orchestration.md) | The orchestration agent (Paperclip or Buzz), exposure levels, the tool, model access at service, team, agent and pool level, deprecations |
 | [Budgets and reports](budgets-and-reports.md) | Budgets, usage, costs, reports and CSV, notification channels, models and prices |
 | [Keys, tags, logs, schedules and service administration](delivery-and-admin.md) | API keys, role links, identities, team tags, log destinations, restore, report schedules, service audit, price proposals, exports and imports |
 | [Swarms](swarms.md) | Ephemeral teams, stages, pools, scaling, handoffs, pool secrets and role links, cost-tag status |

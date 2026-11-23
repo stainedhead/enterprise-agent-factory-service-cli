@@ -64,7 +64,10 @@ OPTIONS
        --description (string)
        --image (string) (required)
           Container image pinned by digest
-       --model-id (string) (required)
+       --model-id (string)
+          Deprecated: use --default-model-id (and --models to choose the set) instead.
+       --models (list)
+          Models the agent may call: the word all (every model the team may use, now and later) or one or more model ids (a fixed selection). Sent members replace the stored ones.
        --name (string) (required)
           Immutable name (team slug, agent, pool, secret)
        --persona (string)
@@ -80,6 +83,8 @@ OPTIONS
           Range: 0 to 200
        --idempotency-key (string)
           Idempotency key (default: a new ULID per invocation).
+       --default-model-id (string)
+          The model the runtime starts with; it must be one of the agent's models. Without --models on an update, only the default changes.
        --wait (boolean)
           Wait until the resource is ready (or gone, for a delete).
        --wait-timeout (duration)
@@ -106,7 +111,7 @@ GLOBAL OPTIONS
 EXAMPLES
        Create a pool of 10 workers and wait until they report
 
-       afs pools create-pool --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --name fixer --template claude-code --image registry.example.com/agents/coder@sha256:4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f --model-id anthropic.claude-sonnet-4-5 --workers 10 --wait
+       afs pools create-pool --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --name fixer --template claude-code --image registry.example.com/agents/coder@sha256:4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f --models anthropic.claude-sonnet-4-5 anthropic.claude-haiku-4-5 --default-model-id anthropic.claude-sonnet-4-5 --workers 10 --wait
 
 ```
 
@@ -1208,6 +1213,9 @@ OPTIONS
        --image (string)
           Container image pinned by digest
        --model-id (string)
+          Deprecated: use --default-model-id (and --models to choose the set) instead.
+       --models (list)
+          Models the agent may call: the word all (every model the team may use, now and later) or one or more model ids (a fixed selection). Sent members replace the stored ones.
        --persona (string)
        --resources (JSON)
        --scratch-size-gib (integer)
@@ -1221,6 +1229,8 @@ OPTIONS
           Range: 0 to 200
        --if-match (string)
           Apply only if the resource is at this version (safe update).
+       --default-model-id (string)
+          The model the runtime starts with; it must be one of the agent's models. Without --models on an update, only the default changes.
        --wait (boolean)
           Wait until the resource is ready (or gone, for a delete).
        --wait-timeout (duration)
@@ -1245,6 +1255,10 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
+       Let the pool's workers call every model the team may use
+
+       afs pools update-pool --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --pool-id pool_01J9ZQ3ABCDEFGHJKMNPQRSTVW --models all
+
        Change a pool's persona
 
        afs pools update-pool --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --pool-id pool_01J9ZQ3ABCDEFGHJKMNPQRSTVW --persona "Minimal-change dependency upgrader"

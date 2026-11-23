@@ -11,7 +11,7 @@ import (
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/golden"
 )
 
-var createCollab = []string{"agents", "create-agent", "--team-id", "team_1", "--name", "paperclip", "--template", "paperclip", "--image", image, "--model-id", "m1"}
+var createCollab = []string{"agents", "create-agent", "--team-id", "team_1", "--name", "paperclip", "--template", "paperclip", "--image", image, "--default-model-id", "m1"}
 
 func with(base []string, more ...string) []string {
 	return append(append([]string{}, base...), more...)
@@ -29,9 +29,10 @@ func TestCreateAgentRoleCollaborationBody(t *testing.T) {
 	}
 }
 
-func TestCreateAgentRoleEnum252(t *testing.T) {
-	r := clitest.Run(t, nil, with(createCollab, "--role", "boss")...)
-	if r.Code != 252 || len(r.Requests) != 0 {
+// ORC-30: --role is hidden and its enum is open, so the API's refusal (role_reserved) is what the person sees.
+func TestCreateAgentRoleSentUnchanged(t *testing.T) {
+	r := clitest.Run(t, createWait, with(createCollab, "--role", "boss")...)
+	if r.Code != 0 || len(r.Requests) != 1 || !strings.Contains(string(r.RequestBody[0]), `"role":"boss"`) {
 		t.Errorf("%d %q", r.Code, r.Err)
 	}
 }
@@ -70,15 +71,6 @@ func TestUpdateAgentCollaborationConnectBody(t *testing.T) {
 	}
 }
 
-func TestCreateAgentCollaborationRoleWithConnect252(t *testing.T) {
-	for _, extra := range [][]string{{"--collaboration-connect"}, {"--no-collaboration-connect"}, {"--paperclip-agent-id", "ag_1"}} {
-		r := clitest.Run(t, nil, with(createCollab, append([]string{"--role", "collaboration"}, extra...)...)...)
-		if r.Code != 252 || len(r.Requests) != 0 {
-			t.Errorf("%v: %d", extra, r.Code)
-		}
-	}
-}
-
 func TestCreateAgentNoCollaborationMemberByDefault(t *testing.T) {
 	r := clitest.Run(t, createWait, createCollab...)
 	if strings.Contains(string(r.RequestBody[0]), "collaboration") || strings.Contains(string(r.RequestBody[0]), `"role"`) {
@@ -112,22 +104,24 @@ func TestListAgentsRoleFilter(t *testing.T) {
 	}
 }
 
-func TestListAgentsRoleEnum252(t *testing.T) {
-	r := clitest.Run(t, nil, "agents", "list-agents", "--team-id", "team_1", "--role", "boss")
-	if r.Code != 252 || len(r.Requests) != 0 {
+// The role filter is an open enum: the API judges the value (worker, orchestration, or collaboration until 2.0.0).
+func TestListAgentsRoleOpenEnumPassesAnyValue(t *testing.T) {
+	r := clitest.Run(t, func(w http.ResponseWriter, _ *http.Request) { clitest.Reply(w, 200, `{"items":[]}`) },
+		"agents", "list-agents", "--team-id", "team_1", "--role", "boss")
+	if r.Code != 0 || r.Req.URL.Query().Get("role") != "boss" {
 		t.Errorf("%d", r.Code)
 	}
 }
 
-func TestAgentTableRoleAndPaperclipColumnsGolden(t *testing.T) {
+func TestAgentTableRoleAndLinkColumnsGolden(t *testing.T) {
 	body := `{"items":[` +
-		`{"id":"agt_1","name":"paperclip","template":"paperclip","modelId":"m1","paused":false,"role":"collaboration","status":{"phase":"Ready"},"version":2},` +
-		`{"id":"agt_2","name":"coder","template":"claude-code","modelId":"m1","paused":false,"role":"worker","collaboration":{"connect":true,"linkState":"linked"},"status":{"phase":"Ready"},"version":5},` +
-		`{"id":"agt_3","name":"fixer","template":"claude-code","modelId":"m1","paused":false,"role":"worker","status":{"phase":"Ready"},"version":1}]}`
+		`{"id":"agt_1","name":"orchestrator","template":"orchestration","models":{"access":"all","defaultModelId":"m1"},"paused":false,"role":"orchestration","status":{"phase":"Ready"},"version":2},` +
+		`{"id":"agt_2","name":"coder","template":"claude-code","models":{"access":"selected","defaultModelId":"m1"},"paused":false,"role":"worker","collaboration":{"connect":true,"linkState":"linked"},"status":{"phase":"Ready"},"version":5},` +
+		`{"id":"agt_3","name":"fixer","template":"claude-code","models":{"access":"selected","defaultModelId":"m1"},"paused":false,"role":"worker","status":{"phase":"Ready"},"version":1}]}`
 	for _, f := range []string{"table", "text"} {
 		r := clitest.Run(t, func(w http.ResponseWriter, _ *http.Request) { clitest.Reply(w, 200, body) },
 			"agents", "list-agents", "--team-id", "team_1", "--output", f)
-		golden.Check(t, "agent-role-paperclip."+f+".golden", r.Out)
+		golden.Check(t, "agent-role-link."+f+".golden", r.Out)
 		for _, line := range strings.Split(r.Out, "\n") {
 			if f == "table" && len([]rune(line)) > 80 {
 				t.Errorf("line over 80 columns: %q", line)
@@ -152,7 +146,7 @@ func TestCreateAgentCollaborationErrors254(t *testing.T) {
 	cases := []struct {
 		name, status, code, details, hint string
 	}{
-		{"exists", "409", "Conflict", `{"reason":"collaboration_agent_exists"}`, "This team already has a collaboration agent; see afs agents list-agents --role collaboration."},
+		{"exists", "409", "Conflict", `{"reason":"collaboration_agent_exists"}`, "This team already has an orchestration agent; see afs orchestration describe-orchestration."},
 		{"template", "400", "ValidationError", `{"fields":[{"field":"template","reason":"not_paperclip_capable"}]}`, "field: template reason: not_paperclip_capable"},
 		{"identity", "400", "ValidationError", `{"fields":[{"field":"iamIdentity","reason":"team_shared"}]}`, "field: iamIdentity reason: team_shared"},
 		{"snapshot", "400", "ValidationError", `{"fields":[{"field":"volume.snapshotSchedule","reason":"off"}]}`, "field: volume.snapshotSchedule reason: off"},

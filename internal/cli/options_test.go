@@ -145,7 +145,7 @@ func TestOverrideMerge(t *testing.T) {
 
 func TestRegistryQueries(t *testing.T) {
 	r := testRegistry(t)
-	if len(r.Services()) < 10 || len(r.Commands("teams")) == 0 || len(r.All()) < 187 {
+	if len(r.Services()) < 10 || len(r.Commands("teams")) == 0 || len(r.All()) < 192 {
 		t.Errorf("services %d, teams %d, all %d", len(r.Services()), len(r.Commands("teams")), len(r.All()))
 	}
 	if _, ok := r.Lookup("teams", "nope"); ok {
@@ -157,14 +157,14 @@ func TestRegistryQueries(t *testing.T) {
 func TestEveryOperationHasMilestone(t *testing.T) {
 	for _, o := range spec.Commands() {
 		m := MilestoneOf(o.ID)
-		if m < 0 || m > 10 {
+		if m < 0 || m > 12 {
 			t.Errorf("%s: milestone %d", o.ID, m)
 		}
 		if StreamOf(o.ID) == "" {
 			t.Errorf("%s: no stream", o.ID)
 		}
 	}
-	if len(milestoneOf) != 187 {
+	if len(milestoneOf) != 192 {
 		t.Errorf("milestone map has %d entries", len(milestoneOf))
 	}
 	if MilestoneOf("Nope") != -1 {

@@ -45,8 +45,8 @@ func TestReaderTableCoversAllIfMatchOperations(t *testing.T) {
 			without = append(without, op.ID)
 		}
 	}
-	if len(withReader)+len(without) != 60 {
-		t.Fatalf("%d If-Match operations, want 60", len(withReader)+len(without))
+	if len(withReader)+len(without) != 62 {
+		t.Fatalf("%d If-Match operations, want 62", len(withReader)+len(without))
 	}
 	t.Logf("no reader (send no If-Match): %s", strings.Join(without, ", "))
 	if len(without) > 6 {

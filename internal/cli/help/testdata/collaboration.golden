@@ -10,7 +10,7 @@ OPERATIONS
        connect-agent                  Connect agent to collaboration
        describe-collaboration         Get team collaboration
        disconnect-agent               Disconnect agent from collaboration
-       invoke-api                     Call a team's Paperclip REST API with your AFS credential and a Paperclip key.
+       invoke-api                     Call a team's Paperclip REST API (the orchestration agent's Web API) with your AFS credential and a Paperclip key.
        list-collaboration-links       List collaboration links
        put-collaboration              Put team collaboration
        rotate-collaboration-keys      Rotate collaboration keys

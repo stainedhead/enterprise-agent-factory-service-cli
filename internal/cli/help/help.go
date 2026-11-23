@@ -21,6 +21,7 @@ var ServiceSummaries = map[string]string{
 	"configure":       "Create and edit profiles in ~/.afs/config.",
 	"members":         "Manage team members and role bindings.",
 	"models":          "List and manage models and their prices.",
+	"orchestration":   "Manage a team's orchestration agent: its collaboration tool and who can reach it.",
 	"pools":           "Manage worker pools.",
 	"reports":         "Run and schedule reports.",
 	"secrets":         "Manage secret references and write secret values.",
@@ -77,6 +78,12 @@ func operationHelp(w io.Writer, c *cli.Command) {
 		sum = c.Op.Summary
 	}
 	p("AFS %s\n\nNAME\n       %s\n\nDESCRIPTION\n       %s\n", strings.ToUpper(strings.ReplaceAll(c.Key(), " ", " ")), c.Key(), sum)
+	if c.Deprecated != "" {
+		p("\n       Deprecated: kept until 2.0.0; use %s instead.\n", c.Deprecated)
+	}
+	for _, n := range c.Notes {
+		p("\n       %s\n", n)
+	}
 	if c.Op != nil {
 		if c.Op.Permission != "" && c.Op.Permission != "none" {
 			p("\n       Required permission: %s\n", c.Op.Permission)
@@ -88,6 +95,9 @@ func operationHelp(w io.Writer, c *cli.Command) {
 	if len(c.Options) > 0 {
 		p("\nOPTIONS\n")
 		for _, o := range c.Options {
+			if o.Hidden {
+				continue
+			}
 			req := ""
 			if o.Required {
 				req = " (required)"
@@ -98,7 +108,9 @@ func operationHelp(w io.Writer, c *cli.Command) {
 			} else {
 				p("       %s (%s)%s\n", o.Flag, kindNames[o.Kind], req)
 			}
-			if o.Desc != "" {
+			if o.Deprecated != "" {
+				p("          Deprecated: %s\n", o.Deprecated)
+			} else if o.Desc != "" {
 				p("          %s\n", o.Desc)
 			}
 			if len(o.Enum) > 0 {

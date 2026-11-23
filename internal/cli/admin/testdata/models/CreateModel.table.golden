@@ -1,8 +1,11 @@
-Field      Value
-Id         anthropic.claude-sonnet-4-5
-Provider   anthropic
-Name       Claude Sonnet 4.5
-Enabled    true
-Context    200000
-MaxOutput  64000
-Version    1
+Field     Value
+Id        anthropic.claude-sonnet-4-5
+Provider  anthropic
+Name      Claude Sonnet 4.5
+Enabled   true
+Callable  -
+Price     -
+Origin    -
+Teams     -
+Context   200000
+Version   1

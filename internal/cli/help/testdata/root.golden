@@ -17,6 +17,7 @@ SERVICES
        configure        Create and edit profiles in ~/.afs/config.
        members          Manage team members and role bindings.
        models           List and manage models and their prices.
+       orchestration    Manage a team's orchestration agent: its collaboration tool and who can reach it.
        pools            Manage worker pools.
        reports          Run and schedule reports.
        secrets          Manage secret references and write secret values.

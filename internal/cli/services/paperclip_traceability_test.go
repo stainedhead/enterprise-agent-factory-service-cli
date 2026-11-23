@@ -18,6 +18,18 @@ var prdCandidates = []string{
 	"specs/archive/261122-paperclip-collaboration/paperclip-collaboration-PRD.md",
 }
 
+// supersededIn110 lists the tests that proved a 1.0.1 criterion which release 1.1.0 changed on purpose (the
+// orchestration agent replaces the collaboration agent, API contract section 4.4d). The criterion stays in the
+// archived PRD as history; the replacement test is named here and proved by the 1.1.0 traceability test.
+var supersededIn110 = map[string]string{
+	"collaboration.TestInvokeAPINullRestApiURL255":             "collaboration.TestInvokeAPIWebAPIOff254",
+	"agents.TestCreateAgentRoleEnum252":                        "agents.TestCreateAgentRoleSentUnchanged",
+	"agents.TestCreateAgentCollaborationRoleWithConnect252":    "agents.TestCreateAgentRoleHiddenAndRefusedByAPI",
+	"agents.TestAgentTableRoleAndPaperclipColumnsGolden":       "agents.TestAgentTableRoleAndLinkColumnsGolden",
+	"agents.TestListAgentsRoleEnum252":                         "agents.TestListAgentsRoleOpenEnumPassesAnyValue",
+	"swarmtemplates.TestSwarmTemplateSkeletonHasCollaboration": "swarmtemplates.TestSwarmTemplateSkeletonHasOrchestration",
+}
+
 var (
 	storyRe     = regexp.MustCompile(`(?m)^\*\*CLI-US-(\d+) `)
 	criterionRe = regexp.MustCompile(`(?m)^- (\d+\.\d+) `)
@@ -115,6 +127,12 @@ func TestPaperclipCriteriaTraceToTests(t *testing.T) {
 				t.Errorf("criterion %s names no test", id)
 			}
 			for _, m := range names {
+				if repl, ok := supersededIn110[m[1]+"."+m[2]]; ok {
+					if !funcs[strings.SplitN(repl, ".", 2)[0]][strings.SplitN(repl, ".", 2)[1]] {
+						missing = append(missing, "CLI-US-"+id+": replacement "+repl)
+					}
+					continue
+				}
 				if !funcs[m[1]][m[2]] {
 					missing = append(missing, "CLI-US-"+id+": "+m[1]+"."+m[2])
 				}

@@ -30,8 +30,11 @@ OPTIONS
           Possible values: persistent, ephemeral
        --max-budget-usd (string)
           USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+       --max-collaboration-exposure (string)
+          Possible values: off, private, public
        --may-add-external-systems (boolean)
        --may-expose-collaboration (boolean)
+          Deprecated: use --max-collaboration-exposure (off, private or public) instead.
        --may-manage-aws-accounts (boolean)
        --owner-email (string)
        --quotas (JSON)
@@ -69,4 +72,8 @@ EXAMPLES
        Apply a change only if the team is still at version 7
 
        afs teams update-team --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --viewer-kubectl --if-match 7
+
+       Cap how far the team's orchestration agent may be exposed (service admins)
+
+       afs teams update-team --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --max-collaboration-exposure private
 
