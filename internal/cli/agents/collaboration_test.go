@@ -78,11 +78,13 @@ func TestCreateAgentNoCollaborationMemberByDefault(t *testing.T) {
 	}
 }
 
-// CLI-US-28.3
-func TestUpdateAgentRoleUnknown252(t *testing.T) {
-	r := clitest.Run(t, nil, "agents", "update-agent", "--team-id", "team_1", "--agent-id", "agt_1", "--role", "collaboration")
-	if r.Code != 252 || !strings.Contains(r.Err, "--role") || len(r.Requests) != 0 {
-		t.Errorf("%d %q", r.Code, r.Err)
+// CLI-US-28.3: contract 1.4 documents role on UpdateAgent (immutable); the flag is sent and the API judges it.
+func TestUpdateAgentRoleSentAndJudgedByAPI(t *testing.T) {
+	r := clitest.Run(t, func(w http.ResponseWriter, _ *http.Request) {
+		clitest.Reply(w, 400, `{"code":"ValidationError","message":"role cannot change","requestId":"req_r","details":{"fields":[{"field":"role","reason":"immutable"}]}}`)
+	}, "agents", "update-agent", "--team-id", "team_1", "--agent-id", "agt_1", "--role", "collaboration", "--if-match", "1")
+	if r.Code != 254 || !strings.Contains(string(r.ReqBody), `"role":"collaboration"`) {
+		t.Errorf("%d %q %s", r.Code, r.Err, r.ReqBody)
 	}
 }
 
@@ -104,12 +106,12 @@ func TestListAgentsRoleFilter(t *testing.T) {
 	}
 }
 
-// The role filter is an open enum: the API judges the value (worker, orchestration, or collaboration until 2.0.0).
-func TestListAgentsRoleOpenEnumPassesAnyValue(t *testing.T) {
+// The role filter is the contract's closed enum (worker, orchestration, collaboration): a value outside it is a usage error.
+func TestListAgentsRoleClosedEnum(t *testing.T) {
 	r := clitest.Run(t, func(w http.ResponseWriter, _ *http.Request) { clitest.Reply(w, 200, `{"items":[]}`) },
 		"agents", "list-agents", "--team-id", "team_1", "--role", "boss")
-	if r.Code != 0 || r.Req.URL.Query().Get("role") != "boss" {
-		t.Errorf("%d", r.Code)
+	if r.Code != 252 || !strings.Contains(r.Err, "invalid choice") {
+		t.Errorf("%d %q", r.Code, r.Err)
 	}
 }
 

@@ -2,6 +2,13 @@
 
 ## v1.1.0 - 2026-11-23
 
+Snapshot refreshed to `-restapi` f8b4404 (still 194 operations): the real enums replace the open-enum workarounds
+(`put-setting --key` lists the 14 `orchestration.*` and `models.*` keys; `list-agents --role` is worker, orchestration
+or collaboration), `update-agent --role` is documented, `teams create-team --orchestration` sends the flat
+`webUiExposure`, `webApiExposure`, `modelId` and `volume` (`VolumeSizeGiB`, `VolumeOnDelete`) fields. `put-setting --key`
+stays open so the API answers a renamed `collab.*` key with `setting_renamed` (hint included). The generated
+types use an overlay to name two colliding inline enums.
+
 Team orchestration agent and model access (API contract v1.4.0). Spec: `specs/archive/261123-orchestration-and-model-access/`
 (or `specs/archive/` once archived). Guide: `user-docs/orchestration.md`.
 

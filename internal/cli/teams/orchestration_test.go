@@ -25,9 +25,10 @@ func TestCreateTeamOrchestrationShorthand(t *testing.T) {
 		arg, want string
 	}{
 		"tool only":  {"Tool=buzz", `"orchestration":{"tool":"buzz"}`},
-		"all keys":   {"Tool=paperclip,WebUiExposure=private,WebApiExposure=off,RegistrationMode=managed,ModelId=m1", `"orchestration":{"tool":"paperclip","webUi":{"exposure":"private"},"webApi":{"exposure":"off"},"registrationMode":"managed","models":{"defaultModelId":"m1"}}`},
-		"lower case": {"webuiexposure=public", `"orchestration":{"webUi":{"exposure":"public"}}`},
-		"model id":   {"DefaultModelId=m2", `"orchestration":{"models":{"defaultModelId":"m2"}}`},
+		"all keys":   {"Tool=paperclip,WebUiExposure=private,WebApiExposure=off,RegistrationMode=managed,ModelId=m1", `"orchestration":{"tool":"paperclip","webUiExposure":"private","webApiExposure":"off","registrationMode":"managed","modelId":"m1"}`},
+		"lower case": {"webuiexposure=public", `"orchestration":{"webUiExposure":"public"}`},
+		"model id":   {"DefaultModelId=m2", `"orchestration":{"modelId":"m2"}`},
+		"volume":     {"VolumeSizeGiB=50,VolumeOnDelete=retain", `"orchestration":{"volume":{"sizeGiB":50,"onDelete":"retain"}}`},
 		"json":       {`{"tool":"buzz","models":{"access":"selected","modelIds":["m1"],"defaultModelId":"m1"}}`, `"orchestration":{"tool":"buzz","models":{"access":"selected","modelIds":["m1"],"defaultModelId":"m1"}}`},
 	} {
 		r := createTeam(t, "--orchestration", tc.arg)
@@ -43,14 +44,16 @@ func TestCreateTeamOrchestrationShorthand(t *testing.T) {
 // OR-CLI-26.9: a shorthand that cannot be right is a usage error before any call.
 func TestCreateTeamOrchestrationShorthandErrors(t *testing.T) {
 	for name, tc := range map[string]struct{ arg, want string }{
-		"unknown key":  {"Flavour=x", `unknown key "Flavour"`},
-		"no equals":    {"Tool", "takes Key=Value pairs or JSON"},
-		"bad tool":     {"Tool=slack", "Tool must be one of paperclip, buzz"},
-		"bad level":    {"WebUiExposure=internal", "WebUiExposure must be one of off, private, public"},
-		"bad mode":     {"RegistrationMode=auto", "RegistrationMode must be one of manual, managed"},
-		"empty model":  {"ModelId=", "ModelId cannot be empty"},
-		"twice":        {"Tool=buzz,Tool=paperclip", "is given twice"},
-		"empty member": {"Tool=buzz,", "takes Key=Value pairs or JSON"},
+		"unknown key":   {"Flavour=x", `unknown key "Flavour"`},
+		"no equals":     {"Tool", "takes Key=Value pairs or JSON"},
+		"bad tool":      {"Tool=slack", "Tool must be one of paperclip, buzz"},
+		"bad level":     {"WebUiExposure=internal", "WebUiExposure must be one of off, private, public"},
+		"bad mode":      {"RegistrationMode=auto", "RegistrationMode must be one of manual, managed"},
+		"bad size":      {"VolumeSizeGiB=5", "VolumeSizeGiB must be a whole number from 10 to 1000"},
+		"bad on delete": {"VolumeOnDelete=keep", "VolumeOnDelete must be one of"},
+		"empty model":   {"ModelId=", "ModelId cannot be empty"},
+		"twice":         {"Tool=buzz,Tool=paperclip", "is given twice"},
+		"empty member":  {"Tool=buzz,", "takes Key=Value pairs or JSON"},
 	} {
 		r := createTeam(t, "--orchestration", tc.arg)
 		if r.Code != 252 || len(r.Requests) != 0 || !strings.Contains(r.Err, tc.want) {

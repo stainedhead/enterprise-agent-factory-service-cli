@@ -1,5 +1,5 @@
 repo: stainedhead/enterprise-agent-factory-service-restapi
 ref: main
-commit: f6d240c06fa55de1ea272e2394c242747b26e6ca
-sha256: b9e9cac718c2f69906d7dcf5a14d137a244485a4d51baaf6add8e04e139f7697
-synced_at: 2026-11-23T19:15:13Z
+commit: f8b44043c3f4dee63ca0a64598249013bd7258a0
+sha256: d1a4db83293819c5ca4a2139522463bd15cd236bb6da8343443b354df930fd76
+synced_at: 2026-11-23T19:59:59Z

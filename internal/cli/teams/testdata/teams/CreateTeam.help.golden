@@ -46,7 +46,7 @@ OPTIONS
        --models (list)
           Model ids enabled for the team
        --orchestration (string or JSON)
-          The team's orchestration agent, all optional: Tool=paperclip|buzz,WebUiExposure=off|private|public,WebApiExposure=off|private|public,RegistrationMode=manual|managed,ModelId=<model id>, or JSON (file://PATH). Defaults come from the orchestration.* settings.
+          The team's orchestration agent, all optional: Tool=paperclip|buzz,WebUiExposure=off|private|public,WebApiExposure=off|private|public,RegistrationMode=manual|managed,ModelId=<model id>,VolumeSizeGiB=10..1000,VolumeOnDelete=snapshot_then_delete|delete|retain, or JSON (file://PATH). Defaults come from the orchestration.* settings.
        --owner-email (string)
        --quotas (JSON)
        --slug (string) (required)

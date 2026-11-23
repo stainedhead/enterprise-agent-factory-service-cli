@@ -26,7 +26,6 @@ func registerModels(r *cli.Registry) {
 		{Title: "Let the agent call every model its team may use", Command: "afs agents update-agent --team-id " + exTeam + " --agent-id " + exAgent + " --models all"},
 	}
 	r.Override(update)
-	r.Override(cli.Override{Op: "ListAgents", OpenEnum: []string{"role"},
-		Enum: map[string][]string{"role": {"worker", "orchestration"}},
+	r.Override(cli.Override{Op: "ListAgents",
 		Desc: map[string]string{"role": "worker or orchestration (collaboration is read as orchestration until 2.0.0)."}})
 }

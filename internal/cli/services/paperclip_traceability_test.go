@@ -26,7 +26,8 @@ var supersededIn110 = map[string]string{
 	"agents.TestCreateAgentRoleEnum252":                        "agents.TestCreateAgentRoleSentUnchanged",
 	"agents.TestCreateAgentCollaborationRoleWithConnect252":    "agents.TestCreateAgentRoleHiddenAndRefusedByAPI",
 	"agents.TestAgentTableRoleAndPaperclipColumnsGolden":       "agents.TestAgentTableRoleAndLinkColumnsGolden",
-	"agents.TestListAgentsRoleEnum252":                         "agents.TestListAgentsRoleOpenEnumPassesAnyValue",
+	"agents.TestListAgentsRoleEnum252":                         "agents.TestListAgentsRoleClosedEnum",
+	"agents.TestUpdateAgentRoleUnknown252":                     "agents.TestUpdateAgentRoleSentAndJudgedByAPI",
 	"swarmtemplates.TestSwarmTemplateSkeletonHasCollaboration": "swarmtemplates.TestSwarmTemplateSkeletonHasOrchestration",
 }
 

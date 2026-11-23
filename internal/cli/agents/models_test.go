@@ -163,14 +163,14 @@ func TestAgentOrchestrationRefusals(t *testing.T) {
 	}
 }
 
-func TestListAgentsRoleOpenEnum(t *testing.T) {
+func TestListAgentsRoleEnum(t *testing.T) {
 	r := clitest.Run(t, func(w http.ResponseWriter, _ *http.Request) { clitest.Reply(w, 200, `{"items":[]}`) },
 		"agents", "list-agents", "--team-id", "team_1", "--role", "orchestration")
 	if r.Code != 0 || r.Req.URL.Query().Get("role") != "orchestration" {
 		t.Errorf("exit %d %s %q", r.Code, r.Req.URL.RawQuery, r.Err)
 	}
 	h := clitest.Run(t, nil, "agents", "list-agents", "help")
-	if !strings.Contains(h.Out, "Known values: worker, orchestration") {
+	if !strings.Contains(h.Out, "Possible values: worker, orchestration, collaboration") {
 		t.Errorf("%q", h.Out)
 	}
 }

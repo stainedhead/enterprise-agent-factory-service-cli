@@ -1080,6 +1080,27 @@ func (e CreateTeamRequestOrchestrationTool) Valid() bool {
 	}
 }
 
+// Defines values for CreateTeamRequestOrchestrationVolumeOnDelete.
+const (
+	CreateTeamRequestOrchestrationVolumeOnDeleteDelete             CreateTeamRequestOrchestrationVolumeOnDelete = "delete"
+	CreateTeamRequestOrchestrationVolumeOnDeleteRetain             CreateTeamRequestOrchestrationVolumeOnDelete = "retain"
+	CreateTeamRequestOrchestrationVolumeOnDeleteSnapshotThenDelete CreateTeamRequestOrchestrationVolumeOnDelete = "snapshot_then_delete"
+)
+
+// Valid indicates whether the value is a known member of the CreateTeamRequestOrchestrationVolumeOnDelete enum.
+func (e CreateTeamRequestOrchestrationVolumeOnDelete) Valid() bool {
+	switch e {
+	case CreateTeamRequestOrchestrationVolumeOnDeleteDelete:
+		return true
+	case CreateTeamRequestOrchestrationVolumeOnDeleteRetain:
+		return true
+	case CreateTeamRequestOrchestrationVolumeOnDeleteSnapshotThenDelete:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for CreateTeamRequestOrchestrationWebApiExposure.
 const (
 	CreateTeamRequestOrchestrationWebApiExposureOff     CreateTeamRequestOrchestrationWebApiExposure = "off"
@@ -1101,6 +1122,27 @@ func (e CreateTeamRequestOrchestrationWebApiExposure) Valid() bool {
 	}
 }
 
+// Defines values for CreateTeamRequestOrchestrationFlatWebApiExposure.
+const (
+	CreateTeamRequestOrchestrationFlatWebApiExposureOff     CreateTeamRequestOrchestrationFlatWebApiExposure = "off"
+	CreateTeamRequestOrchestrationFlatWebApiExposurePrivate CreateTeamRequestOrchestrationFlatWebApiExposure = "private"
+	CreateTeamRequestOrchestrationFlatWebApiExposurePublic  CreateTeamRequestOrchestrationFlatWebApiExposure = "public"
+)
+
+// Valid indicates whether the value is a known member of the CreateTeamRequestOrchestrationFlatWebApiExposure enum.
+func (e CreateTeamRequestOrchestrationFlatWebApiExposure) Valid() bool {
+	switch e {
+	case CreateTeamRequestOrchestrationFlatWebApiExposureOff:
+		return true
+	case CreateTeamRequestOrchestrationFlatWebApiExposurePrivate:
+		return true
+	case CreateTeamRequestOrchestrationFlatWebApiExposurePublic:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for CreateTeamRequestOrchestrationWebUiExposure.
 const (
 	CreateTeamRequestOrchestrationWebUiExposureOff     CreateTeamRequestOrchestrationWebUiExposure = "off"
@@ -1116,6 +1158,27 @@ func (e CreateTeamRequestOrchestrationWebUiExposure) Valid() bool {
 	case CreateTeamRequestOrchestrationWebUiExposurePrivate:
 		return true
 	case CreateTeamRequestOrchestrationWebUiExposurePublic:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateTeamRequestOrchestrationFlatWebUiExposure.
+const (
+	CreateTeamRequestOrchestrationFlatWebUiExposureOff     CreateTeamRequestOrchestrationFlatWebUiExposure = "off"
+	CreateTeamRequestOrchestrationFlatWebUiExposurePrivate CreateTeamRequestOrchestrationFlatWebUiExposure = "private"
+	CreateTeamRequestOrchestrationFlatWebUiExposurePublic  CreateTeamRequestOrchestrationFlatWebUiExposure = "public"
+)
+
+// Valid indicates whether the value is a known member of the CreateTeamRequestOrchestrationFlatWebUiExposure enum.
+func (e CreateTeamRequestOrchestrationFlatWebUiExposure) Valid() bool {
+	switch e {
+	case CreateTeamRequestOrchestrationFlatWebUiExposureOff:
+		return true
+	case CreateTeamRequestOrchestrationFlatWebUiExposurePrivate:
+		return true
+	case CreateTeamRequestOrchestrationFlatWebUiExposurePublic:
 		return true
 	default:
 		return false
@@ -2630,6 +2693,7 @@ const (
 	Array   SettingType = "array"
 	Boolean SettingType = "boolean"
 	Integer SettingType = "integer"
+	Object  SettingType = "object"
 	String  SettingType = "string"
 )
 
@@ -2641,6 +2705,8 @@ func (e SettingType) Valid() bool {
 	case Boolean:
 		return true
 	case Integer:
+		return true
+	case Object:
 		return true
 	case String:
 		return true
@@ -3144,6 +3210,27 @@ func (e UpdateAgentRequestIamIdentity) Valid() bool {
 	case UpdateAgentRequestIamIdentityDedicated:
 		return true
 	case UpdateAgentRequestIamIdentityTeamShared:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for UpdateAgentRequestRole.
+const (
+	UpdateAgentRequestRoleCollaboration UpdateAgentRequestRole = "collaboration"
+	UpdateAgentRequestRoleOrchestration UpdateAgentRequestRole = "orchestration"
+	UpdateAgentRequestRoleWorker        UpdateAgentRequestRole = "worker"
+)
+
+// Valid indicates whether the value is a known member of the UpdateAgentRequestRole enum.
+func (e UpdateAgentRequestRole) Valid() bool {
+	switch e {
+	case UpdateAgentRequestRoleCollaboration:
+		return true
+	case UpdateAgentRequestRoleOrchestration:
+		return true
+	case UpdateAgentRequestRoleWorker:
 		return true
 	default:
 		return false
@@ -3692,25 +3779,37 @@ func (e ListOrchestrationEndpointsParamsState) Valid() bool {
 
 // Defines values for PutSettingParamsKey.
 const (
-	ApiCorsOrigins                   PutSettingParamsKey = "api.cors_origins"
-	ApiIdempotencyKeyTtlSeconds      PutSettingParamsKey = "api.idempotency_key_ttl_seconds"
-	BillingTagActivationAcknowledged PutSettingParamsKey = "billing.tag_activation_acknowledged"
-	BillingVarianceAlertPct          PutSettingParamsKey = "billing.variance_alert_pct"
-	CollabAllowedSourceCidrs         PutSettingParamsKey = "collab.allowed_source_cidrs"
-	CollabBaseDomain                 PutSettingParamsKey = "collab.base_domain"
-	CollabContentScan                PutSettingParamsKey = "collab.content_scan"
-	CollabDeniedSpikeThreshold       PutSettingParamsKey = "collab.denied_spike_threshold"
-	CollabMaxBodyMb                  PutSettingParamsKey = "collab.max_body_mb"
-	CollabPublicEndpoints            PutSettingParamsKey = "collab.public_endpoints"
-	CollabSessionTtlMinutes          PutSettingParamsKey = "collab.session_ttl_minutes"
-	EgressDeniedSpikeThreshold       PutSettingParamsKey = "egress.denied_spike_threshold"
-	GatewayReservationTtlSeconds     PutSettingParamsKey = "gateway.reservation_ttl_seconds"
-	PricingPriceListSync             PutSettingParamsKey = "pricing.price_list_sync"
-	ReportsIdleCpuMillicores         PutSettingParamsKey = "reports.idle_cpu_millicores"
-	SecretsPathPrefix                PutSettingParamsKey = "secrets.path_prefix"
-	TeamsEphemeralMaxDays            PutSettingParamsKey = "teams.ephemeral_max_days"
-	WorkOrdersNotificationChannelId  PutSettingParamsKey = "work_orders.notification_channel_id"
-	WorkOrdersSlaWarningHours        PutSettingParamsKey = "work_orders.sla_warning_hours"
+	ApiCorsOrigins                     PutSettingParamsKey = "api.cors_origins"
+	ApiIdempotencyKeyTtlSeconds        PutSettingParamsKey = "api.idempotency_key_ttl_seconds"
+	BillingTagActivationAcknowledged   PutSettingParamsKey = "billing.tag_activation_acknowledged"
+	BillingVarianceAlertPct            PutSettingParamsKey = "billing.variance_alert_pct"
+	CollabAllowedSourceCidrs           PutSettingParamsKey = "collab.allowed_source_cidrs"
+	CollabContentScan                  PutSettingParamsKey = "collab.content_scan"
+	CollabDeniedSpikeThreshold         PutSettingParamsKey = "collab.denied_spike_threshold"
+	CollabMaxBodyMb                    PutSettingParamsKey = "collab.max_body_mb"
+	CollabSessionTtlMinutes            PutSettingParamsKey = "collab.session_ttl_minutes"
+	EgressDeniedSpikeThreshold         PutSettingParamsKey = "egress.denied_spike_threshold"
+	GatewayReservationTtlSeconds       PutSettingParamsKey = "gateway.reservation_ttl_seconds"
+	ModelsDefaultModelId               PutSettingParamsKey = "models.default_model_id"
+	ModelsDefaultTeamAccess            PutSettingParamsKey = "models.default_team_access"
+	ModelsDefaultTeamModels            PutSettingParamsKey = "models.default_team_models"
+	ModelsServiceAccess                PutSettingParamsKey = "models.service_access"
+	OrchestrationDefaultLimit          PutSettingParamsKey = "orchestration.default_limit"
+	OrchestrationDefaultResources      PutSettingParamsKey = "orchestration.default_resources"
+	OrchestrationDefaultVolumeGib      PutSettingParamsKey = "orchestration.default_volume_gib"
+	OrchestrationDefaultWebApiExposure PutSettingParamsKey = "orchestration.default_web_api_exposure"
+	OrchestrationDefaultWebUiExposure  PutSettingParamsKey = "orchestration.default_web_ui_exposure"
+	OrchestrationPrivateBaseDomain     PutSettingParamsKey = "orchestration.private_base_domain"
+	OrchestrationPrivateEndpoints      PutSettingParamsKey = "orchestration.private_endpoints"
+	OrchestrationPublicBaseDomain      PutSettingParamsKey = "orchestration.public_base_domain"
+	OrchestrationPublicEndpoints       PutSettingParamsKey = "orchestration.public_endpoints"
+	OrchestrationTools                 PutSettingParamsKey = "orchestration.tools"
+	PricingPriceListSync               PutSettingParamsKey = "pricing.price_list_sync"
+	ReportsIdleCpuMillicores           PutSettingParamsKey = "reports.idle_cpu_millicores"
+	SecretsPathPrefix                  PutSettingParamsKey = "secrets.path_prefix"
+	TeamsEphemeralMaxDays              PutSettingParamsKey = "teams.ephemeral_max_days"
+	WorkOrdersNotificationChannelId    PutSettingParamsKey = "work_orders.notification_channel_id"
+	WorkOrdersSlaWarningHours          PutSettingParamsKey = "work_orders.sla_warning_hours"
 )
 
 // Valid indicates whether the value is a known member of the PutSettingParamsKey enum.
@@ -3726,21 +3825,45 @@ func (e PutSettingParamsKey) Valid() bool {
 		return true
 	case CollabAllowedSourceCidrs:
 		return true
-	case CollabBaseDomain:
-		return true
 	case CollabContentScan:
 		return true
 	case CollabDeniedSpikeThreshold:
 		return true
 	case CollabMaxBodyMb:
 		return true
-	case CollabPublicEndpoints:
-		return true
 	case CollabSessionTtlMinutes:
 		return true
 	case EgressDeniedSpikeThreshold:
 		return true
 	case GatewayReservationTtlSeconds:
+		return true
+	case ModelsDefaultModelId:
+		return true
+	case ModelsDefaultTeamAccess:
+		return true
+	case ModelsDefaultTeamModels:
+		return true
+	case ModelsServiceAccess:
+		return true
+	case OrchestrationDefaultLimit:
+		return true
+	case OrchestrationDefaultResources:
+		return true
+	case OrchestrationDefaultVolumeGib:
+		return true
+	case OrchestrationDefaultWebApiExposure:
+		return true
+	case OrchestrationDefaultWebUiExposure:
+		return true
+	case OrchestrationPrivateBaseDomain:
+		return true
+	case OrchestrationPrivateEndpoints:
+		return true
+	case OrchestrationPublicBaseDomain:
+		return true
+	case OrchestrationPublicEndpoints:
+		return true
+	case OrchestrationTools:
 		return true
 	case PricingPriceListSync:
 		return true
@@ -3873,6 +3996,7 @@ func (e ListTeamsParamsKind) Valid() bool {
 // Defines values for ListAgentsParamsRole.
 const (
 	ListAgentsParamsRoleCollaboration ListAgentsParamsRole = "collaboration"
+	ListAgentsParamsRoleOrchestration ListAgentsParamsRole = "orchestration"
 	ListAgentsParamsRoleWorker        ListAgentsParamsRole = "worker"
 )
 
@@ -3880,6 +4004,8 @@ const (
 func (e ListAgentsParamsRole) Valid() bool {
 	switch e {
 	case ListAgentsParamsRoleCollaboration:
+		return true
+	case ListAgentsParamsRoleOrchestration:
 		return true
 	case ListAgentsParamsRoleWorker:
 		return true
@@ -4217,7 +4343,7 @@ type Agent struct {
 	Models AgentModels `json:"models"`
 
 	// Name Immutable name (team slug, agent, pool, secret)
-	Name      *Name      `json:"name,omitempty"`
+	Name      Name       `json:"name"`
 	Paused    *bool      `json:"paused,omitempty"`
 	Resources *Resources `json:"resources,omitempty"`
 
@@ -4229,7 +4355,7 @@ type Agent struct {
 	SecretBindings *[]SecretBinding `json:"secretBindings,omitempty"`
 
 	// Status Reconcile status of a desired-state resource (contract §1.1)
-	Status *Status `json:"status,omitempty"`
+	Status Status `json:"status"`
 
 	// Template Agent template name; null on the orchestration agent for callers who are not service admins
 	Template *string `json:"template"`
@@ -4411,8 +4537,8 @@ type AmbiguousRepo struct {
 // ApiKey defines model for ApiKey.
 type ApiKey struct {
 	// CreatedAt RFC 3339 UTC with Z
-	CreatedAt *Timestamp `json:"createdAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
+	CreatedAt Timestamp `json:"createdAt"`
+	CreatedBy *string   `json:"createdBy,omitempty"`
 
 	// ExpiresAt RFC 3339 UTC with Z
 	ExpiresAt  Timestamp  `json:"expiresAt"`
@@ -4495,11 +4621,11 @@ type Budget struct {
 	ProjectedCapAt *Timestamp      `json:"projectedCapAt,omitempty"`
 
 	// ReservedUsd USD amount as a decimal string with at most 6 fraction digits; never a JSON number
-	ReservedUsd *Money `json:"reservedUsd,omitempty"`
+	ReservedUsd Money `json:"reservedUsd"`
 
 	// SpentUsd USD amount as a decimal string with at most 6 fraction digits; never a JSON number
-	SpentUsd   *Money `json:"spentUsd,omitempty"`
-	Thresholds []int  `json:"thresholds"`
+	SpentUsd   Money `json:"spentUsd"`
+	Thresholds []int `json:"thresholds"`
 
 	// UpdatedAt RFC 3339 UTC with Z
 	UpdatedAt *Timestamp `json:"updatedAt,omitempty"`
@@ -4762,7 +4888,7 @@ type CreateAgentRequest struct {
 	ModelId *string           `json:"modelId,omitempty"`
 	Models  *AgentModelsInput `json:"models,omitempty"`
 
-	// Name The name orchestrator is reserved (name_reserved)
+	// Name Immutable name (team slug, agent, pool, secret)
 	Name      Name       `json:"name"`
 	Resources *Resources `json:"resources,omitempty"`
 
@@ -5028,7 +5154,7 @@ type CreateTeamRequest struct {
 	// Kind Immutable after create
 	Kind CreateTeamRequestKind `json:"kind"`
 
-	// MaxBudgetUsd Guardrail field: needs teams:set-guardrails
+	// MaxBudgetUsd USD amount as a decimal string with at most 6 fraction digits; never a JSON number
 	MaxBudgetUsd Money `json:"maxBudgetUsd"`
 
 	// MaxCollaborationExposure Default off
@@ -5050,16 +5176,30 @@ type CreateTeamRequest struct {
 
 	// Orchestration The orchestration agent created with the team; every field optional
 	Orchestration *struct {
+		// ModelId Shorthand for models.defaultModelId (CD-36)
+		ModelId          *string                                         `json:"modelId,omitempty"`
 		Models           *AgentModelsInput                               `json:"models,omitempty"`
 		RegistrationMode *CreateTeamRequestOrchestrationRegistrationMode `json:"registrationMode,omitempty"`
 		Resources        *Resources                                      `json:"resources,omitempty"`
 		Tool             *CreateTeamRequestOrchestrationTool             `json:"tool,omitempty"`
-		WebApi           *struct {
+
+		// Volume Volume of the orchestration agent; defaults from orchestration.default_volume_gib
+		Volume *struct {
+			OnDelete *CreateTeamRequestOrchestrationVolumeOnDelete `json:"onDelete,omitempty"`
+			SizeGiB  *int                                          `json:"sizeGiB,omitempty"`
+		} `json:"volume,omitempty"`
+		WebApi *struct {
 			Exposure CreateTeamRequestOrchestrationWebApiExposure `json:"exposure"`
 		} `json:"webApi,omitempty"`
-		WebUi *struct {
+
+		// WebApiExposure Flat form of webApi.exposure; same rules as webUiExposure
+		WebApiExposure *CreateTeamRequestOrchestrationFlatWebApiExposure `json:"webApiExposure,omitempty"`
+		WebUi          *struct {
 			Exposure CreateTeamRequestOrchestrationWebUiExposure `json:"exposure"`
 		} `json:"webUi,omitempty"`
+
+		// WebUiExposure Flat form of webUi.exposure (contract section 4.4d); both forms may be sent when they agree, otherwise ValidationError on this field. Above the team limit is exposure_above_limit
+		WebUiExposure *CreateTeamRequestOrchestrationFlatWebUiExposure `json:"webUiExposure,omitempty"`
 	} `json:"orchestration,omitempty"`
 	OwnerEmail *openapi_types.Email `json:"ownerEmail,omitempty"`
 	Quotas     *Quotas              `json:"quotas,omitempty"`
@@ -5093,11 +5233,20 @@ type CreateTeamRequestOrchestrationRegistrationMode string
 // CreateTeamRequestOrchestrationTool defines model for CreateTeamRequest.Orchestration.Tool.
 type CreateTeamRequestOrchestrationTool string
 
+// CreateTeamRequestOrchestrationVolumeOnDelete defines model for CreateTeamRequest.Orchestration.Volume.OnDelete.
+type CreateTeamRequestOrchestrationVolumeOnDelete string
+
 // CreateTeamRequestOrchestrationWebApiExposure defines model for CreateTeamRequest.Orchestration.WebApi.Exposure.
 type CreateTeamRequestOrchestrationWebApiExposure string
 
+// CreateTeamRequestOrchestrationFlatWebApiExposure Flat form of webApi.exposure; same rules as webUiExposure
+type CreateTeamRequestOrchestrationFlatWebApiExposure string
+
 // CreateTeamRequestOrchestrationWebUiExposure defines model for CreateTeamRequest.Orchestration.WebUi.Exposure.
 type CreateTeamRequestOrchestrationWebUiExposure string
+
+// CreateTeamRequestOrchestrationFlatWebUiExposure Flat form of webUi.exposure (contract section 4.4d); both forms may be sent when they agree, otherwise ValidationError on this field. Above the team limit is exposure_above_limit
+type CreateTeamRequestOrchestrationFlatWebUiExposure string
 
 // CreateTeamRequestTeardownRule defines model for CreateTeamRequest.TeardownRule.
 type CreateTeamRequestTeardownRule string
@@ -5186,7 +5335,7 @@ type ErrorDetails struct {
 // Export defines model for Export.
 type Export struct {
 	// CreatedAt RFC 3339 UTC with Z
-	CreatedAt         *Timestamp `json:"createdAt,omitempty"`
+	CreatedAt         Timestamp  `json:"createdAt"`
 	CreatedBy         *string    `json:"createdBy,omitempty"`
 	DownloadExpiresAt *Timestamp `json:"downloadExpiresAt,omitempty"`
 
@@ -5392,7 +5541,7 @@ type LogDestination struct {
 	SecretId   *string            `json:"secretId,omitempty"`
 
 	// Status Reconcile status of a desired-state resource (contract §1.1)
-	Status *Status `json:"status,omitempty"`
+	Status Status `json:"status"`
 
 	// UpdatedAt RFC 3339 UTC with Z
 	UpdatedAt *Timestamp `json:"updatedAt,omitempty"`
@@ -5580,7 +5729,7 @@ type NotificationChannel struct {
 	SecretId   *string                 `json:"secretId,omitempty"`
 
 	// Status Reconcile status of a desired-state resource (contract §1.1)
-	Status *Status `json:"status,omitempty"`
+	Status Status `json:"status"`
 
 	// UpdatedAt RFC 3339 UTC with Z
 	UpdatedAt *Timestamp `json:"updatedAt,omitempty"`
@@ -5740,7 +5889,7 @@ type Pool struct {
 	Models *AgentModels `json:"models,omitempty"`
 
 	// Name Immutable name (team slug, agent, pool, secret)
-	Name           *Name             `json:"name,omitempty"`
+	Name           Name              `json:"name"`
 	Persona        *string           `json:"persona,omitempty"`
 	Resources      *Resources        `json:"resources,omitempty"`
 	ScratchSizeGiB *int              `json:"scratchSizeGiB,omitempty"`
@@ -5749,8 +5898,8 @@ type Pool struct {
 	State          *PoolState        `json:"state,omitempty"`
 
 	// Status Reconcile status of a desired-state resource (contract §1.1)
-	Status   *Status `json:"status,omitempty"`
-	Template string  `json:"template"`
+	Status   Status `json:"status"`
+	Template string `json:"template"`
 
 	// UpdatedAt RFC 3339 UTC with Z
 	UpdatedAt *Timestamp `json:"updatedAt,omitempty"`
@@ -5853,8 +6002,8 @@ type PriceProposal struct {
 	EffectiveFrom Timestamp `json:"effectiveFrom"`
 
 	// FetchedAt RFC 3339 UTC with Z
-	FetchedAt *Timestamp `json:"fetchedAt,omitempty"`
-	Id        *string    `json:"id,omitempty"`
+	FetchedAt Timestamp `json:"fetchedAt"`
+	Id        *string   `json:"id,omitempty"`
 
 	// InputUsdPerMtok USD amount as a decimal string with at most 6 fraction digits; never a JSON number
 	InputUsdPerMtok Money   `json:"inputUsdPerMtok"`
@@ -6209,7 +6358,7 @@ type RevisionList struct {
 
 // RoleLink defines model for RoleLink.
 type RoleLink struct {
-	AccountId *AwsAccountId `json:"accountId,omitempty"`
+	AccountId AwsAccountId `json:"accountId"`
 
 	// CreatedAt RFC 3339 UTC with Z
 	CreatedAt         *Timestamp      `json:"createdAt,omitempty"`
@@ -6473,7 +6622,7 @@ type Snapshot struct {
 	Reason      *SnapshotReason `json:"reason,omitempty"`
 
 	// RequestedAt RFC 3339 UTC with Z
-	RequestedAt *Timestamp     `json:"requestedAt,omitempty"`
+	RequestedAt Timestamp      `json:"requestedAt"`
 	RequestedBy *string        `json:"requestedBy,omitempty"`
 	SizeGiB     *int           `json:"sizeGiB,omitempty"`
 	State       *SnapshotState `json:"state,omitempty"`
@@ -6662,7 +6811,7 @@ type Team struct {
 	DisplayName string     `json:"displayName"`
 
 	// EffectiveCeilingUsd USD amount as a decimal string with at most 6 fraction digits; never a JSON number
-	EffectiveCeilingUsd *Money `json:"effectiveCeilingUsd,omitempty"`
+	EffectiveCeilingUsd Money `json:"effectiveCeilingUsd"`
 
 	// ExpiresAt RFC 3339 UTC with Z
 	ExpiresAt          *Timestamp `json:"expiresAt,omitempty"`
@@ -6702,11 +6851,11 @@ type Team struct {
 	Quotas               *Quotas              `json:"quotas,omitempty"`
 
 	// Slug Immutable name (team slug, agent, pool, secret)
-	Slug  *Name      `json:"slug,omitempty"`
+	Slug  Name       `json:"slug"`
 	State *TeamState `json:"state,omitempty"`
 
 	// Status Reconcile status of a desired-state resource (contract §1.1)
-	Status         *Status             `json:"status,omitempty"`
+	Status         Status              `json:"status"`
 	TeardownReason *TeamTeardownReason `json:"teardownReason,omitempty"`
 	TeardownRule   *TeamTeardownRule   `json:"teardownRule,omitempty"`
 
@@ -6774,7 +6923,7 @@ type TeamCollaboration struct {
 	RestApiUrl       *string                           `json:"restApiUrl,omitempty"`
 
 	// Status Reconcile status of a desired-state resource (contract §1.1)
-	Status                   *Status   `json:"status,omitempty"`
+	Status                   Status    `json:"status"`
 	TeamId                   *string   `json:"teamId,omitempty"`
 	UnmanagedPaperclipAgents *[]string `json:"unmanagedPaperclipAgents,omitempty"`
 
@@ -6848,7 +6997,7 @@ type TeamOrchestration struct {
 	RegistrationMode TeamOrchestrationRegistrationMode `json:"registrationMode"`
 
 	// Status Reconcile status of a desired-state resource (contract §1.1)
-	Status              *Status                `json:"status,omitempty"`
+	Status              Status                 `json:"status"`
 	TeamId              *string                `json:"teamId,omitempty"`
 	Tool                *TeamOrchestrationTool `json:"tool,omitempty"`
 	ToolVersion         *string                `json:"toolVersion,omitempty"`
@@ -6911,10 +7060,13 @@ type UpdateAgentRequest struct {
 	ModelId *string           `json:"modelId,omitempty"`
 	Models  *AgentModelsInput `json:"models,omitempty"`
 
-	// Name Refused on the orchestration agent (orchestration_field_fixed)
-	Name           *Name            `json:"name,omitempty"`
-	Resources      *Resources       `json:"resources,omitempty"`
-	SecretBindings *[]SecretBinding `json:"secretBindings,omitempty"`
+	// Name Immutable name (team slug, agent, pool, secret)
+	Name      *Name      `json:"name,omitempty"`
+	Resources *Resources `json:"resources,omitempty"`
+
+	// Role Immutable; a value that differs from the agent's role is a ValidationError (collaboration reads as orchestration until 2.0.0)
+	Role           *UpdateAgentRequestRole `json:"role,omitempty"`
+	SecretBindings *[]SecretBinding        `json:"secretBindings,omitempty"`
 
 	// Template Agent template name
 	Template *string      `json:"template,omitempty"`
@@ -6923,6 +7075,9 @@ type UpdateAgentRequest struct {
 
 // UpdateAgentRequestIamIdentity defines model for UpdateAgentRequest.IamIdentity.
 type UpdateAgentRequestIamIdentity string
+
+// UpdateAgentRequestRole Immutable; a value that differs from the agent's role is a ValidationError (collaboration reads as orchestration until 2.0.0)
+type UpdateAgentRequestRole string
 
 // UpdateCatalogSystemRequest defines model for UpdateCatalogSystemRequest.
 type UpdateCatalogSystemRequest struct {
@@ -7162,12 +7317,12 @@ type WorkOrder struct {
 	CompletedAt  *Timestamp `json:"completedAt,omitempty"`
 
 	// CreatedAt RFC 3339 UTC with Z
-	CreatedAt *Timestamp         `json:"createdAt,omitempty"`
-	CreatedBy *string            `json:"createdBy,omitempty"`
-	CveId     *string            `json:"cveId,omitempty"`
-	Id        *string            `json:"id,omitempty"`
-	Kind      WorkOrderKind      `json:"kind"`
-	Progress  *WorkOrderProgress `json:"progress,omitempty"`
+	CreatedAt *Timestamp        `json:"createdAt,omitempty"`
+	CreatedBy *string           `json:"createdBy,omitempty"`
+	CveId     *string           `json:"cveId,omitempty"`
+	Id        *string           `json:"id,omitempty"`
+	Kind      WorkOrderKind     `json:"kind"`
+	Progress  WorkOrderProgress `json:"progress"`
 
 	// Repos GetWorkOrder and CreateWorkOrder only
 	Repos    *[]WorkOrderRepo  `json:"repos,omitempty"`
@@ -8094,6 +8249,7 @@ type UpdateTeamParams struct {
 
 // ListAgentsParams defines parameters for ListAgents.
 type ListAgentsParams struct {
+	// Role collaboration is the deprecated 1.0.1 name of orchestration and reads as orchestration until 2.0.0
 	Role       *ListAgentsParamsRole `form:"role,omitempty" json:"role,omitempty"`
 	MaxResults *MaxResults           `form:"maxResults,omitempty" json:"maxResults,omitempty"`
 

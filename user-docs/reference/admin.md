@@ -2008,6 +2008,8 @@ NAME
 DESCRIPTION
        Put setting
 
+       collab.base_domain and collab.public_endpoints are read-only until 2.0.0; use orchestration.public_base_domain and orchestration.public_endpoints.
+
        Required permission: admin:settings
 
 SYNOPSIS
@@ -2015,7 +2017,7 @@ SYNOPSIS
 
 OPTIONS
        --key (string) (required)
-          Known values: secrets.path_prefix, pricing.price_list_sync, billing.variance_alert_pct, api.idempotency_key_ttl_seconds, teams.ephemeral_max_days, work_orders.sla_warning_hours, billing.tag_activation_acknowledged, work_orders.notification_channel_id, reports.idle_cpu_millicores, egress.denied_spike_threshold, gateway.reservation_ttl_seconds, api.cors_origins, collab.allowed_source_cidrs, collab.session_ttl_minutes, collab.content_scan, collab.max_body_mb, collab.denied_spike_threshold, orchestration.tools, orchestration.public_base_domain, orchestration.private_base_domain, orchestration.public_endpoints, orchestration.private_endpoints, orchestration.default_limit, orchestration.default_web_ui_exposure, orchestration.default_web_api_exposure, orchestration.default_resources, orchestration.default_volume_gib, models.service_access, models.default_team_access, models.default_team_models, models.default_model_id
+          Known values: secrets.path_prefix, pricing.price_list_sync, billing.variance_alert_pct, api.idempotency_key_ttl_seconds, teams.ephemeral_max_days, work_orders.sla_warning_hours, billing.tag_activation_acknowledged, work_orders.notification_channel_id, reports.idle_cpu_millicores, egress.denied_spike_threshold, gateway.reservation_ttl_seconds, api.cors_origins, orchestration.tools, orchestration.public_base_domain, orchestration.private_base_domain, orchestration.public_endpoints, orchestration.private_endpoints, orchestration.default_limit, orchestration.default_web_ui_exposure, orchestration.default_web_api_exposure, orchestration.default_resources, orchestration.default_volume_gib, models.service_access, models.default_team_access, models.default_team_models, models.default_model_id, collab.allowed_source_cidrs, collab.session_ttl_minutes, collab.content_scan, collab.max_body_mb, collab.denied_spike_threshold
        --value (string or JSON) (required)
           JSON value of the setting's type
        --if-match (string)

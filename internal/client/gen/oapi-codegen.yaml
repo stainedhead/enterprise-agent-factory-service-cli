@@ -4,3 +4,7 @@ generate:
   models: true
 output-options:
   skip-prune: true
+  # Contract 1.4 has two inline enums for the same exposure level in CreateTeamRequest.orchestration
+  # (webApi.exposure and webApiExposure); the overlay names the flat ones so the Go types do not collide.
+  overlay:
+    path: internal/client/gen/overlay.yaml
