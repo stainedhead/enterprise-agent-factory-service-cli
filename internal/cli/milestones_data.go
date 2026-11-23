@@ -189,6 +189,11 @@ var milestoneOf = map[string]int{
 	"ConnectAgentToCollaboration":      7,
 	"DisconnectAgentFromCollaboration": 7,
 	"ListCollaborationEndpoints":       8,
+	"GetTeamOrchestration":             11,
+	"PutTeamOrchestration":             11,
+	"ChangeCollaborationTool":          11,
+	"ListOrchestrationEndpoints":       11,
+	"PutServiceModelAccess":            12,
 	"RotateCollaborationKeys":          9,
 }
 
@@ -379,5 +384,10 @@ var streamOf = map[string]string{
 	"ConnectAgentToCollaboration":      "M7-A",
 	"DisconnectAgentFromCollaboration": "M7-A",
 	"ListCollaborationEndpoints":       "M8-A",
+	"GetTeamOrchestration":             "M11-A",
+	"PutTeamOrchestration":             "M11-A",
+	"ChangeCollaborationTool":          "M11-A",
+	"ListOrchestrationEndpoints":       "M11-B",
+	"PutServiceModelAccess":            "M12-A",
 	"RotateCollaborationKeys":          "M9-B",
 }

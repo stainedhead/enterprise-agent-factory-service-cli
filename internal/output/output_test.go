@@ -477,3 +477,20 @@ func TestColumnNullPlaceholder(t *testing.T) {
 		t.Errorf("table %q text %q", tb.String(), tx.String())
 	}
 }
+
+// OR-CLI-26: a column with NAUnless shows N/A when the named boolean is false, and its value otherwise.
+func TestColumnNAUnless(t *testing.T) {
+	cols := []Column{{Header: "WebUi", Path: "webUi.exposure", NAUnless: "webUi.supported"}}
+	in := `{"webUi":{"supported":false,"exposure":"off"}}`
+	if got := render(t, in, RenderOptions{Format: "text", Options: Options{Columns: cols}}); got != "N/A\n" {
+		t.Errorf("unsupported: %q", got)
+	}
+	in = `{"webUi":{"supported":true,"exposure":"private"}}`
+	if got := render(t, in, RenderOptions{Format: "text", Options: Options{Columns: cols}}); got != "private\n" {
+		t.Errorf("supported: %q", got)
+	}
+	in = `{"webUi":{"exposure":"public"}}`
+	if got := render(t, in, RenderOptions{Format: "text", Options: Options{Columns: cols}}); got != "public\n" {
+		t.Errorf("no member: %q", got)
+	}
+}

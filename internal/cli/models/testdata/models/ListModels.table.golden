@@ -1,2 +1,2 @@
-Id                           Provider   Name         Enabled  Context  MaxOutput
-anthropic.claude-sonnet-4-5  anthropic  Claude Son…  true     200000   64000
+Id                           Provi…  Name    Enabl…  Calla…  Price  Conte…  MaxOu…
+anthropic.claude-sonnet-4-5  anthr…  Claud…  true    -       -      200000  64000

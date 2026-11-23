@@ -330,8 +330,8 @@ func TestContractReplayAllOperations(t *testing.T) {
 			}
 		})
 	}
-	if n != 187 {
-		t.Errorf("replayed %d operations, want 187", n)
+	if n != 192 {
+		t.Errorf("replayed %d operations, want 192", n)
 	}
 	rp.mu.Lock()
 	defer rp.mu.Unlock()

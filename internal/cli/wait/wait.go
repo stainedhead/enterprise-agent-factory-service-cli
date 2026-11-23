@@ -36,6 +36,7 @@ func init() {
 	add("GetPoolStatus", "GetPool", "CreatePool", "UpdatePool", "PausePool", "ResumePool", "ScalePool", "DeletePool")
 	add("GetLogDestination", "GetLogDestination", "CreateLogDestination", "UpdateLogDestination", "DeleteLogDestination")
 	add("GetTeamCollaboration", "GetTeamCollaboration", "PutTeamCollaboration")
+	add("GetTeamOrchestration", "GetTeamOrchestration", "PutTeamOrchestration", "ChangeCollaborationTool")
 	add("GetNotificationChannel", "GetNotificationChannel", "CreateNotificationChannel", "UpdateNotificationChannel", "DeleteNotificationChannel")
 }
 

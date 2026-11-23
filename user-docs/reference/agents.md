@@ -67,13 +67,13 @@ OPTIONS
           Possible values: team_shared, dedicated
        --image (string) (required)
           Container image pinned by digest
-       --model-id (string) (required)
+       --model-id (string)
+          Deprecated: use --default-model-id (and --models to choose the set) instead.
+       --models (list)
+          Models the agent may call: the word all (every model the team may use, now and later) or one or more model ids (a fixed selection). Sent members replace the stored ones.
        --name (string) (required)
-          Immutable name (team slug, agent, pool, secret)
+          The name orchestrator is reserved (name_reserved)
        --resources (JSON)
-       --role (string)
-          Set on create; immutable
-          Possible values: worker, collaboration
        --secret-bindings (JSON)
        --template (string) (required)
           Agent template name
@@ -81,9 +81,11 @@ OPTIONS
        --idempotency-key (string)
           Idempotency key (default: a new ULID per invocation).
        --collaboration-connect (boolean)
-          Connect the agent to the team's Paperclip (--no-collaboration-connect disconnects it).
+          Connect the agent to the team's collaboration tool (--no-collaboration-connect disconnects it; the default on create is to connect).
        --paperclip-agent-id (string)
-          The agent's id in Paperclip (accepted only while registrationMode is manual).
+          The agent's id in Paperclip (Paperclip only, and only while registrationMode is manual).
+       --default-model-id (string)
+          The model the runtime starts with; it must be one of the agent's models. Without --models on an update, only the default changes.
        --wait (boolean)
           Wait until the resource is ready (or gone, for a delete).
        --wait-timeout (duration)
@@ -110,19 +112,27 @@ GLOBAL OPTIONS
 EXAMPLES
        Create an agent with a volume and wait until it is ready
 
-       afs agents create-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name coder --template claude-code --image registry.example.com/agents/coder@sha256:4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f --model-id anthropic.claude-sonnet-4-5 --volume '{"sizeGiB":20,"storageClass":"gp3-standard","onDelete":"snapshot_then_delete"}' --wait
+       afs agents create-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name coder --template claude-code --image registry.example.com/agents/coder@sha256:4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f --models all --default-model-id anthropic.claude-sonnet-4-5 --volume '{"sizeGiB":20,"storageClass":"gp3-standard","onDelete":"snapshot_then_delete"}' --wait
 
        Create an agent from a file
 
        afs agents create-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --cli-input-json file://agent.json
 
-       Create the team's collaboration agent (Paperclip) and wait until it is ready
+       Create a worker and wait until it is ready (it connects to the team's orchestration agent by default)
 
-       afs agents create-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name paperclip --role collaboration --template paperclip --image registry.example.com/agents/coder@sha256:4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f --model-id anthropic.claude-sonnet-4-5 --wait
+       afs agents create-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name coder --template claude-code --image registry.example.com/agents/coder@sha256:4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f --default-model-id anthropic.claude-sonnet-4-5 --wait
 
-       Create a worker that does not connect to Paperclip
+       Create a worker that does not connect to the team's collaboration tool
 
-       afs agents create-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name coder --template claude-code --image registry.example.com/agents/coder@sha256:4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f --model-id anthropic.claude-sonnet-4-5 --no-collaboration-connect
+       afs agents create-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name coder --template claude-code --image registry.example.com/agents/coder@sha256:4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f --default-model-id anthropic.claude-sonnet-4-5 --no-collaboration-connect
+
+       Create a worker that may call any model the team may use, with a default model
+
+       afs agents create-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name coder --template claude-code --image registry.example.com/agents/coder@sha256:4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f --models all --default-model-id anthropic.claude-sonnet-4-5
+
+       Create a worker limited to two models
+
+       afs agents create-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name reviewer --template claude-code --image registry.example.com/agents/coder@sha256:4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f --models anthropic.claude-sonnet-4-5 anthropic.claude-haiku-4-5 --default-model-id anthropic.claude-haiku-4-5
 
 ```
 
@@ -688,7 +698,8 @@ SYNOPSIS
 
 OPTIONS
        --role (string)
-          Possible values: worker, collaboration
+          worker or orchestration (collaboration is read as orchestration until 2.0.0).
+          Known values: worker, orchestration
        --team-id (string) (required)
           Team id; taken from the path only
 
@@ -719,9 +730,9 @@ EXAMPLES
 
        afs agents list-agents --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --query 'items[].[id,status.phase]' --output text
 
-       Find the team's collaboration agent
+       Find the team's orchestration agent
 
-       afs agents list-agents --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --role collaboration
+       afs agents list-agents --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --role orchestration
 
 ```
 
@@ -1286,6 +1297,11 @@ OPTIONS
        --image (string)
           Container image pinned by digest
        --model-id (string)
+          Deprecated: use --default-model-id (and --models to choose the set) instead.
+       --models (list)
+          Models the agent may call: the word all (every model the team may use, now and later) or one or more model ids (a fixed selection). Sent members replace the stored ones.
+       --name (string)
+          Refused on the orchestration agent (orchestration_field_fixed)
        --resources (JSON)
        --secret-bindings (JSON)
        --template (string)
@@ -1294,9 +1310,11 @@ OPTIONS
        --if-match (string)
           Apply only if the resource is at this version (safe update).
        --collaboration-connect (boolean)
-          Connect the agent to the team's Paperclip (--no-collaboration-connect disconnects it).
+          Connect the agent to the team's collaboration tool (--no-collaboration-connect disconnects it; the default on create is to connect).
        --paperclip-agent-id (string)
-          The agent's id in Paperclip (accepted only while registrationMode is manual).
+          The agent's id in Paperclip (Paperclip only, and only while registrationMode is manual).
+       --default-model-id (string)
+          The model the runtime starts with; it must be one of the agent's models. Without --models on an update, only the default changes.
        --wait (boolean)
           Wait until the resource is ready (or gone, for a delete).
        --wait-timeout (duration)
@@ -1321,17 +1339,29 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       Connect an existing worker to Paperclip (the same effect as afs collaboration connect-agent)
+       Connect an existing worker to the team's collaboration tool (the same effect as afs collaboration connect-agent)
 
        afs agents update-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --collaboration-connect
 
-       Change the model (reads the current version, sends If-Match)
+       Change the default model (reads the current version, sends If-Match)
 
-       afs agents update-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --model-id anthropic.claude-haiku-4-5
+       afs agents update-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --default-model-id anthropic.claude-haiku-4-5
 
        Apply a change only if the agent is still at version 7
 
        afs agents update-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --description 'Reviews pull requests' --if-match 7
+
+       Change the agent's default model only
+
+       afs agents update-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --default-model-id anthropic.claude-haiku-4-5
+
+       Limit the agent to one model
+
+       afs agents update-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --models anthropic.claude-sonnet-4-5 --default-model-id anthropic.claude-sonnet-4-5
+
+       Let the agent call every model its team may use
+
+       afs agents update-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --models all
 
 ```
 

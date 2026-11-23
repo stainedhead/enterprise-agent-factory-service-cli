@@ -11,6 +11,7 @@ func init() { registrations = append(registrations, registerTeams) }
 var teamColumns = []output.Column{
 	{Header: "Id", Path: "id"}, {Header: "Slug", Path: "slug"}, {Header: "Name", Path: "displayName"},
 	{Header: "Kind", Path: "kind"}, {Header: "State", Path: "state"}, {Header: "Phase", Path: "status.phase"},
+	{Header: "Limit", Path: "maxCollaborationExposure", Null: "-"}, {Header: "Models", Path: "modelAccess", Null: "-"},
 	{Header: "Version", Path: "version"},
 }
 

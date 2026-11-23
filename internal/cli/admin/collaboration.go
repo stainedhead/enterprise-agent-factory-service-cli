@@ -51,8 +51,4 @@ func registerCollaboration(r *cli.Registry) {
 	}
 	r.Override(cli.Override{Op: "CreateIdentityProvider", Build: buildCollabSecretARN})
 	r.Override(cli.Override{Op: "UpdateIdentityProvider", Build: buildCollabSecretARN, Examples: collab})
-	r.Override(cli.Override{Op: "PutSetting", Examples: []cli.Example{
-		{Title: "Set the base domain of the Paperclip endpoints", Command: `afs admin put-setting --key collab.base_domain --value '"collab.example.com"'`},
-		{Title: "Switch the public Paperclip endpoints on", Command: "afs admin put-setting --key collab.public_endpoints --value true"},
-	}})
 }

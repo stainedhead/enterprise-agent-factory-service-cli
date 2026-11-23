@@ -15,7 +15,7 @@ OPERATIONS
        connect-agent                  Connect agent to collaboration
        describe-collaboration         Get team collaboration
        disconnect-agent               Disconnect agent from collaboration
-       invoke-api                     Call a team's Paperclip REST API with your AFS credential and a Paperclip key.
+       invoke-api                     Call a team's Paperclip REST API (the orchestration agent's Web API) with your AFS credential and a Paperclip key.
        list-collaboration-links       List collaboration links
        put-collaboration              Put team collaboration
        rotate-collaboration-keys      Rotate collaboration keys
@@ -67,7 +67,7 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       Connect an agent to the team's Paperclip
+       Connect an agent to the team's collaboration tool
 
        afs collaboration connect-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001
 
@@ -87,6 +87,8 @@ NAME
 
 DESCRIPTION
        Get team collaboration
+
+       Deprecated: kept until 2.0.0; use afs orchestration describe-orchestration instead.
 
        Required permission: collaboration:read
 
@@ -168,7 +170,7 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       Disconnect an agent from the team's Paperclip
+       Disconnect an agent from the team's collaboration tool
 
        afs collaboration disconnect-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001
 
@@ -183,7 +185,7 @@ NAME
        collaboration invoke-api
 
 DESCRIPTION
-       Call a team's Paperclip REST API with your AFS credential and a Paperclip key.
+       Call a team's Paperclip REST API (the orchestration agent's Web API) with your AFS credential and a Paperclip key.
 
 SYNOPSIS
        afs collaboration invoke-api [options]
@@ -202,7 +204,7 @@ OPTIONS
        --paperclip-key-file (string) (required)
           A file (mode 0600) holding the Paperclip key, or - for standard input. The key is never an argument.
        --collab-url (string)
-          Use this https origin instead of reading the team's restApiUrl.
+          Use this https origin instead of the Web API address of the team's orchestration agent.
        --include (boolean)
           Print the status line and response headers before the body.
        --wait (boolean)
@@ -227,7 +229,7 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       Read the team's issues through the public Paperclip API
+       Read the team's companies through the Web API at its effective level (private or public)
 
        afs collaboration invoke-api --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --path /api/companies --paperclip-key-file ./pc.key
 
@@ -299,6 +301,10 @@ NAME
 
 DESCRIPTION
        Put team collaboration
+
+       Deprecated: kept until 2.0.0; use afs orchestration put-orchestration instead.
+
+       The booleans stand for exposure levels: on read, public is true and anything else false; on write, true sets the highest level within the team's limit and false sets off. Private exposure cannot be expressed with booleans.
 
        Required permission: collaboration:manage
 

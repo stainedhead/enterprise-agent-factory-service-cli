@@ -13,7 +13,7 @@ SYNOPSIS
 
 OPTIONS
        --key (string) (required)
-          Possible values: secrets.path_prefix, pricing.price_list_sync, billing.variance_alert_pct, api.idempotency_key_ttl_seconds, teams.ephemeral_max_days, work_orders.sla_warning_hours, billing.tag_activation_acknowledged, work_orders.notification_channel_id, reports.idle_cpu_millicores, egress.denied_spike_threshold, gateway.reservation_ttl_seconds, api.cors_origins, collab.base_domain, collab.public_endpoints, collab.allowed_source_cidrs, collab.session_ttl_minutes, collab.content_scan, collab.max_body_mb, collab.denied_spike_threshold
+          Known values: secrets.path_prefix, pricing.price_list_sync, billing.variance_alert_pct, api.idempotency_key_ttl_seconds, teams.ephemeral_max_days, work_orders.sla_warning_hours, billing.tag_activation_acknowledged, work_orders.notification_channel_id, reports.idle_cpu_millicores, egress.denied_spike_threshold, gateway.reservation_ttl_seconds, api.cors_origins, collab.allowed_source_cidrs, collab.session_ttl_minutes, collab.content_scan, collab.max_body_mb, collab.denied_spike_threshold, orchestration.tools, orchestration.public_base_domain, orchestration.private_base_domain, orchestration.public_endpoints, orchestration.private_endpoints, orchestration.default_limit, orchestration.default_web_ui_exposure, orchestration.default_web_api_exposure, orchestration.default_resources, orchestration.default_volume_gib, models.service_access, models.default_team_access, models.default_team_models, models.default_model_id
        --value (string or JSON) (required)
           JSON value of the setting's type
        --if-match (string)
@@ -38,13 +38,21 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       Set the base domain of the Paperclip endpoints
+       Set the base domain of the public orchestration hostnames
 
-       afs admin put-setting --key collab.base_domain --value '"collab.example.com"'
+       afs admin put-setting --key orchestration.public_base_domain --value '"collab.example.com"'
 
-       Switch the public Paperclip endpoints on
+       Set the base domain of the private (internal ALB) hostnames
 
-       afs admin put-setting --key collab.public_endpoints --value true
+       afs admin put-setting --key orchestration.private_base_domain --value '"collab.corp.example.com"'
+
+       Lower the default limit of new teams to private
+
+       afs admin put-setting --key orchestration.default_limit --value '"private"'
+
+       Choose the default model of new agents
+
+       afs admin put-setting --key models.default_model_id --value '"anthropic.claude-sonnet-4-5"'
 
        Set a list value (JSON)
 

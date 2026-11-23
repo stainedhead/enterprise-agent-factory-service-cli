@@ -40,6 +40,11 @@ type Option struct {
 	// value is sent as given (put-setting --key: the collab.* settings, CLI-US-31.3).
 	OpenEnum bool
 	Desc     string
+	// Hidden options are accepted but not listed in help.
+	Hidden bool
+	// Deprecated, when set, names what replaces the option; help shows it instead of Desc and giving the
+	// option prints one stderr line.
+	Deprecated string
 }
 
 // Name is the flag without dashes.
@@ -117,6 +122,9 @@ func DeriveOptions(op *spec.Operation, ov *Override) []Option {
 					k = kk
 				}
 			}
+			if k == List && elem == "" {
+				elem = "string" // a Kinds override that turns an object member into a list of words
+			}
 			o := Option{Flag: flag(f.Name), Wire: f.Name, In: "body", Kind: k, Elem: elem, Required: f.Required,
 				Enum: f.Schema.Enum, Min: f.Schema.Min, Max: f.Schema.Max, Desc: f.Desc}
 			if _, isGlobal := lookupGlobal(o.Name()); isGlobal {
@@ -149,6 +157,20 @@ func DeriveOptions(op *spec.Operation, ov *Override) []Option {
 				if out[i].Wire == w {
 					out[i].OpenEnum = true
 				}
+			}
+			for _, w := range ov.Hidden {
+				if out[i].Wire == w {
+					out[i].Hidden = true
+				}
+			}
+			if d, ok := ov.Desc[out[i].Wire]; ok && out[i].In != "local" {
+				out[i].Desc = d
+			}
+			if e, ok := ov.Enum[out[i].Wire]; ok && out[i].In != "local" {
+				out[i].Enum = e
+			}
+			if d, ok := ov.DeprecatedOptions[out[i].Wire]; ok && out[i].In != "local" {
+				out[i].Deprecated = d
 			}
 		}
 	}

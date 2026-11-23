@@ -33,6 +33,9 @@ func TestCommandsDoneCollaboration(t *testing.T) { // CLI-US-24.10, 26.1, 34.2
 		"ListCollaborationLinks", "ConnectAgentToCollaboration", "DisconnectAgentFromCollaboration", "RotateCollaborationKeys")
 }
 
+// describeDeprecation is the one stderr line every run of describe-collaboration prints in 1.1.0 (ORC-30).
+const describeDeprecation = "Warning: afs collaboration describe-collaboration is deprecated and will be removed in 2.0.0; use afs orchestration describe-orchestration instead.\n"
+
 func reply(body string) http.HandlerFunc {
 	return func(w http.ResponseWriter, _ *http.Request) { clitest.Reply(w, 200, body) }
 }
@@ -69,11 +72,11 @@ func TestDescribeCollaborationNotEffectiveNotice(t *testing.T) {
 	if r.Code != 0 || !strings.Contains(r.Err, want) {
 		t.Fatalf("exit %d stderr %q", r.Code, r.Err)
 	}
-	if j := clitest.Run(t, reply(body), "collaboration", "describe-collaboration", "--team-id", team, "--output", "json"); j.Err != "" {
+	if j := clitest.Run(t, reply(body), "collaboration", "describe-collaboration", "--team-id", team, "--output", "json"); j.Err != describeDeprecation {
 		t.Errorf("json printed %q", j.Err)
 	}
 	none := collab("h.example.com", true, true, `[]`, 1, 1, 1, "Ready")
-	if r := clitest.Run(t, reply(none), "collaboration", "describe-collaboration", "--team-id", team, "--output", "text"); r.Err != "" {
+	if r := clitest.Run(t, reply(none), "collaboration", "describe-collaboration", "--team-id", team, "--output", "text"); r.Err != describeDeprecation {
 		t.Errorf("no reasons must print nothing: %q", r.Err)
 	}
 }
@@ -84,7 +87,7 @@ func TestDescribeCollaborationMissingAgentHint(t *testing.T) {
 		clitest.Reply(w, 404, `{"code":"NotFound","message":"no collaboration agent","requestId":"req_1","details":{"reason":"collaboration_agent_missing"}}`)
 	}, "collaboration", "describe-collaboration", "--team-id", team)
 	if r.Code != 254 || !strings.Contains(r.Err, "(NotFound) when calling the GetTeamCollaboration operation") ||
-		!strings.Contains(r.Err, "This team has no collaboration agent. Create one with: afs agents create-agent --role collaboration") {
+		!strings.Contains(r.Err, "This team has no orchestration agent yet") {
 		t.Errorf("exit %d %q", r.Code, r.Err)
 	}
 }
@@ -206,7 +209,7 @@ func TestPutCollaborationMissingAgent409(t *testing.T) {
 		clitest.Reply(w, 409, `{"code":"Conflict","message":"no collaboration agent","requestId":"req_p","details":{"reason":"collaboration_agent_missing"}}`)
 	}, "collaboration", "put-collaboration", "--team-id", team, "--web-ui-enabled", "--rest-api-enabled")
 	if r.Code != 254 || r.Req.Header.Get("If-Match") != "" || !strings.Contains(r.Err, "(Conflict) when calling the PutTeamCollaboration operation") ||
-		!strings.Contains(r.Err, "This team has no collaboration agent.") {
+		!strings.Contains(r.Err, "This team has no orchestration agent yet") {
 		t.Errorf("exit %d if-match %q %q", r.Code, r.Req.Header.Get("If-Match"), r.Err)
 	}
 }
@@ -220,7 +223,7 @@ func TestPutCollaborationValidationFieldsPrinted(t *testing.T) {
 		t.Fatal(r.Code)
 	}
 	for _, want := range []string{"Request ID: req_v\nfield: webUiEnabled reason: collab_base_domain_unset\nfield: restApiEnabled reason: collab_public_endpoints_off\n",
-		"Ask a service admin to set collab.base_domain (afs admin put-setting).", "Ask a service admin to switch collab.public_endpoints on"} {
+		"Ask a service admin to set orchestration.public_base_domain (afs admin put-setting).", "Ask a service admin to switch orchestration.public_endpoints on"} {
 		if !strings.Contains(r.Err, want) {
 			t.Errorf("missing %q in %q", want, r.Err)
 		}

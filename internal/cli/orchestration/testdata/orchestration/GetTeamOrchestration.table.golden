@@ -1,0 +1,11 @@
+Field            Value
+Tool             paperclip
+WebUi            public
+WebApi           off
+Limit            private
+EffectiveWebUi   private
+EffectiveWebApi  off
+Hostname         payments-factory.collab.corp.example.com
+Mode             managed
+Phase            Ready
+Version          7

@@ -9,8 +9,9 @@ func init() { registrations = append(registrations, registerModels) }
 
 var adminModelColumns = []output.Column{
 	{Header: "Id", Path: "id"}, {Header: "Provider", Path: "provider"}, {Header: "Name", Path: "displayName"},
-	{Header: "Enabled", Path: "enabled"}, {Header: "Context", Path: "contextWindow"}, {Header: "MaxOutput", Path: "maxOutputTokens"},
-	{Header: "Version", Path: "version"},
+	{Header: "Enabled", Path: "enabled"}, {Header: "Callable", Path: "callable", Null: "-"}, {Header: "Price", Path: "priceState", Null: "-"},
+	{Header: "Origin", Path: "origin", Null: "-"}, {Header: "Teams", Path: "teamsWithAccess", Null: "-"},
+	{Header: "Context", Path: "contextWindow"}, {Header: "Version", Path: "version"},
 }
 
 func registerModels(r *cli.Registry) {
@@ -21,6 +22,6 @@ func registerModels(r *cli.Registry) {
 		{Title: "Add a model", Command: `afs admin create-model --id anthropic.claude-sonnet-4-5 --provider anthropic --display-name "Claude Sonnet 4.5" --context-window 200000 --max-output-tokens 64000`},
 	}})
 	r.Override(cli.Override{Op: "UpdateModel", Columns: adminModelColumns, Examples: []cli.Example{
-		{Title: "Disable a model", Command: "afs admin update-model --model-id anthropic.claude-sonnet-4-5 --no-enabled"},
+		{Title: "Disable a model (refused while service model access is all)", Command: "afs admin update-model --model-id anthropic.claude-sonnet-4-5 --no-enabled"},
 	}})
 }

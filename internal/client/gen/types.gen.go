@@ -86,16 +86,31 @@ func (e AgentIamIdentity) Valid() bool {
 
 // Defines values for AgentRole.
 const (
-	AgentRoleCollaboration AgentRole = "collaboration"
+	AgentRoleOrchestration AgentRole = "orchestration"
 	AgentRoleWorker        AgentRole = "worker"
 )
 
 // Valid indicates whether the value is a known member of the AgentRole enum.
 func (e AgentRole) Valid() bool {
 	switch e {
-	case AgentRoleCollaboration:
+	case AgentRoleOrchestration:
 		return true
 	case AgentRoleWorker:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for AgentRuntime.
+const (
+	AgentRuntimeOrchestration AgentRuntime = "orchestration"
+)
+
+// Valid indicates whether the value is a known member of the AgentRuntime enum.
+func (e AgentRuntime) Valid() bool {
+	switch e {
+	case AgentRuntimeOrchestration:
 		return true
 	default:
 		return false
@@ -174,15 +189,60 @@ func (e AgentIdentityStatus) Valid() bool {
 	}
 }
 
+// Defines values for AgentModelsAccess.
+const (
+	AgentModelsAccessAll      AgentModelsAccess = "all"
+	AgentModelsAccessSelected AgentModelsAccess = "selected"
+)
+
+// Valid indicates whether the value is a known member of the AgentModelsAccess enum.
+func (e AgentModelsAccess) Valid() bool {
+	switch e {
+	case AgentModelsAccessAll:
+		return true
+	case AgentModelsAccessSelected:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for AgentModelsInputAccess.
+const (
+	AgentModelsInputAccessAll      AgentModelsInputAccess = "all"
+	AgentModelsInputAccessSelected AgentModelsInputAccess = "selected"
+)
+
+// Valid indicates whether the value is a known member of the AgentModelsInputAccess enum.
+func (e AgentModelsInputAccess) Valid() bool {
+	switch e {
+	case AgentModelsInputAccessAll:
+		return true
+	case AgentModelsInputAccessSelected:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for AgentTemplateCapabilities.
 const (
-	AgentTemplateCapabilitiesPaperclip AgentTemplateCapabilities = "paperclip"
+	AgentTemplateCapabilitiesOrchestration AgentTemplateCapabilities = "orchestration"
+	AgentTemplateCapabilitiesPaperclip     AgentTemplateCapabilities = "paperclip"
+	AgentTemplateCapabilitiesToolBuzz      AgentTemplateCapabilities = "tool:buzz"
+	AgentTemplateCapabilitiesToolPaperclip AgentTemplateCapabilities = "tool:paperclip"
 )
 
 // Valid indicates whether the value is a known member of the AgentTemplateCapabilities enum.
 func (e AgentTemplateCapabilities) Valid() bool {
 	switch e {
+	case AgentTemplateCapabilitiesOrchestration:
+		return true
 	case AgentTemplateCapabilitiesPaperclip:
+		return true
+	case AgentTemplateCapabilitiesToolBuzz:
+		return true
+	case AgentTemplateCapabilitiesToolPaperclip:
 		return true
 	default:
 		return false
@@ -393,24 +453,42 @@ func (e CatalogSystemRequestCategory) Valid() bool {
 	}
 }
 
+// Defines values for ChangeCollaborationToolRequestTool.
+const (
+	ChangeCollaborationToolRequestToolBuzz      ChangeCollaborationToolRequestTool = "buzz"
+	ChangeCollaborationToolRequestToolPaperclip ChangeCollaborationToolRequestTool = "paperclip"
+)
+
+// Valid indicates whether the value is a known member of the ChangeCollaborationToolRequestTool enum.
+func (e ChangeCollaborationToolRequestTool) Valid() bool {
+	switch e {
+	case ChangeCollaborationToolRequestToolBuzz:
+		return true
+	case ChangeCollaborationToolRequestToolPaperclip:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for CollaborationEffectiveReasons.
 const (
-	BaseDomainUnset             CollaborationEffectiveReasons = "base_domain_unset"
-	ProviderWithoutCollabClient CollaborationEffectiveReasons = "provider_without_collab_client"
-	ServiceEndpointsOff         CollaborationEffectiveReasons = "service_endpoints_off"
-	TeamNotAllowed              CollaborationEffectiveReasons = "team_not_allowed"
+	CollaborationEffectiveReasonsBaseDomainUnset             CollaborationEffectiveReasons = "base_domain_unset"
+	CollaborationEffectiveReasonsProviderWithoutCollabClient CollaborationEffectiveReasons = "provider_without_collab_client"
+	CollaborationEffectiveReasonsServiceEndpointsOff         CollaborationEffectiveReasons = "service_endpoints_off"
+	CollaborationEffectiveReasonsTeamNotAllowed              CollaborationEffectiveReasons = "team_not_allowed"
 )
 
 // Valid indicates whether the value is a known member of the CollaborationEffectiveReasons enum.
 func (e CollaborationEffectiveReasons) Valid() bool {
 	switch e {
-	case BaseDomainUnset:
+	case CollaborationEffectiveReasonsBaseDomainUnset:
 		return true
-	case ProviderWithoutCollabClient:
+	case CollaborationEffectiveReasonsProviderWithoutCollabClient:
 		return true
-	case ServiceEndpointsOff:
+	case CollaborationEffectiveReasonsServiceEndpointsOff:
 		return true
-	case TeamNotAllowed:
+	case CollaborationEffectiveReasonsTeamNotAllowed:
 		return true
 	default:
 		return false
@@ -632,15 +710,12 @@ func (e CreateAgentRequestIamIdentity) Valid() bool {
 
 // Defines values for CreateAgentRequestRole.
 const (
-	CreateAgentRequestRoleCollaboration CreateAgentRequestRole = "collaboration"
-	CreateAgentRequestRoleWorker        CreateAgentRequestRole = "worker"
+	CreateAgentRequestRoleWorker CreateAgentRequestRole = "worker"
 )
 
 // Valid indicates whether the value is a known member of the CreateAgentRequestRole enum.
 func (e CreateAgentRequestRole) Valid() bool {
 	switch e {
-	case CreateAgentRequestRoleCollaboration:
-		return true
 	case CreateAgentRequestRoleWorker:
 		return true
 	default:
@@ -924,6 +999,123 @@ func (e CreateTeamRequestKind) Valid() bool {
 	case CreateTeamRequestKindEphemeral:
 		return true
 	case CreateTeamRequestKindPersistent:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateTeamRequestMaxCollaborationExposure.
+const (
+	CreateTeamRequestMaxCollaborationExposureOff     CreateTeamRequestMaxCollaborationExposure = "off"
+	CreateTeamRequestMaxCollaborationExposurePrivate CreateTeamRequestMaxCollaborationExposure = "private"
+	CreateTeamRequestMaxCollaborationExposurePublic  CreateTeamRequestMaxCollaborationExposure = "public"
+)
+
+// Valid indicates whether the value is a known member of the CreateTeamRequestMaxCollaborationExposure enum.
+func (e CreateTeamRequestMaxCollaborationExposure) Valid() bool {
+	switch e {
+	case CreateTeamRequestMaxCollaborationExposureOff:
+		return true
+	case CreateTeamRequestMaxCollaborationExposurePrivate:
+		return true
+	case CreateTeamRequestMaxCollaborationExposurePublic:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateTeamRequestModelAccess.
+const (
+	CreateTeamRequestModelAccessAll      CreateTeamRequestModelAccess = "all"
+	CreateTeamRequestModelAccessSelected CreateTeamRequestModelAccess = "selected"
+)
+
+// Valid indicates whether the value is a known member of the CreateTeamRequestModelAccess enum.
+func (e CreateTeamRequestModelAccess) Valid() bool {
+	switch e {
+	case CreateTeamRequestModelAccessAll:
+		return true
+	case CreateTeamRequestModelAccessSelected:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateTeamRequestOrchestrationRegistrationMode.
+const (
+	CreateTeamRequestOrchestrationRegistrationModeManaged CreateTeamRequestOrchestrationRegistrationMode = "managed"
+	CreateTeamRequestOrchestrationRegistrationModeManual  CreateTeamRequestOrchestrationRegistrationMode = "manual"
+)
+
+// Valid indicates whether the value is a known member of the CreateTeamRequestOrchestrationRegistrationMode enum.
+func (e CreateTeamRequestOrchestrationRegistrationMode) Valid() bool {
+	switch e {
+	case CreateTeamRequestOrchestrationRegistrationModeManaged:
+		return true
+	case CreateTeamRequestOrchestrationRegistrationModeManual:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateTeamRequestOrchestrationTool.
+const (
+	CreateTeamRequestOrchestrationToolBuzz      CreateTeamRequestOrchestrationTool = "buzz"
+	CreateTeamRequestOrchestrationToolPaperclip CreateTeamRequestOrchestrationTool = "paperclip"
+)
+
+// Valid indicates whether the value is a known member of the CreateTeamRequestOrchestrationTool enum.
+func (e CreateTeamRequestOrchestrationTool) Valid() bool {
+	switch e {
+	case CreateTeamRequestOrchestrationToolBuzz:
+		return true
+	case CreateTeamRequestOrchestrationToolPaperclip:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateTeamRequestOrchestrationWebApiExposure.
+const (
+	CreateTeamRequestOrchestrationWebApiExposureOff     CreateTeamRequestOrchestrationWebApiExposure = "off"
+	CreateTeamRequestOrchestrationWebApiExposurePrivate CreateTeamRequestOrchestrationWebApiExposure = "private"
+	CreateTeamRequestOrchestrationWebApiExposurePublic  CreateTeamRequestOrchestrationWebApiExposure = "public"
+)
+
+// Valid indicates whether the value is a known member of the CreateTeamRequestOrchestrationWebApiExposure enum.
+func (e CreateTeamRequestOrchestrationWebApiExposure) Valid() bool {
+	switch e {
+	case CreateTeamRequestOrchestrationWebApiExposureOff:
+		return true
+	case CreateTeamRequestOrchestrationWebApiExposurePrivate:
+		return true
+	case CreateTeamRequestOrchestrationWebApiExposurePublic:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateTeamRequestOrchestrationWebUiExposure.
+const (
+	CreateTeamRequestOrchestrationWebUiExposureOff     CreateTeamRequestOrchestrationWebUiExposure = "off"
+	CreateTeamRequestOrchestrationWebUiExposurePrivate CreateTeamRequestOrchestrationWebUiExposure = "private"
+	CreateTeamRequestOrchestrationWebUiExposurePublic  CreateTeamRequestOrchestrationWebUiExposure = "public"
+)
+
+// Valid indicates whether the value is a known member of the CreateTeamRequestOrchestrationWebUiExposure enum.
+func (e CreateTeamRequestOrchestrationWebUiExposure) Valid() bool {
+	switch e {
+	case CreateTeamRequestOrchestrationWebUiExposureOff:
+		return true
+	case CreateTeamRequestOrchestrationWebUiExposurePrivate:
+		return true
+	case CreateTeamRequestOrchestrationWebUiExposurePublic:
 		return true
 	default:
 		return false
@@ -1362,6 +1554,72 @@ func (e MemberSubjectType) Valid() bool {
 	}
 }
 
+// Defines values for ModelInferenceProfileState.
+const (
+	ModelInferenceProfileStateFailed       ModelInferenceProfileState = "failed"
+	ModelInferenceProfileStateNone         ModelInferenceProfileState = "none"
+	ModelInferenceProfileStateProvisioning ModelInferenceProfileState = "provisioning"
+	ModelInferenceProfileStateReady        ModelInferenceProfileState = "ready"
+	ModelInferenceProfileStateRetiring     ModelInferenceProfileState = "retiring"
+)
+
+// Valid indicates whether the value is a known member of the ModelInferenceProfileState enum.
+func (e ModelInferenceProfileState) Valid() bool {
+	switch e {
+	case ModelInferenceProfileStateFailed:
+		return true
+	case ModelInferenceProfileStateNone:
+		return true
+	case ModelInferenceProfileStateProvisioning:
+		return true
+	case ModelInferenceProfileStateReady:
+		return true
+	case ModelInferenceProfileStateRetiring:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ModelOrigin.
+const (
+	ModelOriginBedrockSync ModelOrigin = "bedrock_sync"
+	ModelOriginManual      ModelOrigin = "manual"
+)
+
+// Valid indicates whether the value is a known member of the ModelOrigin enum.
+func (e ModelOrigin) Valid() bool {
+	switch e {
+	case ModelOriginBedrockSync:
+		return true
+	case ModelOriginManual:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ModelPriceState.
+const (
+	ModelPriceStateApproved ModelPriceState = "approved"
+	ModelPriceStateNone     ModelPriceState = "none"
+	ModelPriceStatePending  ModelPriceState = "pending"
+)
+
+// Valid indicates whether the value is a known member of the ModelPriceState enum.
+func (e ModelPriceState) Valid() bool {
+	switch e {
+	case ModelPriceStateApproved:
+		return true
+	case ModelPriceStateNone:
+		return true
+	case ModelPriceStatePending:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for ModelPriceSource.
 const (
 	ModelPriceSourceAwsPriceList ModelPriceSource = "aws_price_list"
@@ -1404,6 +1662,246 @@ func (e NotificationChannelKind) Valid() bool {
 	case NotificationChannelKindSlack:
 		return true
 	case NotificationChannelKindWebhook:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for OrchestrationEndpointEffective.
+const (
+	OrchestrationEndpointEffectiveOff     OrchestrationEndpointEffective = "off"
+	OrchestrationEndpointEffectivePrivate OrchestrationEndpointEffective = "private"
+	OrchestrationEndpointEffectivePublic  OrchestrationEndpointEffective = "public"
+)
+
+// Valid indicates whether the value is a known member of the OrchestrationEndpointEffective enum.
+func (e OrchestrationEndpointEffective) Valid() bool {
+	switch e {
+	case OrchestrationEndpointEffectiveOff:
+		return true
+	case OrchestrationEndpointEffectivePrivate:
+		return true
+	case OrchestrationEndpointEffectivePublic:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for OrchestrationEndpointExposure.
+const (
+	OrchestrationEndpointExposureOff     OrchestrationEndpointExposure = "off"
+	OrchestrationEndpointExposurePrivate OrchestrationEndpointExposure = "private"
+	OrchestrationEndpointExposurePublic  OrchestrationEndpointExposure = "public"
+)
+
+// Valid indicates whether the value is a known member of the OrchestrationEndpointExposure enum.
+func (e OrchestrationEndpointExposure) Valid() bool {
+	switch e {
+	case OrchestrationEndpointExposureOff:
+		return true
+	case OrchestrationEndpointExposurePrivate:
+		return true
+	case OrchestrationEndpointExposurePublic:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for OrchestrationEndpointLimit.
+const (
+	OrchestrationEndpointLimitOff     OrchestrationEndpointLimit = "off"
+	OrchestrationEndpointLimitPrivate OrchestrationEndpointLimit = "private"
+	OrchestrationEndpointLimitPublic  OrchestrationEndpointLimit = "public"
+)
+
+// Valid indicates whether the value is a known member of the OrchestrationEndpointLimit enum.
+func (e OrchestrationEndpointLimit) Valid() bool {
+	switch e {
+	case OrchestrationEndpointLimitOff:
+		return true
+	case OrchestrationEndpointLimitPrivate:
+		return true
+	case OrchestrationEndpointLimitPublic:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for OrchestrationEndpointReasons.
+const (
+	OrchestrationEndpointReasonsBaseDomainUnset             OrchestrationEndpointReasons = "base_domain_unset"
+	OrchestrationEndpointReasonsProviderWithoutCollabClient OrchestrationEndpointReasons = "provider_without_collab_client"
+	OrchestrationEndpointReasonsServiceSwitchPrivate        OrchestrationEndpointReasons = "service_switch_private"
+	OrchestrationEndpointReasonsServiceSwitchPublic         OrchestrationEndpointReasons = "service_switch_public"
+	OrchestrationEndpointReasonsTeamLimit                   OrchestrationEndpointReasons = "team_limit"
+	OrchestrationEndpointReasonsToolNotSupported            OrchestrationEndpointReasons = "tool_not_supported"
+)
+
+// Valid indicates whether the value is a known member of the OrchestrationEndpointReasons enum.
+func (e OrchestrationEndpointReasons) Valid() bool {
+	switch e {
+	case OrchestrationEndpointReasonsBaseDomainUnset:
+		return true
+	case OrchestrationEndpointReasonsProviderWithoutCollabClient:
+		return true
+	case OrchestrationEndpointReasonsServiceSwitchPrivate:
+		return true
+	case OrchestrationEndpointReasonsServiceSwitchPublic:
+		return true
+	case OrchestrationEndpointReasonsTeamLimit:
+		return true
+	case OrchestrationEndpointReasonsToolNotSupported:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for OrchestrationEndpointSurface.
+const (
+	WebApi OrchestrationEndpointSurface = "webApi"
+	WebUi  OrchestrationEndpointSurface = "webUi"
+)
+
+// Valid indicates whether the value is a known member of the OrchestrationEndpointSurface enum.
+func (e OrchestrationEndpointSurface) Valid() bool {
+	switch e {
+	case WebApi:
+		return true
+	case WebUi:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for OrchestrationEndpointTool.
+const (
+	OrchestrationEndpointToolBuzz      OrchestrationEndpointTool = "buzz"
+	OrchestrationEndpointToolPaperclip OrchestrationEndpointTool = "paperclip"
+)
+
+// Valid indicates whether the value is a known member of the OrchestrationEndpointTool enum.
+func (e OrchestrationEndpointTool) Valid() bool {
+	switch e {
+	case OrchestrationEndpointToolBuzz:
+		return true
+	case OrchestrationEndpointToolPaperclip:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for OrchestrationMigrationBlockedReason.
+const (
+	NoModel                   OrchestrationMigrationBlockedReason = "no_model"
+	OrchestrationRuntimeUnset OrchestrationMigrationBlockedReason = "orchestration_runtime_unset"
+)
+
+// Valid indicates whether the value is a known member of the OrchestrationMigrationBlockedReason enum.
+func (e OrchestrationMigrationBlockedReason) Valid() bool {
+	switch e {
+	case NoModel:
+		return true
+	case OrchestrationRuntimeUnset:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for OrchestrationMigrationState.
+const (
+	OrchestrationMigrationStateBlocked  OrchestrationMigrationState = "blocked"
+	OrchestrationMigrationStateComplete OrchestrationMigrationState = "complete"
+	OrchestrationMigrationStateRunning  OrchestrationMigrationState = "running"
+)
+
+// Valid indicates whether the value is a known member of the OrchestrationMigrationState enum.
+func (e OrchestrationMigrationState) Valid() bool {
+	switch e {
+	case OrchestrationMigrationStateBlocked:
+		return true
+	case OrchestrationMigrationStateComplete:
+		return true
+	case OrchestrationMigrationStateRunning:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for OrchestrationSurfaceEffective.
+const (
+	OrchestrationSurfaceEffectiveOff     OrchestrationSurfaceEffective = "off"
+	OrchestrationSurfaceEffectivePrivate OrchestrationSurfaceEffective = "private"
+	OrchestrationSurfaceEffectivePublic  OrchestrationSurfaceEffective = "public"
+)
+
+// Valid indicates whether the value is a known member of the OrchestrationSurfaceEffective enum.
+func (e OrchestrationSurfaceEffective) Valid() bool {
+	switch e {
+	case OrchestrationSurfaceEffectiveOff:
+		return true
+	case OrchestrationSurfaceEffectivePrivate:
+		return true
+	case OrchestrationSurfaceEffectivePublic:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for OrchestrationSurfaceExposure.
+const (
+	OrchestrationSurfaceExposureOff     OrchestrationSurfaceExposure = "off"
+	OrchestrationSurfaceExposurePrivate OrchestrationSurfaceExposure = "private"
+	OrchestrationSurfaceExposurePublic  OrchestrationSurfaceExposure = "public"
+)
+
+// Valid indicates whether the value is a known member of the OrchestrationSurfaceExposure enum.
+func (e OrchestrationSurfaceExposure) Valid() bool {
+	switch e {
+	case OrchestrationSurfaceExposureOff:
+		return true
+	case OrchestrationSurfaceExposurePrivate:
+		return true
+	case OrchestrationSurfaceExposurePublic:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for OrchestrationSurfaceReasons.
+const (
+	OrchestrationSurfaceReasonsBaseDomainUnset             OrchestrationSurfaceReasons = "base_domain_unset"
+	OrchestrationSurfaceReasonsProviderWithoutCollabClient OrchestrationSurfaceReasons = "provider_without_collab_client"
+	OrchestrationSurfaceReasonsServiceSwitchPrivate        OrchestrationSurfaceReasons = "service_switch_private"
+	OrchestrationSurfaceReasonsServiceSwitchPublic         OrchestrationSurfaceReasons = "service_switch_public"
+	OrchestrationSurfaceReasonsTeamLimit                   OrchestrationSurfaceReasons = "team_limit"
+	OrchestrationSurfaceReasonsToolNotSupported            OrchestrationSurfaceReasons = "tool_not_supported"
+)
+
+// Valid indicates whether the value is a known member of the OrchestrationSurfaceReasons enum.
+func (e OrchestrationSurfaceReasons) Valid() bool {
+	switch e {
+	case OrchestrationSurfaceReasonsBaseDomainUnset:
+		return true
+	case OrchestrationSurfaceReasonsProviderWithoutCollabClient:
+		return true
+	case OrchestrationSurfaceReasonsServiceSwitchPrivate:
+		return true
+	case OrchestrationSurfaceReasonsServiceSwitchPublic:
+		return true
+	case OrchestrationSurfaceReasonsTeamLimit:
+		return true
+	case OrchestrationSurfaceReasonsToolNotSupported:
 		return true
 	default:
 		return false
@@ -1641,6 +2139,24 @@ func (e PutConfigValueRequestSource) Valid() bool {
 	}
 }
 
+// Defines values for PutServiceModelAccessRequestAccess.
+const (
+	PutServiceModelAccessRequestAccessAll      PutServiceModelAccessRequestAccess = "all"
+	PutServiceModelAccessRequestAccessSelected PutServiceModelAccessRequestAccess = "selected"
+)
+
+// Valid indicates whether the value is a known member of the PutServiceModelAccessRequestAccess enum.
+func (e PutServiceModelAccessRequestAccess) Valid() bool {
+	switch e {
+	case PutServiceModelAccessRequestAccessAll:
+		return true
+	case PutServiceModelAccessRequestAccessSelected:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for PutServiceTagRequestMode.
 const (
 	PutServiceTagRequestModeFixed    PutServiceTagRequestMode = "fixed"
@@ -1689,6 +2205,84 @@ func (e PutTeamCollaborationRequestRegistrationMode) Valid() bool {
 	case PutTeamCollaborationRequestRegistrationModeManaged:
 		return true
 	case PutTeamCollaborationRequestRegistrationModeManual:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for PutTeamModelsRequestAccess.
+const (
+	PutTeamModelsRequestAccessAll      PutTeamModelsRequestAccess = "all"
+	PutTeamModelsRequestAccessSelected PutTeamModelsRequestAccess = "selected"
+)
+
+// Valid indicates whether the value is a known member of the PutTeamModelsRequestAccess enum.
+func (e PutTeamModelsRequestAccess) Valid() bool {
+	switch e {
+	case PutTeamModelsRequestAccessAll:
+		return true
+	case PutTeamModelsRequestAccessSelected:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for PutTeamOrchestrationRequestRegistrationMode.
+const (
+	PutTeamOrchestrationRequestRegistrationModeManaged PutTeamOrchestrationRequestRegistrationMode = "managed"
+	PutTeamOrchestrationRequestRegistrationModeManual  PutTeamOrchestrationRequestRegistrationMode = "manual"
+)
+
+// Valid indicates whether the value is a known member of the PutTeamOrchestrationRequestRegistrationMode enum.
+func (e PutTeamOrchestrationRequestRegistrationMode) Valid() bool {
+	switch e {
+	case PutTeamOrchestrationRequestRegistrationModeManaged:
+		return true
+	case PutTeamOrchestrationRequestRegistrationModeManual:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for PutTeamOrchestrationRequestWebApiExposure.
+const (
+	PutTeamOrchestrationRequestWebApiExposureOff     PutTeamOrchestrationRequestWebApiExposure = "off"
+	PutTeamOrchestrationRequestWebApiExposurePrivate PutTeamOrchestrationRequestWebApiExposure = "private"
+	PutTeamOrchestrationRequestWebApiExposurePublic  PutTeamOrchestrationRequestWebApiExposure = "public"
+)
+
+// Valid indicates whether the value is a known member of the PutTeamOrchestrationRequestWebApiExposure enum.
+func (e PutTeamOrchestrationRequestWebApiExposure) Valid() bool {
+	switch e {
+	case PutTeamOrchestrationRequestWebApiExposureOff:
+		return true
+	case PutTeamOrchestrationRequestWebApiExposurePrivate:
+		return true
+	case PutTeamOrchestrationRequestWebApiExposurePublic:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for PutTeamOrchestrationRequestWebUiExposure.
+const (
+	PutTeamOrchestrationRequestWebUiExposureOff     PutTeamOrchestrationRequestWebUiExposure = "off"
+	PutTeamOrchestrationRequestWebUiExposurePrivate PutTeamOrchestrationRequestWebUiExposure = "private"
+	PutTeamOrchestrationRequestWebUiExposurePublic  PutTeamOrchestrationRequestWebUiExposure = "public"
+)
+
+// Valid indicates whether the value is a known member of the PutTeamOrchestrationRequestWebUiExposure enum.
+func (e PutTeamOrchestrationRequestWebUiExposure) Valid() bool {
+	switch e {
+	case PutTeamOrchestrationRequestWebUiExposureOff:
+		return true
+	case PutTeamOrchestrationRequestWebUiExposurePrivate:
+		return true
+	case PutTeamOrchestrationRequestWebUiExposurePublic:
 		return true
 	default:
 		return false
@@ -1995,6 +2589,24 @@ func (e SecurityOperatorSubjectType) Valid() bool {
 	}
 }
 
+// Defines values for ServiceModelAccessAccess.
+const (
+	ServiceModelAccessAccessAll      ServiceModelAccessAccess = "all"
+	ServiceModelAccessAccessSelected ServiceModelAccessAccess = "selected"
+)
+
+// Valid indicates whether the value is a known member of the ServiceModelAccessAccess enum.
+func (e ServiceModelAccessAccess) Valid() bool {
+	switch e {
+	case ServiceModelAccessAccessAll:
+		return true
+	case ServiceModelAccessAccessSelected:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for ServiceTagMode.
 const (
 	ServiceTagModeFixed    ServiceTagMode = "fixed"
@@ -2163,6 +2775,66 @@ func (e SwarmTemplateTeardownRule) Valid() bool {
 	}
 }
 
+// Defines values for SwarmTemplateSpecOrchestrationTool.
+const (
+	SwarmTemplateSpecOrchestrationToolBuzz      SwarmTemplateSpecOrchestrationTool = "buzz"
+	SwarmTemplateSpecOrchestrationToolPaperclip SwarmTemplateSpecOrchestrationTool = "paperclip"
+)
+
+// Valid indicates whether the value is a known member of the SwarmTemplateSpecOrchestrationTool enum.
+func (e SwarmTemplateSpecOrchestrationTool) Valid() bool {
+	switch e {
+	case SwarmTemplateSpecOrchestrationToolBuzz:
+		return true
+	case SwarmTemplateSpecOrchestrationToolPaperclip:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for SwarmTemplateSpecOrchestrationWebApiExposure.
+const (
+	SwarmTemplateSpecOrchestrationWebApiExposureOff     SwarmTemplateSpecOrchestrationWebApiExposure = "off"
+	SwarmTemplateSpecOrchestrationWebApiExposurePrivate SwarmTemplateSpecOrchestrationWebApiExposure = "private"
+	SwarmTemplateSpecOrchestrationWebApiExposurePublic  SwarmTemplateSpecOrchestrationWebApiExposure = "public"
+)
+
+// Valid indicates whether the value is a known member of the SwarmTemplateSpecOrchestrationWebApiExposure enum.
+func (e SwarmTemplateSpecOrchestrationWebApiExposure) Valid() bool {
+	switch e {
+	case SwarmTemplateSpecOrchestrationWebApiExposureOff:
+		return true
+	case SwarmTemplateSpecOrchestrationWebApiExposurePrivate:
+		return true
+	case SwarmTemplateSpecOrchestrationWebApiExposurePublic:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for SwarmTemplateSpecOrchestrationWebUiExposure.
+const (
+	SwarmTemplateSpecOrchestrationWebUiExposureOff     SwarmTemplateSpecOrchestrationWebUiExposure = "off"
+	SwarmTemplateSpecOrchestrationWebUiExposurePrivate SwarmTemplateSpecOrchestrationWebUiExposure = "private"
+	SwarmTemplateSpecOrchestrationWebUiExposurePublic  SwarmTemplateSpecOrchestrationWebUiExposure = "public"
+)
+
+// Valid indicates whether the value is a known member of the SwarmTemplateSpecOrchestrationWebUiExposure enum.
+func (e SwarmTemplateSpecOrchestrationWebUiExposure) Valid() bool {
+	switch e {
+	case SwarmTemplateSpecOrchestrationWebUiExposureOff:
+		return true
+	case SwarmTemplateSpecOrchestrationWebUiExposurePrivate:
+		return true
+	case SwarmTemplateSpecOrchestrationWebUiExposurePublic:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for SwarmTemplateSpecSecretsDelivery.
 const (
 	SwarmTemplateSpecSecretsDeliveryEnv  SwarmTemplateSpecSecretsDelivery = "env"
@@ -2211,6 +2883,45 @@ func (e TeamKind) Valid() bool {
 	case TeamKindEphemeral:
 		return true
 	case TeamKindPersistent:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamMaxCollaborationExposure.
+const (
+	TeamMaxCollaborationExposureOff     TeamMaxCollaborationExposure = "off"
+	TeamMaxCollaborationExposurePrivate TeamMaxCollaborationExposure = "private"
+	TeamMaxCollaborationExposurePublic  TeamMaxCollaborationExposure = "public"
+)
+
+// Valid indicates whether the value is a known member of the TeamMaxCollaborationExposure enum.
+func (e TeamMaxCollaborationExposure) Valid() bool {
+	switch e {
+	case TeamMaxCollaborationExposureOff:
+		return true
+	case TeamMaxCollaborationExposurePrivate:
+		return true
+	case TeamMaxCollaborationExposurePublic:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamModelAccess.
+const (
+	TeamModelAccessAll      TeamModelAccess = "all"
+	TeamModelAccessSelected TeamModelAccess = "selected"
+)
+
+// Valid indicates whether the value is a known member of the TeamModelAccess enum.
+func (e TeamModelAccess) Valid() bool {
+	switch e {
+	case TeamModelAccessAll:
+		return true
+	case TeamModelAccessSelected:
 		return true
 	default:
 		return false
@@ -2313,6 +3024,81 @@ func (e TeamCollaborationRegistrationMode) Valid() bool {
 	case TeamCollaborationRegistrationModeManaged:
 		return true
 	case TeamCollaborationRegistrationModeManual:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamModelsAccess.
+const (
+	TeamModelsAccessAll      TeamModelsAccess = "all"
+	TeamModelsAccessSelected TeamModelsAccess = "selected"
+)
+
+// Valid indicates whether the value is a known member of the TeamModelsAccess enum.
+func (e TeamModelsAccess) Valid() bool {
+	switch e {
+	case TeamModelsAccessAll:
+		return true
+	case TeamModelsAccessSelected:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamOrchestrationLimit.
+const (
+	TeamOrchestrationLimitOff     TeamOrchestrationLimit = "off"
+	TeamOrchestrationLimitPrivate TeamOrchestrationLimit = "private"
+	TeamOrchestrationLimitPublic  TeamOrchestrationLimit = "public"
+)
+
+// Valid indicates whether the value is a known member of the TeamOrchestrationLimit enum.
+func (e TeamOrchestrationLimit) Valid() bool {
+	switch e {
+	case TeamOrchestrationLimitOff:
+		return true
+	case TeamOrchestrationLimitPrivate:
+		return true
+	case TeamOrchestrationLimitPublic:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamOrchestrationRegistrationMode.
+const (
+	TeamOrchestrationRegistrationModeManaged TeamOrchestrationRegistrationMode = "managed"
+	TeamOrchestrationRegistrationModeManual  TeamOrchestrationRegistrationMode = "manual"
+)
+
+// Valid indicates whether the value is a known member of the TeamOrchestrationRegistrationMode enum.
+func (e TeamOrchestrationRegistrationMode) Valid() bool {
+	switch e {
+	case TeamOrchestrationRegistrationModeManaged:
+		return true
+	case TeamOrchestrationRegistrationModeManual:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamOrchestrationTool.
+const (
+	TeamOrchestrationToolBuzz      TeamOrchestrationTool = "buzz"
+	TeamOrchestrationToolPaperclip TeamOrchestrationTool = "paperclip"
+)
+
+// Valid indicates whether the value is a known member of the TeamOrchestrationTool enum.
+func (e TeamOrchestrationTool) Valid() bool {
+	switch e {
+	case TeamOrchestrationToolBuzz:
+		return true
+	case TeamOrchestrationToolPaperclip:
 		return true
 	default:
 		return false
@@ -2475,6 +3261,27 @@ func (e UpdateTeamRequestKind) Valid() bool {
 	case UpdateTeamRequestKindEphemeral:
 		return true
 	case UpdateTeamRequestKindPersistent:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for UpdateTeamRequestMaxCollaborationExposure.
+const (
+	UpdateTeamRequestMaxCollaborationExposureOff     UpdateTeamRequestMaxCollaborationExposure = "off"
+	UpdateTeamRequestMaxCollaborationExposurePrivate UpdateTeamRequestMaxCollaborationExposure = "private"
+	UpdateTeamRequestMaxCollaborationExposurePublic  UpdateTeamRequestMaxCollaborationExposure = "public"
+)
+
+// Valid indicates whether the value is a known member of the UpdateTeamRequestMaxCollaborationExposure enum.
+func (e UpdateTeamRequestMaxCollaborationExposure) Valid() bool {
+	switch e {
+	case UpdateTeamRequestMaxCollaborationExposureOff:
+		return true
+	case UpdateTeamRequestMaxCollaborationExposurePrivate:
+		return true
+	case UpdateTeamRequestMaxCollaborationExposurePublic:
 		return true
 	default:
 		return false
@@ -2817,6 +3624,66 @@ func (e ListModelPriceProposalsParamsStatus) Valid() bool {
 	case ListModelPriceProposalsParamsStatusRejected:
 		return true
 	case ListModelPriceProposalsParamsStatusSuperseded:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListOrchestrationEndpointsParamsExposure.
+const (
+	ListOrchestrationEndpointsParamsExposurePrivate ListOrchestrationEndpointsParamsExposure = "private"
+	ListOrchestrationEndpointsParamsExposurePublic  ListOrchestrationEndpointsParamsExposure = "public"
+)
+
+// Valid indicates whether the value is a known member of the ListOrchestrationEndpointsParamsExposure enum.
+func (e ListOrchestrationEndpointsParamsExposure) Valid() bool {
+	switch e {
+	case ListOrchestrationEndpointsParamsExposurePrivate:
+		return true
+	case ListOrchestrationEndpointsParamsExposurePublic:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListOrchestrationEndpointsParamsTool.
+const (
+	ListOrchestrationEndpointsParamsToolBuzz      ListOrchestrationEndpointsParamsTool = "buzz"
+	ListOrchestrationEndpointsParamsToolPaperclip ListOrchestrationEndpointsParamsTool = "paperclip"
+)
+
+// Valid indicates whether the value is a known member of the ListOrchestrationEndpointsParamsTool enum.
+func (e ListOrchestrationEndpointsParamsTool) Valid() bool {
+	switch e {
+	case ListOrchestrationEndpointsParamsToolBuzz:
+		return true
+	case ListOrchestrationEndpointsParamsToolPaperclip:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListOrchestrationEndpointsParamsState.
+const (
+	ListOrchestrationEndpointsParamsStateDegraded ListOrchestrationEndpointsParamsState = "Degraded"
+	ListOrchestrationEndpointsParamsStateFailed   ListOrchestrationEndpointsParamsState = "Failed"
+	ListOrchestrationEndpointsParamsStatePending  ListOrchestrationEndpointsParamsState = "Pending"
+	ListOrchestrationEndpointsParamsStateReady    ListOrchestrationEndpointsParamsState = "Ready"
+)
+
+// Valid indicates whether the value is a known member of the ListOrchestrationEndpointsParamsState enum.
+func (e ListOrchestrationEndpointsParamsState) Valid() bool {
+	switch e {
+	case ListOrchestrationEndpointsParamsStateDegraded:
+		return true
+	case ListOrchestrationEndpointsParamsStateFailed:
+		return true
+	case ListOrchestrationEndpointsParamsStatePending:
+		return true
+	case ListOrchestrationEndpointsParamsStateReady:
 		return true
 	default:
 		return false
@@ -3339,24 +4206,33 @@ type Agent struct {
 	IamRoleArn  *string          `json:"iamRoleArn,omitempty"`
 	Id          *string          `json:"id,omitempty"`
 
-	// Image Container image pinned by digest
-	Image   ImageRef `json:"image"`
-	ModelId string   `json:"modelId"`
+	// Image Null on the orchestration agent for callers who are not service admins
+	Image *ImageRef `json:"image"`
+
+	// ModelId Deprecated: models.defaultModelId
+	// Deprecated: this property has been marked as deprecated upstream, but no `x-deprecated-reason` was set
+	ModelId *string `json:"modelId,omitempty"`
+
+	// Models Which models an agent may call and its default
+	Models AgentModels `json:"models"`
 
 	// Name Immutable name (team slug, agent, pool, secret)
 	Name      *Name      `json:"name,omitempty"`
 	Paused    *bool      `json:"paused,omitempty"`
 	Resources *Resources `json:"resources,omitempty"`
 
-	// Role worker or collaboration; set on create, immutable
-	Role           *AgentRole       `json:"role,omitempty"`
+	// Role worker or orchestration; read-only (a 1.0.1 collaboration reads as orchestration)
+	Role *AgentRole `json:"role,omitempty"`
+
+	// Runtime Present only on the orchestration agent
+	Runtime        *AgentRuntime    `json:"runtime,omitempty"`
 	SecretBindings *[]SecretBinding `json:"secretBindings,omitempty"`
 
 	// Status Reconcile status of a desired-state resource (contract §1.1)
 	Status *Status `json:"status,omitempty"`
 
-	// Template Agent template name
-	Template string `json:"template"`
+	// Template Agent template name; null on the orchestration agent for callers who are not service admins
+	Template *string `json:"template"`
 
 	// UpdatedAt RFC 3339 UTC with Z
 	UpdatedAt *Timestamp `json:"updatedAt,omitempty"`
@@ -3369,8 +4245,11 @@ type Agent struct {
 // AgentIamIdentity defines model for Agent.IamIdentity.
 type AgentIamIdentity string
 
-// AgentRole worker or collaboration; set on create, immutable
+// AgentRole worker or orchestration; read-only (a 1.0.1 collaboration reads as orchestration)
 type AgentRole string
+
+// AgentRuntime Present only on the orchestration agent
+type AgentRuntime string
 
 // AgentCollaboration A worker agent's connection to the team's Paperclip (absent on the collaboration agent)
 type AgentCollaboration struct {
@@ -3431,6 +4310,28 @@ type AgentList struct {
 	// NextToken Absent on the last page
 	NextToken *string `json:"nextToken,omitempty"`
 }
+
+// AgentModels Which models an agent may call and its default
+type AgentModels struct {
+	// Access all follows the team list
+	Access            AgentModelsAccess `json:"access"`
+	DefaultModelId    string            `json:"defaultModelId"`
+	EffectiveModelIds *[]string         `json:"effectiveModelIds,omitempty"`
+	ModelIds          *[]string         `json:"modelIds,omitempty"`
+}
+
+// AgentModelsAccess all follows the team list
+type AgentModelsAccess string
+
+// AgentModelsInput defines model for AgentModelsInput.
+type AgentModelsInput struct {
+	Access         *AgentModelsInputAccess `json:"access,omitempty"`
+	DefaultModelId *string                 `json:"defaultModelId,omitempty"`
+	ModelIds       *[]string               `json:"modelIds,omitempty"`
+}
+
+// AgentModelsInputAccess defines model for AgentModelsInput.Access.
+type AgentModelsInputAccess string
 
 // AgentTemplate defines model for AgentTemplate.
 type AgentTemplate struct {
@@ -3632,6 +4533,14 @@ type CatalogSystemRequest struct {
 // CatalogSystemRequestCategory defines model for CatalogSystemRequest.Category.
 type CatalogSystemRequestCategory string
 
+// ChangeCollaborationToolRequest defines model for ChangeCollaborationToolRequest.
+type ChangeCollaborationToolRequest struct {
+	Tool ChangeCollaborationToolRequestTool `json:"tool"`
+}
+
+// ChangeCollaborationToolRequestTool defines model for ChangeCollaborationToolRequest.Tool.
+type ChangeCollaborationToolRequestTool string
+
 // CollaborationEffective What the edge honours (stored choice, team guardrail, service settings and the provider's collaboration client)
 type CollaborationEffective struct {
 	Reasons []CollaborationEffectiveReasons `json:"reasons"`
@@ -3667,6 +4576,8 @@ type CollaborationEndpointPhase string
 type CollaborationEndpointTeamState string
 
 // CollaborationEndpointList defines model for CollaborationEndpointList.
+//
+// Deprecated: this type has been marked as deprecated upstream, but no `x-deprecated-reason` was set
 type CollaborationEndpointList struct {
 	Items []CollaborationEndpoint `json:"items"`
 
@@ -3681,11 +4592,16 @@ type CollaborationLink struct {
 	Connect   bool    `json:"connect"`
 
 	// LastError A short sanitized reason; never a Paperclip key or content
-	LastError        *string                     `json:"lastError,omitempty"`
-	LastSyncedAt     *time.Time                  `json:"lastSyncedAt,omitempty"`
-	LinkState        *CollaborationLinkLinkState `json:"linkState,omitempty"`
-	PaperclipAgentId *string                     `json:"paperclipAgentId,omitempty"`
-	Version          *int                        `json:"version,omitempty"`
+	LastError    *string                     `json:"lastError,omitempty"`
+	LastSyncedAt *time.Time                  `json:"lastSyncedAt,omitempty"`
+	LinkState    *CollaborationLinkLinkState `json:"linkState,omitempty"`
+
+	// PaperclipAgentId Paperclip only
+	PaperclipAgentId *string `json:"paperclipAgentId,omitempty"`
+
+	// ToolAgentId Buzz: the agent's public key
+	ToolAgentId *string `json:"toolAgentId,omitempty"`
+	Version     *int    `json:"version,omitempty"`
 }
 
 // CollaborationLinkLinkState defines model for CollaborationLink.LinkState.
@@ -3839,14 +4755,18 @@ type CreateAgentRequest struct {
 	IamIdentity   *CreateAgentRequestIamIdentity `json:"iamIdentity,omitempty"`
 
 	// Image Container image pinned by digest
-	Image   ImageRef `json:"image"`
-	ModelId string   `json:"modelId"`
+	Image ImageRef `json:"image"`
 
-	// Name Immutable name (team slug, agent, pool, secret)
+	// ModelId Deprecated: models.defaultModelId
+	// Deprecated: this property has been marked as deprecated upstream, but no `x-deprecated-reason` was set
+	ModelId *string           `json:"modelId,omitempty"`
+	Models  *AgentModelsInput `json:"models,omitempty"`
+
+	// Name The name orchestrator is reserved (name_reserved)
 	Name      Name       `json:"name"`
 	Resources *Resources `json:"resources,omitempty"`
 
-	// Role Set on create; immutable
+	// Role Workers only; any other value is refused (role_reserved)
 	Role           *CreateAgentRequestRole `json:"role,omitempty"`
 	SecretBindings *[]SecretBinding        `json:"secretBindings,omitempty"`
 
@@ -3858,7 +4778,7 @@ type CreateAgentRequest struct {
 // CreateAgentRequestIamIdentity defines model for CreateAgentRequest.IamIdentity.
 type CreateAgentRequestIamIdentity string
 
-// CreateAgentRequestRole Set on create; immutable
+// CreateAgentRequestRole Workers only; any other value is refused (role_reserved)
 type CreateAgentRequestRole string
 
 // CreateApiKeyRequest defines model for CreateApiKeyRequest.
@@ -3960,8 +4880,12 @@ type CreatePoolRequest struct {
 	Description *string `json:"description,omitempty"`
 
 	// Image Container image pinned by digest
-	Image   ImageRef `json:"image"`
-	ModelId string   `json:"modelId"`
+	Image ImageRef `json:"image"`
+
+	// ModelId Deprecated: models.defaultModelId
+	// Deprecated: this property has been marked as deprecated upstream, but no `x-deprecated-reason` was set
+	ModelId *string           `json:"modelId,omitempty"`
+	Models  *AgentModelsInput `json:"models,omitempty"`
 
 	// Name Immutable name (team slug, agent, pool, secret)
 	Name           Name                           `json:"name"`
@@ -4107,17 +5031,36 @@ type CreateTeamRequest struct {
 	// MaxBudgetUsd Guardrail field: needs teams:set-guardrails
 	MaxBudgetUsd Money `json:"maxBudgetUsd"`
 
+	// MaxCollaborationExposure Default off
+	MaxCollaborationExposure *CreateTeamRequestMaxCollaborationExposure `json:"maxCollaborationExposure,omitempty"`
+
 	// MayAddExternalSystems Guardrail field: needs teams:set-guardrails
 	MayAddExternalSystems *bool `json:"mayAddExternalSystems,omitempty"`
 
 	// MayExposeCollaboration Guardrail field: needs teams:set-guardrails. Whether the team may publish its Paperclip endpoints (default true)
+	// Deprecated: this property has been marked as deprecated upstream, but no `x-deprecated-reason` was set
 	MayExposeCollaboration *bool `json:"mayExposeCollaboration,omitempty"`
 
 	// MayManageAwsAccounts Guardrail field: needs teams:set-guardrails
-	MayManageAwsAccounts *bool `json:"mayManageAwsAccounts,omitempty"`
+	MayManageAwsAccounts *bool                         `json:"mayManageAwsAccounts,omitempty"`
+	ModelAccess          *CreateTeamRequestModelAccess `json:"modelAccess,omitempty"`
 
 	// Models Model ids enabled for the team
-	Models     *[]string            `json:"models,omitempty"`
+	Models *[]string `json:"models,omitempty"`
+
+	// Orchestration The orchestration agent created with the team; every field optional
+	Orchestration *struct {
+		Models           *AgentModelsInput                               `json:"models,omitempty"`
+		RegistrationMode *CreateTeamRequestOrchestrationRegistrationMode `json:"registrationMode,omitempty"`
+		Resources        *Resources                                      `json:"resources,omitempty"`
+		Tool             *CreateTeamRequestOrchestrationTool             `json:"tool,omitempty"`
+		WebApi           *struct {
+			Exposure CreateTeamRequestOrchestrationWebApiExposure `json:"exposure"`
+		} `json:"webApi,omitempty"`
+		WebUi *struct {
+			Exposure CreateTeamRequestOrchestrationWebUiExposure `json:"exposure"`
+		} `json:"webUi,omitempty"`
+	} `json:"orchestration,omitempty"`
 	OwnerEmail *openapi_types.Email `json:"ownerEmail,omitempty"`
 	Quotas     *Quotas              `json:"quotas,omitempty"`
 
@@ -4137,6 +5080,24 @@ type CreateTeamRequestIsolationTier string
 
 // CreateTeamRequestKind Immutable after create
 type CreateTeamRequestKind string
+
+// CreateTeamRequestMaxCollaborationExposure Default off
+type CreateTeamRequestMaxCollaborationExposure string
+
+// CreateTeamRequestModelAccess defines model for CreateTeamRequest.ModelAccess.
+type CreateTeamRequestModelAccess string
+
+// CreateTeamRequestOrchestrationRegistrationMode defines model for CreateTeamRequest.Orchestration.RegistrationMode.
+type CreateTeamRequestOrchestrationRegistrationMode string
+
+// CreateTeamRequestOrchestrationTool defines model for CreateTeamRequest.Orchestration.Tool.
+type CreateTeamRequestOrchestrationTool string
+
+// CreateTeamRequestOrchestrationWebApiExposure defines model for CreateTeamRequest.Orchestration.WebApi.Exposure.
+type CreateTeamRequestOrchestrationWebApiExposure string
+
+// CreateTeamRequestOrchestrationWebUiExposure defines model for CreateTeamRequest.Orchestration.WebUi.Exposure.
+type CreateTeamRequestOrchestrationWebUiExposure string
 
 // CreateTeamRequestTeardownRule defines model for CreateTeamRequest.TeardownRule.
 type CreateTeamRequestTeardownRule string
@@ -4512,17 +5473,41 @@ type MemberList struct {
 
 // Model defines model for Model.
 type Model struct {
-	ContextWindow   int    `json:"contextWindow"`
-	DisplayName     string `json:"displayName"`
-	Enabled         bool   `json:"enabled"`
-	Id              string `json:"id"`
-	MaxOutputTokens int    `json:"maxOutputTokens"`
-	Provider        string `json:"provider"`
+	// Callable Enabled at the service, priced and (for a team list) allowed
+	Callable      *bool  `json:"callable,omitempty"`
+	ContextWindow int    `json:"contextWindow"`
+	DisplayName   string `json:"displayName"`
+	Enabled       bool   `json:"enabled"`
+	Id            string `json:"id"`
+
+	// InferenceProfileState Team list only; the team's inference profile for the model
+	InferenceProfileState *ModelInferenceProfileState `json:"inferenceProfileState,omitempty"`
+	MaxOutputTokens       int                         `json:"maxOutputTokens"`
+
+	// Origin Admin list only
+	Origin     *ModelOrigin     `json:"origin,omitempty"`
+	PriceState *ModelPriceState `json:"priceState,omitempty"`
+	Provider   string           `json:"provider"`
+
+	// ServiceEnabled Admin list only
+	ServiceEnabled *bool `json:"serviceEnabled,omitempty"`
+
+	// TeamsWithAccess Admin list only
+	TeamsWithAccess *int `json:"teamsWithAccess,omitempty"`
 
 	// UpdatedAt RFC 3339 UTC with Z
 	UpdatedAt *Timestamp `json:"updatedAt,omitempty"`
 	Version   *int       `json:"version,omitempty"`
 }
+
+// ModelInferenceProfileState Team list only; the team's inference profile for the model
+type ModelInferenceProfileState string
+
+// ModelOrigin Admin list only
+type ModelOrigin string
+
+// ModelPriceState defines model for Model.PriceState.
+type ModelPriceState string
 
 // ModelList A page of Model resources
 type ModelList struct {
@@ -4623,6 +5608,93 @@ type NotificationTestResult struct {
 	TestId    string  `json:"testId"`
 }
 
+// OrchestrationEndpoint One team and surface whose stored exposure is not off
+type OrchestrationEndpoint struct {
+	AgentId      string                         `json:"agentId"`
+	Effective    OrchestrationEndpointEffective `json:"effective"`
+	Exposure     OrchestrationEndpointExposure  `json:"exposure"`
+	Hostname     *string                        `json:"hostname"`
+	LastAccessAt *time.Time                     `json:"lastAccessAt,omitempty"`
+	Limit        OrchestrationEndpointLimit     `json:"limit"`
+	Phase        string                         `json:"phase"`
+	Reasons      []OrchestrationEndpointReasons `json:"reasons"`
+	Slug         string                         `json:"slug"`
+	Surface      OrchestrationEndpointSurface   `json:"surface"`
+	TeamId       string                         `json:"teamId"`
+	TeamState    string                         `json:"teamState"`
+	Tool         OrchestrationEndpointTool      `json:"tool"`
+}
+
+// OrchestrationEndpointEffective defines model for OrchestrationEndpoint.Effective.
+type OrchestrationEndpointEffective string
+
+// OrchestrationEndpointExposure defines model for OrchestrationEndpoint.Exposure.
+type OrchestrationEndpointExposure string
+
+// OrchestrationEndpointLimit defines model for OrchestrationEndpoint.Limit.
+type OrchestrationEndpointLimit string
+
+// OrchestrationEndpointReasons defines model for OrchestrationEndpoint.Reasons.
+type OrchestrationEndpointReasons string
+
+// OrchestrationEndpointSurface defines model for OrchestrationEndpoint.Surface.
+type OrchestrationEndpointSurface string
+
+// OrchestrationEndpointTool defines model for OrchestrationEndpoint.Tool.
+type OrchestrationEndpointTool string
+
+// OrchestrationEndpointList A page of OrchestrationEndpoint resources
+type OrchestrationEndpointList struct {
+	Items []OrchestrationEndpoint `json:"items"`
+
+	// Migration The 1.1.0 backfill progress for S12
+	Migration OrchestrationMigration `json:"migration"`
+
+	// NextToken Absent on the last page
+	NextToken *string `json:"nextToken,omitempty"`
+}
+
+// OrchestrationMigration The 1.1.0 backfill progress for S12
+type OrchestrationMigration struct {
+	Blocked []struct {
+		Reason OrchestrationMigrationBlockedReason `json:"reason"`
+		TeamId string                              `json:"teamId"`
+	} `json:"blocked"`
+	State                  OrchestrationMigrationState `json:"state"`
+	TeamsPending           int                         `json:"teamsPending"`
+	TeamsTotal             int                         `json:"teamsTotal"`
+	TeamsWithOrchestration int                         `json:"teamsWithOrchestration"`
+}
+
+// OrchestrationMigrationBlockedReason defines model for OrchestrationMigration.Blocked.Reason.
+type OrchestrationMigrationBlockedReason string
+
+// OrchestrationMigrationState defines model for OrchestrationMigration.State.
+type OrchestrationMigrationState string
+
+// OrchestrationSurface One surface of the orchestration agent: stored exposure, effective level and why they differ
+type OrchestrationSurface struct {
+	Effective OrchestrationSurfaceEffective `json:"effective"`
+	Exposure  OrchestrationSurfaceExposure  `json:"exposure"`
+
+	// Hostname Of the effective level; null when off
+	Hostname *string                       `json:"hostname"`
+	Reasons  []OrchestrationSurfaceReasons `json:"reasons"`
+
+	// Supported From the tool's profile; false renders N/A (Buzz has no web surface)
+	Supported bool    `json:"supported"`
+	Url       *string `json:"url"`
+}
+
+// OrchestrationSurfaceEffective defines model for OrchestrationSurface.Effective.
+type OrchestrationSurfaceEffective string
+
+// OrchestrationSurfaceExposure defines model for OrchestrationSurface.Exposure.
+type OrchestrationSurfaceExposure string
+
+// OrchestrationSurfaceReasons defines model for OrchestrationSurface.Reasons.
+type OrchestrationSurfaceReasons string
+
 // OrgAccount defines model for OrgAccount.
 type OrgAccount struct {
 	AccountId AwsAccountId     `json:"accountId"`
@@ -4658,8 +5730,14 @@ type Pool struct {
 	Id          *string    `json:"id,omitempty"`
 
 	// Image Container image pinned by digest
-	Image   ImageRef `json:"image"`
-	ModelId string   `json:"modelId"`
+	Image ImageRef `json:"image"`
+
+	// ModelId Deprecated: models.defaultModelId
+	// Deprecated: this property has been marked as deprecated upstream, but no `x-deprecated-reason` was set
+	ModelId *string `json:"modelId,omitempty"`
+
+	// Models Which models an agent may call and its default
+	Models *AgentModels `json:"models,omitempty"`
 
 	// Name Immutable name (team slug, agent, pool, secret)
 	Name           *Name             `json:"name,omitempty"`
@@ -4877,6 +5955,14 @@ type PutSecretValueRequest struct {
 	Value *SecretValue `json:"value,omitempty"`
 }
 
+// PutServiceModelAccessRequest defines model for PutServiceModelAccessRequest.
+type PutServiceModelAccessRequest struct {
+	Access PutServiceModelAccessRequestAccess `json:"access"`
+}
+
+// PutServiceModelAccessRequestAccess defines model for PutServiceModelAccessRequest.Access.
+type PutServiceModelAccessRequestAccess string
+
 // PutServiceTagRequest defines model for PutServiceTagRequest.
 type PutServiceTagRequest struct {
 	AllowedValues *[]string                `json:"allowedValues,omitempty"`
@@ -4916,10 +6002,35 @@ type PutTeamCollaborationRequest struct {
 // PutTeamCollaborationRequestRegistrationMode Omitted keeps the current value
 type PutTeamCollaborationRequestRegistrationMode string
 
-// PutTeamModelsRequest defines model for PutTeamModelsRequest.
+// PutTeamModelsRequest A body with only modelIds is read as access selected (deprecated form)
 type PutTeamModelsRequest struct {
-	ModelIds []string `json:"modelIds"`
+	Access   *PutTeamModelsRequestAccess `json:"access,omitempty"`
+	ModelIds *[]string                   `json:"modelIds,omitempty"`
 }
+
+// PutTeamModelsRequestAccess defines model for PutTeamModelsRequest.Access.
+type PutTeamModelsRequestAccess string
+
+// PutTeamOrchestrationRequest defines model for PutTeamOrchestrationRequest.
+type PutTeamOrchestrationRequest struct {
+	// RegistrationMode Omitted keeps the current value
+	RegistrationMode *PutTeamOrchestrationRequestRegistrationMode `json:"registrationMode,omitempty"`
+	WebApi           struct {
+		Exposure PutTeamOrchestrationRequestWebApiExposure `json:"exposure"`
+	} `json:"webApi"`
+	WebUi struct {
+		Exposure PutTeamOrchestrationRequestWebUiExposure `json:"exposure"`
+	} `json:"webUi"`
+}
+
+// PutTeamOrchestrationRequestRegistrationMode Omitted keeps the current value
+type PutTeamOrchestrationRequestRegistrationMode string
+
+// PutTeamOrchestrationRequestWebApiExposure defines model for PutTeamOrchestrationRequest.WebApi.Exposure.
+type PutTeamOrchestrationRequestWebApiExposure string
+
+// PutTeamOrchestrationRequestWebUiExposure defines model for PutTeamOrchestrationRequest.WebUi.Exposure.
+type PutTeamOrchestrationRequestWebUiExposure string
 
 // PutTeamTagsRequest defines model for PutTeamTagsRequest.
 type PutTeamTagsRequest struct {
@@ -5259,6 +6370,20 @@ type SecurityOperatorList struct {
 	NextToken *string `json:"nextToken,omitempty"`
 }
 
+// ServiceModelAccess Service-wide model access (API contract §4.4d)
+type ServiceModelAccess struct {
+	// Access all makes every model enabled at the service level; selected uses each model enabled flag
+	Access ServiceModelAccessAccess `json:"access"`
+
+	// CallableModels Enabled and priced
+	CallableModels int  `json:"callableModels"`
+	EnabledModels  int  `json:"enabledModels"`
+	Version        *int `json:"version,omitempty"`
+}
+
+// ServiceModelAccessAccess all makes every model enabled at the service level; selected uses each model enabled flag
+type ServiceModelAccessAccess string
+
 // ServiceNotificationChannelList A page of NotificationChannel resources
 type ServiceNotificationChannelList struct {
 	Items []NotificationChannel `json:"items"`
@@ -5471,12 +6596,21 @@ type SwarmTemplateList struct {
 // SwarmTemplateSpec defines model for SwarmTemplateSpec.
 type SwarmTemplateSpec struct {
 	// Collaboration Optional collaboration agent of the remediation team (PC-D29); the template must be enabled and carry capability paperclip
+	// Deprecated: this property has been marked as deprecated upstream, but no `x-deprecated-reason` was set
 	Collaboration *struct {
 		TemplateId string `json:"templateId"`
 	} `json:"collaboration,omitempty"`
 	ConfigValues *[]map[string]interface{} `json:"configValues,omitempty"`
 	Handoffs     *[]map[string]interface{} `json:"handoffs,omitempty"`
-	Pools        []map[string]interface{}  `json:"pools"`
+
+	// Orchestration The remediation team orchestration agent
+	Orchestration *struct {
+		DefaultModelId *string                                       `json:"defaultModelId,omitempty"`
+		Tool           *SwarmTemplateSpecOrchestrationTool           `json:"tool,omitempty"`
+		WebApiExposure *SwarmTemplateSpecOrchestrationWebApiExposure `json:"webApiExposure,omitempty"`
+		WebUiExposure  *SwarmTemplateSpecOrchestrationWebUiExposure  `json:"webUiExposure,omitempty"`
+	} `json:"orchestration,omitempty"`
+	Pools []map[string]interface{} `json:"pools"`
 
 	// Secrets Secrets a remediation team gets, created empty (the team sets the value with PutSecretValue), each bound to one of the template's pools. A template never holds a value.
 	Secrets *[]struct {
@@ -5494,6 +6628,15 @@ type SwarmTemplateSpec struct {
 	} `json:"secrets,omitempty"`
 	Stages []map[string]interface{} `json:"stages"`
 }
+
+// SwarmTemplateSpecOrchestrationTool defines model for SwarmTemplateSpec.Orchestration.Tool.
+type SwarmTemplateSpecOrchestrationTool string
+
+// SwarmTemplateSpecOrchestrationWebApiExposure defines model for SwarmTemplateSpec.Orchestration.WebApiExposure.
+type SwarmTemplateSpecOrchestrationWebApiExposure string
+
+// SwarmTemplateSpecOrchestrationWebUiExposure defines model for SwarmTemplateSpec.Orchestration.WebUiExposure.
+type SwarmTemplateSpecOrchestrationWebUiExposure string
 
 // SwarmTemplateSpecSecretsDelivery defines model for SwarmTemplateSpec.Secrets.Delivery.
 type SwarmTemplateSpecSecretsDelivery string
@@ -5536,15 +6679,25 @@ type Team struct {
 	// MaxBudgetUsd Guardrail field: needs teams:set-guardrails
 	MaxBudgetUsd Money `json:"maxBudgetUsd"`
 
+	// MaxCollaborationExposure Highest exposure any surface of the orchestration agent may have; service admins set it (teams:set-guardrails)
+	MaxCollaborationExposure *TeamMaxCollaborationExposure `json:"maxCollaborationExposure,omitempty"`
+
 	// MayAddExternalSystems Guardrail field: needs teams:set-guardrails
 	MayAddExternalSystems bool `json:"mayAddExternalSystems"`
 
-	// MayExposeCollaboration Guardrail field: needs teams:set-guardrails. Whether the team may publish its Paperclip endpoints (default true)
+	// MayExposeCollaboration Deprecated: use maxCollaborationExposure (limit is not off)
+	// Deprecated: this property has been marked as deprecated upstream, but no `x-deprecated-reason` was set
 	MayExposeCollaboration *bool `json:"mayExposeCollaboration,omitempty"`
 
 	// MayManageAwsAccounts Guardrail field: needs teams:set-guardrails
-	MayManageAwsAccounts bool                 `json:"mayManageAwsAccounts"`
-	Namespace            *string              `json:"namespace,omitempty"`
+	MayManageAwsAccounts bool `json:"mayManageAwsAccounts"`
+
+	// ModelAccess Whether the team may use every service-enabled model or only those in its list
+	ModelAccess *TeamModelAccess `json:"modelAccess,omitempty"`
+	Namespace   *string          `json:"namespace,omitempty"`
+
+	// OrchestrationAgentId The team orchestration agent; null only before the 1.1.0 backfill reaches the team
+	OrchestrationAgentId *string              `json:"orchestrationAgentId,omitempty"`
 	OwnerEmail           *openapi_types.Email `json:"ownerEmail,omitempty"`
 	Quotas               *Quotas              `json:"quotas,omitempty"`
 
@@ -5576,6 +6729,12 @@ type TeamIsolationTier string
 // TeamKind Immutable after create
 type TeamKind string
 
+// TeamMaxCollaborationExposure Highest exposure any surface of the orchestration agent may have; service admins set it (teams:set-guardrails)
+type TeamMaxCollaborationExposure string
+
+// TeamModelAccess Whether the team may use every service-enabled model or only those in its list
+type TeamModelAccess string
+
 // TeamState defines model for Team.State.
 type TeamState string
 
@@ -5597,6 +6756,8 @@ type TeamBudgetInput struct {
 type TeamBudgetInputPeriod string
 
 // TeamCollaboration The team's collaboration resource; singleton per team (API contract §4.4b)
+//
+// Deprecated: this type has been marked as deprecated upstream, but no `x-deprecated-reason` was set
 type TeamCollaboration struct {
 	AgentId *string `json:"agentId,omitempty"`
 
@@ -5656,8 +6817,64 @@ type TeamList struct {
 
 // TeamModels defines model for TeamModels.
 type TeamModels struct {
+	Access TeamModelsAccess `json:"access"`
+
+	// Items Models the team can use, each with inferenceProfileState
 	Items []Model `json:"items"`
+
+	// ModelIds The team list; meaningful when access is selected
+	ModelIds []string `json:"modelIds"`
 }
+
+// TeamModelsAccess defines model for TeamModels.Access.
+type TeamModelsAccess string
+
+// TeamOrchestration The team's orchestration resource; singleton per team (API contract §4.4d)
+type TeamOrchestration struct {
+	AgentId         *string `json:"agentId,omitempty"`
+	AgentName       *string `json:"agentName,omitempty"`
+	ConnectedAgents *int    `json:"connectedAgents,omitempty"`
+
+	// CreatedAt RFC 3339 UTC with Z
+	CreatedAt  *Timestamp `json:"createdAt,omitempty"`
+	CreatedBy  *string    `json:"createdBy,omitempty"`
+	Generation *int       `json:"generation,omitempty"`
+
+	// Limit The team's maxCollaborationExposure
+	Limit *TeamOrchestrationLimit `json:"limit,omitempty"`
+
+	// Phase The orchestration agent's phase
+	Phase            *string                           `json:"phase,omitempty"`
+	RegistrationMode TeamOrchestrationRegistrationMode `json:"registrationMode"`
+
+	// Status Reconcile status of a desired-state resource (contract §1.1)
+	Status              *Status                `json:"status,omitempty"`
+	TeamId              *string                `json:"teamId,omitempty"`
+	Tool                *TeamOrchestrationTool `json:"tool,omitempty"`
+	ToolVersion         *string                `json:"toolVersion,omitempty"`
+	UnmanagedToolAgents *[]string              `json:"unmanagedToolAgents,omitempty"`
+
+	// UpdatedAt RFC 3339 UTC with Z
+	UpdatedAt *Timestamp `json:"updatedAt,omitempty"`
+
+	// Version Optimistic-concurrency version; ETag is "<version>"
+	Version *int `json:"version,omitempty"`
+
+	// WebApi One surface of the orchestration agent: stored exposure, effective level and why they differ
+	WebApi OrchestrationSurface `json:"webApi"`
+
+	// WebUi One surface of the orchestration agent: stored exposure, effective level and why they differ
+	WebUi OrchestrationSurface `json:"webUi"`
+}
+
+// TeamOrchestrationLimit The team's maxCollaborationExposure
+type TeamOrchestrationLimit string
+
+// TeamOrchestrationRegistrationMode defines model for TeamOrchestration.RegistrationMode.
+type TeamOrchestrationRegistrationMode string
+
+// TeamOrchestrationTool defines model for TeamOrchestration.Tool.
+type TeamOrchestrationTool string
 
 // TeamTag defines model for TeamTag.
 type TeamTag struct {
@@ -5687,8 +6904,15 @@ type UpdateAgentRequest struct {
 	IamIdentity   *UpdateAgentRequestIamIdentity `json:"iamIdentity,omitempty"`
 
 	// Image Container image pinned by digest
-	Image          *ImageRef        `json:"image,omitempty"`
-	ModelId        *string          `json:"modelId,omitempty"`
+	Image *ImageRef `json:"image,omitempty"`
+
+	// ModelId Deprecated: models.defaultModelId
+	// Deprecated: this property has been marked as deprecated upstream, but no `x-deprecated-reason` was set
+	ModelId *string           `json:"modelId,omitempty"`
+	Models  *AgentModelsInput `json:"models,omitempty"`
+
+	// Name Refused on the orchestration agent (orchestration_field_fixed)
+	Name           *Name            `json:"name,omitempty"`
 	Resources      *Resources       `json:"resources,omitempty"`
 	SecretBindings *[]SecretBinding `json:"secretBindings,omitempty"`
 
@@ -5776,8 +7000,12 @@ type UpdatePoolRequest struct {
 	Description *string `json:"description,omitempty"`
 
 	// Image Container image pinned by digest
-	Image          *ImageRef                      `json:"image,omitempty"`
+	Image *ImageRef `json:"image,omitempty"`
+
+	// ModelId Deprecated: models.defaultModelId
+	// Deprecated: this property has been marked as deprecated upstream, but no `x-deprecated-reason` was set
 	ModelId        *string                        `json:"modelId,omitempty"`
+	Models         *AgentModelsInput              `json:"models,omitempty"`
 	Persona        *string                        `json:"persona,omitempty"`
 	Resources      *Resources                     `json:"resources,omitempty"`
 	ScratchSizeGiB *int                           `json:"scratchSizeGiB,omitempty"`
@@ -5835,7 +7063,7 @@ type UpdateSwarmTemplateRequest struct {
 // UpdateSwarmTemplateRequestTeardownRule defines model for UpdateSwarmTemplateRequest.TeardownRule.
 type UpdateSwarmTemplateRequestTeardownRule string
 
-// UpdateTeamRequest Fields to change. maxBudgetUsd, the ceiling override, quotas, isolationTier, viewerKubectl, mayManageAwsAccounts, mayAddExternalSystems and mayExposeCollaboration need teams:set-guardrails; allowedAwsAccounts needs teams:set-aws-accounts
+// UpdateTeamRequest Fields to change. maxBudgetUsd, the ceiling override, quotas, isolationTier, viewerKubectl, mayManageAwsAccounts, mayAddExternalSystems and mayExposeCollaboration, maxCollaborationExposure and modelAccess need teams:set-guardrails; allowedAwsAccounts needs teams:set-aws-accounts
 type UpdateTeamRequest struct {
 	AllowedAwsAccounts       *[]AwsAccountId `json:"allowedAwsAccounts,omitempty"`
 	CeilingOverrideExpiresAt *Timestamp      `json:"ceilingOverrideExpiresAt,omitempty"`
@@ -5853,8 +7081,10 @@ type UpdateTeamRequest struct {
 	Kind *UpdateTeamRequestKind `json:"kind,omitempty"`
 
 	// MaxBudgetUsd USD amount as a decimal string with at most 6 fraction digits; never a JSON number
-	MaxBudgetUsd           *Money               `json:"maxBudgetUsd,omitempty"`
-	MayAddExternalSystems  *bool                `json:"mayAddExternalSystems,omitempty"`
+	MaxBudgetUsd             *Money                                     `json:"maxBudgetUsd,omitempty"`
+	MaxCollaborationExposure *UpdateTeamRequestMaxCollaborationExposure `json:"maxCollaborationExposure,omitempty"`
+	MayAddExternalSystems    *bool                                      `json:"mayAddExternalSystems,omitempty"`
+	// Deprecated: this property has been marked as deprecated upstream, but no `x-deprecated-reason` was set
 	MayExposeCollaboration *bool                `json:"mayExposeCollaboration,omitempty"`
 	MayManageAwsAccounts   *bool                `json:"mayManageAwsAccounts,omitempty"`
 	OwnerEmail             *openapi_types.Email `json:"ownerEmail,omitempty"`
@@ -5867,6 +7097,9 @@ type UpdateTeamRequestIsolationTier string
 
 // UpdateTeamRequestKind Immutable; a different value is a ValidationError
 type UpdateTeamRequestKind string
+
+// UpdateTeamRequestMaxCollaborationExposure defines model for UpdateTeamRequest.MaxCollaborationExposure.
+type UpdateTeamRequestMaxCollaborationExposure string
 
 // UpdateWorkOrderRepoRequest pr_opened needs prUrl
 type UpdateWorkOrderRepoRequest struct {
@@ -6344,6 +7577,15 @@ type UpdateIdentityProviderParams struct {
 	IfMatch IfMatch `json:"If-Match"`
 }
 
+// PutServiceModelAccessParams defines parameters for PutServiceModelAccess.
+type PutServiceModelAccessParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch Required when the resource exists (428 otherwise); omit when the PUT creates it
+	IfMatch *IfMatchPut `json:"If-Match,omitempty"`
+}
+
 // ListModelPriceProposalsParams defines parameters for ListModelPriceProposals.
 type ListModelPriceProposalsParams struct {
 	Status     *ListModelPriceProposalsParamsStatus `form:"status,omitempty" json:"status,omitempty"`
@@ -6463,6 +7705,30 @@ type UpdateServiceNotificationChannelParams struct {
 	// IfMatch The resource's ETag ("<version>"). Missing → 428; stale → 412
 	IfMatch IfMatch `json:"If-Match"`
 }
+
+// ListOrchestrationEndpointsParams defines parameters for ListOrchestrationEndpoints.
+type ListOrchestrationEndpointsParams struct {
+	Exposure   *ListOrchestrationEndpointsParamsExposure `form:"exposure,omitempty" json:"exposure,omitempty"`
+	Tool       *ListOrchestrationEndpointsParamsTool     `form:"tool,omitempty" json:"tool,omitempty"`
+	TeamId     *string                                   `form:"teamId,omitempty" json:"teamId,omitempty"`
+	State      *ListOrchestrationEndpointsParamsState    `form:"state,omitempty" json:"state,omitempty"`
+	MaxResults *MaxResults                               `form:"maxResults,omitempty" json:"maxResults,omitempty"`
+
+	// NextToken Opaque token from the previous page; expires after 24 hours
+	NextToken *NextToken `form:"nextToken,omitempty" json:"nextToken,omitempty"`
+
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// ListOrchestrationEndpointsParamsExposure defines parameters for ListOrchestrationEndpoints.
+type ListOrchestrationEndpointsParamsExposure string
+
+// ListOrchestrationEndpointsParamsTool defines parameters for ListOrchestrationEndpoints.
+type ListOrchestrationEndpointsParamsTool string
+
+// ListOrchestrationEndpointsParamsState defines parameters for ListOrchestrationEndpoints.
+type ListOrchestrationEndpointsParamsState string
 
 // ListOrgAccountsParams defines parameters for ListOrgAccounts.
 type ListOrgAccountsParams struct {
@@ -7462,6 +8728,30 @@ type TestNotificationChannelParams struct {
 	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
 }
 
+// GetTeamOrchestrationParams defines parameters for GetTeamOrchestration.
+type GetTeamOrchestrationParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// PutTeamOrchestrationParams defines parameters for PutTeamOrchestration.
+type PutTeamOrchestrationParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch Required when the resource exists (428 otherwise); omit when the PUT creates it
+	IfMatch *IfMatchPut `json:"If-Match,omitempty"`
+}
+
+// ChangeCollaborationToolParams defines parameters for ChangeCollaborationTool.
+type ChangeCollaborationToolParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
 // ListPoolsParams defines parameters for ListPools.
 type ListPoolsParams struct {
 	MaxResults *MaxResults `form:"maxResults,omitempty" json:"maxResults,omitempty"`
@@ -8022,6 +9312,9 @@ type CreateIdentityProviderJSONRequestBody = CreateIdentityProviderRequest
 // UpdateIdentityProviderJSONRequestBody defines body for UpdateIdentityProvider for application/json ContentType.
 type UpdateIdentityProviderJSONRequestBody = UpdateIdentityProviderRequest
 
+// PutServiceModelAccessJSONRequestBody defines body for PutServiceModelAccess for application/json ContentType.
+type PutServiceModelAccessJSONRequestBody = PutServiceModelAccessRequest
+
 // ApproveModelPriceProposalJSONRequestBody defines body for ApproveModelPriceProposal for application/json ContentType.
 type ApproveModelPriceProposalJSONRequestBody = DecidePriceProposalRequest
 
@@ -8101,6 +9394,8 @@ type CreateApiKeyJSONRequestBody = CreateApiKeyRequest
 type PutBudgetJSONRequestBody = PutBudgetRequest
 
 // PutTeamCollaborationJSONRequestBody defines body for PutTeamCollaboration for application/json ContentType.
+//
+// Deprecated: this type has been marked as deprecated upstream, but no `x-deprecated-reason` was set
 type PutTeamCollaborationJSONRequestBody = PutTeamCollaborationRequest
 
 // ConnectAgentToCollaborationJSONRequestBody defines body for ConnectAgentToCollaboration for application/json ContentType.
@@ -8141,6 +9436,12 @@ type CreateNotificationChannelJSONRequestBody = CreateNotificationChannelRequest
 
 // UpdateNotificationChannelJSONRequestBody defines body for UpdateNotificationChannel for application/json ContentType.
 type UpdateNotificationChannelJSONRequestBody = UpdateNotificationChannelRequest
+
+// PutTeamOrchestrationJSONRequestBody defines body for PutTeamOrchestration for application/json ContentType.
+type PutTeamOrchestrationJSONRequestBody = PutTeamOrchestrationRequest
+
+// ChangeCollaborationToolJSONRequestBody defines body for ChangeCollaborationTool for application/json ContentType.
+type ChangeCollaborationToolJSONRequestBody = ChangeCollaborationToolRequest
 
 // CreatePoolJSONRequestBody defines body for CreatePool for application/json ContentType.
 type CreatePoolJSONRequestBody = CreatePoolRequest

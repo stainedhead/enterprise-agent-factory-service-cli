@@ -56,14 +56,27 @@ func readAll(r *http.Request) []byte {
 	}
 }
 
-// api answers GetTeamCollaboration with restApiUrl set to url (null when url is empty).
+// orchestration builds a GetTeamOrchestration answer whose Web API is served at url (off, with reason
+// base_domain_unset, when url is empty) for the given tool; Buzz has no Web API.
+func orchestrationDoc(tool, url string) string {
+	u, eff, reasons, supported := "null", "off", `["base_domain_unset"]`, true
+	if url != "" {
+		u, eff, reasons = `"`+url+`"`, "public", "[]"
+	}
+	if tool == "buzz" {
+		supported, reasons = false, `["tool_not_supported"]`
+	}
+	return fmt.Sprintf(`{"teamId":%q,"agentId":"agt_1","agentName":"orchestrator","phase":"Ready","tool":%q,"registrationMode":"managed","limit":"public",`+
+		`"webUi":{"supported":%t,"exposure":"off","effective":"off","reasons":[],"hostname":null,"url":null},`+
+		`"webApi":{"supported":%t,"exposure":"public","effective":%q,"reasons":%s,"hostname":null,"url":%s},`+
+		`"connectedAgents":0,"unmanagedToolAgents":[],"version":1,"generation":1,"status":{"phase":"Ready","observedGeneration":1}}`,
+		team, tool, supported, supported, eff, reasons, u)
+}
+
+// api answers GetTeamOrchestration with the Web API's url set to url (off when url is empty).
 func api(url string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		u := "null"
-		if url != "" {
-			u = `"` + url + `"`
-		}
-		clitest.Reply(w, 200, strings.Replace(collab("t.collab.example", true, true, "[]", 1, 1, 1, "Ready"), `"restApiUrl":null`, `"restApiUrl":`+u, 1))
+		clitest.Reply(w, 200, orchestrationDoc("paperclip", url))
 	}
 }
 
@@ -94,7 +107,7 @@ func TestInvokeAPIRequestShape(t *testing.T) {
 	bf := filepath.Join(t.TempDir(), "issue.json")
 	_ = os.WriteFile(bf, []byte(`{"title":"x"}`), 0o600)
 	r := clitest.Run(t, api(e.URL+"/api"), invokeArgs("--method", "post", "--path", "/api/issues", "--body", "file://"+bf, "--paperclip-key-file", kf)...)
-	if r.Code != 0 || len(r.Requests) != 1 || r.Req.URL.Path != "/v1/teams/"+team+"/collaboration" || e.n.Load() != 1 {
+	if r.Code != 0 || len(r.Requests) != 1 || r.Req.URL.Path != "/v1/teams/"+team+"/orchestration" || e.n.Load() != 1 {
 		t.Fatalf("%+v edge=%d", r, e.n.Load())
 	}
 	q, body := e.last.Load(), *e.body.Load()
@@ -341,11 +354,37 @@ func TestInvokeAPIOriginRefused255(t *testing.T) {
 	}
 }
 
-func TestInvokeAPINullRestApiURL255(t *testing.T) {
+// ORC-30, OR-CLI-27: a Web API that is off is refused before any key is sent: exit 254 and "Web API is off".
+func TestInvokeAPIWebAPIOff254(t *testing.T) {
 	e := newEdge(t, ok(`{}`))
 	r := clitest.Run(t, api(""), invokeArgs("--path", "/api/x", "--paperclip-key-file", keyFile(t, pcKey, 0o600))...)
-	if r.Code != 255 || !strings.Contains(r.Err, "Public collaboration is not configured for this service (collab.base_domain is unset).") || e.n.Load() != 0 {
+	want := "An error occurred (SurfaceOff) when calling the InvokeApi operation: Web API is off for this team (base_domain_unset)"
+	if r.Code != 254 || !strings.Contains(r.Err, want) || e.n.Load() != 0 ||
+		!strings.Contains(r.Err, "afs orchestration put-orchestration --team-id <id> --web-api-exposure") {
 		t.Errorf("%d %q", r.Code, r.Err)
+	}
+}
+
+// ORC-30: Buzz has no Web API: the message says so and gives no hint to turn it on.
+func TestInvokeAPIBuzzHasNoWebAPI254(t *testing.T) {
+	e := newEdge(t, ok(`{}`))
+	r := clitest.Run(t, func(w http.ResponseWriter, _ *http.Request) { clitest.Reply(w, 200, orchestrationDoc("buzz", "")) },
+		invokeArgs("--path", "/api/x", "--paperclip-key-file", keyFile(t, pcKey, 0o600))...)
+	if r.Code != 254 || !strings.Contains(r.Err, "Web API is off (N/A for Buzz)") || strings.Contains(r.Err, "put-orchestration") || e.n.Load() != 0 {
+		t.Errorf("%d %q", r.Code, r.Err)
+	}
+}
+
+// ORC-30: a read that fails is reported as the GetTeamOrchestration operation, and a body that is not JSON is refused.
+func TestInvokeAPIOrchestrationReadFailures(t *testing.T) {
+	kf := keyFile(t, pcKey, 0o600)
+	d := clitest.Run(t, clitest.Denied("collaboration:read"), invokeArgs("--path", "/api/x", "--paperclip-key-file", kf)...)
+	if d.Code != 254 || !strings.Contains(d.Err, "(AccessDenied) when calling the GetTeamOrchestration operation") {
+		t.Errorf("%d %q", d.Code, d.Err)
+	}
+	j := clitest.Run(t, ok("not json"), invokeArgs("--path", "/api/x", "--paperclip-key-file", kf)...)
+	if j.Code != 255 || !strings.Contains(j.Err, "the orchestration answer is not valid JSON") {
+		t.Errorf("%d %q", j.Code, j.Err)
 	}
 }
 
@@ -388,7 +427,7 @@ func TestInvokeAPIEdgeErrors254(t *testing.T) {
 		wantAll      []string
 	}
 	cases := []tc{
-		{403, "AccessDenied", "surface_disabled", "", []string{"The REST API is switched off for this team. A team-admin can turn it on: afs collaboration put-collaboration --team-id <id> --rest-api-enabled"}},
+		{403, "AccessDenied", "surface_disabled", "", []string{"The Web API is off for this team. A team-admin can turn it on: afs orchestration put-orchestration --team-id <id> --web-api-exposure"}},
 		{403, "AccessDenied", "permission_required", `,"requiredPermission":"collaboration:invoke"`, []string{"Required permission: collaboration:invoke"}},
 		{403, "AccessDenied", "no_team_role", "", []string{"Your credential has no role on this team"}},
 		{401, "Unauthenticated", "token_expired", "", []string{"Run afs sso login to sign in again."}},
@@ -398,7 +437,7 @@ func TestInvokeAPIEdgeErrors254(t *testing.T) {
 		{400, "ValidationError", "ambiguous_credentials", "", []string{"Send one AFS credential only."}},
 		{400, "ValidationError", "malformed_credential", "", []string{"malformed"}},
 		{400, "ValidationError", "unsupported_encoding", "", []string{"send the body uncompressed"}},
-		{404, "NotFound", "", "", []string{"The team's Paperclip is not reachable through the public endpoint; run afs collaboration describe-collaboration to see why."}},
+		{404, "NotFound", "", "", []string{"The team's Paperclip is not reachable at that level; run afs orchestration describe-orchestration to see the effective level and why."}},
 		{429, "Throttled", "", "", []string{"(Throttled)"}},
 		{503, "Unavailable", "paused", "", []string{"is paused"}},
 		{503, "Unavailable", "team_suspended", "", []string{"The team is suspended"}},
@@ -430,7 +469,7 @@ func TestInvokeAPISurfaceDisabledHint(t *testing.T) {
 		clitest.Reply(w, 403, `{"code":"AccessDenied","message":"off","requestId":"r","details":{"reason":"surface_disabled"}}`)
 	})
 	r := clitest.Run(t, api(e.URL), invokeArgs("--path", "/api/x", "--paperclip-key-file", keyFile(t, pcKey, 0o600))...)
-	if !strings.Contains(r.Err, "afs collaboration put-collaboration --team-id <id> --rest-api-enabled") || strings.Count(r.Err, "switched off") != 1 {
+	if !strings.Contains(r.Err, "afs orchestration put-orchestration --team-id <id> --web-api-exposure") || strings.Count(r.Err, "Web API is off") != 1 {
 		t.Errorf("%q", r.Err)
 	}
 }

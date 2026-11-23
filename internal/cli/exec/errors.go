@@ -70,7 +70,7 @@ func ReportError(w io.Writer, opID, profile string, err error) int {
 			_, _ = fmt.Fprintln(w, "Store the credential as an AFS secret instead (afs secrets create-secret).")
 		}
 		if opID == "InvokeApi" && ae.Status == 404 {
-			_, _ = fmt.Fprintln(w, "The team's Paperclip is not reachable through the public endpoint; run afs collaboration describe-collaboration to see why.")
+			_, _ = fmt.Fprintln(w, "The team's Paperclip is not reachable at that level; run afs orchestration describe-orchestration to see the effective level and why.")
 		}
 		return cli.ExitService
 	}

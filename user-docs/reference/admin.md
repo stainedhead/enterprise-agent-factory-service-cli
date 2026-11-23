@@ -44,12 +44,14 @@ OPERATIONS
        list-model-prices              List model prices
        list-models                    List admin models
        list-notification-channels     List service notification channels
+       list-orchestration-endpoints   List orchestration endpoints
        list-org-accounts              List org accounts
        list-price-proposals           List model price proposals
        list-security-operators        List security operators
        list-service-tags              List service tags
        list-storage-classes           List storage classes admin
        put-agent-template             Put agent template
+       put-service-model-access       Put service model access
        put-service-tag                Put service tag
        put-setting                    Put setting
        put-storage-class              Put storage class
@@ -1187,6 +1189,8 @@ NAME
 DESCRIPTION
        List collaboration endpoints
 
+       Deprecated: kept until 2.0.0; use afs admin list-orchestration-endpoints instead.
+
        Required permission: admin:settings
 
 SYNOPSIS
@@ -1565,6 +1569,64 @@ EXAMPLES
 
 ```
 
+## list-orchestration-endpoints
+
+```text
+AFS ADMIN LIST-ORCHESTRATION-ENDPOINTS
+
+NAME
+       admin list-orchestration-endpoints
+
+DESCRIPTION
+       List orchestration endpoints
+
+       Required permission: admin:settings
+
+SYNOPSIS
+       afs admin list-orchestration-endpoints [options]
+
+OPTIONS
+       --exposure (string)
+          Possible values: private, public
+       --tool (string)
+          Possible values: paperclip, buzz
+       --team-id (string)
+       --state (string)
+          Possible values: Ready, Degraded, Failed, Pending
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       List every team surface that is exposed, privately or publicly
+
+       afs admin list-orchestration-endpoints
+
+       List the Buzz teams whose orchestration agent is not ready
+
+       afs admin list-orchestration-endpoints --tool buzz --state Failed
+
+       List the effectively public surfaces as CSV
+
+       afs admin list-orchestration-endpoints --exposure public --output csv
+
+```
+
 ## list-org-accounts
 
 ```text
@@ -1827,6 +1889,58 @@ EXAMPLES
 
 ```
 
+## put-service-model-access
+
+```text
+AFS ADMIN PUT-SERVICE-MODEL-ACCESS
+
+NAME
+       admin put-service-model-access
+
+DESCRIPTION
+       Put service model access
+
+       Required permission: admin:models
+
+SYNOPSIS
+       afs admin put-service-model-access [options]
+
+OPTIONS
+       --access (string) (required)
+          all (every catalog model is enabled for the service, including models added later; each model's enabled flag is ignored) or selected (each model's enabled flag decides).
+          Possible values: all, selected
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       Enable every catalog model for the service
+
+       afs admin put-service-model-access --access all
+
+       Go back to choosing models one by one
+
+       afs admin put-service-model-access --access selected
+
+```
+
 ## put-service-tag
 
 ```text
@@ -1901,7 +2015,7 @@ SYNOPSIS
 
 OPTIONS
        --key (string) (required)
-          Possible values: secrets.path_prefix, pricing.price_list_sync, billing.variance_alert_pct, api.idempotency_key_ttl_seconds, teams.ephemeral_max_days, work_orders.sla_warning_hours, billing.tag_activation_acknowledged, work_orders.notification_channel_id, reports.idle_cpu_millicores, egress.denied_spike_threshold, gateway.reservation_ttl_seconds, api.cors_origins, collab.base_domain, collab.public_endpoints, collab.allowed_source_cidrs, collab.session_ttl_minutes, collab.content_scan, collab.max_body_mb, collab.denied_spike_threshold
+          Known values: secrets.path_prefix, pricing.price_list_sync, billing.variance_alert_pct, api.idempotency_key_ttl_seconds, teams.ephemeral_max_days, work_orders.sla_warning_hours, billing.tag_activation_acknowledged, work_orders.notification_channel_id, reports.idle_cpu_millicores, egress.denied_spike_threshold, gateway.reservation_ttl_seconds, api.cors_origins, collab.allowed_source_cidrs, collab.session_ttl_minutes, collab.content_scan, collab.max_body_mb, collab.denied_spike_threshold, orchestration.tools, orchestration.public_base_domain, orchestration.private_base_domain, orchestration.public_endpoints, orchestration.private_endpoints, orchestration.default_limit, orchestration.default_web_ui_exposure, orchestration.default_web_api_exposure, orchestration.default_resources, orchestration.default_volume_gib, models.service_access, models.default_team_access, models.default_team_models, models.default_model_id
        --value (string or JSON) (required)
           JSON value of the setting's type
        --if-match (string)
@@ -1926,13 +2040,21 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       Set the base domain of the Paperclip endpoints
+       Set the base domain of the public orchestration hostnames
 
-       afs admin put-setting --key collab.base_domain --value '"collab.example.com"'
+       afs admin put-setting --key orchestration.public_base_domain --value '"collab.example.com"'
 
-       Switch the public Paperclip endpoints on
+       Set the base domain of the private (internal ALB) hostnames
 
-       afs admin put-setting --key collab.public_endpoints --value true
+       afs admin put-setting --key orchestration.private_base_domain --value '"collab.corp.example.com"'
+
+       Lower the default limit of new teams to private
+
+       afs admin put-setting --key orchestration.default_limit --value '"private"'
+
+       Choose the default model of new agents
+
+       afs admin put-setting --key models.default_model_id --value '"anthropic.claude-sonnet-4-5"'
 
        Set a list value (JSON)
 
@@ -2246,7 +2368,7 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       Disable a model
+       Disable a model (refused while service model access is all)
 
        afs admin update-model --model-id anthropic.claude-sonnet-4-5 --no-enabled
 

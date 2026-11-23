@@ -37,11 +37,11 @@ var linkColumns = []output.Column{
 var listLinkColumns = append(append([]output.Column{}, linkColumns...), output.Column{Header: "LastError", Path: "lastError", Null: "-"})
 
 func registerCollaboration(r *cli.Registry) {
-	r.Override(cli.Override{Op: "GetTeamCollaboration", Columns: collaborationColumns, After: afterDescribe, Examples: []cli.Example{
+	r.Override(cli.Override{Op: "GetTeamCollaboration", Deprecated: "afs orchestration describe-orchestration", Columns: collaborationColumns, After: afterDescribe, Examples: []cli.Example{
 		{Title: "Show a team's Paperclip endpoint and what is effective", Command: "afs collaboration describe-collaboration --team-id " + exTeam},
 		{Title: "Print the public hostname only", Command: "afs collaboration describe-collaboration --team-id " + exTeam + " --query hostname --output text"},
 	}})
-	r.Override(cli.Override{Op: "PutTeamCollaboration", Columns: collaborationColumns, Examples: []cli.Example{
+	r.Override(cli.Override{Op: "PutTeamCollaboration", Deprecated: "afs orchestration put-orchestration", Notes: []string{"The booleans stand for exposure levels: on read, public is true and anything else false; on write, true sets the highest level within the team's limit and false sets off. Private exposure cannot be expressed with booleans."}, Columns: collaborationColumns, Examples: []cli.Example{
 		{Title: "Publish the web UI and keep the REST API off", Command: "afs collaboration put-collaboration --team-id " + exTeam + " --web-ui-enabled --no-rest-api-enabled"},
 		{Title: "Turn both surfaces on, use managed registration and wait until it is ready", Command: "afs collaboration put-collaboration --team-id " + exTeam + " --web-ui-enabled --rest-api-enabled --registration-mode managed --wait"},
 	}})
@@ -50,11 +50,11 @@ func registerCollaboration(r *cli.Registry) {
 		{Title: "List the links that failed", Command: "afs collaboration list-collaboration-links --team-id " + exTeam + " --link-state failed"},
 	}})
 	r.Override(cli.Override{Op: "ConnectAgentToCollaboration", Columns: linkColumns, Examples: []cli.Example{
-		{Title: "Connect an agent to the team's Paperclip", Command: "afs collaboration connect-agent --team-id " + exTeam + " --agent-id " + exAgent},
+		{Title: "Connect an agent to the team's collaboration tool", Command: "afs collaboration connect-agent --team-id " + exTeam + " --agent-id " + exAgent},
 		{Title: "Connect an agent in manual registration mode, naming its Paperclip agent", Command: "afs collaboration connect-agent --team-id " + exTeam + " --agent-id " + exAgent + " --paperclip-agent-id ag_8f2c1d"},
 	}})
 	r.Override(cli.Override{Op: "DisconnectAgentFromCollaboration", Columns: linkColumns, Examples: []cli.Example{
-		{Title: "Disconnect an agent from the team's Paperclip", Command: "afs collaboration disconnect-agent --team-id " + exTeam + " --agent-id " + exAgent},
+		{Title: "Disconnect an agent from the team's collaboration tool", Command: "afs collaboration disconnect-agent --team-id " + exTeam + " --agent-id " + exAgent},
 	}})
 }
 

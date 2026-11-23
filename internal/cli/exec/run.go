@@ -62,6 +62,7 @@ func Run(ctx context.Context, inv *cli.Invocation) int {
 	if err != nil {
 		return usageExit(env, err)
 	}
+	deprecated := warnDeprecated(env.Stderr, cmd, inv.P, b)
 	format := st.Output
 	if err := checkPaging(cmd, g, format); err != nil {
 		return usageExit(env, err)
@@ -158,6 +159,9 @@ func Run(ctx context.Context, inv *cli.Invocation) int {
 	}
 	if err != nil {
 		return fail(err)
+	}
+	if !deprecated {
+		warnServiceDeprecation(env.Stderr, resp.Header)
 	}
 	if readVersion != "" {
 		_, _ = fmt.Fprintln(env.Stderr, safeupdate.Notice(readVersion))

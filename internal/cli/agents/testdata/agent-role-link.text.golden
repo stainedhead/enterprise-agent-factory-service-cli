@@ -1,0 +1,3 @@
+agt_1	orchestrator	m1	all	false	Ready	orchestration	-	2
+agt_2	coder	m1	selected	false	Ready	worker	linked	5
+agt_3	fixer	m1	selected	false	Ready	worker	-	1

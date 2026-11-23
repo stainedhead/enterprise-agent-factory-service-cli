@@ -101,10 +101,10 @@ func TestCreateSwarmTemplateSpecCollaborationUnchanged(t *testing.T) {
 	}
 }
 
-func TestSwarmTemplateSkeletonHasCollaboration(t *testing.T) {
+func TestSwarmTemplateSkeletonHasOrchestration(t *testing.T) {
 	for _, op := range []string{"create-swarm-template", "update-swarm-template"} {
 		r := clitest.Run(t, nil, "swarm-templates", op, "--generate-cli-skeleton")
-		if r.Code != 0 || !strings.Contains(r.Out, `"collaboration"`) || !strings.Contains(r.Out, `"templateId"`) || len(r.Requests) != 0 {
+		if r.Code != 0 || !strings.Contains(r.Out, `"orchestration"`) || !strings.Contains(r.Out, `"webUiExposure"`) || strings.Contains(r.Out, `"collaboration"`) || len(r.Requests) != 0 {
 			t.Errorf("%s: %+v", op, r)
 		}
 	}

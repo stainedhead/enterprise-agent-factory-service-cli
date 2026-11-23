@@ -22,6 +22,11 @@ OPTIONS
        --image (string)
           Container image pinned by digest
        --model-id (string)
+          Deprecated: use --default-model-id (and --models to choose the set) instead.
+       --models (list)
+          Models the agent may call: the word all (every model the team may use, now and later) or one or more model ids (a fixed selection). Sent members replace the stored ones.
+       --name (string)
+          Refused on the orchestration agent (orchestration_field_fixed)
        --resources (JSON)
        --secret-bindings (JSON)
        --template (string)
@@ -30,9 +35,11 @@ OPTIONS
        --if-match (string)
           Apply only if the resource is at this version (safe update).
        --collaboration-connect (boolean)
-          Connect the agent to the team's Paperclip (--no-collaboration-connect disconnects it).
+          Connect the agent to the team's collaboration tool (--no-collaboration-connect disconnects it; the default on create is to connect).
        --paperclip-agent-id (string)
-          The agent's id in Paperclip (accepted only while registrationMode is manual).
+          The agent's id in Paperclip (Paperclip only, and only while registrationMode is manual).
+       --default-model-id (string)
+          The model the runtime starts with; it must be one of the agent's models. Without --models on an update, only the default changes.
        --wait (boolean)
           Wait until the resource is ready (or gone, for a delete).
        --wait-timeout (duration)
@@ -57,15 +64,27 @@ GLOBAL OPTIONS
        --version                Print the afs version and exit.
 
 EXAMPLES
-       Connect an existing worker to Paperclip (the same effect as afs collaboration connect-agent)
+       Connect an existing worker to the team's collaboration tool (the same effect as afs collaboration connect-agent)
 
        afs agents update-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --collaboration-connect
 
-       Change the model (reads the current version, sends If-Match)
+       Change the default model (reads the current version, sends If-Match)
 
-       afs agents update-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --model-id anthropic.claude-haiku-4-5
+       afs agents update-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --default-model-id anthropic.claude-haiku-4-5
 
        Apply a change only if the agent is still at version 7
 
        afs agents update-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --description 'Reviews pull requests' --if-match 7
+
+       Change the agent's default model only
+
+       afs agents update-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --default-model-id anthropic.claude-haiku-4-5
+
+       Limit the agent to one model
+
+       afs agents update-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --models anthropic.claude-sonnet-4-5 --default-model-id anthropic.claude-sonnet-4-5
+
+       Let the agent call every model its team may use
+
+       afs agents update-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --models all
 

@@ -110,7 +110,7 @@ func TestVersionString(t *testing.T) {
 	if code := Run(context.Background(), []string{"--version"}, env, r); code != ExitOK {
 		t.Fatal(code)
 	}
-	if !strings.HasPrefix(out.String(), "afs-cli/") || !strings.Contains(out.String(), " contract/1.3 go") || c.inv != nil {
+	if !strings.HasPrefix(out.String(), "afs-cli/") || !strings.Contains(out.String(), " contract/1.4 go") || c.inv != nil {
 		t.Errorf("version = %q", out)
 	}
 }

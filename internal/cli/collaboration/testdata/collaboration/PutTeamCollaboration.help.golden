@@ -6,6 +6,10 @@ NAME
 DESCRIPTION
        Put team collaboration
 
+       Deprecated: kept until 2.0.0; use afs orchestration put-orchestration instead.
+
+       The booleans stand for exposure levels: on read, public is true and anything else false; on write, true sets the highest level within the team's limit and false sets off. Private exposure cannot be expressed with booleans.
+
        Required permission: collaboration:manage
 
 SYNOPSIS

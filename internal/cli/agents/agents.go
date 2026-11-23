@@ -14,9 +14,9 @@ const (
 )
 
 var agentColumns = []output.Column{
-	{Header: "Id", Path: "id"}, {Header: "Name", Path: "name"}, {Header: "Template", Path: "template"},
-	{Header: "Model", Path: "modelId"}, {Header: "Paused", Path: "paused"}, {Header: "Phase", Path: "status.phase"},
-	{Header: "Role", Path: "role"}, {Header: "Paperclip", Path: "collaboration.linkState", Null: "-"},
+	{Header: "Id", Path: "id"}, {Header: "Name", Path: "name"},
+	{Header: "DefaultModel", Path: "models.defaultModelId", Null: "-"}, {Header: "Models", Path: "models.access", Null: "-"}, {Header: "Paused", Path: "paused"}, {Header: "Phase", Path: "status.phase"},
+	{Header: "Role", Path: "role"}, {Header: "Link", Path: "collaboration.linkState", Null: "-"},
 	{Header: "Version", Path: "version"},
 }
 
@@ -38,7 +38,7 @@ func registerAgents(r *cli.Registry) {
 	}})
 	r.Override(cli.Override{Op: "CreateAgent", Columns: agentColumns, Examples: []cli.Example{
 		{Title: "Create an agent with a volume and wait until it is ready", Command: "afs agents create-agent --team-id " + exTeam + " --name coder --template claude-code --image " + exImage +
-			` --model-id anthropic.claude-sonnet-4-5 --volume '{"sizeGiB":20,"storageClass":"gp3-standard","onDelete":"snapshot_then_delete"}' --wait`},
+			` --models all --default-model-id anthropic.claude-sonnet-4-5 --volume '{"sizeGiB":20,"storageClass":"gp3-standard","onDelete":"snapshot_then_delete"}' --wait`},
 		{Title: "Create an agent from a file", Command: "afs agents create-agent --team-id " + exTeam + " --cli-input-json file://agent.json"},
 	}})
 }

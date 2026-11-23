@@ -17,13 +17,14 @@ var templateColumns = []output.Column{
 	{Header: "Version", Path: "version"},
 }
 
-// specSkeleton shows the optional spec.collaboration member (PC-D29) in --generate-cli-skeleton; the spec is
-// sent unchanged, so this is documentation only (CLI-US-35.1).
-var specSkeleton = map[string]json.RawMessage{"spec": json.RawMessage(`{"collaboration":{"templateId":""}}`)}
+// specSkeleton shows the optional spec.orchestration member (ORC-7) in --generate-cli-skeleton; the spec is
+// sent unchanged, so this is documentation only (CLI-US-35.1). spec.collaboration is deprecated until 2.0.0
+// and is no longer shown.
+var specSkeleton = map[string]json.RawMessage{"spec": json.RawMessage(`{"orchestration":{"tool":"","webUiExposure":"","webApiExposure":"","defaultModelId":""}}`)}
 
 func registerTemplates(r *cli.Registry) {
 	r.Override(cli.Override{Op: "CreateSwarmTemplate", SkeletonMembers: specSkeleton, Examples: []cli.Example{
-		{Title: "Give the remediation team a collaboration agent (spec.collaboration.templateId in the spec file)", Command: "afs swarm-templates create-swarm-template --name cve-collab --kind cve_remediation --budget-usd 250.00 --ttl-hours 72 --teardown-rule at_work_complete --spec file://swarm-spec-with-collaboration.json"},
+		{Title: "Choose the tool and exposure of the remediation team's orchestration agent (spec.orchestration in the spec file)", Command: "afs swarm-templates create-swarm-template --name cve-orchestrated --kind cve_remediation --budget-usd 250.00 --ttl-hours 72 --teardown-rule at_work_complete --spec file://swarm-spec-with-orchestration.json"},
 	}})
 	r.Override(cli.Override{Op: "UpdateSwarmTemplate", SkeletonMembers: specSkeleton})
 	r.Override(cli.Override{Op: "ListSwarmTemplates", Columns: templateColumns, Examples: []cli.Example{

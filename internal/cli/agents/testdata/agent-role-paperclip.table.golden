@@ -1,4 +1,0 @@
-Id     Name       Template   Model  Paused  Phase  Role       Paperclip  Version
-agt_1  paperclip  paperclip  m1     false   Ready  collabor…  -          2
-agt_2  coder      claude-c…  m1     false   Ready  worker     linked     5
-agt_3  fixer      claude-c…  m1     false   Ready  worker     -          1

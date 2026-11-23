@@ -13,7 +13,8 @@ SYNOPSIS
 
 OPTIONS
        --role (string)
-          Possible values: worker, collaboration
+          worker or orchestration (collaboration is read as orchestration until 2.0.0).
+          Known values: worker, orchestration
        --team-id (string) (required)
           Team id; taken from the path only
 
@@ -44,7 +45,7 @@ EXAMPLES
 
        afs agents list-agents --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --query 'items[].[id,status.phase]' --output text
 
-       Find the team's collaboration agent
+       Find the team's orchestration agent
 
-       afs agents list-agents --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --role collaboration
+       afs agents list-agents --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --role orchestration
 
