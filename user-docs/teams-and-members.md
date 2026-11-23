@@ -32,7 +32,7 @@ afs teams create-team --slug payments --display-name "Payments" --kind persisten
 
 ## Teams and Paperclip
 
-`afs teams create-team` and `update-team` take `--may-expose-collaboration` or `--no-may-expose-collaboration` (service administrators: it lets the
+`afs teams create-team` and `update-team` take `--max-collaboration-exposure off|private|public` (replaces the deprecated `--may-expose-collaboration`; see [orchestration](orchestration.md)), `--orchestration`, `--may-expose-collaboration` or `--no-may-expose-collaboration` (service administrators: it lets the
 team publish its Paperclip endpoint).
 
 ## Members

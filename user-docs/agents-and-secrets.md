@@ -22,7 +22,8 @@ afs agents pause-agent|resume-agent|restart-agent --team-id team_... --agent-id 
   `list-agent-templates`, and `afs models list-models`.
 - Agent configuration values: `list-config-values`, `put-config-value --name N --source literal --value V`
   (or `--source namespace` to take the team's value), `delete-config-value`.
-- Paperclip: `create-agent --role collaboration` creates the team's collaboration agent; `--collaboration-connect`
+- Models and orchestration: `--models all|ids`, `--default-model-id` (`--model-id` is deprecated); the orchestration agent is created with the team, see [orchestration](orchestration.md).
+- Paperclip (deprecated, 1.0): `create-agent --role collaboration` creates the team's collaboration agent; `--collaboration-connect`
   or `--no-collaboration-connect` and `--paperclip-agent-id` control whether a worker is connected; `list-agents --role`
   and `list-agent-templates --capability paperclip` filter. The agent table has `Role` and `Paperclip` columns. See
   [Team collaboration](collaboration.md).

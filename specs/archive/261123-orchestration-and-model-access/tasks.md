@@ -24,7 +24,7 @@ See status.md. Legend: [x] done.
 
 ## Docs, review, release
 
-- [ ] T13 `make docs`; README, user-docs, CHANGELOG, AGENTS.md, docs/ (FR-016)
-- [ ] T14 Root `skills/enterprise-agent-factory-service-cli.md` updated (not committed in the root)
-- [ ] T15 Code and design review, findings fixed (implementation-notes.md)
-- [ ] T16 Final gate, PR, CI green, merge
+- [x] T13 `make docs`; README, user-docs, CHANGELOG, AGENTS.md, docs/ (FR-016)
+- [x] T14 Root `skills/enterprise-agent-factory-service-cli.md` updated (not committed in the root)
+- [x] T15 Code and design review, findings fixed (implementation-notes.md)
+- [x] T16 Final gate, PR, CI green, merge

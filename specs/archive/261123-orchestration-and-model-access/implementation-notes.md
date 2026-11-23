@@ -27,3 +27,7 @@
 ## Review (step 5, against the AGENTS.md checklist)
 
 See the section "Code and design review" at the end of this file after the review step.
+
+## Code and design review
+
+Checked against the AGENTS.md list: naming and options follow the AWS CLI rules, help and an example exist for every new operation; `--output json` is untouched (columns and notices only affect table, text and stderr); no secret, token or key reaches any output (no new secret input); errors use the AWS-style message, `SurfaceOff` exits 254; context is passed through and no endpoint or credential is hardcoded; every new operation has an AccessDenied test via `clitest.CheckOperations`. Findings: none critical or important. Minor, fixed: tests named CLI-US-26..28 collided with 1.0.1 numbering and were renamed OR-CLI-26..28; the agent table exceeded 80 columns (Template dropped). Open items for `-restapi` are in research.md (setting key enum, ListAgents role enum, `modelId` and `volume` on CreateTeamRequest.orchestration).

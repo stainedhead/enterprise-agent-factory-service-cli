@@ -14,11 +14,11 @@ access decides what each user can do.
 
 ![afs help](docs/images/afs-help.svg)
 
-**Status:** feature complete against API contract 1.3 (milestones M0 to M10, release v1.0.1, which adds Paperclip team
-collaboration). All 187 operations of the pinned
+**Status:** feature complete against API contract 1.4 (milestones M0 to M12, release v1.1.0, which adds the team
+orchestration agent and model access; see [Team orchestration](user-docs/orchestration.md)). All 194 operations of the pinned
 contract are commands, with examples, table columns, golden help and output, and an `AccessDenied` test each, plus the
 local commands `configure`, `configure sso`, `sso login`, `sso logout`, `completion` and `collaboration invoke-api`. The contract snapshot is pinned to
-the final contract on `-restapi` `main` (commit `d887609`, task M6-X2; no release tag exists yet).
+the final contract on `-restapi` `main` (`-restapi` commit `f6d240c`).
 
 What every command gets: AWS-style global options, profiles, five output formats and `--query`, automatic pagination,
 `--cli-input-json` and `--generate-cli-skeleton`, safe updates with `If-Match`, idempotent retries, `--wait`, a redacted

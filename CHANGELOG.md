@@ -1,5 +1,30 @@
 # Changelog
 
+## v1.1.0 - 2026-11-23
+
+Team orchestration agent and model access (API contract v1.4.0). Spec: `specs/archive/261123-orchestration-and-model-access/`
+(or `specs/archive/` once archived). Guide: `user-docs/orchestration.md`.
+
+### Added
+- `afs orchestration` service: `describe-orchestration`, `put-orchestration` (`--web-ui-exposure`, `--web-api-exposure`
+  off|private|public, `--registration-mode`, If-Match, `--wait`), `change-tool` (`--tool paperclip|buzz`, `--wait`);
+  `N/A` for Buzz web surfaces and stderr notes for surfaces that are not effective.
+- `afs admin list-orchestration-endpoints` (with backfill progress on stderr) and `afs admin put-service-model-access`.
+- Model access: `--models all|ids` and `--default-model-id` on agents and pools; `teams put-team-models --access`;
+  `Callable` and `Price` columns on model lists; `teams create-team/update-team --orchestration` and `--max-collaboration-exposure`.
+- Hints for the new refusal codes (`exposure_above_limit`, `surface_not_supported_by_tool`, `tool_change_in_progress`,
+  `model_not_enabled_for_team`, `default_model_not_allowed` and others); `SurfaceOff` for `invoke-api`.
+- Milestones M11 and M12; settings keys `orchestration.*` and `models.*` for `put-setting`.
+
+### Changed
+- The pinned snapshot is contract v1.4.0 (`-restapi` f6d240c, 194 operations, 192 commands; `afs --version` prints `contract/1.4`).
+- `collaboration invoke-api` reads `GetTeamOrchestration`. Agent table: `Template` column dropped, `Paperclip` renamed `Link`, `DefaultModel`, `Models` and `Role` added.
+- `--role` on `create-agent` is hidden and an open enum; the swarm template skeleton shows `spec.orchestration`.
+
+### Deprecated (kept until 2.0.0, a warning on stderr)
+- `collaboration describe-collaboration`, `put-collaboration`; `admin list-collaboration-endpoints`;
+  `--may-expose-collaboration`; `--model-id` on agents and pools; settings `collab.base_domain`, `collab.public_endpoints`.
+
 ## v1.0.1 - 2026-11-22
 
 Paperclip team collaboration (API contract v1.3.1). Spec: `specs/archive/261122-paperclip-collaboration/`
