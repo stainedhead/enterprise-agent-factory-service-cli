@@ -699,7 +699,7 @@ SYNOPSIS
 OPTIONS
        --role (string)
           worker or orchestration (collaboration is read as orchestration until 2.0.0).
-          Known values: worker, orchestration
+          Possible values: worker, orchestration, collaboration
        --team-id (string) (required)
           Team id; taken from the path only
 
@@ -1303,6 +1303,9 @@ OPTIONS
        --name (string)
           Refused on the orchestration agent (orchestration_field_fixed)
        --resources (JSON)
+       --role (string)
+          Immutable; a value that differs from the agent's role is a ValidationError (collaboration reads as orchestration until 2.0.0)
+          Possible values: worker, orchestration, collaboration
        --secret-bindings (JSON)
        --template (string)
           Agent template name

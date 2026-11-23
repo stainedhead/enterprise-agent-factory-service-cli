@@ -3,14 +3,12 @@ package admin
 import (
 	"encoding/json"
 	"fmt"
-	"slices"
 	"strings"
 
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli/runtime"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/client"
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/output"
-	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/spec"
 )
 
 func init() { registrations = append(registrations, registerOrchestration) }
@@ -28,37 +26,6 @@ var orchestrationEndpointColumns = []output.Column{
 var serviceModelAccessColumns = []output.Column{
 	{Header: "Access", Path: "access"}, {Header: "EnabledModels", Path: "enabledModels"},
 	{Header: "CallableModels", Path: "callableModels"}, {Header: "Version", Path: "version"},
-}
-
-// newSettingKeys are the service settings 1.1.0 adds (change PRD section 6.8); the snapshot's enum of keys does
-// not list them, so the key option is open and the API decides (admin:settings covers them, API contract section 3).
-var newSettingKeys = []string{
-	"orchestration.tools", "orchestration.public_base_domain", "orchestration.private_base_domain",
-	"orchestration.public_endpoints", "orchestration.private_endpoints", "orchestration.default_limit",
-	"orchestration.default_web_ui_exposure", "orchestration.default_web_api_exposure",
-	"orchestration.default_resources", "orchestration.default_volume_gib",
-	"models.service_access", "models.default_team_access", "models.default_team_models", "models.default_model_id",
-}
-
-// renamedSettingKeys are the 1.0.1 keys that 1.1.0 renamed; they are read-only until 2.0.0 and the API refuses a
-// write with setting_renamed (ORC-27).
-var renamedSettingKeys = []string{"collab.base_domain", "collab.public_endpoints"}
-
-// knownSettingKeys lists the keys help names: the snapshot's keys without the renamed ones, then the new ones.
-func knownSettingKeys() []string {
-	var keys []string
-	if op := spec.ByID("PutSetting"); op != nil {
-		for _, p := range op.Params {
-			if p.Name == "key" {
-				for _, k := range p.Schema.Enum {
-					if !slices.Contains(renamedSettingKeys, k) {
-						keys = append(keys, k)
-					}
-				}
-			}
-		}
-	}
-	return append(keys, newSettingKeys...)
 }
 
 // afterEndpoints prints, for table and text output, the progress of the 1.1.0 backfill when it is not complete
@@ -105,7 +72,8 @@ func registerOrchestration(r *cli.Registry) {
 			{Title: "Go back to choosing models one by one", Command: "afs admin put-service-model-access --access selected"},
 		}})
 	r.Override(cli.Override{Op: "ListCollaborationEndpoints", Deprecated: "afs admin list-orchestration-endpoints"})
-	r.Override(cli.Override{Op: "PutSetting", OpenEnum: []string{"key"}, Enum: map[string][]string{"key": knownSettingKeys()},
+	r.Override(cli.Override{Op: "PutSetting", OpenEnum: []string{"key"},
+		Notes: []string{"collab.base_domain and collab.public_endpoints are read-only until 2.0.0; use orchestration.public_base_domain and orchestration.public_endpoints."},
 		Examples: []cli.Example{
 			{Title: "Set the base domain of the public orchestration hostnames", Command: `afs admin put-setting --key orchestration.public_base_domain --value '"collab.example.com"'`},
 			{Title: "Set the base domain of the private (internal ALB) hostnames", Command: `afs admin put-setting --key orchestration.private_base_domain --value '"collab.corp.example.com"'`},

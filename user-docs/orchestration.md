@@ -34,7 +34,7 @@ afs admin list-orchestration-endpoints --output table
   public) with the reason from the API.
 - `afs admin list-orchestration-endpoints` lists every team's endpoint; while the 1.4 backfill runs it prints
   the progress on stderr.
-- `afs teams create-team --orchestration Tool=paperclip,WebUiExposure=off,WebApiExposure=off` sets it at creation.
+- `afs teams create-team --orchestration Tool=paperclip,WebUiExposure=off,WebApiExposure=off,ModelId=<id>,VolumeSizeGiB=50,VolumeOnDelete=snapshot_then_delete` sets it at creation (the flat contract fields `webUiExposure`, `webApiExposure`, `modelId` and `volume`).
 - `afs collaboration invoke-api` calls the Web API through `GetTeamOrchestration`; if the Web API is off it
   fails with `SurfaceOff` (exit 254).
 

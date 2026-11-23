@@ -6,7 +6,7 @@ package spec
 const ContractVersion = "1.4.0"
 
 // SnapshotSHA256 is the checksum of the snapshot these descriptors were generated from.
-const SnapshotSHA256 = "b9e9cac718c2f69906d7dcf5a14d137a244485a4d51baaf6add8e04e139f7697"
+const SnapshotSHA256 = "d1a4db83293819c5ca4a2139522463bd15cd236bb6da8343443b354df930fd76"
 
 var operations = []Operation{
 	{ID: "AddMember", Method: "POST", Path: "/v1/teams/{teamId}/members", Service: "members", Command: "add-member", Summary: "Add member",
@@ -1122,7 +1122,7 @@ var operations = []Operation{
 	{ID: "ListAgents", Method: "GET", Path: "/v1/teams/{teamId}/agents", Service: "agents", Command: "list-agents", Summary: "List agents",
 		Permission: "agents:read", Scope: "team", Priority: "P0", CSV: false,
 		Params: []Param{
-			{Name: "role", In: "query", Required: false, Desc: "", Example: "", Schema: Schema{Type: "string", Enum: []string{"worker", "collaboration"}}},
+			{Name: "role", In: "query", Required: false, Desc: "collaboration is the deprecated 1.0.1 name of orchestration and reads as orchestration until 2.0.0", Example: "", Schema: Schema{Type: "string", Enum: []string{"worker", "orchestration", "collaboration"}}},
 			{Name: "teamId", In: "path", Required: true, Desc: "Team id; taken from the path only", Example: "team_01JD2Q3R4S5T6V7W8X9Y0Z0001", Schema: Schema{Type: "string", Pattern: "^team_[0-9A-HJKMNP-TV-Z]{26}$"}},
 		},
 		IfMatch: IfMatchNone, Idempotent: false, Paginated: true,
@@ -1735,7 +1735,7 @@ var operations = []Operation{
 	{ID: "PutSetting", Method: "PUT", Path: "/v1/admin/settings/{key}", Service: "admin", Command: "put-setting", Summary: "Put setting",
 		Permission: "admin:settings", Scope: "service", Priority: "P0", CSV: false,
 		Params: []Param{
-			{Name: "key", In: "path", Required: true, Desc: "", Example: "", Schema: Schema{Type: "string", Enum: []string{"secrets.path_prefix", "pricing.price_list_sync", "billing.variance_alert_pct", "api.idempotency_key_ttl_seconds", "teams.ephemeral_max_days", "work_orders.sla_warning_hours", "billing.tag_activation_acknowledged", "work_orders.notification_channel_id", "reports.idle_cpu_millicores", "egress.denied_spike_threshold", "gateway.reservation_ttl_seconds", "api.cors_origins", "collab.base_domain", "collab.public_endpoints", "collab.allowed_source_cidrs", "collab.session_ttl_minutes", "collab.content_scan", "collab.max_body_mb", "collab.denied_spike_threshold"}}},
+			{Name: "key", In: "path", Required: true, Desc: "", Example: "", Schema: Schema{Type: "string", Enum: []string{"secrets.path_prefix", "pricing.price_list_sync", "billing.variance_alert_pct", "api.idempotency_key_ttl_seconds", "teams.ephemeral_max_days", "work_orders.sla_warning_hours", "billing.tag_activation_acknowledged", "work_orders.notification_channel_id", "reports.idle_cpu_millicores", "egress.denied_spike_threshold", "gateway.reservation_ttl_seconds", "api.cors_origins", "orchestration.tools", "orchestration.public_base_domain", "orchestration.private_base_domain", "orchestration.public_endpoints", "orchestration.private_endpoints", "orchestration.default_limit", "orchestration.default_web_ui_exposure", "orchestration.default_web_api_exposure", "orchestration.default_resources", "orchestration.default_volume_gib", "models.service_access", "models.default_team_access", "models.default_team_models", "models.default_model_id", "collab.allowed_source_cidrs", "collab.session_ttl_minutes", "collab.content_scan", "collab.max_body_mb", "collab.denied_spike_threshold"}}},
 		},
 		IfMatch: IfMatchOptional, Idempotent: false, Paginated: false,
 		Body: &Body{Required: true, MediaType: "application/json", SchemaName: "PutSettingRequest", Fields: []Field{
@@ -1992,6 +1992,7 @@ var operations = []Operation{
 			{Name: "models", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "object", Ref: "AgentModelsInput"}},
 			{Name: "name", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Refused on the orchestration agent (orchestration_field_fixed)", Schema: Schema{Type: "string", Pattern: "^[a-z][a-z0-9-]{1,38}[a-z0-9]$", Ref: "Name"}},
 			{Name: "resources", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "object", Ref: "Resources"}},
+			{Name: "role", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Immutable; a value that differs from the agent's role is a ValidationError (collaboration reads as orchestration until 2.0.0)", Schema: Schema{Type: "string", Enum: []string{"worker", "orchestration", "collaboration"}}},
 			{Name: "secretBindings", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "array", Items: &Schema{Type: "object", Ref: "SecretBinding"}}},
 			{Name: "template", Required: false, WriteOnly: false, ReadOnly: false, Desc: "Agent template name", Schema: Schema{Type: "string"}},
 			{Name: "volume", Required: false, WriteOnly: false, ReadOnly: false, Desc: "", Schema: Schema{Type: "object", Ref: "AgentVolume"}},

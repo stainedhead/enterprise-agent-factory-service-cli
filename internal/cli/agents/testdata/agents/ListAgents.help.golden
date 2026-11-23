@@ -14,7 +14,7 @@ SYNOPSIS
 OPTIONS
        --role (string)
           worker or orchestration (collaboration is read as orchestration until 2.0.0).
-          Known values: worker, orchestration
+          Possible values: worker, orchestration, collaboration
        --team-id (string) (required)
           Team id; taken from the path only
 

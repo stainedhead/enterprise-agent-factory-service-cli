@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/stainedhead/enterprise-agent-factory-service-cli/internal/cli"
@@ -12,16 +13,18 @@ import (
 func init() { registrations = append(registrations, registerOrchestration) }
 
 // orchestrationDesc is the help text of create-team --orchestration (ORC-26, ORC-29).
-const orchestrationDesc = "The team's orchestration agent, all optional: Tool=paperclip|buzz,WebUiExposure=off|private|public,WebApiExposure=off|private|public,RegistrationMode=manual|managed,ModelId=<model id>, or JSON (file://PATH). Defaults come from the orchestration.* settings."
+const orchestrationDesc = "The team's orchestration agent, all optional: Tool=paperclip|buzz,WebUiExposure=off|private|public,WebApiExposure=off|private|public,RegistrationMode=manual|managed,ModelId=<model id>,VolumeSizeGiB=10..1000,VolumeOnDelete=snapshot_then_delete|delete|retain, or JSON (file://PATH). Defaults come from the orchestration.* settings."
 
 // shorthandKeys maps the keys of the --orchestration shorthand, lower case, to what they set.
 var shorthandKeys = map[string]func(o *cli.Object, v string) error{
 	"tool":             setEnum("tool", "tool", []string{"paperclip", "buzz"}),
-	"webuiexposure":    setSurface("webUi", "WebUiExposure"),
-	"webapiexposure":   setSurface("webApi", "WebApiExposure"),
+	"webuiexposure":    setEnum("webUiExposure", "WebUiExposure", levels),
+	"webapiexposure":   setEnum("webApiExposure", "WebApiExposure", levels),
 	"registrationmode": setEnum("registrationMode", "RegistrationMode", []string{"manual", "managed"}),
 	"modelid":          setModel,
 	"defaultmodelid":   setModel,
+	"volumesizegib":    setVolumeSize,
+	"volumeondelete":   setVolumeOnDelete,
 }
 
 var levels = []string{"off", "private", "public"}
@@ -46,33 +49,51 @@ func capitalize(s string) string {
 	return strings.ToUpper(s[:1]) + s[1:]
 }
 
-func setSurface(member, key string) func(*cli.Object, string) error {
-	return func(o *cli.Object, v string) error {
-		inner := cli.NewObject()
-		if err := setEnum("exposure", key, levels)(inner, v); err != nil {
-			return err
+// setVolume sets one member of the volume object, keeping the other when both are given.
+func setVolume(o *cli.Object, member string, val json.RawMessage) {
+	vol := cli.NewObject()
+	if raw, ok := o.Get("volume"); ok {
+		if prev, err := cli.ParseObject(raw); err == nil {
+			vol = prev
 		}
-		b, _ := json.Marshal(inner)
-		o.Set(member, b)
-		return nil
 	}
+	vol.Set(member, val)
+	b, _ := json.Marshal(vol)
+	o.Set("volume", b)
 }
 
+func setVolumeSize(o *cli.Object, v string) error {
+	n, err := strconv.Atoi(v)
+	if err != nil || n < 10 || n > 1000 {
+		return fmt.Errorf("--orchestration: VolumeSizeGiB must be a whole number from 10 to 1000, got %q", v)
+	}
+	setVolume(o, "sizeGiB", json.RawMessage(strconv.Itoa(n)))
+	return nil
+}
+
+func setVolumeOnDelete(o *cli.Object, v string) error {
+	tmp := cli.NewObject()
+	if err := setEnum("onDelete", "VolumeOnDelete", []string{"snapshot_then_delete", "delete", "retain"})(tmp, v); err != nil {
+		return err
+	}
+	raw, _ := tmp.Get("onDelete")
+	setVolume(o, "onDelete", raw)
+	return nil
+}
+
+// setModel sets the flat modelId the API reads as models.defaultModelId (CD-36).
 func setModel(o *cli.Object, v string) error {
 	if v == "" {
 		return errors.New("--orchestration: ModelId cannot be empty")
 	}
-	m := cli.NewObject()
 	b, _ := json.Marshal(v)
-	m.Set("defaultModelId", b)
-	mb, _ := json.Marshal(m)
-	o.Set("models", mb)
+	o.Set("modelId", b)
 	return nil
 }
 
 // buildOrchestration turns the shorthand Key=Value,Key=Value of --orchestration into the object the API takes.
 // JSON and file://PATH reach the body unchanged (the generic reader gives a JSON text its own value), so only a
-// value that arrives as a JSON string is read as shorthand (ModelId is shorthand for models.defaultModelId, CD-36).
+// value that arrives as a JSON string is read as shorthand (the exposure levels, the model and the volume go in the flat fields of the contract).
 func buildOrchestration(_ *cli.Parsed, parts *cli.RequestParts) error {
 	if parts.Body == nil {
 		return nil
@@ -111,7 +132,7 @@ func buildOrchestration(_ *cli.Parsed, parts *cli.RequestParts) error {
 }
 
 func shorthandNames() []string {
-	return []string{"Tool", "WebUiExposure", "WebApiExposure", "RegistrationMode", "ModelId"}
+	return []string{"Tool", "WebUiExposure", "WebApiExposure", "RegistrationMode", "ModelId", "VolumeSizeGiB", "VolumeOnDelete"}
 }
 
 func registerOrchestration(r *cli.Registry) {
