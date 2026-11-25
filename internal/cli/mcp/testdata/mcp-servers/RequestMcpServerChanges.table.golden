@@ -1,0 +1,13 @@
+Field       Value
+Id          mcp_01JD2Q3R4S5T6V7W8X9Y0Z0001
+Slug        github
+Scope       enterprise
+Team        -
+Location    external
+Transport   streamable_http
+Auth        oauth_client
+Review      draft
+Risk        elevated
+Published   false
+Credential  set
+Version     4

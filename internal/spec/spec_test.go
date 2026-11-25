@@ -51,7 +51,7 @@ func TestSnapshotCounts(t *testing.T) {
 			}
 		}
 	}
-	for name, got := range map[string][2]int{"ops": {all, 221}, "cmds": {cmds, 219}, "paginated": {pag, 61}, "csv": {csv, 12}, "ifmatch": {im, 74}, "idem": {idem, 55}} {
+	for name, got := range map[string][2]int{"ops": {all, 276}, "cmds": {cmds, 273}, "paginated": {pag, 68}, "csv": {csv, 16}, "ifmatch": {im, 87}, "idem": {idem, 79}} {
 		if got[0] != got[1] {
 			t.Errorf("%s = %d, want %d", name, got[0], got[1])
 		}
@@ -59,7 +59,7 @@ func TestSnapshotCounts(t *testing.T) {
 }
 
 func TestContractVersionAndChecksum(t *testing.T) {
-	if spec.ContractVersion != "1.5.0" {
+	if spec.ContractVersion != "1.6.0" {
 		t.Errorf("ContractVersion = %s", spec.ContractVersion)
 	}
 	h := sha256.Sum256(api.OpenAPI)
@@ -88,7 +88,7 @@ func TestLookups(t *testing.T) {
 		t.Errorf("DeleteAgent success = %v", p.Success)
 	}
 	cs := spec.Commands()
-	if len(cs) != 219 {
+	if len(cs) != 273 {
 		t.Errorf("commands = %d", len(cs))
 	}
 	if spec.ByID("UpdateWorkOrderRepo").AnyOf == nil {

@@ -1,0 +1,44 @@
+AFS MCP-SERVERS SUSPEND-MCP-SERVER
+
+NAME
+       mcp-servers suspend-mcp-server
+
+DESCRIPTION
+       Suspend MCP server
+
+       Every team gateway refuses calls to a suspended server within a minute; agents keep their configuration.
+
+       Required permission: mcp-servers:suspend
+
+SYNOPSIS
+       afs mcp-servers suspend-mcp-server [options]
+
+OPTIONS
+       --mcp-server-id (string) (required)
+       --reason (string) (required)
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       Suspend a server during an incident
+
+       afs mcp-servers suspend-mcp-server --mcp-server-id mcp_01JD2Q3R4S5T6V7W8X9Y0Z0001 --reason "Vendor incident INC-1234"
+

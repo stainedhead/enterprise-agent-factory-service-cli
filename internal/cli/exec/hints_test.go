@@ -32,11 +32,14 @@ var contractReasons = []string{
 var modelEndpointReasons = []string{"slug_taken", "slug_reserved", "slug_invalid", "base_url_not_https", "provider_disabled",
 	"no_fallback_model", "endpoint_base_url_placeholder", "needs_service_admin", "team_endpoints_not_allowed", "endpoint_enabled"}
 
+// mcpReasons are the new error reasons of API contract v1.6.0 (governed MCP servers).
+var mcpReasons = []string{"url_not_https", "host_denied", "image_not_pinned", "image_unsigned", "registry_not_allowed", "auth_kind_unsupported", "service_account_required", "audience_not_allowed", "audience_reserved", "capture_window_too_long", "mcp_server_not_enabled_for_team", "invalid_policy_rule", "team_servers_not_allowed", "approval_not_permitted_by_policy", "not_team_server", "server_in_use", "server_not_published", "server_not_approved", "team_gateway_required", "invalid_review_transition", "federated_identity_limit", "governed_by_mcp_server", "capture_active"}
+
 // CLI-US-24.7, PC-CLI-D6, 5.2 hints: every reason of the contract has a hint, the table has no
 // reason the contract does not name, a hint is one line, and an unknown reason prints none.
 func TestCollaborationReasonHints(t *testing.T) {
 	want := map[string]bool{}
-	for _, r := range append(append([]string{}, contractReasons...), modelEndpointReasons...) {
+	for _, r := range append(append(append([]string{}, contractReasons...), modelEndpointReasons...), mcpReasons...) {
 		want[r] = true
 		h := Hint(r)
 		if h == "" {

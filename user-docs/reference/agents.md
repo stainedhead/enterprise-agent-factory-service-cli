@@ -17,12 +17,15 @@ OPERATIONS
        create-role-link               Create agent role link
        create-snapshot                Create agent snapshot
        delete-agent                   Delete agent
+       delete-agent-federated-identity Delete agent federated identity
        delete-config-value            Delete agent config value
        delete-identity                Delete agent identity
        delete-role-link               Delete agent role link
        describe-agent                 Get agent
        describe-role-link             Get agent role link
        get-agent-status               Get agent status
+       get-effective-agent-mcp        Get effective agent MCP
+       list-agent-federated-identities List agent federated identities
        list-agent-templates           List agent templates
        list-agents                    List agents
        list-config-values             List agent config values
@@ -32,6 +35,7 @@ OPERATIONS
        list-snapshots                 List agent snapshots
        list-storage-classes           List storage classes
        pause-agent                    Pause agent
+       put-agent-federated-identity   Put agent federated identity
        put-config-value               Put agent config value
        restart-agent                  Restart agent
        resume-agent                   Resume agent
@@ -67,6 +71,8 @@ OPTIONS
           Possible values: team_shared, dedicated
        --image (string) (required)
           Container image pinned by digest
+       --mcp (JSON)
+          v1.6.0 MCP access of an agent or pool
        --model-id (string)
           Deprecated: use --default-model-id (and --models to choose the set) instead.
        --models (list)
@@ -342,6 +348,55 @@ EXAMPLES
        Delete an agent and wait until it is gone
 
        afs agents delete-agent --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --wait
+
+```
+
+## delete-agent-federated-identity
+
+```text
+AFS AGENTS DELETE-AGENT-FEDERATED-IDENTITY
+
+NAME
+       agents delete-agent-federated-identity
+
+DESCRIPTION
+       Delete agent federated identity
+
+       Required permission: agent-federated-identities:write
+
+SYNOPSIS
+       afs agents delete-agent-federated-identity [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+       --name (string) (required)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       Remove a federated identity
+
+       afs agents delete-agent-federated-identity --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name vault
 
 ```
 
@@ -632,6 +687,104 @@ EXAMPLES
        Show reconcile status
 
        afs agents get-agent-status --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
+```
+
+## get-effective-agent-mcp
+
+```text
+AFS AGENTS GET-EFFECTIVE-AGENT-MCP
+
+NAME
+       agents get-effective-agent-mcp
+
+DESCRIPTION
+       Get effective agent MCP
+
+       The servers the agent reaches through the team gateway after the service, team and agent narrowing, and the AFS_MCP_* variable names it gets.
+
+       Required permission: team-mcp-servers:read
+
+SYNOPSIS
+       afs agents get-effective-agent-mcp [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       Show the MCP servers it reaches
+
+       afs agents get-effective-agent-mcp --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
+       Show the variable names it gets
+
+       afs agents get-effective-agent-mcp --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --query env --output text
+
+```
+
+## list-agent-federated-identities
+
+```text
+AFS AGENTS LIST-AGENT-FEDERATED-IDENTITIES
+
+NAME
+       agents list-agent-federated-identities
+
+DESCRIPTION
+       List agent federated identities
+
+       Required permission: agents:read
+
+SYNOPSIS
+       afs agents list-agent-federated-identities [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       List its federated identities
+
+       afs agents list-agent-federated-identities --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001
 
 ```
 
@@ -1063,6 +1216,63 @@ EXAMPLES
 
 ```
 
+## put-agent-federated-identity
+
+```text
+AFS AGENTS PUT-AGENT-FEDERATED-IDENTITY
+
+NAME
+       agents put-agent-federated-identity
+
+DESCRIPTION
+       Put agent federated identity
+
+       A federated identity projects a Kubernetes service account token with the audience into the pod (filePath, envVar), for an external system that trusts the cluster's issuer. The response names the issuer and subject to trust; no secret is stored.
+
+       Required permission: agent-federated-identities:write
+
+SYNOPSIS
+       afs agents put-agent-federated-identity [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --agent-id (string) (required)
+       --name (string) (required)
+       --audience (string) (required)
+          Must match federation.allowed_audiences (400 audience_not_allowed); sts.amazonaws.com and afs-gateway are reserved
+       --env-var (string)
+       --expiration-seconds (integer)
+          Range: 600 to 86400
+       --file-path (string)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       Project a token for an external system's STS
+
+       afs agents put-agent-federated-identity --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --agent-id agt_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name vault --audience vault.corp.example --expiration-seconds 3600
+
+```
+
 ## put-config-value
 
 ```text
@@ -1300,6 +1510,8 @@ OPTIONS
           Possible values: team_shared, dedicated
        --image (string)
           Container image pinned by digest
+       --mcp (JSON)
+          v1.6.0 MCP access of an agent or pool
        --model-id (string)
           Deprecated: use --default-model-id (and --models to choose the set) instead.
        --models (list)

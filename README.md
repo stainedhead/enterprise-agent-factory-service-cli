@@ -14,12 +14,13 @@ access decides what each user can do.
 
 ![afs help](docs/images/afs-help.svg)
 
-**Status:** feature complete against API contract 1.5 (milestones M0 to M14, release v1.2.0, which adds the team
-model gateway; see [Model endpoints](user-docs/model-endpoints.md); v1.1.0 added the team orchestration agent and
-model access, see [Team orchestration](user-docs/orchestration.md)). All 221 operations of the pinned
-contract are commands, with examples, table columns, golden help and output, and an `AccessDenied` test each, plus the
-local commands `configure`, `configure sso`, `sso login`, `sso logout`, `completion` and `collaboration invoke-api`. The contract snapshot is pinned to
-contract v1.5.0 on `-restapi` `main` (`-restapi` commit `7d48ea7`).
+**Status:** feature complete against API contract 1.6 (milestones M0 to M16, release v1.3.0, which adds governed MCP
+servers; see [Governed MCP servers](user-docs/mcp-servers.md); v1.2.0 added the team model gateway, see
+[Model endpoints](user-docs/model-endpoints.md), and v1.1.0 the team orchestration agent, see
+[Team orchestration](user-docs/orchestration.md)). All 273 CLI operations of the pinned contract are commands, with
+examples, table columns, golden help and output, and an `AccessDenied` test each, plus the local commands `configure`,
+`configure sso`, `sso login`, `sso logout`, `completion` and `collaboration invoke-api`. The contract snapshot is pinned
+to contract v1.6.0 on `-restapi` `main` (`-restapi` commit `ef92a4c`).
 
 What every command gets: AWS-style global options, profiles, five output formats and `--query`, automatic pagination,
 `--cli-input-json` and `--generate-cli-skeleton`, safe updates with `If-Match`, idempotent retries, `--wait`, a redacted

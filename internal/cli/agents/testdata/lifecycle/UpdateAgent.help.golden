@@ -21,6 +21,8 @@ OPTIONS
           Possible values: team_shared, dedicated
        --image (string)
           Container image pinned by digest
+       --mcp (JSON)
+          v1.6.0 MCP access of an agent or pool
        --model-id (string)
           Deprecated: use --default-model-id (and --models to choose the set) instead.
        --models (list)

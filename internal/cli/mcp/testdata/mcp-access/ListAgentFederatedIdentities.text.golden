@@ -1,0 +1,1 @@
+azure-prod	api://AzureADTokenExchange	3600	/var/run/secrets/afs/federation/azure-prod/token	AFS_FEDERATED_TOKEN_FILE_AZURE_PROD	system:serviceaccount:afs-t-payments:agt-reviewer	1

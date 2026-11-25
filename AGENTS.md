@@ -16,7 +16,7 @@ It talks only to the API in
 [enterprise-agent-factory-service-restapi](https://github.com/stainedhead/enterprise-agent-factory-service-restapi),
 whose `api/openapi.yaml` is the contract.
 
-Status: feature complete, milestones M0-M14 done, release v1.2.0, contract 1.5 (all 221 operations, 219 commands, with examples, columns and goldens, plus the model endpoint gateway (`model-endpoints` service), the orchestration agent, model access, `collaboration invoke-api` and deprecations kept until 2.0.0). Release signing and the Homebrew tap need credentials and a tap repository that are not in this repository. See `specs/` for the plan.
+Status: feature complete, milestones M0-M16 done, release v1.3.0, contract 1.6 (all 276 operations, 273 commands, with examples, columns and goldens, plus governed MCP servers (`mcp-servers` service and MCP commands in `teams`, `agents`, `pools`, `audit`, `reports`), the model endpoint gateway (`model-endpoints` service), the orchestration agent, model access, `collaboration invoke-api` and deprecations kept until 2.0.0). Release signing and the Homebrew tap need credentials and a tap repository that are not in this repository. See `specs/` for the plan.
 
 ## Toolchain
 
@@ -59,7 +59,7 @@ docs/  user-docs/  specs/
 ## Command design rules (AWS CLI conventions)
 
 - **Shape.** `afs <service> <operation>`. Services are plural nouns (`teams`, `agents`, `secrets`,
-  `budgets`, `members`, `api-keys`, `audit`, `work-orders`, `models`, `admin`) plus `configure` and `sso`.
+  `budgets`, `members`, `api-keys`, `audit`, `work-orders`, `models`, `model-endpoints`, `mcp-servers`, `admin`) plus `configure` and `sso`.
   Operations are kebab-case verb-noun: `list-teams`, `describe-team`, `create-agent`, `update-agent`,
   `delete-agent`, `put-budget`, and action verbs such as `suspend-team`, `restart-agent`, `rotate-secret`.
 - **One operation, one API call** (plus pagination). Operation names map to OpenAPI `operationId`s

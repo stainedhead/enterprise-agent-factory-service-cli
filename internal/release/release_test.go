@@ -106,7 +106,7 @@ func TestSnapshotBinaryReportsVersion(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !strings.HasPrefix(string(out), "afs-cli/"+snapshot+" contract/1.5 go") {
+	if !strings.HasPrefix(string(out), "afs-cli/"+snapshot+" contract/1.6 go") {
 		t.Errorf("--version: %q", out)
 	}
 }

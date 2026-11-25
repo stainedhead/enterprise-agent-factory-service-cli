@@ -1,0 +1,55 @@
+AFS MCP-SERVERS LIST-MCP-SERVERS
+
+NAME
+       mcp-servers list-mcp-servers
+
+DESCRIPTION
+       List MCP servers
+
+       Required permission: mcp-servers:read
+
+SYNOPSIS
+       afs mcp-servers list-mcp-servers [options]
+
+OPTIONS
+       --scope (string)
+          Possible values: enterprise, team, all
+       --review-status (string)
+          Possible values: draft, pending_review, approved, rejected, suspended
+       --risk-tier (string)
+          Possible values: low, elevated, high
+       --team-id (string)
+       --location (string)
+          Possible values: external, corporate, in_namespace
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       List the catalog
+
+       afs mcp-servers list-mcp-servers
+
+       List the enterprise servers that wait for review
+
+       afs mcp-servers list-mcp-servers --scope enterprise --review-status pending_review
+
+       List one team's own servers
+
+       afs mcp-servers list-mcp-servers --scope team --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001
+

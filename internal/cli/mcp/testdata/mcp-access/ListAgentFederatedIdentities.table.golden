@@ -1,0 +1,2 @@
+Name        Audience    Expiratio…  FilePath    EnvVar      Subject      Version
+azure-prod  api://Azu…  3600        /var/run/…  AFS_FEDER…  system:ser…  1

@@ -1,0 +1,8 @@
+Field             Value
+Server            mcp_01JD2Q3R4S5T6V7W8X9Y0Z0001
+Level             team
+Team              team_01JD2Q3R4S5T6V7W8X9Y0Z0001
+DriftPolicy       hold
+TrustAnnotations  true
+AllowSampling     false
+Version           5

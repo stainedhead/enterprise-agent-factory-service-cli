@@ -15,6 +15,7 @@ SERVICES
        collaboration    
        completion       Print a shell completion script.
        configure        Create and edit profiles in ~/.afs/config.
+       mcp-servers      Govern the MCP server catalog: register, review, approve, suspend and capture search queries.
        members          Manage team members and role bindings.
        model-endpoints  
        models           List and manage models and their prices.

@@ -157,14 +157,14 @@ func TestRegistryQueries(t *testing.T) {
 func TestEveryOperationHasMilestone(t *testing.T) {
 	for _, o := range spec.Commands() {
 		m := MilestoneOf(o.ID)
-		if m < 0 || m > 14 {
+		if m < 0 || m > CurrentMilestone {
 			t.Errorf("%s: milestone %d", o.ID, m)
 		}
 		if StreamOf(o.ID) == "" {
 			t.Errorf("%s: no stream", o.ID)
 		}
 	}
-	if len(milestoneOf) != 219 {
+	if len(milestoneOf) != 273 {
 		t.Errorf("milestone map has %d entries", len(milestoneOf))
 	}
 	if MilestoneOf("Nope") != -1 {
