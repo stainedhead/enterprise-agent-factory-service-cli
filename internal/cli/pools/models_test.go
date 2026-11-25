@@ -63,3 +63,15 @@ func TestPoolRefusals(t *testing.T) {
 		}
 	}
 }
+
+// FR-012 (v1.5.0): --routes and --default-route fold into the pool's models member.
+func TestPoolRoutes(t *testing.T) {
+	r := createPool(t, "--models", "all", "--routes", "openai-prod", "coder-vllm", "--default-model-id", "openai-prod/gpt-4.1")
+	if r.Code != 0 || !strings.Contains(string(r.ReqBody), `"models":{"access":"all","defaultModelId":"openai-prod/gpt-4.1","routeAccess":"selected","routes":["openai-prod","coder-vllm"]}`) {
+		t.Errorf("exit %d body %s err %q", r.Code, r.ReqBody, r.Err)
+	}
+	u := clitest.Run(t, okPool, "pools", "update-pool", "--team-id", "team_1", "--pool-id", "pool_1", "--routes", "all", "--if-match", "2")
+	if u.Code != 0 || string(u.ReqBody) != `{"models":{"routeAccess":"all"}}` {
+		t.Errorf("exit %d body %s", u.Code, u.ReqBody)
+	}
+}

@@ -28,11 +28,15 @@ var contractReasons = []string{
 	"default_model_not_allowed", "model_ids_not_allowed_for_all", "conflicting_fields", "setting_renamed", "service_model_access_all",
 }
 
+// modelEndpointReasons are the new error reasons of API contract section 4.13 (v1.5.0).
+var modelEndpointReasons = []string{"slug_taken", "slug_reserved", "slug_invalid", "base_url_not_https", "provider_disabled",
+	"no_fallback_model", "endpoint_base_url_placeholder", "needs_service_admin", "team_endpoints_not_allowed", "endpoint_enabled"}
+
 // CLI-US-24.7, PC-CLI-D6, 5.2 hints: every reason of the contract has a hint, the table has no
 // reason the contract does not name, a hint is one line, and an unknown reason prints none.
 func TestCollaborationReasonHints(t *testing.T) {
 	want := map[string]bool{}
-	for _, r := range contractReasons {
+	for _, r := range append(append([]string{}, contractReasons...), modelEndpointReasons...) {
 		want[r] = true
 		h := Hint(r)
 		if h == "" {
@@ -87,5 +91,14 @@ func TestReportErrorReasonHintAndUnknownReason(t *testing.T) {
 	ReportError(&b, "X", "default", errors.New("plain"))
 	if strings.Contains(b.String(), "field:") {
 		t.Error("no details for a plain error")
+	}
+}
+
+// FR-014 (v1.5.0): every new error reason of section 4.13 has a hint that names a command or what to change.
+func TestModelEndpointHints(t *testing.T) {
+	for _, reason := range modelEndpointReasons {
+		if Hint(reason) == "" {
+			t.Errorf("%s has no hint", reason)
+		}
 	}
 }

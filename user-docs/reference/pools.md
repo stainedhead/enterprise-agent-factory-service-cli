@@ -85,6 +85,10 @@ OPTIONS
           Idempotency key (default: a new ULID per invocation).
        --default-model-id (string)
           The model the runtime starts with; it must be one of the agent's models. Without --models on an update, only the default changes.
+       --routes (list)
+          Model routes the agent may call: the word all (every route of the team, now and later) or one or more route slugs (a fixed selection). Folded into models.routeAccess and models.routes.
+       --default-route (string)
+          The route of the default model; --default-model-id then names the route's model. Or give --default-model-id <route>/<model> alone.
        --wait (boolean)
           Wait until the resource is ready (or gone, for a delete).
        --wait-timeout (duration)
@@ -1231,6 +1235,10 @@ OPTIONS
           Apply only if the resource is at this version (safe update).
        --default-model-id (string)
           The model the runtime starts with; it must be one of the agent's models. Without --models on an update, only the default changes.
+       --routes (list)
+          Model routes the agent may call: the word all (every route of the team, now and later) or one or more route slugs (a fixed selection). Folded into models.routeAccess and models.routes.
+       --default-route (string)
+          The route of the default model; --default-model-id then names the route's model. Or give --default-model-id <route>/<model> alone.
        --wait (boolean)
           Wait until the resource is ready (or gone, for a delete).
        --wait-timeout (duration)

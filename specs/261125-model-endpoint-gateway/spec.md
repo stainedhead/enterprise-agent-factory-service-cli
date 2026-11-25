@@ -48,7 +48,7 @@ the API decides); the MCP operations of contract v1.6.0 (release 1.3.0, another 
 | FR-012 | Agents and pools: `--routes all\|<slug>…` and `--default-route` fold into `models`; `--default-model-id <route>/<model>` is sent unchanged | MEG-CLI-2 | `modelaccess.TestRoutesFoldIntoModels`, `agents.TestCreateAgentRoutes`, `pools.TestPoolRoutes` |
 | FR-013 | Usage and cost reports accept `--route` and `--group-by route` | MEG-CLI-2 | `reports.TestRouteFilterAndGroupBy` |
 | FR-014 | Hints for the v1.5.0 error reasons | MEG-CLI-1 | `exec.TestModelEndpointHints` |
-| FR-015 | Reference docs regenerated; usage examples in `user-docs/`; CHANGELOG 1.2.0; README, AGENTS.md and the CLI PRD updated | MEG-CLI-4 | `docs.TestReferenceUpToDate` |
+| FR-015 | Reference docs regenerated; usage examples in `user-docs/`; CHANGELOG 1.2.0; README, AGENTS.md and the CLI PRD updated | MEG-CLI-4 | `docs.TestDocgenMatchesHelp` |
 
 ## 5. Acceptance
 

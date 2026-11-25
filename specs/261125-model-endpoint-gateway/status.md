@@ -22,3 +22,6 @@ None.
 
 - 2026-11-25: spec created from the root `model-endpoint-gateway-PRD.md` Appendix D.4 and contract v1.5.0 section 4.13;
   research.md records nine findings (four are contract notes).
+- 2026-11-25: T1 to T8 done: re-pin to 7d48ea7 (221 operations, 219 commands), core changes, `model-endpoints`
+  service (23 commands), two `teams` commands, two inference reports, route options, hints, traceability test. The
+  container restarted mid-T3; work resumed from the files on disk and is pushed after each step.
