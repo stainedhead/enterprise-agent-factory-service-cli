@@ -69,6 +69,17 @@ var hints = map[string]string{ //nolint:gosec // G101: the words "key" and "secr
 	"conflicting_fields":            "--model-id and --default-model-id name different models; give one of them (--model-id is deprecated).",
 	"setting_renamed":               "That setting was renamed in 1.1.0: collab.base_domain is now orchestration.public_base_domain and collab.public_endpoints is orchestration.public_endpoints (afs admin get-settings lists every key).",
 	"service_model_access_all":      "Service model access is all, so a model's enabled flag cannot change; switch it first with afs admin put-service-model-access --access selected.",
+	// section 4.13 model endpoints, routes and providers (v1.5.0)
+	"slug_taken":                    "That route slug is already used; choose another --slug (afs model-endpoints list-model-endpoints --include-teams lists the slugs).",
+	"slug_reserved":                 "That slug is reserved (bedrock and the built-in routes); choose another --slug.",
+	"slug_invalid":                  "A route slug is 2 to 31 lowercase letters, digits or hyphens and starts with a letter.",
+	"base_url_not_https":            "External and corporate endpoints need an https:// --base-url; only an in_namespace team endpoint may use http.",
+	"provider_disabled":             "That provider is off for the service. A service admin can turn it on: afs model-endpoints update-inference-provider --provider <name> --enabled.",
+	"no_fallback_model":             "Turning Bedrock off needs a fallback: add --fallback-model <route>/<model> on a provider that is on (try --dry-run first).",
+	"endpoint_base_url_placeholder": "The base URL still holds a placeholder; set the endpoint's real address with --base-url.",
+	"needs_service_admin":           "That endpoint needs extra terms or its provider is selected by service admins; ask a service admin to select it for the team.",
+	"team_endpoints_not_allowed":    "This team may not declare its own endpoints. A service admin can allow it: afs teams put-team-gateway-settings --may-add-model-endpoints.",
+	"endpoint_enabled":              "Switch the endpoint off first: afs model-endpoints update-model-endpoint --no-enabled.",
 }
 
 // Hint returns the hint of a reason, or "" for one that has none.

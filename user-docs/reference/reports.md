@@ -15,7 +15,9 @@ OPERATIONS
        create-report-schedule         Create report schedule
        delete-report-schedule         Delete report schedule
        get-agent-report               Get agent report
+       get-inference-report           Get inference report
        get-service-report             Get service report
+       get-team-inference-report      Get team inference report
        get-team-report                Get team report
        list-report-schedules          List report schedules
        update-report-schedule         Update report schedule
@@ -168,8 +170,10 @@ OPTIONS
           Instead of from and to
           Possible values: 24h, 7d, 30d, 90d, mtd
        --group-by (string)
-          Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams.
+          Comma-separated: team, agent, model, system, day, hour, tag:<key>, pool (ephemeral teams), surface, reason and person (collaboration), and route (usage and costs, v1.5.0).
        --model-id (string)
+       --route (string)
+          v1.5.0, usage and costs reports; a route slug, bedrock for Bedrock calls
        --system-id (string)
        --pool-id (string)
           Ephemeral teams only
@@ -201,6 +205,70 @@ EXAMPLES
 
 ```
 
+## get-inference-report
+
+```text
+AFS REPORTS GET-INFERENCE-REPORT
+
+NAME
+       reports get-inference-report
+
+DESCRIPTION
+       Get inference report
+
+       The service-wide inference report (platform roles); --team-id narrows it to one team.
+
+       Required permission: admin:reports
+
+SYNOPSIS
+       afs reports get-inference-report [options]
+
+OPTIONS
+       --team-id (string)
+          Filter (service reports only)
+       --from (string)
+       --to (string)
+       --range (string)
+          Instead of from and to
+          Possible values: 24h, 7d, 30d, 90d, mtd
+       --group-by (string)
+          Comma-separated: route, model, agent, hour, day (and team on the service report, pool in ephemeral teams)
+       --route (string)
+          Filter by route (bedrock for Bedrock)
+       --model-id (string)
+       --agent-id (string)
+       --pool-id (string)
+          Ephemeral teams only
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       Every route this month, by route
+
+       afs reports get-inference-report --range mtd --group-by route
+
+       One team's hourly TTFT on a route
+
+       afs reports get-inference-report --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --route openai-prod --range 24h --group-by hour
+
+```
+
 ## get-service-report
 
 ```text
@@ -226,11 +294,13 @@ OPTIONS
           Instead of from and to
           Possible values: 24h, 7d, 30d, 90d, mtd
        --group-by (string)
-          Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams.
+          Comma-separated: team, agent, model, system, day, hour, tag:<key>, pool (ephemeral teams), surface, reason and person (collaboration), and route (usage and costs, v1.5.0).
        --team-id (string)
           Filter (service reports only)
        --agent-id (string)
        --model-id (string)
+       --route (string)
+          v1.5.0, usage and costs reports; a route slug, bedrock for Bedrock calls
        --system-id (string)
        --pool-id (string)
           Ephemeral teams only
@@ -266,6 +336,70 @@ EXAMPLES
 
 ```
 
+## get-team-inference-report
+
+```text
+AFS REPORTS GET-TEAM-INFERENCE-REPORT
+
+NAME
+       reports get-team-inference-report
+
+DESCRIPTION
+       Get team inference report
+
+       Latency, time to first token, throughput, errors (upstream errors apart from AFS refusals) and cost, from the gateway's ledger; no prompt or completion text is ever reported.
+
+       Required permission: reports:read
+
+SYNOPSIS
+       afs reports get-team-inference-report [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --from (string)
+       --to (string)
+       --range (string)
+          Instead of from and to
+          Possible values: 24h, 7d, 30d, 90d, mtd
+       --group-by (string)
+          Comma-separated: route, model, agent, hour, day (and team on the service report, pool in ephemeral teams)
+       --route (string)
+          Filter by route (bedrock for Bedrock)
+       --model-id (string)
+       --agent-id (string)
+       --pool-id (string)
+          Ephemeral teams only
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       The team's routes over the last day, by route and model
+
+       afs reports get-team-inference-report --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --range 24h --group-by route,model
+
+       One route by agent over a week, as CSV
+
+       afs reports get-team-inference-report --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --range 7d --route openai-prod --group-by agent --output csv
+
+```
+
 ## get-team-report
 
 ```text
@@ -293,9 +427,11 @@ OPTIONS
           Instead of from and to
           Possible values: 24h, 7d, 30d, 90d, mtd
        --group-by (string)
-          Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams.
+          Comma-separated: team, agent, model, system, day, hour, tag:<key>, pool (ephemeral teams), surface, reason and person (collaboration), and route (usage and costs, v1.5.0).
        --agent-id (string)
        --model-id (string)
+       --route (string)
+          v1.5.0, usage and costs reports; a route slug, bedrock for Bedrock calls
        --system-id (string)
        --pool-id (string)
           Ephemeral teams only

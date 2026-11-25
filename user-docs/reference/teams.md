@@ -38,6 +38,8 @@ OPERATIONS
        list-team-models               List team models
        list-teams                     List teams
        put-config-value               Put namespace config value
+       put-team-gateway-settings      Put team gateway settings
+       put-team-model-endpoints       Put team model endpoints
        put-team-models                Put team models
        put-team-tags                  Put team tags
        restore-revision               Restore revision
@@ -1387,6 +1389,113 @@ EXAMPLES
        Set a team-wide value (reads the version first; a missing value is created)
 
        afs teams put-config-value --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name REGION --value eu-west-1
+
+```
+
+## put-team-gateway-settings
+
+```text
+AFS TEAMS PUT-TEAM-GATEWAY-SETTINGS
+
+NAME
+       teams put-team-gateway-settings
+
+DESCRIPTION
+       Put team gateway settings
+
+       shared sends the team's agents through the service's shared gateway; per_namespace runs the team's own gateway in its namespace (agents roll to it once it is ready). mayAddModelEndpoints lets the team's admins declare their own endpoints.
+
+       Required permission: teams:set-guardrails
+
+SYNOPSIS
+       afs teams put-team-gateway-settings [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --deployment (string)
+          Possible values: shared, per_namespace
+       --may-add-model-endpoints (boolean)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       Give a team its own gateway
+
+       afs teams put-team-gateway-settings --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --deployment per_namespace
+
+       Let a team declare its own model endpoints
+
+       afs teams put-team-gateway-settings --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --may-add-model-endpoints
+
+```
+
+## put-team-model-endpoints
+
+```text
+AFS TEAMS PUT-TEAM-MODEL-ENDPOINTS
+
+NAME
+       teams put-team-model-endpoints
+
+DESCRIPTION
+       Put team model endpoints
+
+       Replaces the team's opted-in service endpoints: an endpoint left out is deselected. Endpoints that need extra terms, or whose provider is selected by service admins, need a service admin (needs_service_admin). No If-Match is sent unless --if-match is given.
+
+       Required permission: model-endpoints:write
+
+SYNOPSIS
+       afs teams put-team-model-endpoints [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --endpoint-ids (list) (required)
+          Service endpoints to opt in to; one left out is deselected
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       Opt the team in to two service routes
+
+       afs teams put-team-model-endpoints --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --endpoint-ids mep_01JD2Q3R4S5T6V7W8X9Y0Z0001 mep_01JD2Q3R4S5T6V7W8X9Y0Z0003
 
 ```
 

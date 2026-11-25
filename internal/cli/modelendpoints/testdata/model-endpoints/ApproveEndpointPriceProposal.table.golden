@@ -1,0 +1,11 @@
+Field             Value
+Id                epp_01JD2Q3R4S5T6V7W8X9Y0Z0001
+Endpoint          openai-prod
+Model             gpt-4.1-mini
+InputUsdPerMtok   0.40
+OutputUsdPerMtok  1.60
+EffectiveFrom     2026-12-01T00:00:00Z
+Status            approved
+Source            price_list
+DecidedBy         usr_admin
+Version           2

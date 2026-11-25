@@ -102,6 +102,13 @@ func TestUserAgentAcceptHeadersAndIfMatch(t *testing.T) {
 	if gotURL != "/v1/x?a=b+c" {
 		t.Errorf("url = %s", gotURL)
 	}
+	// MEG-CLI-1: a provider statement CSV is sent with its own media type.
+	if _, err := c.Do(context.Background(), Request{Method: "POST", Path: "/v1/x", Body: []byte("a,b\n1,2\n"), ContentType: "text/csv"}); err != nil {
+		t.Fatal(err)
+	}
+	if got.Get("Content-Type") != "text/csv" {
+		t.Errorf("Content-Type = %q, want text/csv", got.Get("Content-Type"))
+	}
 	if _, err := c.Do(context.Background(), Request{Method: "GET", Path: "/v1/x", NoAuth: true}); err != nil {
 		t.Fatal(err)
 	}

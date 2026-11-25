@@ -111,9 +111,18 @@ func DeriveOptions(op *spec.Operation, ov *Override) []Option {
 		out = append(out, Option{Flag: flag(p.Name), Wire: p.Name, In: p.In, Kind: k, Elem: elem, Required: p.Required,
 			Enum: p.Schema.Enum, Min: p.Schema.Min, Max: p.Schema.Max, Desc: p.Desc})
 	}
+	query := map[string]bool{}
+	for _, p := range op.Params {
+		if p.In == "query" {
+			query[p.Name] = true
+		}
+	}
 	if op.Body != nil {
 		for _, f := range op.Body.Fields {
-			if f.ReadOnly {
+			if f.ReadOnly || query[f.Name] {
+				// A body member named like a query parameter of the same operation (import-provider-statement's
+				// period and source, which the query carries for a text/csv body) is one option: the query option
+				// stands and the override puts the value where the body it sends needs it.
 				continue
 			}
 			k, elem := kindOf(f.Schema)

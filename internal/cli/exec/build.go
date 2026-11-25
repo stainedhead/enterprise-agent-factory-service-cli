@@ -24,6 +24,8 @@ type Built struct {
 	Path        map[string]string
 	Query       url.Values
 	Body        *cli.Object // nil when the operation has no body
+	Raw         []byte      // sent instead of Body when set (RequestParts.Raw)
+	ContentType string      // media type of Raw
 	IfMatch     string      // explicit version ("" when not given)
 	IdemKey     string
 	Wait        bool
@@ -185,6 +187,7 @@ func Build(cmd *cli.Command, p *cli.Parsed, src Sources, profileTeamID string) (
 		if err := cmd.Build(p, parts); err != nil {
 			return nil, usage(cmd, "%v", err)
 		}
+		b.Raw, b.ContentType = parts.Raw, parts.ContentType
 	}
 	if cmd.Validate != nil {
 		if err := cmd.Validate(p); err != nil {
@@ -209,6 +212,9 @@ func Build(cmd *cli.Command, p *cli.Parsed, src Sources, profileTeamID string) (
 				missing = append(missing, o.Flag)
 			}
 		case "body":
+			if b.Raw != nil {
+				continue
+			}
 			if _, ok := b.Body.Get(o.Wire); !ok {
 				if o.Sensitive {
 					raw, err := promptSecret(src, o)

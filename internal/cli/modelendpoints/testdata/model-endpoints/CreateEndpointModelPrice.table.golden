@@ -1,0 +1,8 @@
+Field                  Value
+Model                  gpt-4.1
+InputUsdPerMtok        2.00
+OutputUsdPerMtok       8.00
+CachedInputUsdPerMtok  0.50
+RequestFeeUsd          0
+EffectiveFrom          2026-12-01T00:00:00Z
+Source                 manual

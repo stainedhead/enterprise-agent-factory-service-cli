@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | Draft for review, feature-complete scope (2026-11-21); revised after `review-prd`. **Extended 2026-11-22 for the Paperclip team collaboration change** ([change PRD](https://github.com/stainedhead/enterprise-agent-factory-service/blob/main/paperclip-team-collaboration-PRD.md), contract v1.3.0): requirements CLI-19 to CLI-27, stories CLI-US-24 to CLI-US-35, milestones M7 to M10, decisions PC-CLI-D1 to D11, open questions PC-CLI-OQ1 to OQ5; revised after a second `review-prd` pass (section 10). Not started |
+| **Status** | Draft for review, feature-complete scope (2026-11-21); revised after `review-prd`. **Extended 2026-11-22 for the Paperclip team collaboration change** ([change PRD](https://github.com/stainedhead/enterprise-agent-factory-service/blob/main/paperclip-team-collaboration-PRD.md), contract v1.3.0): requirements CLI-19 to CLI-27, stories CLI-US-24 to CLI-US-35, milestones M7 to M10, decisions PC-CLI-D1 to D11, open questions PC-CLI-OQ1 to OQ5; revised after a second `review-prd` pass (section 10). Not started. **Extended 2026-11-25 for the model endpoint gateway** ([change PRD](https://github.com/stainedhead/enterprise-agent-factory-service/blob/main/model-endpoint-gateway-PRD.md) Appendix D.4, contract v1.5.0 §4.13): stories CLI-US-36 to CLI-US-39 (MEG-CLI-1 to MEG-CLI-4), section 4.2; built in release 1.2.0 (spec `specs/261125-model-endpoint-gateway/`) |
 | **Author** | J (Enterprise Architecture), drafted with Claude |
 | **Parent** | [Root PRD](https://github.com/stainedhead/enterprise-agent-factory-service/blob/main/enterprise-agent-factory-service-initial-PRD.md) (stories US-1..US-26; IF-2; decisions D23–D57); solution design §11. Change PRD: [Paperclip team collaboration](https://github.com/stainedhead/enterprise-agent-factory-service/blob/main/paperclip-team-collaboration-PRD.md) (stories US-27..US-33, COL-*, SEC-7, decisions PC-D1..PC-D19; its §7.6 assigns CLI-US-24 and CLI-US-25 to this repository) |
 | **Consumes** | [API contract](https://github.com/stainedhead/enterprise-agent-factory-service/blob/main/docs/contracts/api-contract.md) (v1.3.0 for the Paperclip change: §2.1, §3, §4.4, §4.4b, §4.4c, §4.6, §7) via `-restapi/api/openapi.yaml` at a release tag; for the one local command `invoke-api`, also the public edge of §4.4c |
@@ -99,6 +99,7 @@ table is corrected. CLI-US-7 tests the generated command table against `openapi.
 | `swarm-templates` | `list-swarm-templates`, `create-swarm-template`, `describe-swarm-template`, `update-swarm-template`, `delete-swarm-template`, `enable-swarm-template`, `disable-swarm-template` |
 | `work-orders` | `list-work-orders`, `create-work-order`, `describe-work-order`, `update-work-order`, `cancel-work-order`, `list-repos`, `update-repo`, `list-team-work-orders` |
 | `collaboration` (v1.3.0) | `describe-collaboration`, `put-collaboration`, `list-collaboration-links`, `connect-agent`, `disconnect-agent`, `rotate-collaboration-keys`; local: `invoke-api` (not an operation). `admin` also gains `list-collaboration-endpoints`; `agents` gains `--role`, `--collaboration-connect`, `--paperclip-agent-id`, `--capability` on templates; `secrets` gains `--managed-by` |
+| `model-endpoints` (v1.5.0) | `list-model-endpoints`, `create-model-endpoint`, `describe-model-endpoint`, `update-model-endpoint`, `delete-model-endpoint`, `put-endpoint-models`, `create-endpoint-model-price`, `list-endpoint-price-proposals`, `approve-endpoint-price-proposal`, `reject-endpoint-price-proposal`, `list-endpoint-teams`, `put-model-endpoint-credential`, `rotate-model-endpoint-credential`, `put-endpoint-federation`, `import-provider-statement`, `list-inference-providers`, `update-inference-provider`; team endpoints `list-team-model-endpoints`, `create-team-model-endpoint`, `update-team-model-endpoint`, `delete-team-model-endpoint`, `put-team-endpoint-models`, `put-team-model-endpoint-credential`. `teams` gains `put-team-gateway-settings`, `put-team-model-endpoints`; `reports` gains `get-inference-report`, `get-team-inference-report`; agents and pools gain `--routes`, `--default-route` |
 | `sso`, `configure`, `completion` | `login`, `logout`, `list-providers`, `get-caller-identity`; `configure`, `configure sso`, `completion` (`login`, `logout`, `configure` and `completion` are local only, no API operation) |
 
 ### 3.2 Non-goals
@@ -731,6 +732,54 @@ The swarm template commands take the spec as a file (`--spec file://…`), so no
   `swarmtemplates.TestSwarmTemplateCollaborationTemplateRefused254`, `swarmtemplates.TestSwarmTemplateCollaborationAccessDenied254`.
 - 35.3 Pools never connect to Paperclip: `pools` commands gain no collaboration option. Priority P1, M10 (C4). *Proven by*
   `pools.TestNoCollaborationOptionOnPoolCommands`.
+
+### 4.2 Model endpoint gateway (contract v1.5.0)
+
+Added by the change PRD [model-endpoint-gateway-PRD.md](https://github.com/stainedhead/enterprise-agent-factory-service/blob/main/model-endpoint-gateway-PRD.md)
+Appendix D.4 (MEG-CLI-1 to MEG-CLI-4; stories US-70 to US-81; tests TC-CLI-01 to TC-CLI-05). Names, flags and shapes
+follow API contract v1.5.0 §4.13 and the OpenAPI snapshot; the contract wins on any difference. The criteria are traced
+to tests by the FR table of `specs/261125-model-endpoint-gateway/spec.md` (`services.TestModelEndpointCriteriaTraceToTests`).
+
+**CLI-US-36 · Script the model endpoint catalog and the provider switches.** *(MEG-CLI-1; US-62 to US-65, US-78 to US-81; TC-CLI-01, TC-CLI-05)*
+As a service admin, I want every model endpoint, price, proposal, federation, statement and provider operation as one
+command, so that I can manage routes from a pipeline.
+- 36.1 The `model-endpoints` service has one command per operation of §4.13 (kebab-case of the operationId, from
+  `x-afs-cli`), each with an example, table columns, golden help, table and text output. *Proven by*
+  `modelendpoints.TestCommandsDoneModelEndpoints`, `modelendpoints.TestTeamCommandsDoneModelEndpoints`.
+- 36.2 `update-inference-provider --provider bedrock --no-enabled --fallback-model azure-openai/gpt-5.1
+  --select-for-all-teams --reason …` sends exactly those members with the version read from `list-inference-providers`;
+  `--dry-run` sends `dryRun=true` and, for table or text output, prints the impact on stderr. *Proven by*
+  `modelendpoints.TestUpdateInferenceProviderBedrockOff`, `modelendpoints.TestUpdateInferenceProviderDryRun`.
+- 36.3 `import-provider-statement` takes the statement only as `--statement file://PATH`: CSV is sent as `text/csv`
+  with `period` and `source` in the query, JSON is the body. *Proven by* `modelendpoints.TestImportStatementCSV`,
+  `modelendpoints.TestImportStatementJSON`, `modelendpoints.TestImportStatementUsageErrors`.
+- 36.4 `reports get-inference-report` and `get-team-inference-report` send their filters, refuse `--range` with
+  `--from`/`--to` and a malformed `--group-by` with exit 252, and support CSV. *Proven by*
+  `reports.TestInferenceReportQuery`, `reports.TestInferenceReportUsageErrors`.
+
+**CLI-US-37 · Choose a team's routes and gateway.** *(MEG-CLI-2; US-66, US-67, US-76)*
+- 37.1 `teams put-team-gateway-settings` (`--deployment shared|per_namespace`, `--may-add-model-endpoints`) and
+  `teams put-team-model-endpoints --endpoint-ids …` (no version read: the selections carry none). *Proven by*
+  `teams.TestCommandsDoneGateway`, `teams.TestPutTeamModelEndpointsBody`.
+- 37.2 Agents and pools take `--routes all|<slug>…` and `--default-route`, folded into `models.routeAccess`,
+  `models.routes` and `models.defaultRoute`; `--default-model-id <route>/<model>` is sent unchanged; usage and cost
+  reports take `--route` and `--group-by route`. *Proven by* `modelaccess.TestRoutesFoldIntoModels`,
+  `agents.TestCreateAgentRoutes`, `pools.TestPoolRoutes`, `reports.TestRouteFilterAndGroupBy`.
+
+**CLI-US-38 · Set an upstream credential without exposing it.** *(MEG-CLI-3; US-71; TC-CLI-02, TC-CLI-04)*
+- 38.1 `put-model-endpoint-credential`, `rotate-model-endpoint-credential` and `put-team-model-endpoint-credential`
+  read the value only from `file://`, `fileb://`, `-` or a no-echo prompt; a plain argument or `--value` is refused with
+  exit 252 before any call, and the value is never printed. *Proven by*
+  `modelendpoints.TestCredentialValueOnlyFromFileStdinOrPrompt`, `modelendpoints.TestCredentialPlainArgumentRefused`.
+- 38.2 Under `--debug` the value and `Authorization` are redacted. *Proven by* `modelendpoints.TestCredentialDebugRedacted`.
+- 38.3 Credential writes send `If-Match` only when `--if-match` is given (no credential version is readable). *Proven
+  by* `modelendpoints.TestCredentialSendsNoVersionRead`.
+
+**CLI-US-39 · Every new command is denied cleanly and documented.** *(MEG-CLI-4; TC-CLI-03)*
+- 39.1 Each of the 27 new commands answers the API's `AccessDenied` with exit 254 and the AWS-style message. *Proven by*
+  `modelendpoints.TestCommandsDoneModelEndpoints`, `teams.TestCommandsDoneGateway`, `reports.TestCommandsDoneInference`.
+- 39.2 The v1.5.0 refusal reasons print a hint; `user-docs/reference/` is regenerated and `user-docs/model-endpoints.md`
+  gives usage examples. *Proven by* `exec.TestModelEndpointHints`, `docs.TestDocgenMatchesHelp`.
 
 ## 5. Non-functional requirements
 

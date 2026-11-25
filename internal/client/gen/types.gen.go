@@ -207,6 +207,24 @@ func (e AgentModelsAccess) Valid() bool {
 	}
 }
 
+// Defines values for AgentModelsRouteAccess.
+const (
+	AgentModelsRouteAccessAll      AgentModelsRouteAccess = "all"
+	AgentModelsRouteAccessSelected AgentModelsRouteAccess = "selected"
+)
+
+// Valid indicates whether the value is a known member of the AgentModelsRouteAccess enum.
+func (e AgentModelsRouteAccess) Valid() bool {
+	switch e {
+	case AgentModelsRouteAccessAll:
+		return true
+	case AgentModelsRouteAccessSelected:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for AgentModelsInputAccess.
 const (
 	AgentModelsInputAccessAll      AgentModelsInputAccess = "all"
@@ -219,6 +237,24 @@ func (e AgentModelsInputAccess) Valid() bool {
 	case AgentModelsInputAccessAll:
 		return true
 	case AgentModelsInputAccessSelected:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for AgentModelsInputRouteAccess.
+const (
+	AgentModelsInputRouteAccessAll      AgentModelsInputRouteAccess = "all"
+	AgentModelsInputRouteAccessSelected AgentModelsInputRouteAccess = "selected"
+)
+
+// Valid indicates whether the value is a known member of the AgentModelsInputRouteAccess enum.
+func (e AgentModelsInputRouteAccess) Valid() bool {
+	switch e {
+	case AgentModelsInputRouteAccessAll:
+		return true
+	case AgentModelsInputRouteAccessSelected:
 		return true
 	default:
 		return false
@@ -744,6 +780,24 @@ func (e CreateApiKeyRequestRole) Valid() bool {
 	}
 }
 
+// Defines values for CreateEndpointModelPriceRequestSource.
+const (
+	CreateEndpointModelPriceRequestSourceManual   CreateEndpointModelPriceRequestSource = "manual"
+	CreateEndpointModelPriceRequestSourceTransfer CreateEndpointModelPriceRequestSource = "transfer"
+)
+
+// Valid indicates whether the value is a known member of the CreateEndpointModelPriceRequestSource enum.
+func (e CreateEndpointModelPriceRequestSource) Valid() bool {
+	switch e {
+	case CreateEndpointModelPriceRequestSourceManual:
+		return true
+	case CreateEndpointModelPriceRequestSourceTransfer:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for CreateIdentityProviderRequestKind.
 const (
 	CreateIdentityProviderRequestKindEntraId CreateIdentityProviderRequestKind = "entra_id"
@@ -783,6 +837,111 @@ func (e CreateLogDestinationRequestKind) Valid() bool {
 	case CreateLogDestinationRequestKindS3:
 		return true
 	case CreateLogDestinationRequestKindSplunkHec:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateModelEndpointRequestAuthKind.
+const (
+	CreateModelEndpointRequestAuthKindAzureFederated  CreateModelEndpointRequestAuthKind = "azure_federated"
+	CreateModelEndpointRequestAuthKindBearer          CreateModelEndpointRequestAuthKind = "bearer"
+	CreateModelEndpointRequestAuthKindGoogleFederated CreateModelEndpointRequestAuthKind = "google_federated"
+	CreateModelEndpointRequestAuthKindHeader          CreateModelEndpointRequestAuthKind = "header"
+	CreateModelEndpointRequestAuthKindNone            CreateModelEndpointRequestAuthKind = "none"
+)
+
+// Valid indicates whether the value is a known member of the CreateModelEndpointRequestAuthKind enum.
+func (e CreateModelEndpointRequestAuthKind) Valid() bool {
+	switch e {
+	case CreateModelEndpointRequestAuthKindAzureFederated:
+		return true
+	case CreateModelEndpointRequestAuthKindBearer:
+		return true
+	case CreateModelEndpointRequestAuthKindGoogleFederated:
+		return true
+	case CreateModelEndpointRequestAuthKindHeader:
+		return true
+	case CreateModelEndpointRequestAuthKindNone:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateModelEndpointRequestCredentialMode.
+const (
+	CreateModelEndpointRequestCredentialModePerTeam CreateModelEndpointRequestCredentialMode = "per_team"
+	CreateModelEndpointRequestCredentialModeShared  CreateModelEndpointRequestCredentialMode = "shared"
+)
+
+// Valid indicates whether the value is a known member of the CreateModelEndpointRequestCredentialMode enum.
+func (e CreateModelEndpointRequestCredentialMode) Valid() bool {
+	switch e {
+	case CreateModelEndpointRequestCredentialModePerTeam:
+		return true
+	case CreateModelEndpointRequestCredentialModeShared:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateModelEndpointRequestLocation.
+const (
+	CreateModelEndpointRequestLocationCorporate CreateModelEndpointRequestLocation = "corporate"
+	CreateModelEndpointRequestLocationExternal  CreateModelEndpointRequestLocation = "external"
+)
+
+// Valid indicates whether the value is a known member of the CreateModelEndpointRequestLocation enum.
+func (e CreateModelEndpointRequestLocation) Valid() bool {
+	switch e {
+	case CreateModelEndpointRequestLocationCorporate:
+		return true
+	case CreateModelEndpointRequestLocationExternal:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateModelEndpointRequestPricingMode.
+const (
+	CreateModelEndpointRequestPricingModeCapacity CreateModelEndpointRequestPricingMode = "capacity"
+	CreateModelEndpointRequestPricingModeFree     CreateModelEndpointRequestPricingMode = "free"
+	CreateModelEndpointRequestPricingModePerToken CreateModelEndpointRequestPricingMode = "per_token"
+)
+
+// Valid indicates whether the value is a known member of the CreateModelEndpointRequestPricingMode enum.
+func (e CreateModelEndpointRequestPricingMode) Valid() bool {
+	switch e {
+	case CreateModelEndpointRequestPricingModeCapacity:
+		return true
+	case CreateModelEndpointRequestPricingModeFree:
+		return true
+	case CreateModelEndpointRequestPricingModePerToken:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateModelEndpointRequestProtocols.
+const (
+	CreateModelEndpointRequestProtocolsOpenaiChat       CreateModelEndpointRequestProtocols = "openai_chat"
+	CreateModelEndpointRequestProtocolsOpenaiEmbeddings CreateModelEndpointRequestProtocols = "openai_embeddings"
+	CreateModelEndpointRequestProtocolsOpenaiResponses  CreateModelEndpointRequestProtocols = "openai_responses"
+)
+
+// Valid indicates whether the value is a known member of the CreateModelEndpointRequestProtocols enum.
+func (e CreateModelEndpointRequestProtocols) Valid() bool {
+	switch e {
+	case CreateModelEndpointRequestProtocolsOpenaiChat:
+		return true
+	case CreateModelEndpointRequestProtocolsOpenaiEmbeddings:
+		return true
+	case CreateModelEndpointRequestProtocolsOpenaiResponses:
 		return true
 	default:
 		return false
@@ -963,6 +1122,96 @@ func (e CreateSwarmTemplateRequestTeardownRule) Valid() bool {
 	case CreateSwarmTemplateRequestTeardownRuleAtExpiry:
 		return true
 	case CreateSwarmTemplateRequestTeardownRuleAtWorkComplete:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateTeamModelEndpointRequestAuthKind.
+const (
+	CreateTeamModelEndpointRequestAuthKindAzureFederated  CreateTeamModelEndpointRequestAuthKind = "azure_federated"
+	CreateTeamModelEndpointRequestAuthKindBearer          CreateTeamModelEndpointRequestAuthKind = "bearer"
+	CreateTeamModelEndpointRequestAuthKindGoogleFederated CreateTeamModelEndpointRequestAuthKind = "google_federated"
+	CreateTeamModelEndpointRequestAuthKindHeader          CreateTeamModelEndpointRequestAuthKind = "header"
+	CreateTeamModelEndpointRequestAuthKindNone            CreateTeamModelEndpointRequestAuthKind = "none"
+)
+
+// Valid indicates whether the value is a known member of the CreateTeamModelEndpointRequestAuthKind enum.
+func (e CreateTeamModelEndpointRequestAuthKind) Valid() bool {
+	switch e {
+	case CreateTeamModelEndpointRequestAuthKindAzureFederated:
+		return true
+	case CreateTeamModelEndpointRequestAuthKindBearer:
+		return true
+	case CreateTeamModelEndpointRequestAuthKindGoogleFederated:
+		return true
+	case CreateTeamModelEndpointRequestAuthKindHeader:
+		return true
+	case CreateTeamModelEndpointRequestAuthKindNone:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateTeamModelEndpointRequestLocation.
+const (
+	CreateTeamModelEndpointRequestLocationCorporate   CreateTeamModelEndpointRequestLocation = "corporate"
+	CreateTeamModelEndpointRequestLocationExternal    CreateTeamModelEndpointRequestLocation = "external"
+	CreateTeamModelEndpointRequestLocationInNamespace CreateTeamModelEndpointRequestLocation = "in_namespace"
+)
+
+// Valid indicates whether the value is a known member of the CreateTeamModelEndpointRequestLocation enum.
+func (e CreateTeamModelEndpointRequestLocation) Valid() bool {
+	switch e {
+	case CreateTeamModelEndpointRequestLocationCorporate:
+		return true
+	case CreateTeamModelEndpointRequestLocationExternal:
+		return true
+	case CreateTeamModelEndpointRequestLocationInNamespace:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateTeamModelEndpointRequestPricingMode.
+const (
+	CreateTeamModelEndpointRequestPricingModeCapacity CreateTeamModelEndpointRequestPricingMode = "capacity"
+	CreateTeamModelEndpointRequestPricingModeFree     CreateTeamModelEndpointRequestPricingMode = "free"
+	CreateTeamModelEndpointRequestPricingModePerToken CreateTeamModelEndpointRequestPricingMode = "per_token"
+)
+
+// Valid indicates whether the value is a known member of the CreateTeamModelEndpointRequestPricingMode enum.
+func (e CreateTeamModelEndpointRequestPricingMode) Valid() bool {
+	switch e {
+	case CreateTeamModelEndpointRequestPricingModeCapacity:
+		return true
+	case CreateTeamModelEndpointRequestPricingModeFree:
+		return true
+	case CreateTeamModelEndpointRequestPricingModePerToken:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateTeamModelEndpointRequestProtocols.
+const (
+	CreateTeamModelEndpointRequestProtocolsOpenaiChat       CreateTeamModelEndpointRequestProtocols = "openai_chat"
+	CreateTeamModelEndpointRequestProtocolsOpenaiEmbeddings CreateTeamModelEndpointRequestProtocols = "openai_embeddings"
+	CreateTeamModelEndpointRequestProtocolsOpenaiResponses  CreateTeamModelEndpointRequestProtocols = "openai_responses"
+)
+
+// Valid indicates whether the value is a known member of the CreateTeamModelEndpointRequestProtocols enum.
+func (e CreateTeamModelEndpointRequestProtocols) Valid() bool {
+	switch e {
+	case CreateTeamModelEndpointRequestProtocolsOpenaiChat:
+		return true
+	case CreateTeamModelEndpointRequestProtocolsOpenaiEmbeddings:
+		return true
+	case CreateTeamModelEndpointRequestProtocolsOpenaiResponses:
 		return true
 	default:
 		return false
@@ -1281,6 +1530,219 @@ func (e DeclareExternalSystemRequestCategory) Valid() bool {
 	}
 }
 
+// Defines values for EndpointFederationKind.
+const (
+	Azure  EndpointFederationKind = "azure"
+	Google EndpointFederationKind = "google"
+)
+
+// Valid indicates whether the value is a known member of the EndpointFederationKind enum.
+func (e EndpointFederationKind) Valid() bool {
+	switch e {
+	case Azure:
+		return true
+	case Google:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for EndpointFederationStatus.
+const (
+	EndpointFederationStatusFailing EndpointFederationStatus = "failing"
+	EndpointFederationStatusPending EndpointFederationStatus = "pending"
+	EndpointFederationStatusReady   EndpointFederationStatus = "ready"
+)
+
+// Valid indicates whether the value is a known member of the EndpointFederationStatus enum.
+func (e EndpointFederationStatus) Valid() bool {
+	switch e {
+	case EndpointFederationStatusFailing:
+		return true
+	case EndpointFederationStatusPending:
+		return true
+	case EndpointFederationStatusReady:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for EndpointModelPriceState.
+const (
+	EndpointModelPriceStateApproved    EndpointModelPriceState = "approved"
+	EndpointModelPriceStateNone        EndpointModelPriceState = "none"
+	EndpointModelPriceStateNotRequired EndpointModelPriceState = "not_required"
+	EndpointModelPriceStatePending     EndpointModelPriceState = "pending"
+)
+
+// Valid indicates whether the value is a known member of the EndpointModelPriceState enum.
+func (e EndpointModelPriceState) Valid() bool {
+	switch e {
+	case EndpointModelPriceStateApproved:
+		return true
+	case EndpointModelPriceStateNone:
+		return true
+	case EndpointModelPriceStateNotRequired:
+		return true
+	case EndpointModelPriceStatePending:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for EndpointModelPriceSource.
+const (
+	EndpointModelPriceSourceManual    EndpointModelPriceSource = "manual"
+	EndpointModelPriceSourcePriceList EndpointModelPriceSource = "price_list"
+	EndpointModelPriceSourceProvider  EndpointModelPriceSource = "provider"
+	EndpointModelPriceSourceTransfer  EndpointModelPriceSource = "transfer"
+)
+
+// Valid indicates whether the value is a known member of the EndpointModelPriceSource enum.
+func (e EndpointModelPriceSource) Valid() bool {
+	switch e {
+	case EndpointModelPriceSourceManual:
+		return true
+	case EndpointModelPriceSourcePriceList:
+		return true
+	case EndpointModelPriceSourceProvider:
+		return true
+	case EndpointModelPriceSourceTransfer:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for EndpointPriceProposalSource.
+const (
+	EndpointPriceProposalSourcePriceList EndpointPriceProposalSource = "price_list"
+	EndpointPriceProposalSourceProvider  EndpointPriceProposalSource = "provider"
+)
+
+// Valid indicates whether the value is a known member of the EndpointPriceProposalSource enum.
+func (e EndpointPriceProposalSource) Valid() bool {
+	switch e {
+	case EndpointPriceProposalSourcePriceList:
+		return true
+	case EndpointPriceProposalSourceProvider:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for EndpointPriceProposalStatus.
+const (
+	EndpointPriceProposalStatusApproved   EndpointPriceProposalStatus = "approved"
+	EndpointPriceProposalStatusPending    EndpointPriceProposalStatus = "pending"
+	EndpointPriceProposalStatusRejected   EndpointPriceProposalStatus = "rejected"
+	EndpointPriceProposalStatusSuperseded EndpointPriceProposalStatus = "superseded"
+)
+
+// Valid indicates whether the value is a known member of the EndpointPriceProposalStatus enum.
+func (e EndpointPriceProposalStatus) Valid() bool {
+	switch e {
+	case EndpointPriceProposalStatusApproved:
+		return true
+	case EndpointPriceProposalStatusPending:
+		return true
+	case EndpointPriceProposalStatusRejected:
+		return true
+	case EndpointPriceProposalStatusSuperseded:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for EndpointTeamCredentialState.
+const (
+	EndpointTeamCredentialStateMissing     EndpointTeamCredentialState = "missing"
+	EndpointTeamCredentialStateNotRequired EndpointTeamCredentialState = "not_required"
+	EndpointTeamCredentialStateSet         EndpointTeamCredentialState = "set"
+)
+
+// Valid indicates whether the value is a known member of the EndpointTeamCredentialState enum.
+func (e EndpointTeamCredentialState) Valid() bool {
+	switch e {
+	case EndpointTeamCredentialStateMissing:
+		return true
+	case EndpointTeamCredentialStateNotRequired:
+		return true
+	case EndpointTeamCredentialStateSet:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for EndpointTeamFederationState.
+const (
+	EndpointTeamFederationStateFailing     EndpointTeamFederationState = "failing"
+	EndpointTeamFederationStateNotRequired EndpointTeamFederationState = "not_required"
+	EndpointTeamFederationStatePending     EndpointTeamFederationState = "pending"
+	EndpointTeamFederationStateReady       EndpointTeamFederationState = "ready"
+)
+
+// Valid indicates whether the value is a known member of the EndpointTeamFederationState enum.
+func (e EndpointTeamFederationState) Valid() bool {
+	switch e {
+	case EndpointTeamFederationStateFailing:
+		return true
+	case EndpointTeamFederationStateNotRequired:
+		return true
+	case EndpointTeamFederationStatePending:
+		return true
+	case EndpointTeamFederationStateReady:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for EndpointTeamGatewayDeployment.
+const (
+	EndpointTeamGatewayDeploymentPerNamespace EndpointTeamGatewayDeployment = "per_namespace"
+	EndpointTeamGatewayDeploymentShared       EndpointTeamGatewayDeployment = "shared"
+)
+
+// Valid indicates whether the value is a known member of the EndpointTeamGatewayDeployment enum.
+func (e EndpointTeamGatewayDeployment) Valid() bool {
+	switch e {
+	case EndpointTeamGatewayDeploymentPerNamespace:
+		return true
+	case EndpointTeamGatewayDeploymentShared:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for EndpointTeamSelectedBy.
+const (
+	EndpointTeamSelectedByLessThannil  EndpointTeamSelectedBy = "<nil>"
+	EndpointTeamSelectedByServiceAdmin EndpointTeamSelectedBy = "service_admin"
+	EndpointTeamSelectedByTeamAdmin    EndpointTeamSelectedBy = "team_admin"
+)
+
+// Valid indicates whether the value is a known member of the EndpointTeamSelectedBy enum.
+func (e EndpointTeamSelectedBy) Valid() bool {
+	switch e {
+	case EndpointTeamSelectedByLessThannil:
+		return true
+	case EndpointTeamSelectedByServiceAdmin:
+		return true
+	case EndpointTeamSelectedByTeamAdmin:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for ErrorCode.
 const (
 	ErrorCodeAccessDenied         ErrorCode = "AccessDenied"
@@ -1503,6 +1965,24 @@ func (e IdentityProviderKind) Valid() bool {
 	}
 }
 
+// Defines values for ImportProviderStatementRequestSource.
+const (
+	ImportProviderStatementRequestSourceNousStatement ImportProviderStatementRequestSource = "nous_statement"
+	ImportProviderStatementRequestSourceOpencodeCsv   ImportProviderStatementRequestSource = "opencode_csv"
+)
+
+// Valid indicates whether the value is a known member of the ImportProviderStatementRequestSource enum.
+func (e ImportProviderStatementRequestSource) Valid() bool {
+	switch e {
+	case ImportProviderStatementRequestSourceNousStatement:
+		return true
+	case ImportProviderStatementRequestSourceOpencodeCsv:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for ImportTeamResultResult.
 const (
 	ImportTeamResultResultCreated ImportTeamResultResult = "created"
@@ -1521,6 +2001,48 @@ func (e ImportTeamResultResult) Valid() bool {
 	case ImportTeamResultResultSkipped:
 		return true
 	case ImportTeamResultResultUpdated:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for InferenceProviderTeamSelection.
+const (
+	InferenceProviderTeamSelectionServiceAdmin InferenceProviderTeamSelection = "service_admin"
+	InferenceProviderTeamSelectionTeamAdmin    InferenceProviderTeamSelection = "team_admin"
+)
+
+// Valid indicates whether the value is a known member of the InferenceProviderTeamSelection enum.
+func (e InferenceProviderTeamSelection) Valid() bool {
+	switch e {
+	case InferenceProviderTeamSelectionServiceAdmin:
+		return true
+	case InferenceProviderTeamSelectionTeamAdmin:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for InferenceReportRowPricingMode.
+const (
+	InferenceReportRowPricingModeBedrock  InferenceReportRowPricingMode = "bedrock"
+	InferenceReportRowPricingModeCapacity InferenceReportRowPricingMode = "capacity"
+	InferenceReportRowPricingModeFree     InferenceReportRowPricingMode = "free"
+	InferenceReportRowPricingModePerToken InferenceReportRowPricingMode = "per_token"
+)
+
+// Valid indicates whether the value is a known member of the InferenceReportRowPricingMode enum.
+func (e InferenceReportRowPricingMode) Valid() bool {
+	switch e {
+	case InferenceReportRowPricingModeBedrock:
+		return true
+	case InferenceReportRowPricingModeCapacity:
+		return true
+	case InferenceReportRowPricingModeFree:
+		return true
+	case InferenceReportRowPricingModePerToken:
 		return true
 	default:
 		return false
@@ -1677,6 +2199,192 @@ func (e ModelPriceState) Valid() bool {
 	case ModelPriceStateNone:
 		return true
 	case ModelPriceStatePending:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ModelProviderState.
+const (
+	ModelProviderStateOff ModelProviderState = "off"
+	ModelProviderStateOn  ModelProviderState = "on"
+)
+
+// Valid indicates whether the value is a known member of the ModelProviderState enum.
+func (e ModelProviderState) Valid() bool {
+	switch e {
+	case ModelProviderStateOff:
+		return true
+	case ModelProviderStateOn:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ModelEndpointAuthKind.
+const (
+	ModelEndpointAuthKindAzureFederated  ModelEndpointAuthKind = "azure_federated"
+	ModelEndpointAuthKindBearer          ModelEndpointAuthKind = "bearer"
+	ModelEndpointAuthKindGoogleFederated ModelEndpointAuthKind = "google_federated"
+	ModelEndpointAuthKindHeader          ModelEndpointAuthKind = "header"
+	ModelEndpointAuthKindNone            ModelEndpointAuthKind = "none"
+)
+
+// Valid indicates whether the value is a known member of the ModelEndpointAuthKind enum.
+func (e ModelEndpointAuthKind) Valid() bool {
+	switch e {
+	case ModelEndpointAuthKindAzureFederated:
+		return true
+	case ModelEndpointAuthKindBearer:
+		return true
+	case ModelEndpointAuthKindGoogleFederated:
+		return true
+	case ModelEndpointAuthKindHeader:
+		return true
+	case ModelEndpointAuthKindNone:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ModelEndpointCredentialMode.
+const (
+	ModelEndpointCredentialModePerTeam ModelEndpointCredentialMode = "per_team"
+	ModelEndpointCredentialModeShared  ModelEndpointCredentialMode = "shared"
+)
+
+// Valid indicates whether the value is a known member of the ModelEndpointCredentialMode enum.
+func (e ModelEndpointCredentialMode) Valid() bool {
+	switch e {
+	case ModelEndpointCredentialModePerTeam:
+		return true
+	case ModelEndpointCredentialModeShared:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ModelEndpointLocation.
+const (
+	ModelEndpointLocationCorporate   ModelEndpointLocation = "corporate"
+	ModelEndpointLocationExternal    ModelEndpointLocation = "external"
+	ModelEndpointLocationInNamespace ModelEndpointLocation = "in_namespace"
+)
+
+// Valid indicates whether the value is a known member of the ModelEndpointLocation enum.
+func (e ModelEndpointLocation) Valid() bool {
+	switch e {
+	case ModelEndpointLocationCorporate:
+		return true
+	case ModelEndpointLocationExternal:
+		return true
+	case ModelEndpointLocationInNamespace:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ModelEndpointPricingMode.
+const (
+	ModelEndpointPricingModeCapacity ModelEndpointPricingMode = "capacity"
+	ModelEndpointPricingModeFree     ModelEndpointPricingMode = "free"
+	ModelEndpointPricingModePerToken ModelEndpointPricingMode = "per_token"
+)
+
+// Valid indicates whether the value is a known member of the ModelEndpointPricingMode enum.
+func (e ModelEndpointPricingMode) Valid() bool {
+	switch e {
+	case ModelEndpointPricingModeCapacity:
+		return true
+	case ModelEndpointPricingModeFree:
+		return true
+	case ModelEndpointPricingModePerToken:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ModelEndpointProtocols.
+const (
+	ModelEndpointProtocolsOpenaiChat       ModelEndpointProtocols = "openai_chat"
+	ModelEndpointProtocolsOpenaiEmbeddings ModelEndpointProtocols = "openai_embeddings"
+	ModelEndpointProtocolsOpenaiResponses  ModelEndpointProtocols = "openai_responses"
+)
+
+// Valid indicates whether the value is a known member of the ModelEndpointProtocols enum.
+func (e ModelEndpointProtocols) Valid() bool {
+	switch e {
+	case ModelEndpointProtocolsOpenaiChat:
+		return true
+	case ModelEndpointProtocolsOpenaiEmbeddings:
+		return true
+	case ModelEndpointProtocolsOpenaiResponses:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ModelEndpointProviderState.
+const (
+	ModelEndpointProviderStateOff ModelEndpointProviderState = "off"
+	ModelEndpointProviderStateOn  ModelEndpointProviderState = "on"
+)
+
+// Valid indicates whether the value is a known member of the ModelEndpointProviderState enum.
+func (e ModelEndpointProviderState) Valid() bool {
+	switch e {
+	case ModelEndpointProviderStateOff:
+		return true
+	case ModelEndpointProviderStateOn:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ModelEndpointCredentialState.
+const (
+	ModelEndpointCredentialStateMissing ModelEndpointCredentialState = "missing"
+	ModelEndpointCredentialStateSet     ModelEndpointCredentialState = "set"
+)
+
+// Valid indicates whether the value is a known member of the ModelEndpointCredentialState enum.
+func (e ModelEndpointCredentialState) Valid() bool {
+	switch e {
+	case ModelEndpointCredentialStateMissing:
+		return true
+	case ModelEndpointCredentialStateSet:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ModelEndpointHealthState.
+const (
+	ModelEndpointHealthStateDegraded    ModelEndpointHealthState = "Degraded"
+	ModelEndpointHealthStateReady       ModelEndpointHealthState = "Ready"
+	ModelEndpointHealthStateUnavailable ModelEndpointHealthState = "Unavailable"
+	ModelEndpointHealthStateUnknown     ModelEndpointHealthState = "Unknown"
+)
+
+// Valid indicates whether the value is a known member of the ModelEndpointHealthState enum.
+func (e ModelEndpointHealthState) Valid() bool {
+	switch e {
+	case ModelEndpointHealthStateDegraded:
+		return true
+	case ModelEndpointHealthStateReady:
+		return true
+	case ModelEndpointHealthStateUnavailable:
+		return true
+	case ModelEndpointHealthStateUnknown:
 		return true
 	default:
 		return false
@@ -2133,6 +2841,24 @@ func (e PrincipalType) Valid() bool {
 	}
 }
 
+// Defines values for ProviderStatementSource.
+const (
+	ProviderStatementSourceNousStatement ProviderStatementSource = "nous_statement"
+	ProviderStatementSourceOpencodeCsv   ProviderStatementSource = "opencode_csv"
+)
+
+// Valid indicates whether the value is a known member of the ProviderStatementSource enum.
+func (e ProviderStatementSource) Valid() bool {
+	switch e {
+	case ProviderStatementSourceNousStatement:
+		return true
+	case ProviderStatementSourceOpencodeCsv:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for PutAgentTemplateRequestCapabilities.
 const (
 	PutAgentTemplateRequestCapabilitiesPaperclip PutAgentTemplateRequestCapabilities = "paperclip"
@@ -2268,6 +2994,24 @@ func (e PutTeamCollaborationRequestRegistrationMode) Valid() bool {
 	case PutTeamCollaborationRequestRegistrationModeManaged:
 		return true
 	case PutTeamCollaborationRequestRegistrationModeManual:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for PutTeamGatewaySettingsRequestDeployment.
+const (
+	PutTeamGatewaySettingsRequestDeploymentPerNamespace PutTeamGatewaySettingsRequestDeployment = "per_namespace"
+	PutTeamGatewaySettingsRequestDeploymentShared       PutTeamGatewaySettingsRequestDeployment = "shared"
+)
+
+// Valid indicates whether the value is a known member of the PutTeamGatewaySettingsRequestDeployment enum.
+func (e PutTeamGatewaySettingsRequestDeployment) Valid() bool {
+	switch e {
+	case PutTeamGatewaySettingsRequestDeploymentPerNamespace:
+		return true
+	case PutTeamGatewaySettingsRequestDeploymentShared:
 		return true
 	default:
 		return false
@@ -2919,6 +3663,24 @@ func (e SwarmTemplateSpecSecretsDelivery) Valid() bool {
 	}
 }
 
+// Defines values for TeamGatewayDeployment.
+const (
+	TeamGatewayDeploymentPerNamespace TeamGatewayDeployment = "per_namespace"
+	TeamGatewayDeploymentShared       TeamGatewayDeployment = "shared"
+)
+
+// Valid indicates whether the value is a known member of the TeamGatewayDeployment enum.
+func (e TeamGatewayDeployment) Valid() bool {
+	switch e {
+	case TeamGatewayDeploymentPerNamespace:
+		return true
+	case TeamGatewayDeploymentShared:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for TeamIsolationTier.
 const (
 	TeamIsolationTierDedicated TeamIsolationTier = "dedicated"
@@ -3096,6 +3858,345 @@ func (e TeamCollaborationRegistrationMode) Valid() bool {
 	}
 }
 
+// Defines values for TeamGatewaySettingsDeployment.
+const (
+	TeamGatewaySettingsDeploymentPerNamespace TeamGatewaySettingsDeployment = "per_namespace"
+	TeamGatewaySettingsDeploymentShared       TeamGatewaySettingsDeployment = "shared"
+)
+
+// Valid indicates whether the value is a known member of the TeamGatewaySettingsDeployment enum.
+func (e TeamGatewaySettingsDeployment) Valid() bool {
+	switch e {
+	case TeamGatewaySettingsDeploymentPerNamespace:
+		return true
+	case TeamGatewaySettingsDeploymentShared:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamGatewaySettingsGatewayState.
+const (
+	TeamGatewaySettingsGatewayStateDegraded     TeamGatewaySettingsGatewayState = "degraded"
+	TeamGatewaySettingsGatewayStateProvisioning TeamGatewaySettingsGatewayState = "provisioning"
+	TeamGatewaySettingsGatewayStateReady        TeamGatewaySettingsGatewayState = "ready"
+	TeamGatewaySettingsGatewayStateShared       TeamGatewaySettingsGatewayState = "shared"
+)
+
+// Valid indicates whether the value is a known member of the TeamGatewaySettingsGatewayState enum.
+func (e TeamGatewaySettingsGatewayState) Valid() bool {
+	switch e {
+	case TeamGatewaySettingsGatewayStateDegraded:
+		return true
+	case TeamGatewaySettingsGatewayStateProvisioning:
+		return true
+	case TeamGatewaySettingsGatewayStateReady:
+		return true
+	case TeamGatewaySettingsGatewayStateShared:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamModelEndpointAuthKind.
+const (
+	TeamModelEndpointAuthKindAzureFederated  TeamModelEndpointAuthKind = "azure_federated"
+	TeamModelEndpointAuthKindBearer          TeamModelEndpointAuthKind = "bearer"
+	TeamModelEndpointAuthKindGoogleFederated TeamModelEndpointAuthKind = "google_federated"
+	TeamModelEndpointAuthKindHeader          TeamModelEndpointAuthKind = "header"
+	TeamModelEndpointAuthKindNone            TeamModelEndpointAuthKind = "none"
+)
+
+// Valid indicates whether the value is a known member of the TeamModelEndpointAuthKind enum.
+func (e TeamModelEndpointAuthKind) Valid() bool {
+	switch e {
+	case TeamModelEndpointAuthKindAzureFederated:
+		return true
+	case TeamModelEndpointAuthKindBearer:
+		return true
+	case TeamModelEndpointAuthKindGoogleFederated:
+		return true
+	case TeamModelEndpointAuthKindHeader:
+		return true
+	case TeamModelEndpointAuthKindNone:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamModelEndpointCredentialMode.
+const (
+	TeamModelEndpointCredentialModePerTeam TeamModelEndpointCredentialMode = "per_team"
+	TeamModelEndpointCredentialModeShared  TeamModelEndpointCredentialMode = "shared"
+)
+
+// Valid indicates whether the value is a known member of the TeamModelEndpointCredentialMode enum.
+func (e TeamModelEndpointCredentialMode) Valid() bool {
+	switch e {
+	case TeamModelEndpointCredentialModePerTeam:
+		return true
+	case TeamModelEndpointCredentialModeShared:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamModelEndpointCredentialState.
+const (
+	TeamModelEndpointCredentialStateMissing     TeamModelEndpointCredentialState = "missing"
+	TeamModelEndpointCredentialStateNotRequired TeamModelEndpointCredentialState = "not_required"
+	TeamModelEndpointCredentialStateSet         TeamModelEndpointCredentialState = "set"
+)
+
+// Valid indicates whether the value is a known member of the TeamModelEndpointCredentialState enum.
+func (e TeamModelEndpointCredentialState) Valid() bool {
+	switch e {
+	case TeamModelEndpointCredentialStateMissing:
+		return true
+	case TeamModelEndpointCredentialStateNotRequired:
+		return true
+	case TeamModelEndpointCredentialStateSet:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamModelEndpointFederationState.
+const (
+	TeamModelEndpointFederationStateFailing     TeamModelEndpointFederationState = "failing"
+	TeamModelEndpointFederationStateNotRequired TeamModelEndpointFederationState = "not_required"
+	TeamModelEndpointFederationStatePending     TeamModelEndpointFederationState = "pending"
+	TeamModelEndpointFederationStateReady       TeamModelEndpointFederationState = "ready"
+)
+
+// Valid indicates whether the value is a known member of the TeamModelEndpointFederationState enum.
+func (e TeamModelEndpointFederationState) Valid() bool {
+	switch e {
+	case TeamModelEndpointFederationStateFailing:
+		return true
+	case TeamModelEndpointFederationStateNotRequired:
+		return true
+	case TeamModelEndpointFederationStatePending:
+		return true
+	case TeamModelEndpointFederationStateReady:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamModelEndpointLocation.
+const (
+	TeamModelEndpointLocationCorporate   TeamModelEndpointLocation = "corporate"
+	TeamModelEndpointLocationExternal    TeamModelEndpointLocation = "external"
+	TeamModelEndpointLocationInNamespace TeamModelEndpointLocation = "in_namespace"
+)
+
+// Valid indicates whether the value is a known member of the TeamModelEndpointLocation enum.
+func (e TeamModelEndpointLocation) Valid() bool {
+	switch e {
+	case TeamModelEndpointLocationCorporate:
+		return true
+	case TeamModelEndpointLocationExternal:
+		return true
+	case TeamModelEndpointLocationInNamespace:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamModelEndpointOffReason.
+const (
+	TeamModelEndpointOffReasonCredentialMissing  TeamModelEndpointOffReason = "credential_missing"
+	TeamModelEndpointOffReasonEndpointDisabled   TeamModelEndpointOffReason = "endpoint_disabled"
+	TeamModelEndpointOffReasonFederationNotReady TeamModelEndpointOffReason = "federation_not_ready"
+	TeamModelEndpointOffReasonLessThannil        TeamModelEndpointOffReason = "<nil>"
+	TeamModelEndpointOffReasonNotSelected        TeamModelEndpointOffReason = "not_selected"
+	TeamModelEndpointOffReasonProviderDisabled   TeamModelEndpointOffReason = "provider_disabled"
+)
+
+// Valid indicates whether the value is a known member of the TeamModelEndpointOffReason enum.
+func (e TeamModelEndpointOffReason) Valid() bool {
+	switch e {
+	case TeamModelEndpointOffReasonCredentialMissing:
+		return true
+	case TeamModelEndpointOffReasonEndpointDisabled:
+		return true
+	case TeamModelEndpointOffReasonFederationNotReady:
+		return true
+	case TeamModelEndpointOffReasonLessThannil:
+		return true
+	case TeamModelEndpointOffReasonNotSelected:
+		return true
+	case TeamModelEndpointOffReasonProviderDisabled:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamModelEndpointPricingMode.
+const (
+	TeamModelEndpointPricingModeCapacity TeamModelEndpointPricingMode = "capacity"
+	TeamModelEndpointPricingModeFree     TeamModelEndpointPricingMode = "free"
+	TeamModelEndpointPricingModePerToken TeamModelEndpointPricingMode = "per_token"
+)
+
+// Valid indicates whether the value is a known member of the TeamModelEndpointPricingMode enum.
+func (e TeamModelEndpointPricingMode) Valid() bool {
+	switch e {
+	case TeamModelEndpointPricingModeCapacity:
+		return true
+	case TeamModelEndpointPricingModeFree:
+		return true
+	case TeamModelEndpointPricingModePerToken:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamModelEndpointProtocols.
+const (
+	TeamModelEndpointProtocolsOpenaiChat       TeamModelEndpointProtocols = "openai_chat"
+	TeamModelEndpointProtocolsOpenaiEmbeddings TeamModelEndpointProtocols = "openai_embeddings"
+	TeamModelEndpointProtocolsOpenaiResponses  TeamModelEndpointProtocols = "openai_responses"
+)
+
+// Valid indicates whether the value is a known member of the TeamModelEndpointProtocols enum.
+func (e TeamModelEndpointProtocols) Valid() bool {
+	switch e {
+	case TeamModelEndpointProtocolsOpenaiChat:
+		return true
+	case TeamModelEndpointProtocolsOpenaiEmbeddings:
+		return true
+	case TeamModelEndpointProtocolsOpenaiResponses:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamModelEndpointProviderState.
+const (
+	TeamModelEndpointProviderStateOff TeamModelEndpointProviderState = "off"
+	TeamModelEndpointProviderStateOn  TeamModelEndpointProviderState = "on"
+)
+
+// Valid indicates whether the value is a known member of the TeamModelEndpointProviderState enum.
+func (e TeamModelEndpointProviderState) Valid() bool {
+	switch e {
+	case TeamModelEndpointProviderStateOff:
+		return true
+	case TeamModelEndpointProviderStateOn:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamModelEndpointRelation.
+const (
+	TeamModelEndpointRelationAvailable TeamModelEndpointRelation = "available"
+	TeamModelEndpointRelationOwn       TeamModelEndpointRelation = "own"
+	TeamModelEndpointRelationSelected  TeamModelEndpointRelation = "selected"
+)
+
+// Valid indicates whether the value is a known member of the TeamModelEndpointRelation enum.
+func (e TeamModelEndpointRelation) Valid() bool {
+	switch e {
+	case TeamModelEndpointRelationAvailable:
+		return true
+	case TeamModelEndpointRelationOwn:
+		return true
+	case TeamModelEndpointRelationSelected:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamModelEndpointSelectableBy.
+const (
+	TeamModelEndpointSelectableByServiceAdmin TeamModelEndpointSelectableBy = "service_admin"
+	TeamModelEndpointSelectableByTeamAdmin    TeamModelEndpointSelectableBy = "team_admin"
+)
+
+// Valid indicates whether the value is a known member of the TeamModelEndpointSelectableBy enum.
+func (e TeamModelEndpointSelectableBy) Valid() bool {
+	switch e {
+	case TeamModelEndpointSelectableByServiceAdmin:
+		return true
+	case TeamModelEndpointSelectableByTeamAdmin:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamModelEndpointSelectedBy.
+const (
+	TeamModelEndpointSelectedByLessThannil  TeamModelEndpointSelectedBy = "<nil>"
+	TeamModelEndpointSelectedByServiceAdmin TeamModelEndpointSelectedBy = "service_admin"
+	TeamModelEndpointSelectedByTeamAdmin    TeamModelEndpointSelectedBy = "team_admin"
+)
+
+// Valid indicates whether the value is a known member of the TeamModelEndpointSelectedBy enum.
+func (e TeamModelEndpointSelectedBy) Valid() bool {
+	switch e {
+	case TeamModelEndpointSelectedByLessThannil:
+		return true
+	case TeamModelEndpointSelectedByServiceAdmin:
+		return true
+	case TeamModelEndpointSelectedByTeamAdmin:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamModelEndpointListGatewayDeployment.
+const (
+	TeamModelEndpointListGatewayDeploymentPerNamespace TeamModelEndpointListGatewayDeployment = "per_namespace"
+	TeamModelEndpointListGatewayDeploymentShared       TeamModelEndpointListGatewayDeployment = "shared"
+)
+
+// Valid indicates whether the value is a known member of the TeamModelEndpointListGatewayDeployment enum.
+func (e TeamModelEndpointListGatewayDeployment) Valid() bool {
+	switch e {
+	case TeamModelEndpointListGatewayDeploymentPerNamespace:
+		return true
+	case TeamModelEndpointListGatewayDeploymentShared:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamModelEndpointSelectionSelectedBy.
+const (
+	TeamModelEndpointSelectionSelectedByServiceAdmin TeamModelEndpointSelectionSelectedBy = "service_admin"
+	TeamModelEndpointSelectionSelectedByTeamAdmin    TeamModelEndpointSelectionSelectedBy = "team_admin"
+)
+
+// Valid indicates whether the value is a known member of the TeamModelEndpointSelectionSelectedBy enum.
+func (e TeamModelEndpointSelectionSelectedBy) Valid() bool {
+	switch e {
+	case TeamModelEndpointSelectionSelectedByServiceAdmin:
+		return true
+	case TeamModelEndpointSelectionSelectedByTeamAdmin:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for TeamModelsAccess.
 const (
 	TeamModelsAccessAll      TeamModelsAccess = "all"
@@ -3237,6 +4338,24 @@ func (e UpdateAgentRequestRole) Valid() bool {
 	}
 }
 
+// Defines values for UpdateInferenceProviderRequestTeamSelection.
+const (
+	UpdateInferenceProviderRequestTeamSelectionServiceAdmin UpdateInferenceProviderRequestTeamSelection = "service_admin"
+	UpdateInferenceProviderRequestTeamSelectionTeamAdmin    UpdateInferenceProviderRequestTeamSelection = "team_admin"
+)
+
+// Valid indicates whether the value is a known member of the UpdateInferenceProviderRequestTeamSelection enum.
+func (e UpdateInferenceProviderRequestTeamSelection) Valid() bool {
+	switch e {
+	case UpdateInferenceProviderRequestTeamSelectionServiceAdmin:
+		return true
+	case UpdateInferenceProviderRequestTeamSelectionTeamAdmin:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for UpdateMemberRequestRole.
 const (
 	UpdateMemberRequestRoleTeamAdmin        UpdateMemberRequestRole = "team_admin"
@@ -3252,6 +4371,111 @@ func (e UpdateMemberRequestRole) Valid() bool {
 	case UpdateMemberRequestRoleTeamCollaborator:
 		return true
 	case UpdateMemberRequestRoleTeamViewer:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for UpdateModelEndpointRequestAuthKind.
+const (
+	UpdateModelEndpointRequestAuthKindAzureFederated  UpdateModelEndpointRequestAuthKind = "azure_federated"
+	UpdateModelEndpointRequestAuthKindBearer          UpdateModelEndpointRequestAuthKind = "bearer"
+	UpdateModelEndpointRequestAuthKindGoogleFederated UpdateModelEndpointRequestAuthKind = "google_federated"
+	UpdateModelEndpointRequestAuthKindHeader          UpdateModelEndpointRequestAuthKind = "header"
+	UpdateModelEndpointRequestAuthKindNone            UpdateModelEndpointRequestAuthKind = "none"
+)
+
+// Valid indicates whether the value is a known member of the UpdateModelEndpointRequestAuthKind enum.
+func (e UpdateModelEndpointRequestAuthKind) Valid() bool {
+	switch e {
+	case UpdateModelEndpointRequestAuthKindAzureFederated:
+		return true
+	case UpdateModelEndpointRequestAuthKindBearer:
+		return true
+	case UpdateModelEndpointRequestAuthKindGoogleFederated:
+		return true
+	case UpdateModelEndpointRequestAuthKindHeader:
+		return true
+	case UpdateModelEndpointRequestAuthKindNone:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for UpdateModelEndpointRequestCredentialMode.
+const (
+	UpdateModelEndpointRequestCredentialModePerTeam UpdateModelEndpointRequestCredentialMode = "per_team"
+	UpdateModelEndpointRequestCredentialModeShared  UpdateModelEndpointRequestCredentialMode = "shared"
+)
+
+// Valid indicates whether the value is a known member of the UpdateModelEndpointRequestCredentialMode enum.
+func (e UpdateModelEndpointRequestCredentialMode) Valid() bool {
+	switch e {
+	case UpdateModelEndpointRequestCredentialModePerTeam:
+		return true
+	case UpdateModelEndpointRequestCredentialModeShared:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for UpdateModelEndpointRequestLocation.
+const (
+	UpdateModelEndpointRequestLocationCorporate UpdateModelEndpointRequestLocation = "corporate"
+	UpdateModelEndpointRequestLocationExternal  UpdateModelEndpointRequestLocation = "external"
+)
+
+// Valid indicates whether the value is a known member of the UpdateModelEndpointRequestLocation enum.
+func (e UpdateModelEndpointRequestLocation) Valid() bool {
+	switch e {
+	case UpdateModelEndpointRequestLocationCorporate:
+		return true
+	case UpdateModelEndpointRequestLocationExternal:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for UpdateModelEndpointRequestPricingMode.
+const (
+	UpdateModelEndpointRequestPricingModeCapacity UpdateModelEndpointRequestPricingMode = "capacity"
+	UpdateModelEndpointRequestPricingModeFree     UpdateModelEndpointRequestPricingMode = "free"
+	UpdateModelEndpointRequestPricingModePerToken UpdateModelEndpointRequestPricingMode = "per_token"
+)
+
+// Valid indicates whether the value is a known member of the UpdateModelEndpointRequestPricingMode enum.
+func (e UpdateModelEndpointRequestPricingMode) Valid() bool {
+	switch e {
+	case UpdateModelEndpointRequestPricingModeCapacity:
+		return true
+	case UpdateModelEndpointRequestPricingModeFree:
+		return true
+	case UpdateModelEndpointRequestPricingModePerToken:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for UpdateModelEndpointRequestProtocols.
+const (
+	UpdateModelEndpointRequestProtocolsOpenaiChat       UpdateModelEndpointRequestProtocols = "openai_chat"
+	UpdateModelEndpointRequestProtocolsOpenaiEmbeddings UpdateModelEndpointRequestProtocols = "openai_embeddings"
+	UpdateModelEndpointRequestProtocolsOpenaiResponses  UpdateModelEndpointRequestProtocols = "openai_responses"
+)
+
+// Valid indicates whether the value is a known member of the UpdateModelEndpointRequestProtocols enum.
+func (e UpdateModelEndpointRequestProtocols) Valid() bool {
+	switch e {
+	case UpdateModelEndpointRequestProtocolsOpenaiChat:
+		return true
+	case UpdateModelEndpointRequestProtocolsOpenaiEmbeddings:
+		return true
+	case UpdateModelEndpointRequestProtocolsOpenaiResponses:
 		return true
 	default:
 		return false
@@ -3312,6 +4536,96 @@ func (e UpdateSwarmTemplateRequestTeardownRule) Valid() bool {
 	case UpdateSwarmTemplateRequestTeardownRuleAtExpiry:
 		return true
 	case UpdateSwarmTemplateRequestTeardownRuleAtWorkComplete:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for UpdateTeamModelEndpointRequestAuthKind.
+const (
+	UpdateTeamModelEndpointRequestAuthKindAzureFederated  UpdateTeamModelEndpointRequestAuthKind = "azure_federated"
+	UpdateTeamModelEndpointRequestAuthKindBearer          UpdateTeamModelEndpointRequestAuthKind = "bearer"
+	UpdateTeamModelEndpointRequestAuthKindGoogleFederated UpdateTeamModelEndpointRequestAuthKind = "google_federated"
+	UpdateTeamModelEndpointRequestAuthKindHeader          UpdateTeamModelEndpointRequestAuthKind = "header"
+	UpdateTeamModelEndpointRequestAuthKindNone            UpdateTeamModelEndpointRequestAuthKind = "none"
+)
+
+// Valid indicates whether the value is a known member of the UpdateTeamModelEndpointRequestAuthKind enum.
+func (e UpdateTeamModelEndpointRequestAuthKind) Valid() bool {
+	switch e {
+	case UpdateTeamModelEndpointRequestAuthKindAzureFederated:
+		return true
+	case UpdateTeamModelEndpointRequestAuthKindBearer:
+		return true
+	case UpdateTeamModelEndpointRequestAuthKindGoogleFederated:
+		return true
+	case UpdateTeamModelEndpointRequestAuthKindHeader:
+		return true
+	case UpdateTeamModelEndpointRequestAuthKindNone:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for UpdateTeamModelEndpointRequestLocation.
+const (
+	UpdateTeamModelEndpointRequestLocationCorporate   UpdateTeamModelEndpointRequestLocation = "corporate"
+	UpdateTeamModelEndpointRequestLocationExternal    UpdateTeamModelEndpointRequestLocation = "external"
+	UpdateTeamModelEndpointRequestLocationInNamespace UpdateTeamModelEndpointRequestLocation = "in_namespace"
+)
+
+// Valid indicates whether the value is a known member of the UpdateTeamModelEndpointRequestLocation enum.
+func (e UpdateTeamModelEndpointRequestLocation) Valid() bool {
+	switch e {
+	case UpdateTeamModelEndpointRequestLocationCorporate:
+		return true
+	case UpdateTeamModelEndpointRequestLocationExternal:
+		return true
+	case UpdateTeamModelEndpointRequestLocationInNamespace:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for UpdateTeamModelEndpointRequestPricingMode.
+const (
+	UpdateTeamModelEndpointRequestPricingModeCapacity UpdateTeamModelEndpointRequestPricingMode = "capacity"
+	UpdateTeamModelEndpointRequestPricingModeFree     UpdateTeamModelEndpointRequestPricingMode = "free"
+	UpdateTeamModelEndpointRequestPricingModePerToken UpdateTeamModelEndpointRequestPricingMode = "per_token"
+)
+
+// Valid indicates whether the value is a known member of the UpdateTeamModelEndpointRequestPricingMode enum.
+func (e UpdateTeamModelEndpointRequestPricingMode) Valid() bool {
+	switch e {
+	case UpdateTeamModelEndpointRequestPricingModeCapacity:
+		return true
+	case UpdateTeamModelEndpointRequestPricingModeFree:
+		return true
+	case UpdateTeamModelEndpointRequestPricingModePerToken:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for UpdateTeamModelEndpointRequestProtocols.
+const (
+	UpdateTeamModelEndpointRequestProtocolsOpenaiChat       UpdateTeamModelEndpointRequestProtocols = "openai_chat"
+	UpdateTeamModelEndpointRequestProtocolsOpenaiEmbeddings UpdateTeamModelEndpointRequestProtocols = "openai_embeddings"
+	UpdateTeamModelEndpointRequestProtocolsOpenaiResponses  UpdateTeamModelEndpointRequestProtocols = "openai_responses"
+)
+
+// Valid indicates whether the value is a known member of the UpdateTeamModelEndpointRequestProtocols enum.
+func (e UpdateTeamModelEndpointRequestProtocols) Valid() bool {
+	switch e {
+	case UpdateTeamModelEndpointRequestProtocolsOpenaiChat:
+		return true
+	case UpdateTeamModelEndpointRequestProtocolsOpenaiEmbeddings:
+		return true
+	case UpdateTeamModelEndpointRequestProtocolsOpenaiResponses:
 		return true
 	default:
 		return false
@@ -3693,6 +5007,90 @@ func (e ListCostReconciliationsParamsStatus) Valid() bool {
 	}
 }
 
+// Defines values for ListEndpointPriceProposalsParamsStatus.
+const (
+	ListEndpointPriceProposalsParamsStatusApproved   ListEndpointPriceProposalsParamsStatus = "approved"
+	ListEndpointPriceProposalsParamsStatusPending    ListEndpointPriceProposalsParamsStatus = "pending"
+	ListEndpointPriceProposalsParamsStatusRejected   ListEndpointPriceProposalsParamsStatus = "rejected"
+	ListEndpointPriceProposalsParamsStatusSuperseded ListEndpointPriceProposalsParamsStatus = "superseded"
+)
+
+// Valid indicates whether the value is a known member of the ListEndpointPriceProposalsParamsStatus enum.
+func (e ListEndpointPriceProposalsParamsStatus) Valid() bool {
+	switch e {
+	case ListEndpointPriceProposalsParamsStatusApproved:
+		return true
+	case ListEndpointPriceProposalsParamsStatusPending:
+		return true
+	case ListEndpointPriceProposalsParamsStatusRejected:
+		return true
+	case ListEndpointPriceProposalsParamsStatusSuperseded:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListModelEndpointsParamsLocation.
+const (
+	ListModelEndpointsParamsLocationCorporate   ListModelEndpointsParamsLocation = "corporate"
+	ListModelEndpointsParamsLocationExternal    ListModelEndpointsParamsLocation = "external"
+	ListModelEndpointsParamsLocationInNamespace ListModelEndpointsParamsLocation = "in_namespace"
+)
+
+// Valid indicates whether the value is a known member of the ListModelEndpointsParamsLocation enum.
+func (e ListModelEndpointsParamsLocation) Valid() bool {
+	switch e {
+	case ListModelEndpointsParamsLocationCorporate:
+		return true
+	case ListModelEndpointsParamsLocationExternal:
+		return true
+	case ListModelEndpointsParamsLocationInNamespace:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListModelEndpointsParamsPricingMode.
+const (
+	ListModelEndpointsParamsPricingModeCapacity ListModelEndpointsParamsPricingMode = "capacity"
+	ListModelEndpointsParamsPricingModeFree     ListModelEndpointsParamsPricingMode = "free"
+	ListModelEndpointsParamsPricingModePerToken ListModelEndpointsParamsPricingMode = "per_token"
+)
+
+// Valid indicates whether the value is a known member of the ListModelEndpointsParamsPricingMode enum.
+func (e ListModelEndpointsParamsPricingMode) Valid() bool {
+	switch e {
+	case ListModelEndpointsParamsPricingModeCapacity:
+		return true
+	case ListModelEndpointsParamsPricingModeFree:
+		return true
+	case ListModelEndpointsParamsPricingModePerToken:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ImportProviderStatementParamsSource.
+const (
+	ImportProviderStatementParamsSourceNousStatement ImportProviderStatementParamsSource = "nous_statement"
+	ImportProviderStatementParamsSourceOpencodeCsv   ImportProviderStatementParamsSource = "opencode_csv"
+)
+
+// Valid indicates whether the value is a known member of the ImportProviderStatementParamsSource enum.
+func (e ImportProviderStatementParamsSource) Valid() bool {
+	switch e {
+	case ImportProviderStatementParamsSourceNousStatement:
+		return true
+	case ImportProviderStatementParamsSourceOpencodeCsv:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for ListModelPriceProposalsParamsStatus.
 const (
 	ListModelPriceProposalsParamsStatusApproved   ListModelPriceProposalsParamsStatus = "approved"
@@ -3891,6 +5289,33 @@ const (
 func (e ListAgentTemplatesParamsCapability) Valid() bool {
 	switch e {
 	case ListAgentTemplatesParamsCapabilityPaperclip:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetInferenceReportParamsRange.
+const (
+	GetInferenceReportParamsRangeMtd  GetInferenceReportParamsRange = "mtd"
+	GetInferenceReportParamsRangeN24h GetInferenceReportParamsRange = "24h"
+	GetInferenceReportParamsRangeN30d GetInferenceReportParamsRange = "30d"
+	GetInferenceReportParamsRangeN7d  GetInferenceReportParamsRange = "7d"
+	GetInferenceReportParamsRangeN90d GetInferenceReportParamsRange = "90d"
+)
+
+// Valid indicates whether the value is a known member of the GetInferenceReportParamsRange enum.
+func (e GetInferenceReportParamsRange) Valid() bool {
+	switch e {
+	case GetInferenceReportParamsRangeMtd:
+		return true
+	case GetInferenceReportParamsRangeN24h:
+		return true
+	case GetInferenceReportParamsRangeN30d:
+		return true
+	case GetInferenceReportParamsRangeN7d:
+		return true
+	case GetInferenceReportParamsRangeN90d:
 		return true
 	default:
 		return false
@@ -4104,6 +5529,54 @@ func (e ListCollaborationLinksParamsLinkState) Valid() bool {
 	case ListCollaborationLinksParamsLinkStateLinked:
 		return true
 	case ListCollaborationLinksParamsLinkStatePending:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListTeamModelEndpointsParamsRelation.
+const (
+	ListTeamModelEndpointsParamsRelationAvailable ListTeamModelEndpointsParamsRelation = "available"
+	ListTeamModelEndpointsParamsRelationOwn       ListTeamModelEndpointsParamsRelation = "own"
+	ListTeamModelEndpointsParamsRelationSelected  ListTeamModelEndpointsParamsRelation = "selected"
+)
+
+// Valid indicates whether the value is a known member of the ListTeamModelEndpointsParamsRelation enum.
+func (e ListTeamModelEndpointsParamsRelation) Valid() bool {
+	switch e {
+	case ListTeamModelEndpointsParamsRelationAvailable:
+		return true
+	case ListTeamModelEndpointsParamsRelationOwn:
+		return true
+	case ListTeamModelEndpointsParamsRelationSelected:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetTeamInferenceReportParamsRange.
+const (
+	GetTeamInferenceReportParamsRangeMtd  GetTeamInferenceReportParamsRange = "mtd"
+	GetTeamInferenceReportParamsRangeN24h GetTeamInferenceReportParamsRange = "24h"
+	GetTeamInferenceReportParamsRangeN30d GetTeamInferenceReportParamsRange = "30d"
+	GetTeamInferenceReportParamsRangeN7d  GetTeamInferenceReportParamsRange = "7d"
+	GetTeamInferenceReportParamsRangeN90d GetTeamInferenceReportParamsRange = "90d"
+)
+
+// Valid indicates whether the value is a known member of the GetTeamInferenceReportParamsRange enum.
+func (e GetTeamInferenceReportParamsRange) Valid() bool {
+	switch e {
+	case GetTeamInferenceReportParamsRangeMtd:
+		return true
+	case GetTeamInferenceReportParamsRangeN24h:
+		return true
+	case GetTeamInferenceReportParamsRangeN30d:
+		return true
+	case GetTeamInferenceReportParamsRangeN7d:
+		return true
+	case GetTeamInferenceReportParamsRangeN90d:
 		return true
 	default:
 		return false
@@ -4440,24 +5913,58 @@ type AgentList struct {
 // AgentModels Which models an agent may call and its default
 type AgentModels struct {
 	// Access all follows the team list
-	Access            AgentModelsAccess `json:"access"`
-	DefaultModelId    string            `json:"defaultModelId"`
-	EffectiveModelIds *[]string         `json:"effectiveModelIds,omitempty"`
-	ModelIds          *[]string         `json:"modelIds,omitempty"`
+	Access AgentModelsAccess `json:"access"`
+
+	// DefaultModelId A Bedrock model id, or (v1.5.0) a route model as <route>/<model> or, with defaultRoute, the route's model name
+	DefaultModelId string `json:"defaultModelId"`
+
+	// DefaultRoute v1.5.0: set when the default model is a route model; defaultModelId then holds the model name
+	DefaultRoute      *string   `json:"defaultRoute,omitempty"`
+	EffectiveModelIds *[]string `json:"effectiveModelIds,omitempty"`
+
+	// EffectiveRoutes v1.5.0: route slugs the agent can call (service routes the team opted in to and team routes, narrowed by routes, on providers that are on), default first
+	EffectiveRoutes *[]string `json:"effectiveRoutes,omitempty"`
+
+	// Env v1.5.0: the AFS_LLM_*, OPENAI_BASE_URL and OPENAI_API_KEY variables the agent receives on its next roll (names and non-secret values; OPENAI_API_KEY is the afs-gateway placeholder)
+	Env      *map[string]string `json:"env,omitempty"`
+	ModelIds *[]string          `json:"modelIds,omitempty"`
+
+	// RouteAccess v1.5.0: all follows the team's routes; selected narrows them to routes
+	RouteAccess *AgentModelsRouteAccess `json:"routeAccess,omitempty"`
+
+	// Routes v1.5.0: route slugs selected when routeAccess is selected
+	Routes *[]string `json:"routes,omitempty"`
 }
 
 // AgentModelsAccess all follows the team list
 type AgentModelsAccess string
 
+// AgentModelsRouteAccess v1.5.0: all follows the team's routes; selected narrows them to routes
+type AgentModelsRouteAccess string
+
 // AgentModelsInput defines model for AgentModelsInput.
 type AgentModelsInput struct {
-	Access         *AgentModelsInputAccess `json:"access,omitempty"`
-	DefaultModelId *string                 `json:"defaultModelId,omitempty"`
-	ModelIds       *[]string               `json:"modelIds,omitempty"`
+	Access *AgentModelsInputAccess `json:"access,omitempty"`
+
+	// DefaultModelId A Bedrock model id or (v1.5.0) <route>/<model>
+	DefaultModelId *string `json:"defaultModelId,omitempty"`
+
+	// DefaultRoute v1.5.0; with defaultModelId as the route's model name. Sending both defaultRoute and a <route>/<model> defaultModelId that disagree → 400 conflicting_fields
+	DefaultRoute *string   `json:"defaultRoute,omitempty"`
+	ModelIds     *[]string `json:"modelIds,omitempty"`
+
+	// RouteAccess v1.5.0; create defaults to all
+	RouteAccess *AgentModelsInputRouteAccess `json:"routeAccess,omitempty"`
+
+	// Routes v1.5.0; route slugs of the team's set (400 agent_routes_team otherwise)
+	Routes *[]string `json:"routes,omitempty"`
 }
 
 // AgentModelsInputAccess defines model for AgentModelsInput.Access.
 type AgentModelsInputAccess string
+
+// AgentModelsInputRouteAccess v1.5.0; create defaults to all
+type AgentModelsInputRouteAccess string
 
 // AgentTemplate defines model for AgentTemplate.
 type AgentTemplate struct {
@@ -4918,6 +6425,31 @@ type CreateApiKeyRequest struct {
 // CreateApiKeyRequestRole defines model for CreateApiKeyRequest.Role.
 type CreateApiKeyRequestRole string
 
+// CreateEndpointModelPriceRequest defines model for CreateEndpointModelPriceRequest.
+type CreateEndpointModelPriceRequest struct {
+	// CachedInputUsdPerMtok USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+	CachedInputUsdPerMtok *Money `json:"cachedInputUsdPerMtok,omitempty"`
+
+	// EffectiveFrom RFC 3339 UTC with Z
+	EffectiveFrom Timestamp `json:"effectiveFrom"`
+
+	// InputUsdPerMtok USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+	InputUsdPerMtok Money  `json:"inputUsdPerMtok"`
+	ModelName       string `json:"modelName"`
+
+	// OutputUsdPerMtok USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+	OutputUsdPerMtok Money `json:"outputUsdPerMtok"`
+
+	// RequestFeeUsd USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+	RequestFeeUsd *Money `json:"requestFeeUsd,omitempty"`
+
+	// Source transfer for an internal platform's chargeback rate
+	Source *CreateEndpointModelPriceRequestSource `json:"source,omitempty"`
+}
+
+// CreateEndpointModelPriceRequestSource transfer for an internal platform's chargeback rate
+type CreateEndpointModelPriceRequestSource string
+
 // CreateExportRequest defines model for CreateExportRequest.
 type CreateExportRequest struct {
 	// TeamIds Teams to export; omit for every team
@@ -4957,6 +6489,52 @@ type CreateLogDestinationRequest struct {
 
 // CreateLogDestinationRequestKind defines model for CreateLogDestinationRequest.Kind.
 type CreateLogDestinationRequestKind string
+
+// CreateModelEndpointRequest A service endpoint; created off (enabled false)
+type CreateModelEndpointRequest struct {
+	// AuthHeader Header name, required when authKind is header
+	AuthHeader *string                            `json:"authHeader,omitempty"`
+	AuthKind   CreateModelEndpointRequestAuthKind `json:"authKind"`
+
+	// BaseUrl https for external and corporate; in_namespace may be http://<service>.<namespace>.svc:<port>
+	BaseUrl string `json:"baseUrl"`
+
+	// CaBundle PEM; not a secret
+	CaBundle         *string                                   `json:"caBundle,omitempty"`
+	CredentialMode   *CreateModelEndpointRequestCredentialMode `json:"credentialMode,omitempty"`
+	Description      *string                                   `json:"description,omitempty"`
+	DisplayName      string                                    `json:"displayName"`
+	ExternalSystemId *string                                   `json:"externalSystemId,omitempty"`
+	Location         CreateModelEndpointRequestLocation        `json:"location"`
+	MaxBodyMib       *int                                      `json:"maxBodyMib,omitempty"`
+	Models           *[]EndpointModelInput                     `json:"models,omitempty"`
+	PricingMode      CreateModelEndpointRequestPricingMode     `json:"pricingMode"`
+
+	// Protocols openai_chat always; openai_responses and openai_embeddings add those paths
+	Protocols []CreateModelEndpointRequestProtocols `json:"protocols"`
+
+	// Provider Provider key of inference_providers (bedrock, openai, openrouter, nous, opencode, azure, google, other) or internal for corporate and in-namespace endpoints, which have no provider switch
+	Provider        string `json:"provider"`
+	RequiresTerms   *bool  `json:"requiresTerms,omitempty"`
+	Slug            string `json:"slug"`
+	TimeoutSeconds  *int   `json:"timeoutSeconds,omitempty"`
+	UseProviderCost *bool  `json:"useProviderCost,omitempty"`
+}
+
+// CreateModelEndpointRequestAuthKind defines model for CreateModelEndpointRequest.AuthKind.
+type CreateModelEndpointRequestAuthKind string
+
+// CreateModelEndpointRequestCredentialMode defines model for CreateModelEndpointRequest.CredentialMode.
+type CreateModelEndpointRequestCredentialMode string
+
+// CreateModelEndpointRequestLocation defines model for CreateModelEndpointRequest.Location.
+type CreateModelEndpointRequestLocation string
+
+// CreateModelEndpointRequestPricingMode defines model for CreateModelEndpointRequest.PricingMode.
+type CreateModelEndpointRequestPricingMode string
+
+// CreateModelEndpointRequestProtocols defines model for CreateModelEndpointRequest.Protocols.
+type CreateModelEndpointRequestProtocols string
 
 // CreateModelPriceRequest defines model for CreateModelPriceRequest.
 type CreateModelPriceRequest struct {
@@ -5130,6 +6708,47 @@ type CreateSwarmTemplateRequestKind string
 // CreateSwarmTemplateRequestTeardownRule defines model for CreateSwarmTemplateRequest.TeardownRule.
 type CreateSwarmTemplateRequestTeardownRule string
 
+// CreateTeamModelEndpointRequest A team-declared endpoint (needs mayAddModelEndpoints). The provider is derived from the host; a host of a disabled provider is refused (provider_disabled). Created off
+type CreateTeamModelEndpointRequest struct {
+	// AuthHeader Header name, required when authKind is header
+	AuthHeader *string                                `json:"authHeader,omitempty"`
+	AuthKind   CreateTeamModelEndpointRequestAuthKind `json:"authKind"`
+
+	// BaseUrl https for external and corporate; in_namespace may be http://<service>.<namespace>.svc:<port>
+	BaseUrl string `json:"baseUrl"`
+
+	// CaBundle PEM; not a secret
+	CaBundle    *string                                   `json:"caBundle,omitempty"`
+	Description *string                                   `json:"description,omitempty"`
+	DisplayName string                                    `json:"displayName"`
+	Location    CreateTeamModelEndpointRequestLocation    `json:"location"`
+	MaxBodyMib  *int                                      `json:"maxBodyMib,omitempty"`
+	MetricsPort *int                                      `json:"metricsPort,omitempty"`
+	Models      *[]TeamEndpointModelInput                 `json:"models,omitempty"`
+	Owner       string                                    `json:"owner"`
+	PricingMode CreateTeamModelEndpointRequestPricingMode `json:"pricingMode"`
+
+	// Protocols openai_chat always; openai_responses and openai_embeddings add those paths
+	Protocols []CreateTeamModelEndpointRequestProtocols `json:"protocols"`
+	Purpose   string                                    `json:"purpose"`
+
+	// Slug Unique in the team and not a service slug
+	Slug           string `json:"slug"`
+	TimeoutSeconds *int   `json:"timeoutSeconds,omitempty"`
+}
+
+// CreateTeamModelEndpointRequestAuthKind defines model for CreateTeamModelEndpointRequest.AuthKind.
+type CreateTeamModelEndpointRequestAuthKind string
+
+// CreateTeamModelEndpointRequestLocation defines model for CreateTeamModelEndpointRequest.Location.
+type CreateTeamModelEndpointRequestLocation string
+
+// CreateTeamModelEndpointRequestPricingMode defines model for CreateTeamModelEndpointRequest.PricingMode.
+type CreateTeamModelEndpointRequestPricingMode string
+
+// CreateTeamModelEndpointRequestProtocols defines model for CreateTeamModelEndpointRequest.Protocols.
+type CreateTeamModelEndpointRequestProtocols string
+
 // CreateTeamRequest defines model for CreateTeamRequest.
 type CreateTeamRequest struct {
 	// AllowedAwsAccounts Needs teams:set-aws-accounts on update
@@ -5301,6 +6920,239 @@ type DeliveryStatus struct {
 	LastTestId      *string    `json:"lastTestId,omitempty"`
 }
 
+// EndpointFederation What AFS stores and what the cloud admins must trust (§11.1)
+type EndpointFederation struct {
+	CheckedAt  *Timestamp `json:"checkedAt,omitempty"`
+	ClientId   *string    `json:"clientId,omitempty"`
+	EndpointId string     `json:"endpointId"`
+
+	// ExpectedAudience Azure: api://AzureADTokenExchange
+	ExpectedAudience *string `json:"expectedAudience,omitempty"`
+
+	// ExpectedIssuer Azure: the EKS cluster's OIDC issuer URL to trust
+	ExpectedIssuer *string `json:"expectedIssuer,omitempty"`
+
+	// ExpectedRoleArn Google: the team gateway's AWS role to map in the pool provider
+	ExpectedRoleArn *string `json:"expectedRoleArn,omitempty"`
+
+	// ExpectedSubject Azure: system:serviceaccount:afs-t-<slug>:afs-gateway
+	ExpectedSubject *string                   `json:"expectedSubject,omitempty"`
+	Kind            EndpointFederationKind    `json:"kind"`
+	LastError       *string                   `json:"lastError,omitempty"`
+	Location        *string                   `json:"location,omitempty"`
+	PoolId          *string                   `json:"poolId,omitempty"`
+	ProjectId       *string                   `json:"projectId,omitempty"`
+	ProjectNumber   *string                   `json:"projectNumber,omitempty"`
+	ProviderId      *string                   `json:"providerId,omitempty"`
+	Status          *EndpointFederationStatus `json:"status,omitempty"`
+	TeamId          string                    `json:"teamId"`
+	TenantId        *string                   `json:"tenantId,omitempty"`
+	Version         *int                      `json:"version,omitempty"`
+}
+
+// EndpointFederationKind defines model for EndpointFederation.Kind.
+type EndpointFederationKind string
+
+// EndpointFederationStatus defines model for EndpointFederation.Status.
+type EndpointFederationStatus string
+
+// EndpointFederationRequest Metadata only, no secret. Azure endpoints (authKind azure_federated) take tenantId and clientId; Google endpoints (google_federated) take projectNumber, poolId, providerId, projectId and location
+type EndpointFederationRequest struct {
+	// ClientId Azure: the managed identity or app registration
+	ClientId *openapi_types.UUID `json:"clientId,omitempty"`
+
+	// Location Google, for example us-central1 or global
+	Location *string `json:"location,omitempty"`
+
+	// PoolId Google workload identity pool
+	PoolId *string `json:"poolId,omitempty"`
+
+	// ProjectId Google
+	ProjectId *string `json:"projectId,omitempty"`
+
+	// ProjectNumber Google
+	ProjectNumber *string `json:"projectNumber,omitempty"`
+
+	// ProviderId Google pool provider
+	ProviderId *string `json:"providerId,omitempty"`
+
+	// TenantId Azure
+	TenantId *openapi_types.UUID `json:"tenantId,omitempty"`
+}
+
+// EndpointModel defines model for EndpointModel.
+type EndpointModel struct {
+	// Callable Enabled and, on a per_token route, priced in force
+	Callable        *bool `json:"callable,omitempty"`
+	ContextTokens   *int  `json:"contextTokens,omitempty"`
+	Enabled         bool  `json:"enabled"`
+	MaxOutputTokens int   `json:"maxOutputTokens"`
+
+	// ModelName What the client sends in model (for Azure, the deployment name)
+	ModelName string `json:"modelName"`
+
+	// Price The price in force, if any
+	Price *EndpointModelPriceInline `json:"price,omitempty"`
+
+	// PriceState not_required on capacity and free routes
+	PriceState *EndpointModelPriceState `json:"priceState,omitempty"`
+}
+
+// EndpointModelPriceState not_required on capacity and free routes
+type EndpointModelPriceState string
+
+// EndpointModelInput defines model for EndpointModelInput.
+type EndpointModelInput struct {
+	ContextTokens   *int   `json:"contextTokens,omitempty"`
+	Enabled         *bool  `json:"enabled,omitempty"`
+	MaxOutputTokens int    `json:"maxOutputTokens"`
+	ModelName       string `json:"modelName"`
+}
+
+// EndpointModelList The route models of an endpoint
+type EndpointModelList struct {
+	EndpointId string          `json:"endpointId"`
+	Items      []EndpointModel `json:"items"`
+
+	// Version The endpoint's version after the change
+	Version *int `json:"version,omitempty"`
+}
+
+// EndpointModelPrice An effective-dated price of a route model (append-only)
+type EndpointModelPrice struct {
+	ApprovedBy *string `json:"approvedBy,omitempty"`
+
+	// CachedInputUsdPerMtok USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+	CachedInputUsdPerMtok *Money `json:"cachedInputUsdPerMtok,omitempty"`
+
+	// CreatedAt RFC 3339 UTC with Z
+	CreatedAt *Timestamp `json:"createdAt,omitempty"`
+
+	// EffectiveFrom RFC 3339 UTC with Z
+	EffectiveFrom Timestamp `json:"effectiveFrom"`
+	EndpointId    string    `json:"endpointId"`
+
+	// InputUsdPerMtok USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+	InputUsdPerMtok Money  `json:"inputUsdPerMtok"`
+	ModelName       string `json:"modelName"`
+
+	// OutputUsdPerMtok USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+	OutputUsdPerMtok Money `json:"outputUsdPerMtok"`
+
+	// RequestFeeUsd USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+	RequestFeeUsd *Money                   `json:"requestFeeUsd,omitempty"`
+	Source        EndpointModelPriceSource `json:"source"`
+}
+
+// EndpointModelPriceSource defines model for EndpointModelPrice.Source.
+type EndpointModelPriceSource string
+
+// EndpointModelPriceInline USD per million tokens and an optional per-call fee; team endpoints set prices inline (PutTeamEndpointModels)
+type EndpointModelPriceInline struct {
+	// CachedInputUsdPerMtok USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+	CachedInputUsdPerMtok *Money `json:"cachedInputUsdPerMtok,omitempty"`
+
+	// InputUsdPerMtok USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+	InputUsdPerMtok Money `json:"inputUsdPerMtok"`
+
+	// OutputUsdPerMtok USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+	OutputUsdPerMtok Money `json:"outputUsdPerMtok"`
+
+	// RequestFeeUsd USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+	RequestFeeUsd *Money `json:"requestFeeUsd,omitempty"`
+}
+
+// EndpointPriceProposal defines model for EndpointPriceProposal.
+type EndpointPriceProposal struct {
+	// CachedInputUsdPerMtok USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+	CachedInputUsdPerMtok *Money     `json:"cachedInputUsdPerMtok,omitempty"`
+	DecidedAt             *Timestamp `json:"decidedAt,omitempty"`
+	DecidedBy             *string    `json:"decidedBy,omitempty"`
+
+	// EffectiveFrom RFC 3339 UTC with Z
+	EffectiveFrom Timestamp `json:"effectiveFrom"`
+	EndpointId    string    `json:"endpointId"`
+
+	// FetchedAt RFC 3339 UTC with Z
+	FetchedAt Timestamp `json:"fetchedAt"`
+	Id        *string   `json:"id,omitempty"`
+
+	// InputUsdPerMtok USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+	InputUsdPerMtok Money   `json:"inputUsdPerMtok"`
+	ModelName       string  `json:"modelName"`
+	Note            *string `json:"note,omitempty"`
+
+	// OutputUsdPerMtok USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+	OutputUsdPerMtok Money `json:"outputUsdPerMtok"`
+
+	// RequestFeeUsd USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+	RequestFeeUsd *Money  `json:"requestFeeUsd,omitempty"`
+	Slug          *string `json:"slug,omitempty"`
+
+	// Source LiteLLM's list or the provider's published prices
+	Source *EndpointPriceProposalSource `json:"source,omitempty"`
+	Status *EndpointPriceProposalStatus `json:"status,omitempty"`
+
+	// Version 1 while pending, 2 once decided
+	Version *int `json:"version,omitempty"`
+}
+
+// EndpointPriceProposalSource LiteLLM's list or the provider's published prices
+type EndpointPriceProposalSource string
+
+// EndpointPriceProposalStatus defines model for EndpointPriceProposal.Status.
+type EndpointPriceProposalStatus string
+
+// EndpointPriceProposalList A page of EndpointPriceProposal resources
+type EndpointPriceProposalList struct {
+	Items []EndpointPriceProposal `json:"items"`
+
+	// NextToken Absent on the last page
+	NextToken *string `json:"nextToken,omitempty"`
+}
+
+// EndpointTeam One team's view of a service endpoint (screen 58)
+type EndpointTeam struct {
+	CredentialRotatedAt *Timestamp                    `json:"credentialRotatedAt,omitempty"`
+	CredentialState     EndpointTeamCredentialState   `json:"credentialState"`
+	FederationState     EndpointTeamFederationState   `json:"federationState"`
+	GatewayDeployment   EndpointTeamGatewayDeployment `json:"gatewayDeployment"`
+
+	// GatewayVersion Image version of the team gateway, when rendered
+	GatewayVersion *string `json:"gatewayVersion,omitempty"`
+
+	// Health Route health; Unknown before the first evaluation
+	Health     *ModelEndpointHealth    `json:"health,omitempty"`
+	Selected   bool                    `json:"selected"`
+	SelectedBy *EndpointTeamSelectedBy `json:"selectedBy,omitempty"`
+
+	// SpendMtdUsd USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+	SpendMtdUsd     Money   `json:"spendMtdUsd"`
+	TeamDisplayName *string `json:"teamDisplayName,omitempty"`
+	TeamId          string  `json:"teamId"`
+	TeamSlug        *string `json:"teamSlug,omitempty"`
+}
+
+// EndpointTeamCredentialState defines model for EndpointTeam.CredentialState.
+type EndpointTeamCredentialState string
+
+// EndpointTeamFederationState defines model for EndpointTeam.FederationState.
+type EndpointTeamFederationState string
+
+// EndpointTeamGatewayDeployment defines model for EndpointTeam.GatewayDeployment.
+type EndpointTeamGatewayDeployment string
+
+// EndpointTeamSelectedBy defines model for EndpointTeam.SelectedBy.
+type EndpointTeamSelectedBy string
+
+// EndpointTeamList A page of EndpointTeam resources
+type EndpointTeamList struct {
+	Items []EndpointTeam `json:"items"`
+
+	// NextToken Absent on the last page
+	NextToken *string `json:"nextToken,omitempty"`
+}
+
 // Error defines model for Error.
 type Error struct {
 	// Code API contract §6 codes returned by afs-api (BudgetExceeded and UpstreamError come only from afs-gateway)
@@ -5326,10 +7178,16 @@ type ErrorDetails struct {
 	Fields      *[]FieldError `json:"fields,omitempty"`
 	MissingTags *[]string     `json:"missingTags,omitempty"`
 
-	// Reason idempotency_mismatch, idempotency_in_progress, team_suspended, not_implemented and others
-	Reason             *string   `json:"reason,omitempty"`
-	RequiredPermission *string   `json:"requiredPermission,omitempty"`
-	UnownedRepos       *[]string `json:"unownedRepos,omitempty"`
+	// Model v1.5.0, a model named by the reason
+	Model *string `json:"model,omitempty"`
+
+	// Reason idempotency_mismatch, idempotency_in_progress, team_suspended, not_implemented and others. v1.5.0 adds slug_taken, slug_reserved, slug_invalid, base_url_not_https, provider_disabled, no_fallback_model, endpoint_base_url_placeholder, needs_service_admin, team_endpoints_not_allowed, endpoint_enabled, endpoint_credential_path, agent_routes_team and agents_default_route_allowed
+	Reason             *string `json:"reason,omitempty"`
+	RequiredPermission *string `json:"requiredPermission,omitempty"`
+
+	// Route v1.5.0, a route slug named by the reason
+	Route        *string   `json:"route,omitempty"`
+	UnownedRepos *[]string `json:"unownedRepos,omitempty"`
 }
 
 // Export defines model for Export.
@@ -5493,6 +7351,17 @@ type IdentityProviderList struct {
 // ImageRef Container image pinned by digest
 type ImageRef = string
 
+// ImportProviderStatementRequest A provider's monthly statement. A text/csv body (columns teamId,model,amountUsd,tokens) takes period and source as query parameters
+type ImportProviderStatementRequest struct {
+	// Period Month, YYYY-MM
+	Period string                               `json:"period"`
+	Rows   []ProviderStatementRow               `json:"rows"`
+	Source ImportProviderStatementRequestSource `json:"source"`
+}
+
+// ImportProviderStatementRequestSource defines model for ImportProviderStatementRequest.Source.
+type ImportProviderStatementRequestSource string
+
 // ImportReport defines model for ImportReport.
 type ImportReport struct {
 	DryRun bool               `json:"dryRun"`
@@ -5521,6 +7390,127 @@ type ImportTeamResult struct {
 
 // ImportTeamResultResult defines model for ImportTeamResult.Result.
 type ImportTeamResultResult string
+
+// InferenceProvider A provider switch (Bedrock included). impact is present on a dryRun and after a change
+type InferenceProvider struct {
+	ChangedAt      *Timestamp `json:"changedAt,omitempty"`
+	ChangedBy      *string    `json:"changedBy,omitempty"`
+	DirectSystems  *int       `json:"directSystems,omitempty"`
+	DisabledReason *string    `json:"disabledReason,omitempty"`
+	DisplayName    string     `json:"displayName"`
+	Enabled        bool       `json:"enabled"`
+
+	// FallbackModel Bedrock only: <route>/<model> chosen when it was turned off
+	FallbackModel *string `json:"fallbackModel,omitempty"`
+
+	// Hosts FQDN globs; other has none and matches any unlisted external host
+	Hosts []string `json:"hosts"`
+
+	// Impact What turning the provider off (or on) changes (screen 68a)
+	Impact        *InferenceProviderImpact       `json:"impact,omitempty"`
+	Provider      string                         `json:"provider"`
+	Routes        *int                           `json:"routes,omitempty"`
+	TeamSelection InferenceProviderTeamSelection `json:"teamSelection"`
+	Teams         *int                           `json:"teams,omitempty"`
+	Version       *int                           `json:"version,omitempty"`
+}
+
+// InferenceProviderTeamSelection defines model for InferenceProvider.TeamSelection.
+type InferenceProviderTeamSelection string
+
+// InferenceProviderImpact What turning the provider off (or on) changes (screen 68a)
+type InferenceProviderImpact struct {
+	// Agents Agents and pools with a route or model of the provider
+	Agents int `json:"agents"`
+
+	// AgentsDegraded Agents left with no model (for example templates that speak only Anthropic Messages)
+	AgentsDegraded int `json:"agentsDegraded"`
+
+	// AgentsMovingToFallback Bedrock off: agents whose default moves to fallbackModel
+	AgentsMovingToFallback int `json:"agentsMovingToFallback"`
+
+	// DirectSystems llm external systems that stop rendering
+	DirectSystems int     `json:"directSystems"`
+	FallbackModel *string `json:"fallbackModel,omitempty"`
+
+	// Routes Endpoints on the provider (service and team)
+	Routes int `json:"routes"`
+
+	// Teams Teams with a route of the provider selected or declared
+	Teams int `json:"teams"`
+
+	// TeamsToSelect Bedrock off: teams the fallback route would be selected for (selectForAllTeams)
+	TeamsToSelect int `json:"teamsToSelect"`
+}
+
+// InferenceProviderList Every provider
+type InferenceProviderList struct {
+	Items []InferenceProvider `json:"items"`
+}
+
+// InferenceReport Latency, TTFT, errors, throughput and cost from the usage ledger (PRD §10.5); never prompt or completion content
+type InferenceReport struct {
+	GroupBy   []string             `json:"groupBy"`
+	NextToken *string              `json:"nextToken,omitempty"`
+	Notes     []string             `json:"notes"`
+	Range     ReportRange          `json:"range"`
+	Rows      []InferenceReportRow `json:"rows"`
+
+	// Totals groupBy columns, then measures; percentiles are null with no calls
+	Totals InferenceReportRow `json:"totals"`
+}
+
+// InferenceReportRow groupBy columns, then measures; percentiles are null with no calls
+type InferenceReportRow struct {
+	AgentId      *string `json:"agentId,omitempty"`
+	CachedTokens *int    `json:"cachedTokens,omitempty"`
+	Calls        int     `json:"calls"`
+
+	// CostUsd USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+	CostUsd Money `json:"costUsd"`
+
+	// CostUsdPerHour USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+	CostUsdPerHour *Money              `json:"costUsdPerHour,omitempty"`
+	Day            *openapi_types.Date `json:"day,omitempty"`
+
+	// EffectiveUsdPerMtok capacity routes: allocated cost over tokens
+	EffectiveUsdPerMtok *Money   `json:"effectiveUsdPerMtok,omitempty"`
+	ErrorRatePct        *float32 `json:"errorRatePct,omitempty"`
+	Errors              int      `json:"errors"`
+
+	// EstimatedPct Share of calls settled with usage_source estimated
+	EstimatedPct *float32 `json:"estimatedPct,omitempty"`
+
+	// GatewayP99Ms Gateway added latency
+	GatewayP99Ms *int `json:"gatewayP99Ms,omitempty"`
+
+	// Hour RFC 3339 UTC with Z
+	Hour                  *Timestamp                     `json:"hour,omitempty"`
+	InputTokens           int                            `json:"inputTokens"`
+	LatencyP50Ms          *int                           `json:"latencyP50Ms,omitempty"`
+	LatencyP95Ms          *int                           `json:"latencyP95Ms,omitempty"`
+	LatencyP99Ms          *int                           `json:"latencyP99Ms,omitempty"`
+	Model                 *string                        `json:"model,omitempty"`
+	OutputTokens          int                            `json:"outputTokens"`
+	OutputTokensPerSecond *float32                       `json:"outputTokensPerSecond,omitempty"`
+	PoolId                *string                        `json:"poolId,omitempty"`
+	PricingMode           *InferenceReportRowPricingMode `json:"pricingMode,omitempty"`
+	ReasoningTokens       *int                           `json:"reasoningTokens,omitempty"`
+
+	// Refused AFS refusals (402, 403)
+	Refused *int `json:"refused,omitempty"`
+
+	// Route Endpoint slug; bedrock for Bedrock calls
+	Route     *string `json:"route,omitempty"`
+	TeamId    *string `json:"teamId,omitempty"`
+	Throttled *int    `json:"throttled,omitempty"`
+	TtftP50Ms *int    `json:"ttftP50Ms,omitempty"`
+	TtftP95Ms *int    `json:"ttftP95Ms,omitempty"`
+	TtftP99Ms *int    `json:"ttftP99Ms,omitempty"`
+}
+
+// InferenceReportRowPricingMode defines model for InferenceReportRow.PricingMode.
+type InferenceReportRowPricingMode string
 
 // Kubeconfig kubeconfig YAML with an exec credential plugin; never a token
 type Kubeconfig = string
@@ -5638,6 +7628,9 @@ type Model struct {
 	PriceState *ModelPriceState `json:"priceState,omitempty"`
 	Provider   string           `json:"provider"`
 
+	// ProviderState v1.5.0: off while the model's provider (bedrock) is switched off by provider policy
+	ProviderState *ModelProviderState `json:"providerState,omitempty"`
+
 	// ServiceEnabled Admin list only
 	ServiceEnabled *bool `json:"serviceEnabled,omitempty"`
 
@@ -5657,6 +7650,142 @@ type ModelOrigin string
 
 // ModelPriceState defines model for Model.PriceState.
 type ModelPriceState string
+
+// ModelProviderState v1.5.0: off while the model's provider (bedrock) is switched off by provider policy
+type ModelProviderState string
+
+// ModelEndpoint One configured upstream (a route). Never holds a credential value
+type ModelEndpoint struct {
+	// AuthHeader Header name, required when authKind is header
+	AuthHeader *string               `json:"authHeader,omitempty"`
+	AuthKind   ModelEndpointAuthKind `json:"authKind"`
+
+	// BaseUrl https for external and corporate; in_namespace may be http://<service>.<namespace>.svc:<port>
+	BaseUrl string `json:"baseUrl"`
+	Builtin *bool  `json:"builtin,omitempty"`
+
+	// CaBundle PEM; not a secret
+	CaBundle *string `json:"caBundle,omitempty"`
+
+	// Capped per_token routes reserve and settle against the team budget
+	Capped *bool `json:"capped,omitempty"`
+
+	// CreatedAt RFC 3339 UTC with Z
+	CreatedAt *Timestamp `json:"createdAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+
+	// CredentialMode Team endpoints are always per_team
+	CredentialMode ModelEndpointCredentialMode `json:"credentialMode"`
+	Description    *string                     `json:"description,omitempty"`
+	DisplayName    string                      `json:"displayName"`
+
+	// Enabled The service (or team) switch; new endpoints are off
+	Enabled bool `json:"enabled"`
+
+	// ExternalSystemId The llm external system of the same provider (direct-access policy, MEG-OQ-5)
+	ExternalSystemId *string `json:"externalSystemId,omitempty"`
+
+	// Health Route health; Unknown before the first evaluation
+	Health     *ModelEndpointHealth  `json:"health,omitempty"`
+	Id         *string               `json:"id,omitempty"`
+	Location   ModelEndpointLocation `json:"location"`
+	MaxBodyMib *int                  `json:"maxBodyMib,omitempty"`
+	Metered    *bool                 `json:"metered,omitempty"`
+
+	// MetricsPort in_namespace only
+	MetricsPort *int             `json:"metricsPort,omitempty"`
+	Models      *[]EndpointModel `json:"models,omitempty"`
+
+	// Owner Required on team endpoints
+	Owner       *string                  `json:"owner,omitempty"`
+	PricingMode ModelEndpointPricingMode `json:"pricingMode"`
+
+	// Protocols openai_chat always; openai_responses and openai_embeddings add those paths
+	Protocols []ModelEndpointProtocols `json:"protocols"`
+
+	// Provider Provider key of inference_providers (bedrock, openai, openrouter, nous, opencode, azure, google, other) or internal for corporate and in-namespace endpoints, which have no provider switch
+	Provider string `json:"provider"`
+
+	// ProviderState off when the provider's switch is off (provider policy)
+	ProviderState *ModelEndpointProviderState `json:"providerState,omitempty"`
+
+	// Purpose Required on team endpoints
+	Purpose *string `json:"purpose,omitempty"`
+
+	// RequiresTerms Extra terms: only a service admin selects it for a team
+	RequiresTerms bool `json:"requiresTerms"`
+
+	// Slug The route name; bedrock is reserved; immutable
+	Slug string `json:"slug"`
+
+	// TeamId null for a service endpoint
+	TeamId         *string `json:"teamId,omitempty"`
+	TeamsSelected  *int    `json:"teamsSelected,omitempty"`
+	TimeoutSeconds *int    `json:"timeoutSeconds,omitempty"`
+
+	// UpdatedAt RFC 3339 UTC with Z
+	UpdatedAt *Timestamp `json:"updatedAt,omitempty"`
+
+	// UseProviderCost Settle to the larger of the provider's usage.cost and the token-price cost
+	UseProviderCost *bool `json:"useProviderCost,omitempty"`
+	Version         *int  `json:"version,omitempty"`
+}
+
+// ModelEndpointAuthKind defines model for ModelEndpoint.AuthKind.
+type ModelEndpointAuthKind string
+
+// ModelEndpointCredentialMode Team endpoints are always per_team
+type ModelEndpointCredentialMode string
+
+// ModelEndpointLocation defines model for ModelEndpoint.Location.
+type ModelEndpointLocation string
+
+// ModelEndpointPricingMode defines model for ModelEndpoint.PricingMode.
+type ModelEndpointPricingMode string
+
+// ModelEndpointProtocols defines model for ModelEndpoint.Protocols.
+type ModelEndpointProtocols string
+
+// ModelEndpointProviderState off when the provider's switch is off (provider policy)
+type ModelEndpointProviderState string
+
+// ModelEndpointCredential Credential metadata only; there is no value member
+type ModelEndpointCredential struct {
+	EndpointId string                       `json:"endpointId"`
+	RotatedAt  *Timestamp                   `json:"rotatedAt"`
+	Scope      string                       `json:"scope"`
+	State      ModelEndpointCredentialState `json:"state"`
+}
+
+// ModelEndpointCredentialState defines model for ModelEndpointCredential.State.
+type ModelEndpointCredentialState string
+
+// ModelEndpointCredentialRequest The upstream credential (API key). Write-only: never stored in the database, returned or logged
+type ModelEndpointCredentialRequest struct {
+	// Value Sent once, passed to Secrets Manager and dropped; never returned, logged or audited
+	Value *SecretValue `json:"value,omitempty"`
+}
+
+// ModelEndpointHealth Route health; Unknown before the first evaluation
+type ModelEndpointHealth struct {
+	// Reason Why the state is not Ready, for example error_rate or ttft_objective
+	Reason *string    `json:"reason,omitempty"`
+	Since  *Timestamp `json:"since,omitempty"`
+
+	// State Route condition derived by the reconciler from the gateway ledger over 5 minutes (PRD §10.4)
+	State ModelEndpointHealthState `json:"state"`
+}
+
+// ModelEndpointHealthState Route condition derived by the reconciler from the gateway ledger over 5 minutes (PRD §10.4)
+type ModelEndpointHealthState string
+
+// ModelEndpointList A page of ModelEndpoint resources
+type ModelEndpointList struct {
+	Items []ModelEndpoint `json:"items"`
+
+	// NextToken Absent on the last page
+	NextToken *string `json:"nextToken,omitempty"`
+}
 
 // ModelList A page of Model resources
 type ModelList struct {
@@ -6040,6 +8169,34 @@ type Principal struct {
 // PrincipalType defines model for Principal.Type.
 type PrincipalType string
 
+// ProviderStatement defines model for ProviderStatement.
+type ProviderStatement struct {
+	EndpointId string  `json:"endpointId"`
+	Id         *string `json:"id,omitempty"`
+
+	// ImportedAt RFC 3339 UTC with Z
+	ImportedAt Timestamp               `json:"importedAt"`
+	ImportedBy string                  `json:"importedBy"`
+	Period     string                  `json:"period"`
+	RowCount   int                     `json:"rowCount"`
+	Source     ProviderStatementSource `json:"source"`
+
+	// TotalUsd USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+	TotalUsd Money `json:"totalUsd"`
+}
+
+// ProviderStatementSource defines model for ProviderStatement.Source.
+type ProviderStatementSource string
+
+// ProviderStatementRow defines model for ProviderStatementRow.
+type ProviderStatementRow struct {
+	// AmountUsd USD amount as a decimal string with at most 6 fraction digits; never a JSON number
+	AmountUsd Money  `json:"amountUsd"`
+	Model     string `json:"model"`
+	TeamId    string `json:"teamId"`
+	Tokens    *int   `json:"tokens,omitempty"`
+}
+
 // PutAgentTemplateRequest defines model for PutAgentTemplateRequest.
 type PutAgentTemplateRequest struct {
 	AllowedDigests   []string                               `json:"allowedDigests"`
@@ -6082,6 +8239,11 @@ type PutConfigValueRequest struct {
 
 // PutConfigValueRequestSource defines model for PutConfigValueRequest.Source.
 type PutConfigValueRequestSource string
+
+// PutEndpointModelsRequest Replaces the endpoint's route models; a model left out is removed
+type PutEndpointModelsRequest struct {
+	Models []EndpointModelInput `json:"models"`
+}
 
 // PutNamespaceConfigValueRequest defines model for PutNamespaceConfigValueRequest.
 type PutNamespaceConfigValueRequest struct {
@@ -6150,6 +8312,26 @@ type PutTeamCollaborationRequest struct {
 
 // PutTeamCollaborationRequestRegistrationMode Omitted keeps the current value
 type PutTeamCollaborationRequestRegistrationMode string
+
+// PutTeamEndpointModelsRequest Replaces the team endpoint's route models and their prices (written as manual prices effective now)
+type PutTeamEndpointModelsRequest struct {
+	Models []TeamEndpointModelInput `json:"models"`
+}
+
+// PutTeamGatewaySettingsRequest Members sent replace stored ones (service admins only, teams_guardrail_guard). Routes are served only by team gateways
+type PutTeamGatewaySettingsRequest struct {
+	Deployment           *PutTeamGatewaySettingsRequestDeployment `json:"deployment,omitempty"`
+	MayAddModelEndpoints *bool                                    `json:"mayAddModelEndpoints,omitempty"`
+}
+
+// PutTeamGatewaySettingsRequestDeployment defines model for PutTeamGatewaySettingsRequest.Deployment.
+type PutTeamGatewaySettingsRequestDeployment string
+
+// PutTeamModelEndpointsRequest Replaces the team's opt-in list. Selecting an extra-terms endpoint or one of a provider with teamSelection service_admin, or deselecting one a service admin selected, needs a service admin (403 needs_service_admin)
+type PutTeamModelEndpointsRequest struct {
+	// EndpointIds Service endpoints to opt in to; one left out is deselected
+	EndpointIds []string `json:"endpointIds"`
+}
 
 // PutTeamModelsRequest A body with only modelIds is read as access selected (deprecated form)
 type PutTeamModelsRequest struct {
@@ -6814,10 +8996,13 @@ type Team struct {
 	EffectiveCeilingUsd Money `json:"effectiveCeilingUsd"`
 
 	// ExpiresAt RFC 3339 UTC with Z
-	ExpiresAt          *Timestamp `json:"expiresAt,omitempty"`
-	Generation         *int       `json:"generation,omitempty"`
-	Id                 *string    `json:"id,omitempty"`
-	IdentityProviderId *string    `json:"identityProviderId,omitempty"`
+	ExpiresAt *Timestamp `json:"expiresAt,omitempty"`
+
+	// GatewayDeployment v1.5.0: shared gateway or a team gateway in the namespace; set with PutTeamGatewaySettings
+	GatewayDeployment  *TeamGatewayDeployment `json:"gatewayDeployment,omitempty"`
+	Generation         *int                   `json:"generation,omitempty"`
+	Id                 *string                `json:"id,omitempty"`
+	IdentityProviderId *string                `json:"identityProviderId,omitempty"`
 
 	// IsolationTier Guardrail field: needs teams:set-guardrails
 	IsolationTier TeamIsolationTier `json:"isolationTier"`
@@ -6833,6 +9018,9 @@ type Team struct {
 
 	// MayAddExternalSystems Guardrail field: needs teams:set-guardrails
 	MayAddExternalSystems bool `json:"mayAddExternalSystems"`
+
+	// MayAddModelEndpoints v1.5.0: the team may declare its own model endpoints; set with PutTeamGatewaySettings
+	MayAddModelEndpoints *bool `json:"mayAddModelEndpoints,omitempty"`
 
 	// MayExposeCollaboration Deprecated: use maxCollaborationExposure (limit is not off)
 	// Deprecated: this property has been marked as deprecated upstream, but no `x-deprecated-reason` was set
@@ -6871,6 +9059,9 @@ type Team struct {
 	// ViewerKubectl Guardrail field: needs teams:set-guardrails
 	ViewerKubectl bool `json:"viewerKubectl"`
 }
+
+// TeamGatewayDeployment v1.5.0: shared gateway or a team gateway in the namespace; set with PutTeamGatewaySettings
+type TeamGatewayDeployment string
 
 // TeamIsolationTier Guardrail field: needs teams:set-guardrails
 type TeamIsolationTier string
@@ -6956,12 +9147,159 @@ type TeamDirectoryList struct {
 	NextToken *string `json:"nextToken,omitempty"`
 }
 
+// TeamEndpointModelInput defines model for TeamEndpointModelInput.
+type TeamEndpointModelInput struct {
+	ContextTokens   *int   `json:"contextTokens,omitempty"`
+	Enabled         *bool  `json:"enabled,omitempty"`
+	MaxOutputTokens int    `json:"maxOutputTokens"`
+	ModelName       string `json:"modelName"`
+
+	// Price USD per million tokens and an optional per-call fee; team endpoints set prices inline (PutTeamEndpointModels)
+	Price *EndpointModelPriceInline `json:"price,omitempty"`
+}
+
+// TeamGatewaySettings defines model for TeamGatewaySettings.
+type TeamGatewaySettings struct {
+	Deployment TeamGatewaySettingsDeployment `json:"deployment"`
+
+	// GatewayState shared until the reconciler has rendered the team gateway
+	GatewayState *TeamGatewaySettingsGatewayState `json:"gatewayState,omitempty"`
+
+	// GatewayUrl The opaque AFS_GATEWAY_URL agents of the team receive
+	GatewayUrl           *string `json:"gatewayUrl,omitempty"`
+	MayAddModelEndpoints bool    `json:"mayAddModelEndpoints"`
+	TeamId               string  `json:"teamId"`
+
+	// Version The team's version
+	Version *int `json:"version,omitempty"`
+}
+
+// TeamGatewaySettingsDeployment defines model for TeamGatewaySettings.Deployment.
+type TeamGatewaySettingsDeployment string
+
+// TeamGatewaySettingsGatewayState shared until the reconciler has rendered the team gateway
+type TeamGatewaySettingsGatewayState string
+
 // TeamList A page of Team resources
 type TeamList struct {
 	Items []Team `json:"items"`
 
 	// NextToken Absent on the last page
 	NextToken *string `json:"nextToken,omitempty"`
+}
+
+// TeamModelEndpoint A route as the team sees it (screens 61, 66)
+type TeamModelEndpoint struct {
+	AuthKind *TeamModelEndpointAuthKind `json:"authKind,omitempty"`
+
+	// BaseUrl Team endpoints only; null for service endpoints
+	BaseUrl *string `json:"baseUrl,omitempty"`
+
+	// BaseUrlEnv AFS_LLM_<ROUTE>_BASE_URL
+	BaseUrlEnv      *string                           `json:"baseUrlEnv,omitempty"`
+	Capped          *bool                             `json:"capped,omitempty"`
+	CredentialMode  *TeamModelEndpointCredentialMode  `json:"credentialMode,omitempty"`
+	CredentialState TeamModelEndpointCredentialState  `json:"credentialState"`
+	Description     *string                           `json:"description,omitempty"`
+	DisplayName     string                            `json:"displayName"`
+	Enabled         bool                              `json:"enabled"`
+	FederationState *TeamModelEndpointFederationState `json:"federationState,omitempty"`
+
+	// Health Route health; Unknown before the first evaluation
+	Health   *ModelEndpointHealth      `json:"health,omitempty"`
+	Id       string                    `json:"id"`
+	Location TeamModelEndpointLocation `json:"location"`
+	Metered  *bool                     `json:"metered,omitempty"`
+	Models   []EndpointModel           `json:"models"`
+
+	// OffReason Why the route does not reach the team's agents
+	OffReason     *TeamModelEndpointOffReason    `json:"offReason"`
+	Owner         *string                        `json:"owner,omitempty"`
+	PricingMode   TeamModelEndpointPricingMode   `json:"pricingMode"`
+	Protocols     []TeamModelEndpointProtocols   `json:"protocols"`
+	Provider      string                         `json:"provider"`
+	ProviderState TeamModelEndpointProviderState `json:"providerState"`
+	Purpose       *string                        `json:"purpose,omitempty"`
+
+	// Relation selected: an opted-in service endpoint; own: declared by the team; available: switched on, not opted in
+	Relation      TeamModelEndpointRelation `json:"relation"`
+	RequiresTerms *bool                     `json:"requiresTerms,omitempty"`
+
+	// SelectableBy service_admin for extra-terms endpoints and providers with teamSelection service_admin
+	SelectableBy TeamModelEndpointSelectableBy `json:"selectableBy"`
+	SelectedBy   *TeamModelEndpointSelectedBy  `json:"selectedBy,omitempty"`
+	Slug         string                        `json:"slug"`
+
+	// TeamId null for a service endpoint
+	TeamId  *string `json:"teamId"`
+	Version int     `json:"version"`
+}
+
+// TeamModelEndpointAuthKind defines model for TeamModelEndpoint.AuthKind.
+type TeamModelEndpointAuthKind string
+
+// TeamModelEndpointCredentialMode defines model for TeamModelEndpoint.CredentialMode.
+type TeamModelEndpointCredentialMode string
+
+// TeamModelEndpointCredentialState defines model for TeamModelEndpoint.CredentialState.
+type TeamModelEndpointCredentialState string
+
+// TeamModelEndpointFederationState defines model for TeamModelEndpoint.FederationState.
+type TeamModelEndpointFederationState string
+
+// TeamModelEndpointLocation defines model for TeamModelEndpoint.Location.
+type TeamModelEndpointLocation string
+
+// TeamModelEndpointOffReason Why the route does not reach the team's agents
+type TeamModelEndpointOffReason string
+
+// TeamModelEndpointPricingMode defines model for TeamModelEndpoint.PricingMode.
+type TeamModelEndpointPricingMode string
+
+// TeamModelEndpointProtocols defines model for TeamModelEndpoint.Protocols.
+type TeamModelEndpointProtocols string
+
+// TeamModelEndpointProviderState defines model for TeamModelEndpoint.ProviderState.
+type TeamModelEndpointProviderState string
+
+// TeamModelEndpointRelation selected: an opted-in service endpoint; own: declared by the team; available: switched on, not opted in
+type TeamModelEndpointRelation string
+
+// TeamModelEndpointSelectableBy service_admin for extra-terms endpoints and providers with teamSelection service_admin
+type TeamModelEndpointSelectableBy string
+
+// TeamModelEndpointSelectedBy defines model for TeamModelEndpoint.SelectedBy.
+type TeamModelEndpointSelectedBy string
+
+// TeamModelEndpointList The team's selected, own and available routes
+type TeamModelEndpointList struct {
+	// GatewayDeployment Routes reach agents only with per_namespace
+	GatewayDeployment    TeamModelEndpointListGatewayDeployment `json:"gatewayDeployment"`
+	Items                []TeamModelEndpoint                    `json:"items"`
+	MayAddModelEndpoints bool                                   `json:"mayAddModelEndpoints"`
+
+	// NextToken Absent on the last page
+	NextToken *string `json:"nextToken,omitempty"`
+}
+
+// TeamModelEndpointListGatewayDeployment Routes reach agents only with per_namespace
+type TeamModelEndpointListGatewayDeployment string
+
+// TeamModelEndpointSelection defines model for TeamModelEndpointSelection.
+type TeamModelEndpointSelection struct {
+	EndpointId string                               `json:"endpointId"`
+	SelectedBy TeamModelEndpointSelectionSelectedBy `json:"selectedBy"`
+	Slug       string                               `json:"slug"`
+}
+
+// TeamModelEndpointSelectionSelectedBy defines model for TeamModelEndpointSelection.SelectedBy.
+type TeamModelEndpointSelectionSelectedBy string
+
+// TeamModelEndpointSelections defines model for TeamModelEndpointSelections.
+type TeamModelEndpointSelections struct {
+	EndpointIds []string                     `json:"endpointIds"`
+	Selections  []TeamModelEndpointSelection `json:"selections"`
+	TeamId      string                       `json:"teamId"`
 }
 
 // TeamModels defines model for TeamModels.
@@ -7117,6 +9455,24 @@ type UpdateIdentityProviderRequest struct {
 	Name                  *string `json:"name,omitempty"`
 }
 
+// UpdateInferenceProviderRequest Turning Bedrock off without a usable fallback → 400 no_fallback_model
+type UpdateInferenceProviderRequest struct {
+	Enabled *bool `json:"enabled,omitempty"`
+
+	// FallbackModel Bedrock off only: becomes models.default_model_id; its route must be enabled, on a provider that is on
+	FallbackModel *string `json:"fallbackModel,omitempty"`
+
+	// Reason Recorded as disabledReason and in the audit record
+	Reason *string `json:"reason,omitempty"`
+
+	// SelectForAllTeams Bedrock off only: select the fallback route for every team that lacks it (selectedBy service_admin) in the same transaction
+	SelectForAllTeams *bool                                        `json:"selectForAllTeams,omitempty"`
+	TeamSelection     *UpdateInferenceProviderRequestTeamSelection `json:"teamSelection,omitempty"`
+}
+
+// UpdateInferenceProviderRequestTeamSelection defines model for UpdateInferenceProviderRequest.TeamSelection.
+type UpdateInferenceProviderRequestTeamSelection string
+
 // UpdateLogDestinationRequest defines model for UpdateLogDestinationRequest.
 type UpdateLogDestinationRequest struct {
 	Config   *map[string]interface{} `json:"config,omitempty"`
@@ -7132,6 +9488,51 @@ type UpdateMemberRequest struct {
 
 // UpdateMemberRequestRole defines model for UpdateMemberRequest.Role.
 type UpdateMemberRequestRole string
+
+// UpdateModelEndpointRequest Members sent replace stored ones; slug cannot change
+type UpdateModelEndpointRequest struct {
+	// AuthHeader Header name, required when authKind is header
+	AuthHeader *string                             `json:"authHeader,omitempty"`
+	AuthKind   *UpdateModelEndpointRequestAuthKind `json:"authKind,omitempty"`
+
+	// BaseUrl https for external and corporate; in_namespace may be http://<service>.<namespace>.svc:<port>
+	BaseUrl *string `json:"baseUrl,omitempty"`
+
+	// CaBundle PEM; not a secret
+	CaBundle       *string                                   `json:"caBundle,omitempty"`
+	CredentialMode *UpdateModelEndpointRequestCredentialMode `json:"credentialMode,omitempty"`
+	Description    *string                                   `json:"description,omitempty"`
+	DisplayName    *string                                   `json:"displayName,omitempty"`
+
+	// Enabled Refused while the provider is off (provider_disabled) or the base URL holds a placeholder (endpoint_base_url_placeholder)
+	Enabled          *bool                                  `json:"enabled,omitempty"`
+	ExternalSystemId *string                                `json:"externalSystemId,omitempty"`
+	Location         *UpdateModelEndpointRequestLocation    `json:"location,omitempty"`
+	MaxBodyMib       *int                                   `json:"maxBodyMib,omitempty"`
+	PricingMode      *UpdateModelEndpointRequestPricingMode `json:"pricingMode,omitempty"`
+
+	// Protocols openai_chat always; openai_responses and openai_embeddings add those paths
+	Protocols       *[]UpdateModelEndpointRequestProtocols `json:"protocols,omitempty"`
+	Provider        *string                                `json:"provider,omitempty"`
+	RequiresTerms   *bool                                  `json:"requiresTerms,omitempty"`
+	TimeoutSeconds  *int                                   `json:"timeoutSeconds,omitempty"`
+	UseProviderCost *bool                                  `json:"useProviderCost,omitempty"`
+}
+
+// UpdateModelEndpointRequestAuthKind defines model for UpdateModelEndpointRequest.AuthKind.
+type UpdateModelEndpointRequestAuthKind string
+
+// UpdateModelEndpointRequestCredentialMode defines model for UpdateModelEndpointRequest.CredentialMode.
+type UpdateModelEndpointRequestCredentialMode string
+
+// UpdateModelEndpointRequestLocation defines model for UpdateModelEndpointRequest.Location.
+type UpdateModelEndpointRequestLocation string
+
+// UpdateModelEndpointRequestPricingMode defines model for UpdateModelEndpointRequest.PricingMode.
+type UpdateModelEndpointRequestPricingMode string
+
+// UpdateModelEndpointRequestProtocols defines model for UpdateModelEndpointRequest.Protocols.
+type UpdateModelEndpointRequestProtocols string
 
 // UpdateModelRequest defines model for UpdateModelRequest.
 type UpdateModelRequest struct {
@@ -7217,6 +9618,44 @@ type UpdateSwarmTemplateRequest struct {
 
 // UpdateSwarmTemplateRequestTeardownRule defines model for UpdateSwarmTemplateRequest.TeardownRule.
 type UpdateSwarmTemplateRequestTeardownRule string
+
+// UpdateTeamModelEndpointRequest Members sent replace stored ones; slug cannot change
+type UpdateTeamModelEndpointRequest struct {
+	// AuthHeader Header name, required when authKind is header
+	AuthHeader *string                                 `json:"authHeader,omitempty"`
+	AuthKind   *UpdateTeamModelEndpointRequestAuthKind `json:"authKind,omitempty"`
+
+	// BaseUrl https for external and corporate; in_namespace may be http://<service>.<namespace>.svc:<port>
+	BaseUrl *string `json:"baseUrl,omitempty"`
+
+	// CaBundle PEM; not a secret
+	CaBundle    *string                                    `json:"caBundle,omitempty"`
+	Description *string                                    `json:"description,omitempty"`
+	DisplayName *string                                    `json:"displayName,omitempty"`
+	Enabled     *bool                                      `json:"enabled,omitempty"`
+	Location    *UpdateTeamModelEndpointRequestLocation    `json:"location,omitempty"`
+	MaxBodyMib  *int                                       `json:"maxBodyMib,omitempty"`
+	MetricsPort *int                                       `json:"metricsPort,omitempty"`
+	Owner       *string                                    `json:"owner,omitempty"`
+	PricingMode *UpdateTeamModelEndpointRequestPricingMode `json:"pricingMode,omitempty"`
+
+	// Protocols openai_chat always; openai_responses and openai_embeddings add those paths
+	Protocols      *[]UpdateTeamModelEndpointRequestProtocols `json:"protocols,omitempty"`
+	Purpose        *string                                    `json:"purpose,omitempty"`
+	TimeoutSeconds *int                                       `json:"timeoutSeconds,omitempty"`
+}
+
+// UpdateTeamModelEndpointRequestAuthKind defines model for UpdateTeamModelEndpointRequest.AuthKind.
+type UpdateTeamModelEndpointRequestAuthKind string
+
+// UpdateTeamModelEndpointRequestLocation defines model for UpdateTeamModelEndpointRequest.Location.
+type UpdateTeamModelEndpointRequestLocation string
+
+// UpdateTeamModelEndpointRequestPricingMode defines model for UpdateTeamModelEndpointRequest.PricingMode.
+type UpdateTeamModelEndpointRequestPricingMode string
+
+// UpdateTeamModelEndpointRequestProtocols defines model for UpdateTeamModelEndpointRequest.Protocols.
+type UpdateTeamModelEndpointRequestProtocols string
 
 // UpdateTeamRequest Fields to change. maxBudgetUsd, the ceiling override, quotas, isolationTier, viewerKubectl, mayManageAwsAccounts, mayAddExternalSystems and mayExposeCollaboration, maxCollaborationExposure and modelAccess need teams:set-guardrails; allowedAwsAccounts needs teams:set-aws-accounts
 type UpdateTeamRequest struct {
@@ -7462,6 +9901,9 @@ type PoolIdFilter = string
 // Range defines model for Range.
 type Range string
 
+// RouteFilter defines model for RouteFilter.
+type RouteFilter = string
+
 // SystemIdFilter defines model for SystemIdFilter.
 type SystemIdFilter = string
 
@@ -7644,6 +10086,40 @@ type ListCostTagStatusParams struct {
 	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
 }
 
+// ListEndpointPriceProposalsParams defines parameters for ListEndpointPriceProposals.
+type ListEndpointPriceProposalsParams struct {
+	Status     *ListEndpointPriceProposalsParamsStatus `form:"status,omitempty" json:"status,omitempty"`
+	EndpointId *string                                 `form:"endpointId,omitempty" json:"endpointId,omitempty"`
+	MaxResults *MaxResults                             `form:"maxResults,omitempty" json:"maxResults,omitempty"`
+
+	// NextToken Opaque token from the previous page; expires after 24 hours
+	NextToken *NextToken `form:"nextToken,omitempty" json:"nextToken,omitempty"`
+
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// ListEndpointPriceProposalsParamsStatus defines parameters for ListEndpointPriceProposals.
+type ListEndpointPriceProposalsParamsStatus string
+
+// ApproveEndpointPriceProposalParams defines parameters for ApproveEndpointPriceProposal.
+type ApproveEndpointPriceProposalParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// RejectEndpointPriceProposalParams defines parameters for RejectEndpointPriceProposal.
+type RejectEndpointPriceProposalParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
 // ListCatalogSystemsParams defines parameters for ListCatalogSystems.
 type ListCatalogSystemsParams struct {
 	MaxResults *MaxResults `form:"maxResults,omitempty" json:"maxResults,omitempty"`
@@ -7732,6 +10208,24 @@ type UpdateIdentityProviderParams struct {
 	IfMatch IfMatch `json:"If-Match"`
 }
 
+// ListInferenceProvidersParams defines parameters for ListInferenceProviders.
+type ListInferenceProvidersParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// UpdateInferenceProviderParams defines parameters for UpdateInferenceProvider.
+type UpdateInferenceProviderParams struct {
+	// DryRun Return the impact without writing
+	DryRun *bool `form:"dryRun,omitempty" json:"dryRun,omitempty"`
+
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch The resource's ETag ("<version>"). Missing → 428; stale → 412
+	IfMatch IfMatch `json:"If-Match"`
+}
+
 // PutServiceModelAccessParams defines parameters for PutServiceModelAccess.
 type PutServiceModelAccessParams struct {
 	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
@@ -7739,6 +10233,135 @@ type PutServiceModelAccessParams struct {
 
 	// IfMatch Required when the resource exists (428 otherwise); omit when the PUT creates it
 	IfMatch *IfMatchPut `json:"If-Match,omitempty"`
+}
+
+// ListModelEndpointsParams defines parameters for ListModelEndpoints.
+type ListModelEndpointsParams struct {
+	// IncludeTeams Also list team-declared endpoints
+	IncludeTeams *bool                                `form:"includeTeams,omitempty" json:"includeTeams,omitempty"`
+	Provider     *string                              `form:"provider,omitempty" json:"provider,omitempty"`
+	Location     *ListModelEndpointsParamsLocation    `form:"location,omitempty" json:"location,omitempty"`
+	PricingMode  *ListModelEndpointsParamsPricingMode `form:"pricingMode,omitempty" json:"pricingMode,omitempty"`
+	MaxResults   *MaxResults                          `form:"maxResults,omitempty" json:"maxResults,omitempty"`
+
+	// NextToken Opaque token from the previous page; expires after 24 hours
+	NextToken *NextToken `form:"nextToken,omitempty" json:"nextToken,omitempty"`
+
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// ListModelEndpointsParamsLocation defines parameters for ListModelEndpoints.
+type ListModelEndpointsParamsLocation string
+
+// ListModelEndpointsParamsPricingMode defines parameters for ListModelEndpoints.
+type ListModelEndpointsParamsPricingMode string
+
+// CreateModelEndpointParams defines parameters for CreateModelEndpoint.
+type CreateModelEndpointParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// DeleteModelEndpointParams defines parameters for DeleteModelEndpoint.
+type DeleteModelEndpointParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch The resource's ETag ("<version>"). Missing → 428; stale → 412
+	IfMatch IfMatch `json:"If-Match"`
+}
+
+// GetModelEndpointParams defines parameters for GetModelEndpoint.
+type GetModelEndpointParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// UpdateModelEndpointParams defines parameters for UpdateModelEndpoint.
+type UpdateModelEndpointParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch The resource's ETag ("<version>"). Missing → 428; stale → 412
+	IfMatch IfMatch `json:"If-Match"`
+}
+
+// PutModelEndpointCredentialParams defines parameters for PutModelEndpointCredential.
+type PutModelEndpointCredentialParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch Required when the resource exists (428 otherwise); omit when the PUT creates it
+	IfMatch *IfMatchPut `json:"If-Match,omitempty"`
+}
+
+// RotateModelEndpointCredentialParams defines parameters for RotateModelEndpointCredential.
+type RotateModelEndpointCredentialParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// PutEndpointFederationParams defines parameters for PutEndpointFederation.
+type PutEndpointFederationParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch Required when the resource exists (428 otherwise); omit when the PUT creates it
+	IfMatch *IfMatchPut `json:"If-Match,omitempty"`
+}
+
+// PutEndpointModelsParams defines parameters for PutEndpointModels.
+type PutEndpointModelsParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch Required when the resource exists (428 otherwise); omit when the PUT creates it
+	IfMatch *IfMatchPut `json:"If-Match,omitempty"`
+}
+
+// CreateEndpointModelPriceParams defines parameters for CreateEndpointModelPrice.
+type CreateEndpointModelPriceParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// ImportProviderStatementParams defines parameters for ImportProviderStatement.
+type ImportProviderStatementParams struct {
+	// Period With a text/csv body
+	Period *string `form:"period,omitempty" json:"period,omitempty"`
+
+	// Source With a text/csv body
+	Source *ImportProviderStatementParamsSource `form:"source,omitempty" json:"source,omitempty"`
+
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// ImportProviderStatementParamsSource defines parameters for ImportProviderStatement.
+type ImportProviderStatementParamsSource string
+
+// ListEndpointTeamsParams defines parameters for ListEndpointTeams.
+type ListEndpointTeamsParams struct {
+	MaxResults *MaxResults `form:"maxResults,omitempty" json:"maxResults,omitempty"`
+
+	// NextToken Opaque token from the previous page; expires after 24 hours
+	NextToken *NextToken `form:"nextToken,omitempty" json:"nextToken,omitempty"`
+
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
 }
 
 // ListModelPriceProposalsParams defines parameters for ListModelPriceProposals.
@@ -8063,6 +10686,15 @@ type EnableSwarmTemplateParams struct {
 	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
 }
 
+// PutTeamGatewaySettingsParams defines parameters for PutTeamGatewaySettings.
+type PutTeamGatewaySettingsParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch Required when the resource exists (428 otherwise); omit when the PUT creates it
+	IfMatch *IfMatchPut `json:"If-Match,omitempty"`
+}
+
 // ListAgentTemplatesParams defines parameters for ListAgentTemplates.
 type ListAgentTemplatesParams struct {
 	Capability *ListAgentTemplatesParamsCapability `form:"capability,omitempty" json:"capability,omitempty"`
@@ -8139,6 +10771,38 @@ type ListModelsParams struct {
 	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
 }
 
+// GetInferenceReportParams defines parameters for GetInferenceReport.
+type GetInferenceReportParams struct {
+	// TeamId Filter (service reports only)
+	TeamId *TeamIdFilter `form:"teamId,omitempty" json:"teamId,omitempty"`
+	From   *From         `form:"from,omitempty" json:"from,omitempty"`
+	To     *To           `form:"to,omitempty" json:"to,omitempty"`
+
+	// Range Instead of from and to
+	Range *GetInferenceReportParamsRange `form:"range,omitempty" json:"range,omitempty"`
+
+	// GroupBy Comma-separated: route, model, agent, hour, day (and team on the service report, pool in ephemeral teams)
+	GroupBy *string `form:"groupBy,omitempty" json:"groupBy,omitempty"`
+
+	// Route Filter by route (bedrock for Bedrock)
+	Route   *string        `form:"route,omitempty" json:"route,omitempty"`
+	ModelId *ModelIdFilter `form:"modelId,omitempty" json:"modelId,omitempty"`
+	AgentId *AgentIdFilter `form:"agentId,omitempty" json:"agentId,omitempty"`
+
+	// PoolId Ephemeral teams only
+	PoolId     *PoolIdFilter `form:"poolId,omitempty" json:"poolId,omitempty"`
+	MaxResults *MaxResults   `form:"maxResults,omitempty" json:"maxResults,omitempty"`
+
+	// NextToken Opaque token from the previous page; expires after 24 hours
+	NextToken *NextToken `form:"nextToken,omitempty" json:"nextToken,omitempty"`
+
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// GetInferenceReportParamsRange defines parameters for GetInferenceReport.
+type GetInferenceReportParamsRange string
+
 // GetServiceReportParams defines parameters for GetServiceReport.
 type GetServiceReportParams struct {
 	From *From `form:"from,omitempty" json:"from,omitempty"`
@@ -8147,13 +10811,16 @@ type GetServiceReportParams struct {
 	// Range Instead of from and to
 	Range *GetServiceReportParamsRange `form:"range,omitempty" json:"range,omitempty"`
 
-	// GroupBy Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams. The collaboration report takes team (service report), day, surface, reason and person. Filters tag.<key>=<value> are also accepted
+	// GroupBy Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams; route (v1.5.0) on the usage and costs reports. The collaboration report takes team (service report), day, surface, reason and person. Filters tag.<key>=<value> are also accepted
 	GroupBy *GroupBy `form:"groupBy,omitempty" json:"groupBy,omitempty"`
 
 	// TeamId Filter (service reports only)
-	TeamId   *TeamIdFilter   `form:"teamId,omitempty" json:"teamId,omitempty"`
-	AgentId  *AgentIdFilter  `form:"agentId,omitempty" json:"agentId,omitempty"`
-	ModelId  *ModelIdFilter  `form:"modelId,omitempty" json:"modelId,omitempty"`
+	TeamId  *TeamIdFilter  `form:"teamId,omitempty" json:"teamId,omitempty"`
+	AgentId *AgentIdFilter `form:"agentId,omitempty" json:"agentId,omitempty"`
+	ModelId *ModelIdFilter `form:"modelId,omitempty" json:"modelId,omitempty"`
+
+	// Route v1.5.0, usage and costs reports; a route slug, bedrock for Bedrock calls
+	Route    *RouteFilter    `form:"route,omitempty" json:"route,omitempty"`
 	SystemId *SystemIdFilter `form:"systemId,omitempty" json:"systemId,omitempty"`
 
 	// PoolId Ephemeral teams only
@@ -8382,13 +11049,16 @@ type GetAgentReportParams struct {
 	// Range Instead of from and to
 	Range *GetAgentReportParamsRange `form:"range,omitempty" json:"range,omitempty"`
 
-	// GroupBy Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams. The collaboration report takes team (service report), day, surface, reason and person. Filters tag.<key>=<value> are also accepted
+	// GroupBy Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams; route (v1.5.0) on the usage and costs reports. The collaboration report takes team (service report), day, surface, reason and person. Filters tag.<key>=<value> are also accepted
 	GroupBy *GroupBy `form:"groupBy,omitempty" json:"groupBy,omitempty"`
 
 	// TeamId Filter (service reports only)
-	TeamId   *TeamIdFilter   `form:"teamId,omitempty" json:"teamId,omitempty"`
-	AgentId  *AgentIdFilter  `form:"agentId,omitempty" json:"agentId,omitempty"`
-	ModelId  *ModelIdFilter  `form:"modelId,omitempty" json:"modelId,omitempty"`
+	TeamId  *TeamIdFilter  `form:"teamId,omitempty" json:"teamId,omitempty"`
+	AgentId *AgentIdFilter `form:"agentId,omitempty" json:"agentId,omitempty"`
+	ModelId *ModelIdFilter `form:"modelId,omitempty" json:"modelId,omitempty"`
+
+	// Route v1.5.0, usage and costs reports; a route slug, bedrock for Bedrock calls
+	Route    *RouteFilter    `form:"route,omitempty" json:"route,omitempty"`
 	SystemId *SystemIdFilter `form:"systemId,omitempty" json:"systemId,omitempty"`
 
 	// PoolId Ephemeral teams only
@@ -8816,6 +11486,75 @@ type UpdateMemberParams struct {
 	IfMatch IfMatch `json:"If-Match"`
 }
 
+// PutTeamModelEndpointsParams defines parameters for PutTeamModelEndpoints.
+type PutTeamModelEndpointsParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch Required when the resource exists (428 otherwise); omit when the PUT creates it
+	IfMatch *IfMatchPut `json:"If-Match,omitempty"`
+}
+
+// ListTeamModelEndpointsParams defines parameters for ListTeamModelEndpoints.
+type ListTeamModelEndpointsParams struct {
+	Relation   *ListTeamModelEndpointsParamsRelation `form:"relation,omitempty" json:"relation,omitempty"`
+	MaxResults *MaxResults                           `form:"maxResults,omitempty" json:"maxResults,omitempty"`
+
+	// NextToken Opaque token from the previous page; expires after 24 hours
+	NextToken *NextToken `form:"nextToken,omitempty" json:"nextToken,omitempty"`
+
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// ListTeamModelEndpointsParamsRelation defines parameters for ListTeamModelEndpoints.
+type ListTeamModelEndpointsParamsRelation string
+
+// CreateTeamModelEndpointParams defines parameters for CreateTeamModelEndpoint.
+type CreateTeamModelEndpointParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// DeleteTeamModelEndpointParams defines parameters for DeleteTeamModelEndpoint.
+type DeleteTeamModelEndpointParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch The resource's ETag ("<version>"). Missing → 428; stale → 412
+	IfMatch IfMatch `json:"If-Match"`
+}
+
+// UpdateTeamModelEndpointParams defines parameters for UpdateTeamModelEndpoint.
+type UpdateTeamModelEndpointParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch The resource's ETag ("<version>"). Missing → 428; stale → 412
+	IfMatch IfMatch `json:"If-Match"`
+}
+
+// PutTeamModelEndpointCredentialParams defines parameters for PutTeamModelEndpointCredential.
+type PutTeamModelEndpointCredentialParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch Required when the resource exists (428 otherwise); omit when the PUT creates it
+	IfMatch *IfMatchPut `json:"If-Match,omitempty"`
+}
+
+// PutTeamEndpointModelsParams defines parameters for PutTeamEndpointModels.
+type PutTeamEndpointModelsParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch Required when the resource exists (428 otherwise); omit when the PUT creates it
+	IfMatch *IfMatchPut `json:"If-Match,omitempty"`
+}
+
 // ListTeamModelsParams defines parameters for ListTeamModels.
 type ListTeamModelsParams struct {
 	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
@@ -9140,6 +11879,36 @@ type UpdateReportScheduleParams struct {
 	IfMatch IfMatch `json:"If-Match"`
 }
 
+// GetTeamInferenceReportParams defines parameters for GetTeamInferenceReport.
+type GetTeamInferenceReportParams struct {
+	From *From `form:"from,omitempty" json:"from,omitempty"`
+	To   *To   `form:"to,omitempty" json:"to,omitempty"`
+
+	// Range Instead of from and to
+	Range *GetTeamInferenceReportParamsRange `form:"range,omitempty" json:"range,omitempty"`
+
+	// GroupBy Comma-separated: route, model, agent, hour, day (and team on the service report, pool in ephemeral teams)
+	GroupBy *string `form:"groupBy,omitempty" json:"groupBy,omitempty"`
+
+	// Route Filter by route (bedrock for Bedrock)
+	Route   *string        `form:"route,omitempty" json:"route,omitempty"`
+	ModelId *ModelIdFilter `form:"modelId,omitempty" json:"modelId,omitempty"`
+	AgentId *AgentIdFilter `form:"agentId,omitempty" json:"agentId,omitempty"`
+
+	// PoolId Ephemeral teams only
+	PoolId     *PoolIdFilter `form:"poolId,omitempty" json:"poolId,omitempty"`
+	MaxResults *MaxResults   `form:"maxResults,omitempty" json:"maxResults,omitempty"`
+
+	// NextToken Opaque token from the previous page; expires after 24 hours
+	NextToken *NextToken `form:"nextToken,omitempty" json:"nextToken,omitempty"`
+
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// GetTeamInferenceReportParamsRange defines parameters for GetTeamInferenceReport.
+type GetTeamInferenceReportParamsRange string
+
 // GetTeamReportParams defines parameters for GetTeamReport.
 type GetTeamReportParams struct {
 	From *From `form:"from,omitempty" json:"from,omitempty"`
@@ -9148,13 +11917,16 @@ type GetTeamReportParams struct {
 	// Range Instead of from and to
 	Range *GetTeamReportParamsRange `form:"range,omitempty" json:"range,omitempty"`
 
-	// GroupBy Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams. The collaboration report takes team (service report), day, surface, reason and person. Filters tag.<key>=<value> are also accepted
+	// GroupBy Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams; route (v1.5.0) on the usage and costs reports. The collaboration report takes team (service report), day, surface, reason and person. Filters tag.<key>=<value> are also accepted
 	GroupBy *GroupBy `form:"groupBy,omitempty" json:"groupBy,omitempty"`
 
 	// TeamId Filter (service reports only)
-	TeamId   *TeamIdFilter   `form:"teamId,omitempty" json:"teamId,omitempty"`
-	AgentId  *AgentIdFilter  `form:"agentId,omitempty" json:"agentId,omitempty"`
-	ModelId  *ModelIdFilter  `form:"modelId,omitempty" json:"modelId,omitempty"`
+	TeamId  *TeamIdFilter  `form:"teamId,omitempty" json:"teamId,omitempty"`
+	AgentId *AgentIdFilter `form:"agentId,omitempty" json:"agentId,omitempty"`
+	ModelId *ModelIdFilter `form:"modelId,omitempty" json:"modelId,omitempty"`
+
+	// Route v1.5.0, usage and costs reports; a route slug, bedrock for Bedrock calls
+	Route    *RouteFilter    `form:"route,omitempty" json:"route,omitempty"`
 	SystemId *SystemIdFilter `form:"systemId,omitempty" json:"systemId,omitempty"`
 
 	// PoolId Ephemeral teams only
@@ -9456,6 +12228,12 @@ type PutAgentTemplateJSONRequestBody = PutAgentTemplateRequest
 // CreateServiceApiKeyJSONRequestBody defines body for CreateServiceApiKey for application/json ContentType.
 type CreateServiceApiKeyJSONRequestBody = CreateServiceApiKeyRequest
 
+// ApproveEndpointPriceProposalJSONRequestBody defines body for ApproveEndpointPriceProposal for application/json ContentType.
+type ApproveEndpointPriceProposalJSONRequestBody = DecidePriceProposalRequest
+
+// RejectEndpointPriceProposalJSONRequestBody defines body for RejectEndpointPriceProposal for application/json ContentType.
+type RejectEndpointPriceProposalJSONRequestBody = DecidePriceProposalRequest
+
 // CreateCatalogSystemJSONRequestBody defines body for CreateCatalogSystem for application/json ContentType.
 type CreateCatalogSystemJSONRequestBody = CatalogSystemRequest
 
@@ -9468,8 +12246,35 @@ type CreateIdentityProviderJSONRequestBody = CreateIdentityProviderRequest
 // UpdateIdentityProviderJSONRequestBody defines body for UpdateIdentityProvider for application/json ContentType.
 type UpdateIdentityProviderJSONRequestBody = UpdateIdentityProviderRequest
 
+// UpdateInferenceProviderJSONRequestBody defines body for UpdateInferenceProvider for application/json ContentType.
+type UpdateInferenceProviderJSONRequestBody = UpdateInferenceProviderRequest
+
 // PutServiceModelAccessJSONRequestBody defines body for PutServiceModelAccess for application/json ContentType.
 type PutServiceModelAccessJSONRequestBody = PutServiceModelAccessRequest
+
+// CreateModelEndpointJSONRequestBody defines body for CreateModelEndpoint for application/json ContentType.
+type CreateModelEndpointJSONRequestBody = CreateModelEndpointRequest
+
+// UpdateModelEndpointJSONRequestBody defines body for UpdateModelEndpoint for application/json ContentType.
+type UpdateModelEndpointJSONRequestBody = UpdateModelEndpointRequest
+
+// PutModelEndpointCredentialJSONRequestBody defines body for PutModelEndpointCredential for application/json ContentType.
+type PutModelEndpointCredentialJSONRequestBody = ModelEndpointCredentialRequest
+
+// RotateModelEndpointCredentialJSONRequestBody defines body for RotateModelEndpointCredential for application/json ContentType.
+type RotateModelEndpointCredentialJSONRequestBody = ModelEndpointCredentialRequest
+
+// PutEndpointFederationJSONRequestBody defines body for PutEndpointFederation for application/json ContentType.
+type PutEndpointFederationJSONRequestBody = EndpointFederationRequest
+
+// PutEndpointModelsJSONRequestBody defines body for PutEndpointModels for application/json ContentType.
+type PutEndpointModelsJSONRequestBody = PutEndpointModelsRequest
+
+// CreateEndpointModelPriceJSONRequestBody defines body for CreateEndpointModelPrice for application/json ContentType.
+type CreateEndpointModelPriceJSONRequestBody = CreateEndpointModelPriceRequest
+
+// ImportProviderStatementJSONRequestBody defines body for ImportProviderStatement for application/json ContentType.
+type ImportProviderStatementJSONRequestBody = ImportProviderStatementRequest
 
 // ApproveModelPriceProposalJSONRequestBody defines body for ApproveModelPriceProposal for application/json ContentType.
 type ApproveModelPriceProposalJSONRequestBody = DecidePriceProposalRequest
@@ -9509,6 +12314,9 @@ type CreateSwarmTemplateJSONRequestBody = CreateSwarmTemplateRequest
 
 // UpdateSwarmTemplateJSONRequestBody defines body for UpdateSwarmTemplate for application/json ContentType.
 type UpdateSwarmTemplateJSONRequestBody = UpdateSwarmTemplateRequest
+
+// PutTeamGatewaySettingsJSONRequestBody defines body for PutTeamGatewaySettings for application/json ContentType.
+type PutTeamGatewaySettingsJSONRequestBody = PutTeamGatewaySettingsRequest
 
 // CreateExportJSONRequestBody defines body for CreateExport for application/json ContentType.
 type CreateExportJSONRequestBody = CreateExportRequest
@@ -9583,6 +12391,21 @@ type AddMemberJSONRequestBody = AddMemberRequest
 
 // UpdateMemberJSONRequestBody defines body for UpdateMember for application/json ContentType.
 type UpdateMemberJSONRequestBody = UpdateMemberRequest
+
+// PutTeamModelEndpointsJSONRequestBody defines body for PutTeamModelEndpoints for application/json ContentType.
+type PutTeamModelEndpointsJSONRequestBody = PutTeamModelEndpointsRequest
+
+// CreateTeamModelEndpointJSONRequestBody defines body for CreateTeamModelEndpoint for application/json ContentType.
+type CreateTeamModelEndpointJSONRequestBody = CreateTeamModelEndpointRequest
+
+// UpdateTeamModelEndpointJSONRequestBody defines body for UpdateTeamModelEndpoint for application/json ContentType.
+type UpdateTeamModelEndpointJSONRequestBody = UpdateTeamModelEndpointRequest
+
+// PutTeamModelEndpointCredentialJSONRequestBody defines body for PutTeamModelEndpointCredential for application/json ContentType.
+type PutTeamModelEndpointCredentialJSONRequestBody = ModelEndpointCredentialRequest
+
+// PutTeamEndpointModelsJSONRequestBody defines body for PutTeamEndpointModels for application/json ContentType.
+type PutTeamEndpointModelsJSONRequestBody = PutTeamEndpointModelsRequest
 
 // PutTeamModelsJSONRequestBody defines body for PutTeamModels for application/json ContentType.
 type PutTeamModelsJSONRequestBody = PutTeamModelsRequest

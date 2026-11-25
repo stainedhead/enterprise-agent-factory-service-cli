@@ -183,7 +183,11 @@ func (c *Client) once(ctx context.Context, req *Request, key string, cred Creden
 	hr.Header.Set("Accept", accept)
 	hr.Header.Set("User-Agent", c.cfg.UserAgent)
 	if len(req.Body) > 0 {
-		hr.Header.Set("Content-Type", "application/json")
+		ct := req.ContentType
+		if ct == "" {
+			ct = "application/json"
+		}
+		hr.Header.Set("Content-Type", ct)
 	}
 	if cred.Header != "" && !req.NoAuth {
 		hr.Header.Set("Authorization", cred.Header)

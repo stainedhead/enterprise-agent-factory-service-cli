@@ -16,7 +16,7 @@ It talks only to the API in
 [enterprise-agent-factory-service-restapi](https://github.com/stainedhead/enterprise-agent-factory-service-restapi),
 whose `api/openapi.yaml` is the contract.
 
-Status: feature complete, milestones M0-M12 done, release v1.1.0, contract 1.4 (all 194 operations, 192 commands, with examples, columns and goldens, plus the orchestration agent, model access, `collaboration invoke-api` and deprecations kept until 2.0.0). Release signing and the Homebrew tap need credentials and a tap repository that are not in this repository. See `specs/` for the plan.
+Status: feature complete, milestones M0-M14 done, release v1.2.0, contract 1.5 (all 221 operations, 219 commands, with examples, columns and goldens, plus the model endpoint gateway (`model-endpoints` service), the orchestration agent, model access, `collaboration invoke-api` and deprecations kept until 2.0.0). Release signing and the Homebrew tap need credentials and a tap repository that are not in this repository. See `specs/` for the plan.
 
 ## Toolchain
 

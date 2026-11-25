@@ -1,5 +1,40 @@
 # Changelog
 
+## v1.2.0 - 2026-11-25
+
+Model endpoint gateway (API contract v1.5.0, section 4.13). Spec: `specs/261125-model-endpoint-gateway/` (or
+`specs/archive/261125-model-endpoint-gateway/` once archived). Guide: `user-docs/model-endpoints.md`.
+
+### Added
+- `afs model-endpoints` service, 23 commands: the endpoint catalog (`list-`, `create-`, `describe-`, `update-`,
+  `delete-model-endpoint`, `put-endpoint-models`), prices and proposals (`create-endpoint-model-price`,
+  `list-`, `approve-`, `reject-endpoint-price-proposal`), `list-endpoint-teams`, credentials
+  (`put-model-endpoint-credential`, `rotate-model-endpoint-credential`, `put-team-model-endpoint-credential`),
+  `put-endpoint-federation`, `import-provider-statement`, provider switches (`list-inference-providers`,
+  `update-inference-provider` with `--dry-run`), and team endpoints (`list-`, `create-`, `update-`,
+  `delete-team-model-endpoint`, `put-team-endpoint-models`).
+- `afs teams put-team-gateway-settings` and `afs teams put-team-model-endpoints`.
+- `afs reports get-inference-report` and `get-team-inference-report` (group by route, model, agent, pool, team, hour
+  or day; CSV).
+- `--routes all|<slug>...` and `--default-route` on `create-agent`, `update-agent`, `create-pool` and `update-pool`;
+  `--default-model-id` takes `<route>/<model>`.
+- `--route` and `--group-by route` on the usage and cost reports.
+- Hints for `slug_taken`, `slug_reserved`, `slug_invalid`, `base_url_not_https`, `provider_disabled`,
+  `no_fallback_model`, `endpoint_base_url_placeholder`, `needs_service_admin`, `team_endpoints_not_allowed` and
+  `endpoint_enabled`.
+- Milestones M13 and M14.
+
+### Changed
+- The pinned snapshot is contract v1.5.0 (`-restapi` 7d48ea7, 221 operations, 219 commands; `afs --version` prints
+  `contract/1.5`).
+- Credential values are read only from `file://`, `fileb://`, `-` (standard input) or a no-echo prompt, and are
+  redacted under `--debug`. Credential writes send `If-Match` only when `--if-match` is given (the API returns no
+  credential version).
+- `import-provider-statement --statement file://PATH` sends a CSV file as `text/csv` with `period` and `source` in the
+  query, and a JSON file as the body. The executor can now send a non-JSON request body.
+- `update-inference-provider` reads its version from the provider list; `put-team-model-endpoints` reads none.
+
+
 ## v1.1.0 - 2026-11-23
 
 Snapshot refreshed to `-restapi` f8b4404 (still 194 operations): the real enums replace the open-enum workarounds

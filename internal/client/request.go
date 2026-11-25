@@ -12,10 +12,12 @@ import (
 type Request struct {
 	Method string
 	// Path is the escaped path, built with BuildPath.
-	Path   string
-	Query  url.Values
-	Body   []byte
-	Accept string // media type wanted; "" means application/json
+	Path  string
+	Query url.Values
+	Body  []byte
+	// ContentType is the media type of Body; "" means application/json.
+	ContentType string
+	Accept      string // media type wanted; "" means application/json
 	// IfMatch is the version sent as If-Match: "<version>" ("" sends no header).
 	IfMatch string
 	// Idempotent marks a request that carries an Idempotency-Key (every POST).

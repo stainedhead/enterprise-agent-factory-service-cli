@@ -23,8 +23,10 @@ OPTIONS
           Instead of from and to
           Possible values: 24h, 7d, 30d, 90d, mtd
        --group-by (string)
-          Comma-separated: team, agent, model, system, day, hour, tag:<key>, and pool in ephemeral teams.
+          Comma-separated: team, agent, model, system, day, hour, tag:<key>, pool (ephemeral teams), surface, reason and person (collaboration), and route (usage and costs, v1.5.0).
        --model-id (string)
+       --route (string)
+          v1.5.0, usage and costs reports; a route slug, bedrock for Bedrock calls
        --system-id (string)
        --pool-id (string)
           Ephemeral teams only

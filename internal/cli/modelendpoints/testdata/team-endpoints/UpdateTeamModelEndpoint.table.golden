@@ -1,0 +1,13 @@
+Field          Value
+Id             mep_01JD2Q3R4S5T6V7W8X9Y0Z0002
+Slug           coder-vllm
+Provider       internal
+Location       in_namespace
+Pricing        capacity
+Enabled        true
+ProviderState  on
+Health         Ready
+Credential     per_team
+Teams          1
+Team           team_01JD2Q3R4S5T6V7W8X9Y0Z0001
+Version        2

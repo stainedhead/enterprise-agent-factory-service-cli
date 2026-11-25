@@ -13,6 +13,7 @@ Generated from `afs help` by `make docs`; do not edit by hand.
 | [completion](completion.md) | Print a shell completion script. |
 | [configure](configure.md) | Create and edit profiles in ~/.afs/config. |
 | [members](members.md) | Manage team members and role bindings. |
+| [model-endpoints](model-endpoints.md) |  |
 | [models](models.md) | List and manage models and their prices. |
 | [orchestration](orchestration.md) | Manage a team's orchestration agent: its collaboration tool and who can reach it. |
 | [pools](pools.md) | Manage worker pools. |

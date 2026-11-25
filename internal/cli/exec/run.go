@@ -101,7 +101,9 @@ func Run(ctx context.Context, inv *cli.Invocation) int {
 	var body []byte
 	// For an operation that says so, an optional body with no member is no body: rotate-secret on an
 	// AFS-generated secret and rotate-collaboration-keys without --names send none (CLI-US-27.1, 29.3).
-	if b.Body != nil && (!cmd.OmitEmptyBody || op.Body.Required || b.Body.Len() > 0) {
+	if b.Raw != nil {
+		body = b.Raw
+	} else if b.Body != nil && (!cmd.OmitEmptyBody || op.Body.Required || b.Body.Len() > 0) {
 		if body, err = json.Marshal(b.Body); err != nil {
 			return fail(err)
 		}
@@ -115,7 +117,7 @@ func Run(ctx context.Context, inv *cli.Invocation) int {
 	}
 	send := func(ctx context.Context, q url.Values) (*client.Response, error) {
 		return c.Do(ctx, client.Request{
-			Method: op.Method, Path: client.BuildPath(op.Path, b.Path), Query: q, Body: body, Accept: accept,
+			Method: op.Method, Path: client.BuildPath(op.Path, b.Path), Query: q, Body: body, ContentType: b.ContentType, Accept: accept,
 			IfMatch: b.IfMatch, Idempotent: op.Idempotent, IdempotencyKey: b.IdemKey, NoAuth: op.Scope == "public", Operation: op.ID,
 		})
 	}
