@@ -54,7 +54,7 @@ afs agents update-agent --team-id team_... --agent-id agt_... \
 afs agents get-effective-agent-mcp --team-id team_... --agent-id agt_... --query env --output text
 ```
 
-`mode` is `full` (every allowed tool listed) or `search` (two meta-tools for large catalogs). The agent gets
+`mode` is `full` (every allowed tool listed) or `search` (three meta-tools, `afs_search`, `afs_describe` and `afs_call`, for large catalogs). The agent gets
 `AFS_MCP_URL`, `AFS_MCP_MODE`, `AFS_MCP_SERVERS`, one `AFS_MCP_<SLUG>_URL` per server and `/etc/afs/mcp.json`.
 `put-agent-federated-identity` projects a token for an external system that trusts the cluster's issuer.
 
