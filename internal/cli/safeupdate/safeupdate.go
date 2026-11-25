@@ -71,7 +71,15 @@ var ReadOptional = map[string]bool{"UpdateWorkOrderRepo": true}
 
 // versionless lists operations whose resource has no version: they send If-Match only when the
 // user passes --if-match, and read nothing first (D-C8).
-var versionless = map[string]bool{"PutTeamModels": true}
+// PutTeamModelEndpoints answers with no version (the selections are not a versioned resource), and a model
+// endpoint credential's version is never returned (v1.5.0), so neither reads one: a read through the team's or
+// the endpoint's path would send another resource's version.
+var versionless = map[string]bool{"PutTeamModels": true, "PutTeamModelEndpoints": true, "PutTeamModelEndpointCredential": true}
+
+// lists names operations whose resource is one item of a collection that is not paginated and has no GET of its
+// own: the version is read from the collection, matching the item by the operation's last path parameter
+// (an inference provider, v1.5.0).
+var lists = map[string]string{"UpdateInferenceProvider": "/v1/admin/inference-providers"}
 
 // ReaderFor returns the reader of an operation, or nil when its resource carries no readable
 // version (the operation then sends no If-Match).
@@ -80,6 +88,13 @@ func ReaderFor(op *spec.Operation) *Reader {
 		return nil
 	}
 	gets := getOps()
+	if path, ok := lists[op.ID]; ok {
+		segs := segments(op.Path)
+		if g, ok := gets[path]; ok {
+			return &Reader{Get: g, Match: strings.Trim(segs[len(segs)-1], "{}"), Path: path}
+		}
+		return nil
+	}
 	if c, ok := composite[op.ID]; ok {
 		if g, ok := gets[c.Path]; ok {
 			c.Get = g

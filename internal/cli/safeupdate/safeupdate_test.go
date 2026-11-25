@@ -45,12 +45,21 @@ func TestReaderTableCoversAllIfMatchOperations(t *testing.T) {
 			without = append(without, op.ID)
 		}
 	}
-	if len(withReader)+len(without) != 62 {
-		t.Fatalf("%d If-Match operations, want 62", len(withReader)+len(without))
+	if len(withReader)+len(without) != 74 {
+		t.Fatalf("%d If-Match operations, want 74", len(withReader)+len(without))
 	}
 	t.Logf("no reader (send no If-Match): %s", strings.Join(without, ", "))
-	if len(without) > 6 {
-		t.Errorf("too many operations without a reader: %v", without)
+	// Every operation without a reader takes an optional If-Match (CD-2), so the write is sent without one
+	// unless --if-match is given; v1.5.0 adds five (no readable version: credentials, federation, gateway
+	// settings, selections).
+	want := "PutEndpointFederation, PutModelEndpointCredential, PutServiceModelAccess, PutSetting, PutTeamGatewaySettings, PutTeamModelEndpointCredential, PutTeamModelEndpoints, PutTeamModels"
+	if got := strings.Join(without, ", "); got != want {
+		t.Errorf("operations without a reader:\n got %s\nwant %s", got, want)
+	}
+	for _, id := range without {
+		if spec.ByID(id).IfMatch != spec.IfMatchOptional {
+			t.Errorf("%s has no reader but requires If-Match", id)
+		}
 	}
 }
 
@@ -209,6 +218,29 @@ func TestReaderTableMatchesSnapshot(t *testing.T) {
 		op := spec.ByID(id)
 		if op.IfMatch != spec.IfMatchNone { // the executor reads a version only when the operation takes If-Match
 			t.Errorf("%s must take no If-Match, so no version is read", id)
+		}
+	}
+}
+
+// FR-008 (v1.5.0): an inference provider has no GET of its own; its version is read from the provider list (not
+// paginated) by the item's provider.
+func TestInferenceProviderVersionFromList(t *testing.T) {
+	op := spec.ByID("UpdateInferenceProvider")
+	r := ReaderFor(op)
+	if r == nil || r.Get.ID != "ListInferenceProviders" || r.Match != "provider" {
+		t.Fatalf("reader = %+v", r)
+	}
+	f := &fake{byPath: map[string][]any{"/v1/admin/inference-providers|": {`{"items":[{"provider":"bedrock","version":3},{"provider":"azure","version":8}]}`}}}
+	v, ok, err := Version(context.Background(), f, op, map[string]string{"provider": "azure"})
+	if err != nil || !ok || v != "8" {
+		t.Fatalf("v=%q ok=%v err=%v", v, ok, err)
+	}
+	if len(f.calls) != 1 || f.calls[0] != "/v1/admin/inference-providers?" {
+		t.Errorf("requests %v", f.calls)
+	}
+	for _, id := range []string{"PutTeamModelEndpoints", "PutTeamModelEndpointCredential", "PutModelEndpointCredential"} {
+		if ReaderFor(spec.ByID(id)) != nil {
+			t.Errorf("%s must read no version", id)
 		}
 	}
 }

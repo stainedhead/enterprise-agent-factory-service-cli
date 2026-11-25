@@ -17,6 +17,10 @@ type RequestParts struct {
 	Path  map[string]string // path parameter values by wire name
 	Query url.Values
 	Body  *Object // nil when the operation has no body
+	// Raw, when set, is sent as the request body instead of Body, with ContentType (a provider statement's
+	// CSV file is sent as text/csv). The required body members are then not checked.
+	Raw         []byte
+	ContentType string
 }
 
 // BuildFunc turns parsed options into request parts (shorthands such as --repos).
