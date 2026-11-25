@@ -1,0 +1,74 @@
+AFS MCP-SERVERS UPDATE-MCP-SERVER
+
+NAME
+       mcp-servers update-mcp-server
+
+DESCRIPTION
+       Update MCP server
+
+       Required permission: mcp-servers:write
+
+SYNOPSIS
+       afs mcp-servers update-mcp-server [options]
+
+OPTIONS
+       --mcp-server-id (string) (required)
+       --allow-sampling (boolean)
+       --auth-header (string)
+       --auth-kind (string)
+          Possible values: none, static, oauth_client, workload_federation, oauth_user, aws_sigv4
+       --ca-bundle (string or JSON)
+          PEM bundle of the CA that signs the server's certificate, as text or file://PATH (not a secret).
+       --credential-mode (string)
+          Possible values: shared, per_team
+       --data-classification (string)
+          Possible values: public, internal, confidential, restricted
+       --default-for-new-teams (boolean)
+       --display-name (string)
+       --doc-url (string)
+       --drift-policy (string)
+          Possible values: hold, auto_approve_compatible
+       --federation (JSON)
+          Workload federation as JSON or file://PATH: the token endpoint and audience the gateway exchanges its projected token with.
+       --hosted (JSON)
+          A hosted server as JSON or file://PATH: {"imageDigest":…, "args":[…], "envNames":[…], "egressHosts":[…], "instanceMode":"per_team", "needsAws":false}.
+       --limits (JSON)
+          The server's own limits as JSON: {"requestBytes":…, "responseBytes":…, "timeoutSeconds":…, "concurrentPerAgent":…}; unset members take mcp.limits.
+       --location (string)
+          Possible values: external, corporate, in_namespace
+       --owner (string)
+       --purpose (string)
+       --transport (string)
+          Possible values: streamable_http, hosted
+       --trust-annotations (boolean)
+       --url (string)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       Approve compatible definition changes automatically
+
+       afs mcp-servers update-mcp-server --mcp-server-id mcp_01JD2Q3R4S5T6V7W8X9Y0Z0001 --drift-policy auto_approve_compatible
+
+       Raise the timeout
+
+       afs mcp-servers update-mcp-server --mcp-server-id mcp_01JD2Q3R4S5T6V7W8X9Y0Z0001 --limits '{"timeoutSeconds":120}'
+

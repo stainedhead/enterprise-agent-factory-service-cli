@@ -45,14 +45,15 @@ func TestReaderTableCoversAllIfMatchOperations(t *testing.T) {
 			without = append(without, op.ID)
 		}
 	}
-	if len(withReader)+len(without) != 74 {
-		t.Fatalf("%d If-Match operations, want 74", len(withReader)+len(without))
+	if len(withReader)+len(without) != 87 {
+		t.Fatalf("%d If-Match operations, want 87", len(withReader)+len(without))
 	}
 	t.Logf("no reader (send no If-Match): %s", strings.Join(without, ", "))
 	// Every operation without a reader takes an optional If-Match (CD-2), so the write is sent without one
 	// unless --if-match is given; v1.5.0 adds five (no readable version: credentials, federation, gateway
 	// settings, selections).
-	want := "PutEndpointFederation, PutModelEndpointCredential, PutServiceModelAccess, PutSetting, PutTeamGatewaySettings, PutTeamModelEndpointCredential, PutTeamModelEndpoints, PutTeamModels"
+	// v1.6.0 adds the MCP policies, credentials and a team's switch of a server.
+	want := "PutEndpointFederation, PutMcpPolicy, PutMcpServerCredential, PutModelEndpointCredential, PutServiceModelAccess, PutSetting, PutTeamGatewaySettings, PutTeamMcpPolicy, PutTeamMcpServer, PutTeamMcpServerCredential, PutTeamModelEndpointCredential, PutTeamModelEndpoints, PutTeamModels"
 	if got := strings.Join(without, ", "); got != want {
 		t.Errorf("operations without a reader:\n got %s\nwant %s", got, want)
 	}
@@ -242,5 +243,29 @@ func TestInferenceProviderVersionFromList(t *testing.T) {
 		if ReaderFor(spec.ByID(id)) != nil {
 			t.Errorf("%s must read no version", id)
 		}
+	}
+}
+
+// v1.6.0: a team's view of an MCP server carries the server's version in "server"; a federated identity is
+// matched by name in its agent's list.
+func TestMcpReaders(t *testing.T) {
+	f := &fake{byPath: map[string][]any{
+		"/v1/teams/team_1/mcp-servers/mcp_1|":                 {`{"server":{"id":"mcp_1","version":5},"enabled":true}`},
+		"/v1/teams/team_1/agents/agt_1/federated-identities|": {`{"items":[{"name":"sts","version":3}]}`},
+	}}
+	path := map[string]string{"teamId": "team_1", "mcpServerId": "mcp_1"}
+	if v, ok, err := Version(context.Background(), f, spec.ByID("UpdateTeamMcpServer"), path); err != nil || !ok || v != "5" {
+		t.Fatalf("team server: %q %v %v", v, ok, err)
+	}
+	fi := map[string]string{"teamId": "team_1", "agentId": "agt_1", "name": "sts"}
+	if v, ok, err := Version(context.Background(), f, spec.ByID("DeleteAgentFederatedIdentity"), fi); err != nil || !ok || v != "3" {
+		t.Fatalf("federated identity: %q %v %v", v, ok, err)
+	}
+	f.byPath["/v1/teams/team_1/mcp-servers/mcp_2|"] = []any{`[]`}
+	if _, ok, _ := Version(context.Background(), f, spec.ByID("DeleteTeamMcpServer"), map[string]string{"teamId": "team_1", "mcpServerId": "mcp_2"}); ok {
+		t.Fatal("a body that is not an object has no version")
+	}
+	if ReaderFor(spec.ByID("PutMcpPolicy")) != nil {
+		t.Fatal("a policy has no reader")
 	}
 }

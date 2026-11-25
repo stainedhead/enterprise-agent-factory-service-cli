@@ -1,0 +1,13 @@
+Field       Value
+Id          mcp_01JD2Q3R4S5T6V7W8X9Y0Z0002
+Slug        jira-local
+Scope       team
+Team        team_01JD2Q3R4S5T6V7W8X9Y0Z0001
+Location    in_namespace
+Transport   hosted
+Auth        none
+Review      rejected
+Risk        low
+Published   false
+Credential  not_required
+Version     2

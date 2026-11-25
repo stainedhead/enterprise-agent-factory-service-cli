@@ -16,8 +16,10 @@ OPERATIONS
        delete-report-schedule         Delete report schedule
        get-agent-report               Get agent report
        get-inference-report           Get inference report
+       get-mcp-usage-report           Get MCP usage report
        get-service-report             Get service report
        get-team-inference-report      Get team inference report
+       get-team-mcp-usage-report      Get team MCP usage report
        get-team-report                Get team report
        list-report-schedules          List report schedules
        update-report-schedule         Update report schedule
@@ -269,6 +271,62 @@ EXAMPLES
 
 ```
 
+## get-mcp-usage-report
+
+```text
+AFS REPORTS GET-MCP-USAGE-REPORT
+
+NAME
+       reports get-mcp-usage-report
+
+DESCRIPTION
+       Get MCP usage report
+
+       Required permission: mcp-events:read
+
+SYNOPSIS
+       afs reports get-mcp-usage-report [options]
+
+OPTIONS
+       --from (string)
+       --to (string)
+       --group-by (string)
+          Possible values: server, primitive, team, agent, day
+       --view (string)
+          Possible values: usage, unused, refusals, discovery, adoption
+       --window (integer)
+          Days, for view unused
+          Possible values: 30, 90
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       Calls per server this month
+
+       afs reports get-mcp-usage-report --from 2026-11-01T00:00:00Z --to 2026-12-01T00:00:00Z --group-by server --view usage
+
+       Servers no team used in 90 days
+
+       afs reports get-mcp-usage-report --from 2026-08-27T00:00:00Z --to 2026-11-25T00:00:00Z --group-by server --view unused --window 90
+
+```
+
 ## get-service-report
 
 ```text
@@ -397,6 +455,60 @@ EXAMPLES
        One route by agent over a week, as CSV
 
        afs reports get-team-inference-report --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --range 7d --route openai-prod --group-by agent --output csv
+
+```
+
+## get-team-mcp-usage-report
+
+```text
+AFS REPORTS GET-TEAM-MCP-USAGE-REPORT
+
+NAME
+       reports get-team-mcp-usage-report
+
+DESCRIPTION
+       Get team MCP usage report
+
+       Required permission: mcp-events:read
+
+SYNOPSIS
+       afs reports get-team-mcp-usage-report [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --from (string)
+       --to (string)
+       --group-by (string)
+          Possible values: server, primitive, agent, day
+       --view (string)
+          Possible values: usage, unused, refusals, discovery
+       --window (integer)
+          Days, for view unused
+          Possible values: 30, 90
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       The team's refusals per agent
+
+       afs reports get-team-mcp-usage-report --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --from 2026-11-01T00:00:00Z --to 2026-12-01T00:00:00Z --group-by agent --view refusals
 
 ```
 

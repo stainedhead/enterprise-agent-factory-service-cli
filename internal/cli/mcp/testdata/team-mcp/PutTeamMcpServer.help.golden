@@ -1,0 +1,52 @@
+AFS TEAMS PUT-TEAM-MCP-SERVER
+
+NAME
+       teams put-team-mcp-server
+
+DESCRIPTION
+       Put team MCP server
+
+       Only a team on its own gateway (per_namespace) can switch a server on. read_only mode admits only tools the review marked read-only.
+
+       Required permission: team-mcp-servers:write
+
+SYNOPSIS
+       afs teams put-team-mcp-server [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --mcp-server-id (string) (required)
+       --enabled (boolean) (required)
+       --mode (string)
+          Possible values: full, read_only
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       Switch a server on, read-only
+
+       afs teams put-team-mcp-server --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --mcp-server-id mcp_01JD2Q3R4S5T6V7W8X9Y0Z0001 --enabled --mode read_only
+
+       Switch it off
+
+       afs teams put-team-mcp-server --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --mcp-server-id mcp_01JD2Q3R4S5T6V7W8X9Y0Z0001 --no-enabled
+

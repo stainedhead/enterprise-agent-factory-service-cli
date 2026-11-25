@@ -1,0 +1,67 @@
+AFS TEAMS CREATE-TEAM-MCP-SERVER
+
+NAME
+       teams create-team-mcp-server
+
+DESCRIPTION
+       Create team MCP server
+
+       Allowed when the team's gateway settings have mayAddMcpServers (otherwise AccessDenied, reason team_servers_not_allowed). The server starts as a draft; submit it for review.
+
+       Required permission: team-mcp-servers:write
+
+SYNOPSIS
+       afs teams create-team-mcp-server [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --auth-header (string)
+       --auth-kind (string) (required)
+          Possible values: none, static, oauth_client, workload_federation, oauth_user, aws_sigv4
+       --ca-bundle (string or JSON)
+          PEM bundle of the CA that signs the server's certificate, as text or file://PATH (not a secret).
+       --data-classification (string) (required)
+          Possible values: public, internal, confidential, restricted
+       --display-name (string) (required)
+       --doc-url (string)
+       --federation (JSON)
+          Workload federation as JSON or file://PATH: the token endpoint and audience the gateway exchanges its projected token with.
+       --hosted (JSON)
+          A hosted server as JSON or file://PATH: {"imageDigest":…, "args":[…], "envNames":[…], "egressHosts":[…], "instanceMode":"per_team", "needsAws":false}.
+       --limits (JSON)
+          The server's own limits as JSON: {"requestBytes":…, "responseBytes":…, "timeoutSeconds":…, "concurrentPerAgent":…}; unset members take mcp.limits.
+       --location (string) (required)
+          Possible values: external, corporate, in_namespace
+       --owner (string) (required)
+       --purpose (string) (required)
+       --slug (string) (required)
+       --transport (string) (required)
+          Possible values: streamable_http, hosted
+       --url (string)
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       Register the team's own server
+
+       afs teams create-team-mcp-server --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --slug payments-tools --display-name "Payments tools" --owner payments-team --purpose "Ledger lookups" --data-classification confidential --transport streamable_http --location corporate --url https://tools.payments.corp.example/mcp --auth-kind workload_federation --federation file://federation.json
+

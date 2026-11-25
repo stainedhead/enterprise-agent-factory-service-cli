@@ -13,6 +13,7 @@ How to install, configure and use the `afs` CLI.
 | [Team collaboration (Paperclip)](collaboration.md) | The collaboration agent, its public endpoint settings, links, collaborator role, managed secrets |
 | [Team orchestration and model access](orchestration.md) | The orchestration agent (Paperclip or Buzz), exposure levels, the tool, model access at service, team, agent and pool level, deprecations |
 | [Model endpoints and the team gateway](model-endpoints.md) | Model routes (service and team endpoints), prices, credentials from a file, stdin or prompt, provider switches including Bedrock off, statements, route options on agents and pools, the inference report |
+| [Governed MCP servers](mcp-servers.md) | The MCP catalog, review and approval, team switches and policies, credentials and OAuth connect, agent and pool access, federated identities, the ledger and usage report (1.3.0) |
 | [Budgets and reports](budgets-and-reports.md) | Budgets, usage, costs, reports and CSV, notification channels, models and prices |
 | [Keys, tags, logs, schedules and service administration](delivery-and-admin.md) | API keys, role links, identities, team tags, log destinations, restore, report schedules, service audit, price proposals, exports and imports |
 | [Swarms](swarms.md) | Ephemeral teams, stages, pools, scaling, handoffs, pool secrets and role links, cost-tag status |

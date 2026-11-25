@@ -30,6 +30,9 @@ type Reader struct {
 	// Composite names the path parameters (host, owner, repo) that together identify an item of the
 	// collection as host == first and repo == "second/third" (a work order's repository, D-C17).
 	Composite []string
+	// Member names the object of the read whose version applies (a team's view of an MCP server carries the
+	// server's version in "server"); empty for the top level.
+	Member string
 }
 
 // ReadDeniedError is a failure to read the current version because the caller may not read the
@@ -74,12 +77,24 @@ var ReadOptional = map[string]bool{"UpdateWorkOrderRepo": true}
 // PutTeamModelEndpoints answers with no version (the selections are not a versioned resource), and a model
 // endpoint credential's version is never returned (v1.5.0), so neither reads one: a read through the team's or
 // the endpoint's path would send another resource's version.
-var versionless = map[string]bool{"PutTeamModels": true, "PutTeamModelEndpoints": true, "PutTeamModelEndpointCredential": true}
+// The MCP policies, credentials and a team's switch of a server (v1.6.0) have no read of their own: a read through
+// the server's path would send the server's version.
+var versionless = map[string]bool{"PutTeamModels": true, "PutTeamModelEndpoints": true, "PutTeamModelEndpointCredential": true,
+	"PutMcpPolicy": true, "PutTeamMcpPolicy": true, "PutMcpServerCredential": true, "PutTeamMcpServerCredential": true,
+	"PutTeamMcpServer": true}
+
+// members names operations whose read answers a wrapper: the version is that of the named member (v1.6.0).
+var members = map[string]string{"UpdateTeamMcpServer": "server", "DeleteTeamMcpServer": "server"}
 
 // lists names operations whose resource is one item of a collection that is not paginated and has no GET of its
 // own: the version is read from the collection, matching the item by the operation's last path parameter
 // (an inference provider, v1.5.0).
-var lists = map[string]string{"UpdateInferenceProvider": "/v1/admin/inference-providers"}
+// A federated identity (v1.6.0) is matched by name in its agent's or pool's list.
+var lists = map[string]string{"UpdateInferenceProvider": "/v1/admin/inference-providers",
+	"PutAgentFederatedIdentity":    "/v1/teams/{teamId}/agents/{agentId}/federated-identities",
+	"DeleteAgentFederatedIdentity": "/v1/teams/{teamId}/agents/{agentId}/federated-identities",
+	"PutPoolFederatedIdentity":     "/v1/teams/{teamId}/pools/{poolId}/federated-identities",
+	"DeletePoolFederatedIdentity":  "/v1/teams/{teamId}/pools/{poolId}/federated-identities"}
 
 // ReaderFor returns the reader of an operation, or nil when its resource carries no readable
 // version (the operation then sends no If-Match).
@@ -112,7 +127,7 @@ func ReaderFor(op *spec.Operation) *Reader {
 	}
 	full := "/" + strings.Join(segs, "/")
 	if g, ok := gets[full]; ok {
-		return &Reader{Get: g, Path: full}
+		return &Reader{Get: g, Path: full, Member: members[op.ID]}
 	}
 	if len(segs) > 1 && isParam(segs[len(segs)-1]) {
 		parent := "/" + strings.Join(segs[:len(segs)-1], "/")
@@ -156,7 +171,15 @@ func Version(ctx context.Context, d Doer, op *spec.Operation, path map[string]st
 			}
 			return "", false, err
 		}
-		return versionOf(resp.Body)
+		body := resp.Body
+		if r.Member != "" {
+			var doc map[string]json.RawMessage
+			if json.Unmarshal(body, &doc) != nil {
+				return "", false, nil
+			}
+			body = doc[r.Member]
+		}
+		return versionOf(body)
 	}
 	token := ""
 	for page := 0; page < maxListPages; page++ {

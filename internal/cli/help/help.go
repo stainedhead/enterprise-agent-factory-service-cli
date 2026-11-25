@@ -20,6 +20,7 @@ var ServiceSummaries = map[string]string{
 	"completion":      "Print a shell completion script.",
 	"configure":       "Create and edit profiles in ~/.afs/config.",
 	"members":         "Manage team members and role bindings.",
+	"mcp-servers":     "Govern the MCP server catalog: register, review, approve, suspend and capture search queries.",
 	"models":          "List and manage models and their prices.",
 	"orchestration":   "Manage a team's orchestration agent: its collaboration tool and who can reach it.",
 	"pools":           "Manage worker pools.",

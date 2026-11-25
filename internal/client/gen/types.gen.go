@@ -189,6 +189,78 @@ func (e AgentIdentityStatus) Valid() bool {
 	}
 }
 
+// Defines values for AgentMcpAccess.
+const (
+	AgentMcpAccessAll      AgentMcpAccess = "all"
+	AgentMcpAccessSelected AgentMcpAccess = "selected"
+)
+
+// Valid indicates whether the value is a known member of the AgentMcpAccess enum.
+func (e AgentMcpAccess) Valid() bool {
+	switch e {
+	case AgentMcpAccessAll:
+		return true
+	case AgentMcpAccessSelected:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for AgentMcpMode.
+const (
+	AgentMcpModeFull   AgentMcpMode = "full"
+	AgentMcpModeSearch AgentMcpMode = "search"
+)
+
+// Valid indicates whether the value is a known member of the AgentMcpMode enum.
+func (e AgentMcpMode) Valid() bool {
+	switch e {
+	case AgentMcpModeFull:
+		return true
+	case AgentMcpModeSearch:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for AgentMcpInputAccess.
+const (
+	AgentMcpInputAccessAll      AgentMcpInputAccess = "all"
+	AgentMcpInputAccessSelected AgentMcpInputAccess = "selected"
+)
+
+// Valid indicates whether the value is a known member of the AgentMcpInputAccess enum.
+func (e AgentMcpInputAccess) Valid() bool {
+	switch e {
+	case AgentMcpInputAccessAll:
+		return true
+	case AgentMcpInputAccessSelected:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for AgentMcpInputMode.
+const (
+	AgentMcpInputModeFull   AgentMcpInputMode = "full"
+	AgentMcpInputModeSearch AgentMcpInputMode = "search"
+)
+
+// Valid indicates whether the value is a known member of the AgentMcpInputMode enum.
+func (e AgentMcpInputMode) Valid() bool {
+	switch e {
+	case AgentMcpInputModeFull:
+		return true
+	case AgentMcpInputModeSearch:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for AgentModelsAccess.
 const (
 	AgentModelsAccessAll      AgentModelsAccess = "all"
@@ -843,6 +915,135 @@ func (e CreateLogDestinationRequestKind) Valid() bool {
 	}
 }
 
+// Defines values for CreateMcpServerRequestAuthKind.
+const (
+	CreateMcpServerRequestAuthKindAwsSigv4           CreateMcpServerRequestAuthKind = "aws_sigv4"
+	CreateMcpServerRequestAuthKindNone               CreateMcpServerRequestAuthKind = "none"
+	CreateMcpServerRequestAuthKindOauthClient        CreateMcpServerRequestAuthKind = "oauth_client"
+	CreateMcpServerRequestAuthKindOauthUser          CreateMcpServerRequestAuthKind = "oauth_user"
+	CreateMcpServerRequestAuthKindStatic             CreateMcpServerRequestAuthKind = "static"
+	CreateMcpServerRequestAuthKindWorkloadFederation CreateMcpServerRequestAuthKind = "workload_federation"
+)
+
+// Valid indicates whether the value is a known member of the CreateMcpServerRequestAuthKind enum.
+func (e CreateMcpServerRequestAuthKind) Valid() bool {
+	switch e {
+	case CreateMcpServerRequestAuthKindAwsSigv4:
+		return true
+	case CreateMcpServerRequestAuthKindNone:
+		return true
+	case CreateMcpServerRequestAuthKindOauthClient:
+		return true
+	case CreateMcpServerRequestAuthKindOauthUser:
+		return true
+	case CreateMcpServerRequestAuthKindStatic:
+		return true
+	case CreateMcpServerRequestAuthKindWorkloadFederation:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateMcpServerRequestCredentialMode.
+const (
+	CreateMcpServerRequestCredentialModePerTeam CreateMcpServerRequestCredentialMode = "per_team"
+	CreateMcpServerRequestCredentialModeShared  CreateMcpServerRequestCredentialMode = "shared"
+)
+
+// Valid indicates whether the value is a known member of the CreateMcpServerRequestCredentialMode enum.
+func (e CreateMcpServerRequestCredentialMode) Valid() bool {
+	switch e {
+	case CreateMcpServerRequestCredentialModePerTeam:
+		return true
+	case CreateMcpServerRequestCredentialModeShared:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateMcpServerRequestDataClassification.
+const (
+	CreateMcpServerRequestDataClassificationConfidential CreateMcpServerRequestDataClassification = "confidential"
+	CreateMcpServerRequestDataClassificationInternal     CreateMcpServerRequestDataClassification = "internal"
+	CreateMcpServerRequestDataClassificationPublic       CreateMcpServerRequestDataClassification = "public"
+	CreateMcpServerRequestDataClassificationRestricted   CreateMcpServerRequestDataClassification = "restricted"
+)
+
+// Valid indicates whether the value is a known member of the CreateMcpServerRequestDataClassification enum.
+func (e CreateMcpServerRequestDataClassification) Valid() bool {
+	switch e {
+	case CreateMcpServerRequestDataClassificationConfidential:
+		return true
+	case CreateMcpServerRequestDataClassificationInternal:
+		return true
+	case CreateMcpServerRequestDataClassificationPublic:
+		return true
+	case CreateMcpServerRequestDataClassificationRestricted:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateMcpServerRequestDriftPolicy.
+const (
+	CreateMcpServerRequestDriftPolicyAutoApproveCompatible CreateMcpServerRequestDriftPolicy = "auto_approve_compatible"
+	CreateMcpServerRequestDriftPolicyHold                  CreateMcpServerRequestDriftPolicy = "hold"
+)
+
+// Valid indicates whether the value is a known member of the CreateMcpServerRequestDriftPolicy enum.
+func (e CreateMcpServerRequestDriftPolicy) Valid() bool {
+	switch e {
+	case CreateMcpServerRequestDriftPolicyAutoApproveCompatible:
+		return true
+	case CreateMcpServerRequestDriftPolicyHold:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateMcpServerRequestLocation.
+const (
+	CreateMcpServerRequestLocationCorporate   CreateMcpServerRequestLocation = "corporate"
+	CreateMcpServerRequestLocationExternal    CreateMcpServerRequestLocation = "external"
+	CreateMcpServerRequestLocationInNamespace CreateMcpServerRequestLocation = "in_namespace"
+)
+
+// Valid indicates whether the value is a known member of the CreateMcpServerRequestLocation enum.
+func (e CreateMcpServerRequestLocation) Valid() bool {
+	switch e {
+	case CreateMcpServerRequestLocationCorporate:
+		return true
+	case CreateMcpServerRequestLocationExternal:
+		return true
+	case CreateMcpServerRequestLocationInNamespace:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateMcpServerRequestTransport.
+const (
+	CreateMcpServerRequestTransportHosted         CreateMcpServerRequestTransport = "hosted"
+	CreateMcpServerRequestTransportStreamableHttp CreateMcpServerRequestTransport = "streamable_http"
+)
+
+// Valid indicates whether the value is a known member of the CreateMcpServerRequestTransport enum.
+func (e CreateMcpServerRequestTransport) Valid() bool {
+	switch e {
+	case CreateMcpServerRequestTransportHosted:
+		return true
+	case CreateMcpServerRequestTransportStreamableHttp:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for CreateModelEndpointRequestAuthKind.
 const (
 	CreateModelEndpointRequestAuthKindAzureFederated  CreateModelEndpointRequestAuthKind = "azure_federated"
@@ -1122,6 +1323,99 @@ func (e CreateSwarmTemplateRequestTeardownRule) Valid() bool {
 	case CreateSwarmTemplateRequestTeardownRuleAtExpiry:
 		return true
 	case CreateSwarmTemplateRequestTeardownRuleAtWorkComplete:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateTeamMcpServerRequestAuthKind.
+const (
+	CreateTeamMcpServerRequestAuthKindAwsSigv4           CreateTeamMcpServerRequestAuthKind = "aws_sigv4"
+	CreateTeamMcpServerRequestAuthKindNone               CreateTeamMcpServerRequestAuthKind = "none"
+	CreateTeamMcpServerRequestAuthKindOauthClient        CreateTeamMcpServerRequestAuthKind = "oauth_client"
+	CreateTeamMcpServerRequestAuthKindOauthUser          CreateTeamMcpServerRequestAuthKind = "oauth_user"
+	CreateTeamMcpServerRequestAuthKindStatic             CreateTeamMcpServerRequestAuthKind = "static"
+	CreateTeamMcpServerRequestAuthKindWorkloadFederation CreateTeamMcpServerRequestAuthKind = "workload_federation"
+)
+
+// Valid indicates whether the value is a known member of the CreateTeamMcpServerRequestAuthKind enum.
+func (e CreateTeamMcpServerRequestAuthKind) Valid() bool {
+	switch e {
+	case CreateTeamMcpServerRequestAuthKindAwsSigv4:
+		return true
+	case CreateTeamMcpServerRequestAuthKindNone:
+		return true
+	case CreateTeamMcpServerRequestAuthKindOauthClient:
+		return true
+	case CreateTeamMcpServerRequestAuthKindOauthUser:
+		return true
+	case CreateTeamMcpServerRequestAuthKindStatic:
+		return true
+	case CreateTeamMcpServerRequestAuthKindWorkloadFederation:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateTeamMcpServerRequestDataClassification.
+const (
+	CreateTeamMcpServerRequestDataClassificationConfidential CreateTeamMcpServerRequestDataClassification = "confidential"
+	CreateTeamMcpServerRequestDataClassificationInternal     CreateTeamMcpServerRequestDataClassification = "internal"
+	CreateTeamMcpServerRequestDataClassificationPublic       CreateTeamMcpServerRequestDataClassification = "public"
+	CreateTeamMcpServerRequestDataClassificationRestricted   CreateTeamMcpServerRequestDataClassification = "restricted"
+)
+
+// Valid indicates whether the value is a known member of the CreateTeamMcpServerRequestDataClassification enum.
+func (e CreateTeamMcpServerRequestDataClassification) Valid() bool {
+	switch e {
+	case CreateTeamMcpServerRequestDataClassificationConfidential:
+		return true
+	case CreateTeamMcpServerRequestDataClassificationInternal:
+		return true
+	case CreateTeamMcpServerRequestDataClassificationPublic:
+		return true
+	case CreateTeamMcpServerRequestDataClassificationRestricted:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateTeamMcpServerRequestLocation.
+const (
+	CreateTeamMcpServerRequestLocationCorporate   CreateTeamMcpServerRequestLocation = "corporate"
+	CreateTeamMcpServerRequestLocationExternal    CreateTeamMcpServerRequestLocation = "external"
+	CreateTeamMcpServerRequestLocationInNamespace CreateTeamMcpServerRequestLocation = "in_namespace"
+)
+
+// Valid indicates whether the value is a known member of the CreateTeamMcpServerRequestLocation enum.
+func (e CreateTeamMcpServerRequestLocation) Valid() bool {
+	switch e {
+	case CreateTeamMcpServerRequestLocationCorporate:
+		return true
+	case CreateTeamMcpServerRequestLocationExternal:
+		return true
+	case CreateTeamMcpServerRequestLocationInNamespace:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateTeamMcpServerRequestTransport.
+const (
+	CreateTeamMcpServerRequestTransportHosted         CreateTeamMcpServerRequestTransport = "hosted"
+	CreateTeamMcpServerRequestTransportStreamableHttp CreateTeamMcpServerRequestTransport = "streamable_http"
+)
+
+// Valid indicates whether the value is a known member of the CreateTeamMcpServerRequestTransport enum.
+func (e CreateTeamMcpServerRequestTransport) Valid() bool {
+	switch e {
+	case CreateTeamMcpServerRequestTransportHosted:
+		return true
+	case CreateTeamMcpServerRequestTransportStreamableHttp:
 		return true
 	default:
 		return false
@@ -1505,6 +1799,7 @@ const (
 	DeclareExternalSystemRequestCategoryEmail         DeclareExternalSystemRequestCategory = "email"
 	DeclareExternalSystemRequestCategoryIdentity      DeclareExternalSystemRequestCategory = "identity"
 	DeclareExternalSystemRequestCategoryLlm           DeclareExternalSystemRequestCategory = "llm"
+	DeclareExternalSystemRequestCategoryMcp           DeclareExternalSystemRequestCategory = "mcp"
 	DeclareExternalSystemRequestCategoryOther         DeclareExternalSystemRequestCategory = "other"
 )
 
@@ -1523,7 +1818,150 @@ func (e DeclareExternalSystemRequestCategory) Valid() bool {
 		return true
 	case DeclareExternalSystemRequestCategoryLlm:
 		return true
+	case DeclareExternalSystemRequestCategoryMcp:
+		return true
 	case DeclareExternalSystemRequestCategoryOther:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for EffectiveMcpAccess.
+const (
+	EffectiveMcpAccessAll      EffectiveMcpAccess = "all"
+	EffectiveMcpAccessSelected EffectiveMcpAccess = "selected"
+)
+
+// Valid indicates whether the value is a known member of the EffectiveMcpAccess enum.
+func (e EffectiveMcpAccess) Valid() bool {
+	switch e {
+	case EffectiveMcpAccessAll:
+		return true
+	case EffectiveMcpAccessSelected:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for EffectiveMcpMode.
+const (
+	EffectiveMcpModeFull   EffectiveMcpMode = "full"
+	EffectiveMcpModeSearch EffectiveMcpMode = "search"
+)
+
+// Valid indicates whether the value is a known member of the EffectiveMcpMode enum.
+func (e EffectiveMcpMode) Valid() bool {
+	switch e {
+	case EffectiveMcpModeFull:
+		return true
+	case EffectiveMcpModeSearch:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for EffectiveMcpSubjectKind.
+const (
+	EffectiveMcpSubjectKindAgent EffectiveMcpSubjectKind = "agent"
+	EffectiveMcpSubjectKindPool  EffectiveMcpSubjectKind = "pool"
+)
+
+// Valid indicates whether the value is a known member of the EffectiveMcpSubjectKind enum.
+func (e EffectiveMcpSubjectKind) Valid() bool {
+	switch e {
+	case EffectiveMcpSubjectKindAgent:
+		return true
+	case EffectiveMcpSubjectKindPool:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for EffectiveMcpPrimitiveKind.
+const (
+	EffectiveMcpPrimitiveKindPrompt           EffectiveMcpPrimitiveKind = "prompt"
+	EffectiveMcpPrimitiveKindResource         EffectiveMcpPrimitiveKind = "resource"
+	EffectiveMcpPrimitiveKindResourceTemplate EffectiveMcpPrimitiveKind = "resource_template"
+	EffectiveMcpPrimitiveKindTool             EffectiveMcpPrimitiveKind = "tool"
+)
+
+// Valid indicates whether the value is a known member of the EffectiveMcpPrimitiveKind enum.
+func (e EffectiveMcpPrimitiveKind) Valid() bool {
+	switch e {
+	case EffectiveMcpPrimitiveKindPrompt:
+		return true
+	case EffectiveMcpPrimitiveKindResource:
+		return true
+	case EffectiveMcpPrimitiveKindResourceTemplate:
+		return true
+	case EffectiveMcpPrimitiveKindTool:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for EffectiveMcpPrimitiveLevel.
+const (
+	EffectiveMcpPrimitiveLevelAgent       EffectiveMcpPrimitiveLevel = "agent"
+	EffectiveMcpPrimitiveLevelLessThannil EffectiveMcpPrimitiveLevel = "<nil>"
+	EffectiveMcpPrimitiveLevelPool        EffectiveMcpPrimitiveLevel = "pool"
+	EffectiveMcpPrimitiveLevelService     EffectiveMcpPrimitiveLevel = "service"
+	EffectiveMcpPrimitiveLevelTeam        EffectiveMcpPrimitiveLevel = "team"
+)
+
+// Valid indicates whether the value is a known member of the EffectiveMcpPrimitiveLevel enum.
+func (e EffectiveMcpPrimitiveLevel) Valid() bool {
+	switch e {
+	case EffectiveMcpPrimitiveLevelAgent:
+		return true
+	case EffectiveMcpPrimitiveLevelLessThannil:
+		return true
+	case EffectiveMcpPrimitiveLevelPool:
+		return true
+	case EffectiveMcpPrimitiveLevelService:
+		return true
+	case EffectiveMcpPrimitiveLevelTeam:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for EffectiveMcpServerMode.
+const (
+	EffectiveMcpServerModeFull     EffectiveMcpServerMode = "full"
+	EffectiveMcpServerModeReadOnly EffectiveMcpServerMode = "read_only"
+)
+
+// Valid indicates whether the value is a known member of the EffectiveMcpServerMode enum.
+func (e EffectiveMcpServerMode) Valid() bool {
+	switch e {
+	case EffectiveMcpServerModeFull:
+		return true
+	case EffectiveMcpServerModeReadOnly:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for EffectiveMcpServerScope.
+const (
+	EffectiveMcpServerScopeEnterprise EffectiveMcpServerScope = "enterprise"
+	EffectiveMcpServerScopeTeam       EffectiveMcpServerScope = "team"
+)
+
+// Valid indicates whether the value is a known member of the EffectiveMcpServerScope enum.
+func (e EffectiveMcpServerScope) Valid() bool {
+	switch e {
+	case EffectiveMcpServerScopeEnterprise:
+		return true
+	case EffectiveMcpServerScopeTeam:
 		return true
 	default:
 		return false
@@ -1820,6 +2258,7 @@ const (
 	ExternalSystemCategoryEmail         ExternalSystemCategory = "email"
 	ExternalSystemCategoryIdentity      ExternalSystemCategory = "identity"
 	ExternalSystemCategoryLlm           ExternalSystemCategory = "llm"
+	ExternalSystemCategoryMcp           ExternalSystemCategory = "mcp"
 	ExternalSystemCategoryOther         ExternalSystemCategory = "other"
 )
 
@@ -1837,6 +2276,8 @@ func (e ExternalSystemCategory) Valid() bool {
 	case ExternalSystemCategoryIdentity:
 		return true
 	case ExternalSystemCategoryLlm:
+		return true
+	case ExternalSystemCategoryMcp:
 		return true
 	case ExternalSystemCategoryOther:
 		return true
@@ -2070,6 +2511,729 @@ func (e LogDestinationKind) Valid() bool {
 	case LogDestinationKindS3:
 		return true
 	case LogDestinationKindSplunkHec:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpBlockRuleClass.
+const (
+	McpBlockRuleClassDestructive McpBlockRuleClass = "destructive"
+	McpBlockRuleClassOpenWorld   McpBlockRuleClass = "open_world"
+	McpBlockRuleClassReadOnly    McpBlockRuleClass = "read_only"
+)
+
+// Valid indicates whether the value is a known member of the McpBlockRuleClass enum.
+func (e McpBlockRuleClass) Valid() bool {
+	switch e {
+	case McpBlockRuleClassDestructive:
+		return true
+	case McpBlockRuleClassOpenWorld:
+		return true
+	case McpBlockRuleClassReadOnly:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpBlockRuleEffect.
+const (
+	McpBlockRuleEffectBlock McpBlockRuleEffect = "block"
+)
+
+// Valid indicates whether the value is a known member of the McpBlockRuleEffect enum.
+func (e McpBlockRuleEffect) Valid() bool {
+	switch e {
+	case McpBlockRuleEffectBlock:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpCheckOutcome.
+const (
+	Fail McpCheckOutcome = "fail"
+	Pass McpCheckOutcome = "pass"
+	Warn McpCheckOutcome = "warn"
+)
+
+// Valid indicates whether the value is a known member of the McpCheckOutcome enum.
+func (e McpCheckOutcome) Valid() bool {
+	switch e {
+	case Fail:
+		return true
+	case Pass:
+		return true
+	case Warn:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpCredentialKind.
+const (
+	McpCredentialKindOauthClient McpCredentialKind = "oauth_client"
+	McpCredentialKindOauthUser   McpCredentialKind = "oauth_user"
+	McpCredentialKindStatic      McpCredentialKind = "static"
+)
+
+// Valid indicates whether the value is a known member of the McpCredentialKind enum.
+func (e McpCredentialKind) Valid() bool {
+	switch e {
+	case McpCredentialKindOauthClient:
+		return true
+	case McpCredentialKindOauthUser:
+		return true
+	case McpCredentialKindStatic:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpCredentialState.
+const (
+	McpCredentialStateExpired     McpCredentialState = "expired"
+	McpCredentialStateMissing     McpCredentialState = "missing"
+	McpCredentialStateNotRequired McpCredentialState = "not_required"
+	McpCredentialStateSet         McpCredentialState = "set"
+)
+
+// Valid indicates whether the value is a known member of the McpCredentialState enum.
+func (e McpCredentialState) Valid() bool {
+	switch e {
+	case McpCredentialStateExpired:
+		return true
+	case McpCredentialStateMissing:
+		return true
+	case McpCredentialStateNotRequired:
+		return true
+	case McpCredentialStateSet:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpDecisionLevel.
+const (
+	McpDecisionLevelAgent       McpDecisionLevel = "agent"
+	McpDecisionLevelLessThannil McpDecisionLevel = "<nil>"
+	McpDecisionLevelPool        McpDecisionLevel = "pool"
+	McpDecisionLevelService     McpDecisionLevel = "service"
+	McpDecisionLevelTeam        McpDecisionLevel = "team"
+)
+
+// Valid indicates whether the value is a known member of the McpDecisionLevel enum.
+func (e McpDecisionLevel) Valid() bool {
+	switch e {
+	case McpDecisionLevelAgent:
+		return true
+	case McpDecisionLevelLessThannil:
+		return true
+	case McpDecisionLevelPool:
+		return true
+	case McpDecisionLevelService:
+		return true
+	case McpDecisionLevelTeam:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpEventOutcome.
+const (
+	McpEventOutcomeCancelled           McpEventOutcome = "cancelled"
+	McpEventOutcomeOk                  McpEventOutcome = "ok"
+	McpEventOutcomeProtocolError       McpEventOutcome = "protocol_error"
+	McpEventOutcomeRefused             McpEventOutcome = "refused"
+	McpEventOutcomeTimeout             McpEventOutcome = "timeout"
+	McpEventOutcomeToolError           McpEventOutcome = "tool_error"
+	McpEventOutcomeUpstreamUnavailable McpEventOutcome = "upstream_unavailable"
+)
+
+// Valid indicates whether the value is a known member of the McpEventOutcome enum.
+func (e McpEventOutcome) Valid() bool {
+	switch e {
+	case McpEventOutcomeCancelled:
+		return true
+	case McpEventOutcomeOk:
+		return true
+	case McpEventOutcomeProtocolError:
+		return true
+	case McpEventOutcomeRefused:
+		return true
+	case McpEventOutcomeTimeout:
+		return true
+	case McpEventOutcomeToolError:
+		return true
+	case McpEventOutcomeUpstreamUnavailable:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpEventServerKind.
+const (
+	McpEventServerKindAfs         McpEventServerKind = "afs"
+	McpEventServerKindEnterprise  McpEventServerKind = "enterprise"
+	McpEventServerKindLessThannil McpEventServerKind = "<nil>"
+	McpEventServerKindTeam        McpEventServerKind = "team"
+)
+
+// Valid indicates whether the value is a known member of the McpEventServerKind enum.
+func (e McpEventServerKind) Valid() bool {
+	switch e {
+	case McpEventServerKindAfs:
+		return true
+	case McpEventServerKindEnterprise:
+		return true
+	case McpEventServerKindLessThannil:
+		return true
+	case McpEventServerKindTeam:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpHostedSpecInstanceMode.
+const (
+	McpHostedSpecInstanceModePerAgent McpHostedSpecInstanceMode = "per_agent"
+	McpHostedSpecInstanceModePerTeam  McpHostedSpecInstanceMode = "per_team"
+)
+
+// Valid indicates whether the value is a known member of the McpHostedSpecInstanceMode enum.
+func (e McpHostedSpecInstanceMode) Valid() bool {
+	switch e {
+	case McpHostedSpecInstanceModePerAgent:
+		return true
+	case McpHostedSpecInstanceModePerTeam:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpPolicyDriftPolicy.
+const (
+	McpPolicyDriftPolicyAutoApproveCompatible McpPolicyDriftPolicy = "auto_approve_compatible"
+	McpPolicyDriftPolicyHold                  McpPolicyDriftPolicy = "hold"
+)
+
+// Valid indicates whether the value is a known member of the McpPolicyDriftPolicy enum.
+func (e McpPolicyDriftPolicy) Valid() bool {
+	switch e {
+	case McpPolicyDriftPolicyAutoApproveCompatible:
+		return true
+	case McpPolicyDriftPolicyHold:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpPolicyLevel.
+const (
+	McpPolicyLevelService McpPolicyLevel = "service"
+	McpPolicyLevelTeam    McpPolicyLevel = "team"
+)
+
+// Valid indicates whether the value is a known member of the McpPolicyLevel enum.
+func (e McpPolicyLevel) Valid() bool {
+	switch e {
+	case McpPolicyLevelService:
+		return true
+	case McpPolicyLevelTeam:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpPolicyRuleClass.
+const (
+	McpPolicyRuleClassDestructive McpPolicyRuleClass = "destructive"
+	McpPolicyRuleClassOpenWorld   McpPolicyRuleClass = "open_world"
+	McpPolicyRuleClassReadOnly    McpPolicyRuleClass = "read_only"
+)
+
+// Valid indicates whether the value is a known member of the McpPolicyRuleClass enum.
+func (e McpPolicyRuleClass) Valid() bool {
+	switch e {
+	case McpPolicyRuleClassDestructive:
+		return true
+	case McpPolicyRuleClassOpenWorld:
+		return true
+	case McpPolicyRuleClassReadOnly:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpPolicyRuleEffect.
+const (
+	McpPolicyRuleEffectAllow McpPolicyRuleEffect = "allow"
+	McpPolicyRuleEffectBlock McpPolicyRuleEffect = "block"
+)
+
+// Valid indicates whether the value is a known member of the McpPolicyRuleEffect enum.
+func (e McpPolicyRuleEffect) Valid() bool {
+	switch e {
+	case McpPolicyRuleEffectAllow:
+		return true
+	case McpPolicyRuleEffectBlock:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpPrimitiveChangeKind.
+const (
+	McpPrimitiveChangeKindCompatible   McpPrimitiveChangeKind = "compatible"
+	McpPrimitiveChangeKindIncompatible McpPrimitiveChangeKind = "incompatible"
+	McpPrimitiveChangeKindLessThannil  McpPrimitiveChangeKind = "<nil>"
+	McpPrimitiveChangeKindNew          McpPrimitiveChangeKind = "new"
+)
+
+// Valid indicates whether the value is a known member of the McpPrimitiveChangeKind enum.
+func (e McpPrimitiveChangeKind) Valid() bool {
+	switch e {
+	case McpPrimitiveChangeKindCompatible:
+		return true
+	case McpPrimitiveChangeKindIncompatible:
+		return true
+	case McpPrimitiveChangeKindLessThannil:
+		return true
+	case McpPrimitiveChangeKindNew:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpPrimitiveKind.
+const (
+	McpPrimitiveKindPrompt           McpPrimitiveKind = "prompt"
+	McpPrimitiveKindResource         McpPrimitiveKind = "resource"
+	McpPrimitiveKindResourceTemplate McpPrimitiveKind = "resource_template"
+	McpPrimitiveKindTool             McpPrimitiveKind = "tool"
+)
+
+// Valid indicates whether the value is a known member of the McpPrimitiveKind enum.
+func (e McpPrimitiveKind) Valid() bool {
+	switch e {
+	case McpPrimitiveKindPrompt:
+		return true
+	case McpPrimitiveKindResource:
+		return true
+	case McpPrimitiveKindResourceTemplate:
+		return true
+	case McpPrimitiveKindTool:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpPrimitiveStatus.
+const (
+	McpPrimitiveStatusApproved      McpPrimitiveStatus = "approved"
+	McpPrimitiveStatusBlocked       McpPrimitiveStatus = "blocked"
+	McpPrimitiveStatusPendingReview McpPrimitiveStatus = "pending_review"
+)
+
+// Valid indicates whether the value is a known member of the McpPrimitiveStatus enum.
+func (e McpPrimitiveStatus) Valid() bool {
+	switch e {
+	case McpPrimitiveStatusApproved:
+		return true
+	case McpPrimitiveStatusBlocked:
+		return true
+	case McpPrimitiveStatusPendingReview:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpPrimitiveDecisionDecision.
+const (
+	McpPrimitiveDecisionDecisionApprove McpPrimitiveDecisionDecision = "approve"
+	McpPrimitiveDecisionDecisionBlock   McpPrimitiveDecisionDecision = "block"
+)
+
+// Valid indicates whether the value is a known member of the McpPrimitiveDecisionDecision enum.
+func (e McpPrimitiveDecisionDecision) Valid() bool {
+	switch e {
+	case McpPrimitiveDecisionDecisionApprove:
+		return true
+	case McpPrimitiveDecisionDecisionBlock:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpReviewItemApprover.
+const (
+	McpReviewItemApproverSecurity  McpReviewItemApprover = "security"
+	McpReviewItemApproverTeamAdmin McpReviewItemApprover = "team_admin"
+)
+
+// Valid indicates whether the value is a known member of the McpReviewItemApprover enum.
+func (e McpReviewItemApprover) Valid() bool {
+	switch e {
+	case McpReviewItemApproverSecurity:
+		return true
+	case McpReviewItemApproverTeamAdmin:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpReviewItemKind.
+const (
+	McpReviewItemKindPrimitive McpReviewItemKind = "primitive"
+	McpReviewItemKindServer    McpReviewItemKind = "server"
+)
+
+// Valid indicates whether the value is a known member of the McpReviewItemKind enum.
+func (e McpReviewItemKind) Valid() bool {
+	switch e {
+	case McpReviewItemKindPrimitive:
+		return true
+	case McpReviewItemKindServer:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpReviewItemRiskTier.
+const (
+	McpReviewItemRiskTierElevated    McpReviewItemRiskTier = "elevated"
+	McpReviewItemRiskTierHigh        McpReviewItemRiskTier = "high"
+	McpReviewItemRiskTierLessThannil McpReviewItemRiskTier = "<nil>"
+	McpReviewItemRiskTierLow         McpReviewItemRiskTier = "low"
+)
+
+// Valid indicates whether the value is a known member of the McpReviewItemRiskTier enum.
+func (e McpReviewItemRiskTier) Valid() bool {
+	switch e {
+	case McpReviewItemRiskTierElevated:
+		return true
+	case McpReviewItemRiskTierHigh:
+		return true
+	case McpReviewItemRiskTierLessThannil:
+		return true
+	case McpReviewItemRiskTierLow:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpServerApprover.
+const (
+	McpServerApproverLessThannil McpServerApprover = "<nil>"
+	McpServerApproverSecurity    McpServerApprover = "security"
+	McpServerApproverTeamAdmin   McpServerApprover = "team_admin"
+)
+
+// Valid indicates whether the value is a known member of the McpServerApprover enum.
+func (e McpServerApprover) Valid() bool {
+	switch e {
+	case McpServerApproverLessThannil:
+		return true
+	case McpServerApproverSecurity:
+		return true
+	case McpServerApproverTeamAdmin:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpServerAuthKind.
+const (
+	McpServerAuthKindAwsSigv4           McpServerAuthKind = "aws_sigv4"
+	McpServerAuthKindNone               McpServerAuthKind = "none"
+	McpServerAuthKindOauthClient        McpServerAuthKind = "oauth_client"
+	McpServerAuthKindOauthUser          McpServerAuthKind = "oauth_user"
+	McpServerAuthKindStatic             McpServerAuthKind = "static"
+	McpServerAuthKindWorkloadFederation McpServerAuthKind = "workload_federation"
+)
+
+// Valid indicates whether the value is a known member of the McpServerAuthKind enum.
+func (e McpServerAuthKind) Valid() bool {
+	switch e {
+	case McpServerAuthKindAwsSigv4:
+		return true
+	case McpServerAuthKindNone:
+		return true
+	case McpServerAuthKindOauthClient:
+		return true
+	case McpServerAuthKindOauthUser:
+		return true
+	case McpServerAuthKindStatic:
+		return true
+	case McpServerAuthKindWorkloadFederation:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpServerCredentialMode.
+const (
+	McpServerCredentialModePerTeam McpServerCredentialMode = "per_team"
+	McpServerCredentialModeShared  McpServerCredentialMode = "shared"
+)
+
+// Valid indicates whether the value is a known member of the McpServerCredentialMode enum.
+func (e McpServerCredentialMode) Valid() bool {
+	switch e {
+	case McpServerCredentialModePerTeam:
+		return true
+	case McpServerCredentialModeShared:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpServerCredentialState.
+const (
+	McpServerCredentialStateExpired     McpServerCredentialState = "expired"
+	McpServerCredentialStateMissing     McpServerCredentialState = "missing"
+	McpServerCredentialStateNotRequired McpServerCredentialState = "not_required"
+	McpServerCredentialStateSet         McpServerCredentialState = "set"
+)
+
+// Valid indicates whether the value is a known member of the McpServerCredentialState enum.
+func (e McpServerCredentialState) Valid() bool {
+	switch e {
+	case McpServerCredentialStateExpired:
+		return true
+	case McpServerCredentialStateMissing:
+		return true
+	case McpServerCredentialStateNotRequired:
+		return true
+	case McpServerCredentialStateSet:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpServerDataClassification.
+const (
+	McpServerDataClassificationConfidential McpServerDataClassification = "confidential"
+	McpServerDataClassificationInternal     McpServerDataClassification = "internal"
+	McpServerDataClassificationPublic       McpServerDataClassification = "public"
+	McpServerDataClassificationRestricted   McpServerDataClassification = "restricted"
+)
+
+// Valid indicates whether the value is a known member of the McpServerDataClassification enum.
+func (e McpServerDataClassification) Valid() bool {
+	switch e {
+	case McpServerDataClassificationConfidential:
+		return true
+	case McpServerDataClassificationInternal:
+		return true
+	case McpServerDataClassificationPublic:
+		return true
+	case McpServerDataClassificationRestricted:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpServerDriftPolicy.
+const (
+	McpServerDriftPolicyAutoApproveCompatible McpServerDriftPolicy = "auto_approve_compatible"
+	McpServerDriftPolicyHold                  McpServerDriftPolicy = "hold"
+)
+
+// Valid indicates whether the value is a known member of the McpServerDriftPolicy enum.
+func (e McpServerDriftPolicy) Valid() bool {
+	switch e {
+	case McpServerDriftPolicyAutoApproveCompatible:
+		return true
+	case McpServerDriftPolicyHold:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpServerLocation.
+const (
+	McpServerLocationCorporate   McpServerLocation = "corporate"
+	McpServerLocationExternal    McpServerLocation = "external"
+	McpServerLocationInNamespace McpServerLocation = "in_namespace"
+)
+
+// Valid indicates whether the value is a known member of the McpServerLocation enum.
+func (e McpServerLocation) Valid() bool {
+	switch e {
+	case McpServerLocationCorporate:
+		return true
+	case McpServerLocationExternal:
+		return true
+	case McpServerLocationInNamespace:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpServerReviewStatus.
+const (
+	McpServerReviewStatusApproved      McpServerReviewStatus = "approved"
+	McpServerReviewStatusDraft         McpServerReviewStatus = "draft"
+	McpServerReviewStatusPendingReview McpServerReviewStatus = "pending_review"
+	McpServerReviewStatusRejected      McpServerReviewStatus = "rejected"
+	McpServerReviewStatusSuspended     McpServerReviewStatus = "suspended"
+)
+
+// Valid indicates whether the value is a known member of the McpServerReviewStatus enum.
+func (e McpServerReviewStatus) Valid() bool {
+	switch e {
+	case McpServerReviewStatusApproved:
+		return true
+	case McpServerReviewStatusDraft:
+		return true
+	case McpServerReviewStatusPendingReview:
+		return true
+	case McpServerReviewStatusRejected:
+		return true
+	case McpServerReviewStatusSuspended:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpServerRiskTier.
+const (
+	McpServerRiskTierElevated    McpServerRiskTier = "elevated"
+	McpServerRiskTierHigh        McpServerRiskTier = "high"
+	McpServerRiskTierLessThannil McpServerRiskTier = "<nil>"
+	McpServerRiskTierLow         McpServerRiskTier = "low"
+)
+
+// Valid indicates whether the value is a known member of the McpServerRiskTier enum.
+func (e McpServerRiskTier) Valid() bool {
+	switch e {
+	case McpServerRiskTierElevated:
+		return true
+	case McpServerRiskTierHigh:
+		return true
+	case McpServerRiskTierLessThannil:
+		return true
+	case McpServerRiskTierLow:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpServerScope.
+const (
+	McpServerScopeEnterprise McpServerScope = "enterprise"
+	McpServerScopeTeam       McpServerScope = "team"
+)
+
+// Valid indicates whether the value is a known member of the McpServerScope enum.
+func (e McpServerScope) Valid() bool {
+	switch e {
+	case McpServerScopeEnterprise:
+		return true
+	case McpServerScopeTeam:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpServerTransport.
+const (
+	McpServerTransportHosted         McpServerTransport = "hosted"
+	McpServerTransportStreamableHttp McpServerTransport = "streamable_http"
+)
+
+// Valid indicates whether the value is a known member of the McpServerTransport enum.
+func (e McpServerTransport) Valid() bool {
+	switch e {
+	case McpServerTransportHosted:
+		return true
+	case McpServerTransportStreamableHttp:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpUsageReportGroupBy.
+const (
+	McpUsageReportGroupByAgent     McpUsageReportGroupBy = "agent"
+	McpUsageReportGroupByDay       McpUsageReportGroupBy = "day"
+	McpUsageReportGroupByPrimitive McpUsageReportGroupBy = "primitive"
+	McpUsageReportGroupByServer    McpUsageReportGroupBy = "server"
+	McpUsageReportGroupByTeam      McpUsageReportGroupBy = "team"
+)
+
+// Valid indicates whether the value is a known member of the McpUsageReportGroupBy enum.
+func (e McpUsageReportGroupBy) Valid() bool {
+	switch e {
+	case McpUsageReportGroupByAgent:
+		return true
+	case McpUsageReportGroupByDay:
+		return true
+	case McpUsageReportGroupByPrimitive:
+		return true
+	case McpUsageReportGroupByServer:
+		return true
+	case McpUsageReportGroupByTeam:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for McpUsageReportView.
+const (
+	McpUsageReportViewAdoption  McpUsageReportView = "adoption"
+	McpUsageReportViewDiscovery McpUsageReportView = "discovery"
+	McpUsageReportViewRefusals  McpUsageReportView = "refusals"
+	McpUsageReportViewUnused    McpUsageReportView = "unused"
+	McpUsageReportViewUsage     McpUsageReportView = "usage"
+)
+
+// Valid indicates whether the value is a known member of the McpUsageReportView enum.
+func (e McpUsageReportView) Valid() bool {
+	switch e {
+	case McpUsageReportViewAdoption:
+		return true
+	case McpUsageReportViewDiscovery:
+		return true
+	case McpUsageReportViewRefusals:
+		return true
+	case McpUsageReportViewUnused:
+		return true
+	case McpUsageReportViewUsage:
 		return true
 	default:
 		return false
@@ -2928,6 +4092,24 @@ func (e PutConfigValueRequestSource) Valid() bool {
 	}
 }
 
+// Defines values for PutMcpPolicyRequestDriftPolicy.
+const (
+	PutMcpPolicyRequestDriftPolicyAutoApproveCompatible PutMcpPolicyRequestDriftPolicy = "auto_approve_compatible"
+	PutMcpPolicyRequestDriftPolicyHold                  PutMcpPolicyRequestDriftPolicy = "hold"
+)
+
+// Valid indicates whether the value is a known member of the PutMcpPolicyRequestDriftPolicy enum.
+func (e PutMcpPolicyRequestDriftPolicy) Valid() bool {
+	switch e {
+	case PutMcpPolicyRequestDriftPolicyAutoApproveCompatible:
+		return true
+	case PutMcpPolicyRequestDriftPolicyHold:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for PutServiceModelAccessRequestAccess.
 const (
 	PutServiceModelAccessRequestAccessAll      PutServiceModelAccessRequestAccess = "all"
@@ -3012,6 +4194,42 @@ func (e PutTeamGatewaySettingsRequestDeployment) Valid() bool {
 	case PutTeamGatewaySettingsRequestDeploymentPerNamespace:
 		return true
 	case PutTeamGatewaySettingsRequestDeploymentShared:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for PutTeamGatewaySettingsRequestMcpPlacement.
+const (
+	PutTeamGatewaySettingsRequestMcpPlacementCombined PutTeamGatewaySettingsRequestMcpPlacement = "combined"
+	PutTeamGatewaySettingsRequestMcpPlacementSeparate PutTeamGatewaySettingsRequestMcpPlacement = "separate"
+)
+
+// Valid indicates whether the value is a known member of the PutTeamGatewaySettingsRequestMcpPlacement enum.
+func (e PutTeamGatewaySettingsRequestMcpPlacement) Valid() bool {
+	switch e {
+	case PutTeamGatewaySettingsRequestMcpPlacementCombined:
+		return true
+	case PutTeamGatewaySettingsRequestMcpPlacementSeparate:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for PutTeamMcpServerRequestMode.
+const (
+	PutTeamMcpServerRequestModeFull     PutTeamMcpServerRequestMode = "full"
+	PutTeamMcpServerRequestModeReadOnly PutTeamMcpServerRequestMode = "read_only"
+)
+
+// Valid indicates whether the value is a known member of the PutTeamMcpServerRequestMode enum.
+func (e PutTeamMcpServerRequestMode) Valid() bool {
+	switch e {
+	case PutTeamMcpServerRequestModeFull:
+		return true
+	case PutTeamMcpServerRequestModeReadOnly:
 		return true
 	default:
 		return false
@@ -3900,6 +5118,105 @@ func (e TeamGatewaySettingsGatewayState) Valid() bool {
 	}
 }
 
+// Defines values for TeamGatewaySettingsMcpPlacement.
+const (
+	TeamGatewaySettingsMcpPlacementCombined TeamGatewaySettingsMcpPlacement = "combined"
+	TeamGatewaySettingsMcpPlacementSeparate TeamGatewaySettingsMcpPlacement = "separate"
+)
+
+// Valid indicates whether the value is a known member of the TeamGatewaySettingsMcpPlacement enum.
+func (e TeamGatewaySettingsMcpPlacement) Valid() bool {
+	switch e {
+	case TeamGatewaySettingsMcpPlacementCombined:
+		return true
+	case TeamGatewaySettingsMcpPlacementSeparate:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamMcpServerFederationState.
+const (
+	TeamMcpServerFederationStateFailed      TeamMcpServerFederationState = "failed"
+	TeamMcpServerFederationStateLessThannil TeamMcpServerFederationState = "<nil>"
+	TeamMcpServerFederationStateOk          TeamMcpServerFederationState = "ok"
+	TeamMcpServerFederationStateUnknown     TeamMcpServerFederationState = "unknown"
+)
+
+// Valid indicates whether the value is a known member of the TeamMcpServerFederationState enum.
+func (e TeamMcpServerFederationState) Valid() bool {
+	switch e {
+	case TeamMcpServerFederationStateFailed:
+		return true
+	case TeamMcpServerFederationStateLessThannil:
+		return true
+	case TeamMcpServerFederationStateOk:
+		return true
+	case TeamMcpServerFederationStateUnknown:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamMcpServerManaged.
+const (
+	TeamMcpServerManagedEnterprise TeamMcpServerManaged = "enterprise"
+	TeamMcpServerManagedTeam       TeamMcpServerManaged = "team"
+)
+
+// Valid indicates whether the value is a known member of the TeamMcpServerManaged enum.
+func (e TeamMcpServerManaged) Valid() bool {
+	switch e {
+	case TeamMcpServerManagedEnterprise:
+		return true
+	case TeamMcpServerManagedTeam:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamMcpServerMode.
+const (
+	TeamMcpServerModeFull     TeamMcpServerMode = "full"
+	TeamMcpServerModeReadOnly TeamMcpServerMode = "read_only"
+)
+
+// Valid indicates whether the value is a known member of the TeamMcpServerMode enum.
+func (e TeamMcpServerMode) Valid() bool {
+	switch e {
+	case TeamMcpServerModeFull:
+		return true
+	case TeamMcpServerModeReadOnly:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for TeamMcpServerState.
+const (
+	TeamMcpServerStateOff     TeamMcpServerState = "off"
+	TeamMcpServerStateOn      TeamMcpServerState = "on"
+	TeamMcpServerStatePending TeamMcpServerState = "pending"
+)
+
+// Valid indicates whether the value is a known member of the TeamMcpServerState enum.
+func (e TeamMcpServerState) Valid() bool {
+	switch e {
+	case TeamMcpServerStateOff:
+		return true
+	case TeamMcpServerStateOn:
+		return true
+	case TeamMcpServerStatePending:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for TeamModelEndpointAuthKind.
 const (
 	TeamModelEndpointAuthKindAzureFederated  TeamModelEndpointAuthKind = "azure_federated"
@@ -4356,6 +5673,135 @@ func (e UpdateInferenceProviderRequestTeamSelection) Valid() bool {
 	}
 }
 
+// Defines values for UpdateMcpServerRequestAuthKind.
+const (
+	UpdateMcpServerRequestAuthKindAwsSigv4           UpdateMcpServerRequestAuthKind = "aws_sigv4"
+	UpdateMcpServerRequestAuthKindNone               UpdateMcpServerRequestAuthKind = "none"
+	UpdateMcpServerRequestAuthKindOauthClient        UpdateMcpServerRequestAuthKind = "oauth_client"
+	UpdateMcpServerRequestAuthKindOauthUser          UpdateMcpServerRequestAuthKind = "oauth_user"
+	UpdateMcpServerRequestAuthKindStatic             UpdateMcpServerRequestAuthKind = "static"
+	UpdateMcpServerRequestAuthKindWorkloadFederation UpdateMcpServerRequestAuthKind = "workload_federation"
+)
+
+// Valid indicates whether the value is a known member of the UpdateMcpServerRequestAuthKind enum.
+func (e UpdateMcpServerRequestAuthKind) Valid() bool {
+	switch e {
+	case UpdateMcpServerRequestAuthKindAwsSigv4:
+		return true
+	case UpdateMcpServerRequestAuthKindNone:
+		return true
+	case UpdateMcpServerRequestAuthKindOauthClient:
+		return true
+	case UpdateMcpServerRequestAuthKindOauthUser:
+		return true
+	case UpdateMcpServerRequestAuthKindStatic:
+		return true
+	case UpdateMcpServerRequestAuthKindWorkloadFederation:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for UpdateMcpServerRequestCredentialMode.
+const (
+	UpdateMcpServerRequestCredentialModePerTeam UpdateMcpServerRequestCredentialMode = "per_team"
+	UpdateMcpServerRequestCredentialModeShared  UpdateMcpServerRequestCredentialMode = "shared"
+)
+
+// Valid indicates whether the value is a known member of the UpdateMcpServerRequestCredentialMode enum.
+func (e UpdateMcpServerRequestCredentialMode) Valid() bool {
+	switch e {
+	case UpdateMcpServerRequestCredentialModePerTeam:
+		return true
+	case UpdateMcpServerRequestCredentialModeShared:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for UpdateMcpServerRequestDataClassification.
+const (
+	UpdateMcpServerRequestDataClassificationConfidential UpdateMcpServerRequestDataClassification = "confidential"
+	UpdateMcpServerRequestDataClassificationInternal     UpdateMcpServerRequestDataClassification = "internal"
+	UpdateMcpServerRequestDataClassificationPublic       UpdateMcpServerRequestDataClassification = "public"
+	UpdateMcpServerRequestDataClassificationRestricted   UpdateMcpServerRequestDataClassification = "restricted"
+)
+
+// Valid indicates whether the value is a known member of the UpdateMcpServerRequestDataClassification enum.
+func (e UpdateMcpServerRequestDataClassification) Valid() bool {
+	switch e {
+	case UpdateMcpServerRequestDataClassificationConfidential:
+		return true
+	case UpdateMcpServerRequestDataClassificationInternal:
+		return true
+	case UpdateMcpServerRequestDataClassificationPublic:
+		return true
+	case UpdateMcpServerRequestDataClassificationRestricted:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for UpdateMcpServerRequestDriftPolicy.
+const (
+	UpdateMcpServerRequestDriftPolicyAutoApproveCompatible UpdateMcpServerRequestDriftPolicy = "auto_approve_compatible"
+	UpdateMcpServerRequestDriftPolicyHold                  UpdateMcpServerRequestDriftPolicy = "hold"
+)
+
+// Valid indicates whether the value is a known member of the UpdateMcpServerRequestDriftPolicy enum.
+func (e UpdateMcpServerRequestDriftPolicy) Valid() bool {
+	switch e {
+	case UpdateMcpServerRequestDriftPolicyAutoApproveCompatible:
+		return true
+	case UpdateMcpServerRequestDriftPolicyHold:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for UpdateMcpServerRequestLocation.
+const (
+	UpdateMcpServerRequestLocationCorporate   UpdateMcpServerRequestLocation = "corporate"
+	UpdateMcpServerRequestLocationExternal    UpdateMcpServerRequestLocation = "external"
+	UpdateMcpServerRequestLocationInNamespace UpdateMcpServerRequestLocation = "in_namespace"
+)
+
+// Valid indicates whether the value is a known member of the UpdateMcpServerRequestLocation enum.
+func (e UpdateMcpServerRequestLocation) Valid() bool {
+	switch e {
+	case UpdateMcpServerRequestLocationCorporate:
+		return true
+	case UpdateMcpServerRequestLocationExternal:
+		return true
+	case UpdateMcpServerRequestLocationInNamespace:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for UpdateMcpServerRequestTransport.
+const (
+	UpdateMcpServerRequestTransportHosted         UpdateMcpServerRequestTransport = "hosted"
+	UpdateMcpServerRequestTransportStreamableHttp UpdateMcpServerRequestTransport = "streamable_http"
+)
+
+// Valid indicates whether the value is a known member of the UpdateMcpServerRequestTransport enum.
+func (e UpdateMcpServerRequestTransport) Valid() bool {
+	switch e {
+	case UpdateMcpServerRequestTransportHosted:
+		return true
+	case UpdateMcpServerRequestTransportStreamableHttp:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for UpdateMemberRequestRole.
 const (
 	UpdateMemberRequestRoleTeamAdmin        UpdateMemberRequestRole = "team_admin"
@@ -4536,6 +5982,99 @@ func (e UpdateSwarmTemplateRequestTeardownRule) Valid() bool {
 	case UpdateSwarmTemplateRequestTeardownRuleAtExpiry:
 		return true
 	case UpdateSwarmTemplateRequestTeardownRuleAtWorkComplete:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for UpdateTeamMcpServerRequestAuthKind.
+const (
+	UpdateTeamMcpServerRequestAuthKindAwsSigv4           UpdateTeamMcpServerRequestAuthKind = "aws_sigv4"
+	UpdateTeamMcpServerRequestAuthKindNone               UpdateTeamMcpServerRequestAuthKind = "none"
+	UpdateTeamMcpServerRequestAuthKindOauthClient        UpdateTeamMcpServerRequestAuthKind = "oauth_client"
+	UpdateTeamMcpServerRequestAuthKindOauthUser          UpdateTeamMcpServerRequestAuthKind = "oauth_user"
+	UpdateTeamMcpServerRequestAuthKindStatic             UpdateTeamMcpServerRequestAuthKind = "static"
+	UpdateTeamMcpServerRequestAuthKindWorkloadFederation UpdateTeamMcpServerRequestAuthKind = "workload_federation"
+)
+
+// Valid indicates whether the value is a known member of the UpdateTeamMcpServerRequestAuthKind enum.
+func (e UpdateTeamMcpServerRequestAuthKind) Valid() bool {
+	switch e {
+	case UpdateTeamMcpServerRequestAuthKindAwsSigv4:
+		return true
+	case UpdateTeamMcpServerRequestAuthKindNone:
+		return true
+	case UpdateTeamMcpServerRequestAuthKindOauthClient:
+		return true
+	case UpdateTeamMcpServerRequestAuthKindOauthUser:
+		return true
+	case UpdateTeamMcpServerRequestAuthKindStatic:
+		return true
+	case UpdateTeamMcpServerRequestAuthKindWorkloadFederation:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for UpdateTeamMcpServerRequestDataClassification.
+const (
+	UpdateTeamMcpServerRequestDataClassificationConfidential UpdateTeamMcpServerRequestDataClassification = "confidential"
+	UpdateTeamMcpServerRequestDataClassificationInternal     UpdateTeamMcpServerRequestDataClassification = "internal"
+	UpdateTeamMcpServerRequestDataClassificationPublic       UpdateTeamMcpServerRequestDataClassification = "public"
+	UpdateTeamMcpServerRequestDataClassificationRestricted   UpdateTeamMcpServerRequestDataClassification = "restricted"
+)
+
+// Valid indicates whether the value is a known member of the UpdateTeamMcpServerRequestDataClassification enum.
+func (e UpdateTeamMcpServerRequestDataClassification) Valid() bool {
+	switch e {
+	case UpdateTeamMcpServerRequestDataClassificationConfidential:
+		return true
+	case UpdateTeamMcpServerRequestDataClassificationInternal:
+		return true
+	case UpdateTeamMcpServerRequestDataClassificationPublic:
+		return true
+	case UpdateTeamMcpServerRequestDataClassificationRestricted:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for UpdateTeamMcpServerRequestLocation.
+const (
+	UpdateTeamMcpServerRequestLocationCorporate   UpdateTeamMcpServerRequestLocation = "corporate"
+	UpdateTeamMcpServerRequestLocationExternal    UpdateTeamMcpServerRequestLocation = "external"
+	UpdateTeamMcpServerRequestLocationInNamespace UpdateTeamMcpServerRequestLocation = "in_namespace"
+)
+
+// Valid indicates whether the value is a known member of the UpdateTeamMcpServerRequestLocation enum.
+func (e UpdateTeamMcpServerRequestLocation) Valid() bool {
+	switch e {
+	case UpdateTeamMcpServerRequestLocationCorporate:
+		return true
+	case UpdateTeamMcpServerRequestLocationExternal:
+		return true
+	case UpdateTeamMcpServerRequestLocationInNamespace:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for UpdateTeamMcpServerRequestTransport.
+const (
+	UpdateTeamMcpServerRequestTransportHosted         UpdateTeamMcpServerRequestTransport = "hosted"
+	UpdateTeamMcpServerRequestTransportStreamableHttp UpdateTeamMcpServerRequestTransport = "streamable_http"
+)
+
+// Valid indicates whether the value is a known member of the UpdateTeamMcpServerRequestTransport enum.
+func (e UpdateTeamMcpServerRequestTransport) Valid() bool {
+	switch e {
+	case UpdateTeamMcpServerRequestTransportHosted:
+		return true
+	case UpdateTeamMcpServerRequestTransportStreamableHttp:
 		return true
 	default:
 		return false
@@ -5177,103 +6716,145 @@ func (e ListOrchestrationEndpointsParamsState) Valid() bool {
 
 // Defines values for PutSettingParamsKey.
 const (
-	ApiCorsOrigins                     PutSettingParamsKey = "api.cors_origins"
-	ApiIdempotencyKeyTtlSeconds        PutSettingParamsKey = "api.idempotency_key_ttl_seconds"
-	BillingTagActivationAcknowledged   PutSettingParamsKey = "billing.tag_activation_acknowledged"
-	BillingVarianceAlertPct            PutSettingParamsKey = "billing.variance_alert_pct"
-	CollabAllowedSourceCidrs           PutSettingParamsKey = "collab.allowed_source_cidrs"
-	CollabContentScan                  PutSettingParamsKey = "collab.content_scan"
-	CollabDeniedSpikeThreshold         PutSettingParamsKey = "collab.denied_spike_threshold"
-	CollabMaxBodyMb                    PutSettingParamsKey = "collab.max_body_mb"
-	CollabSessionTtlMinutes            PutSettingParamsKey = "collab.session_ttl_minutes"
-	EgressDeniedSpikeThreshold         PutSettingParamsKey = "egress.denied_spike_threshold"
-	GatewayReservationTtlSeconds       PutSettingParamsKey = "gateway.reservation_ttl_seconds"
-	ModelsDefaultModelId               PutSettingParamsKey = "models.default_model_id"
-	ModelsDefaultTeamAccess            PutSettingParamsKey = "models.default_team_access"
-	ModelsDefaultTeamModels            PutSettingParamsKey = "models.default_team_models"
-	ModelsServiceAccess                PutSettingParamsKey = "models.service_access"
-	OrchestrationDefaultLimit          PutSettingParamsKey = "orchestration.default_limit"
-	OrchestrationDefaultResources      PutSettingParamsKey = "orchestration.default_resources"
-	OrchestrationDefaultVolumeGib      PutSettingParamsKey = "orchestration.default_volume_gib"
-	OrchestrationDefaultWebApiExposure PutSettingParamsKey = "orchestration.default_web_api_exposure"
-	OrchestrationDefaultWebUiExposure  PutSettingParamsKey = "orchestration.default_web_ui_exposure"
-	OrchestrationPrivateBaseDomain     PutSettingParamsKey = "orchestration.private_base_domain"
-	OrchestrationPrivateEndpoints      PutSettingParamsKey = "orchestration.private_endpoints"
-	OrchestrationPublicBaseDomain      PutSettingParamsKey = "orchestration.public_base_domain"
-	OrchestrationPublicEndpoints       PutSettingParamsKey = "orchestration.public_endpoints"
-	OrchestrationTools                 PutSettingParamsKey = "orchestration.tools"
-	PricingPriceListSync               PutSettingParamsKey = "pricing.price_list_sync"
-	ReportsIdleCpuMillicores           PutSettingParamsKey = "reports.idle_cpu_millicores"
-	SecretsPathPrefix                  PutSettingParamsKey = "secrets.path_prefix"
-	TeamsEphemeralMaxDays              PutSettingParamsKey = "teams.ephemeral_max_days"
-	WorkOrdersNotificationChannelId    PutSettingParamsKey = "work_orders.notification_channel_id"
-	WorkOrdersSlaWarningHours          PutSettingParamsKey = "work_orders.sla_warning_hours"
+	PutSettingParamsKeyApiCorsOrigins                     PutSettingParamsKey = "api.cors_origins"
+	PutSettingParamsKeyApiIdempotencyKeyTtlSeconds        PutSettingParamsKey = "api.idempotency_key_ttl_seconds"
+	PutSettingParamsKeyBillingTagActivationAcknowledged   PutSettingParamsKey = "billing.tag_activation_acknowledged"
+	PutSettingParamsKeyBillingVarianceAlertPct            PutSettingParamsKey = "billing.variance_alert_pct"
+	PutSettingParamsKeyCollabAllowedSourceCidrs           PutSettingParamsKey = "collab.allowed_source_cidrs"
+	PutSettingParamsKeyCollabContentScan                  PutSettingParamsKey = "collab.content_scan"
+	PutSettingParamsKeyCollabDeniedSpikeThreshold         PutSettingParamsKey = "collab.denied_spike_threshold"
+	PutSettingParamsKeyCollabMaxBodyMb                    PutSettingParamsKey = "collab.max_body_mb"
+	PutSettingParamsKeyCollabSessionTtlMinutes            PutSettingParamsKey = "collab.session_ttl_minutes"
+	PutSettingParamsKeyEgressDeniedSpikeThreshold         PutSettingParamsKey = "egress.denied_spike_threshold"
+	PutSettingParamsKeyFederationAllowedAudiences         PutSettingParamsKey = "federation.allowed_audiences"
+	PutSettingParamsKeyGatewayMcpPlacementDefault         PutSettingParamsKey = "gateway.mcp.placement_default"
+	PutSettingParamsKeyGatewayReservationTtlSeconds       PutSettingParamsKey = "gateway.reservation_ttl_seconds"
+	PutSettingParamsKeyMcpAllowedImageRegistries          PutSettingParamsKey = "mcp.allowed_image_registries"
+	PutSettingParamsKeyMcpCorporateDomains                PutSettingParamsKey = "mcp.corporate_domains"
+	PutSettingParamsKeyMcpDefaultAgentMode                PutSettingParamsKey = "mcp.default_agent_mode"
+	PutSettingParamsKeyMcpEnabled                         PutSettingParamsKey = "mcp.enabled"
+	PutSettingParamsKeyMcpEventsRetentionMonths           PutSettingParamsKey = "mcp.events_retention_months"
+	PutSettingParamsKeyMcpHostDenyList                    PutSettingParamsKey = "mcp.host_deny_list"
+	PutSettingParamsKeyMcpImageSignaturePolicy            PutSettingParamsKey = "mcp.image_signature_policy"
+	PutSettingParamsKeyMcpLimits                          PutSettingParamsKey = "mcp.limits"
+	PutSettingParamsKeyMcpQueryCaptureMaxDays             PutSettingParamsKey = "mcp.query_capture_max_days"
+	PutSettingParamsKeyMcpRefreshIntervalMinutes          PutSettingParamsKey = "mcp.refresh_interval_minutes"
+	PutSettingParamsKeyMcpSearchLimitMax                  PutSettingParamsKey = "mcp.search_limit_max"
+	PutSettingParamsKeyMcpTeamServerApproval              PutSettingParamsKey = "mcp.team_server_approval"
+	PutSettingParamsKeyModelsDefaultModelId               PutSettingParamsKey = "models.default_model_id"
+	PutSettingParamsKeyModelsDefaultTeamAccess            PutSettingParamsKey = "models.default_team_access"
+	PutSettingParamsKeyModelsDefaultTeamModels            PutSettingParamsKey = "models.default_team_models"
+	PutSettingParamsKeyModelsServiceAccess                PutSettingParamsKey = "models.service_access"
+	PutSettingParamsKeyOrchestrationDefaultLimit          PutSettingParamsKey = "orchestration.default_limit"
+	PutSettingParamsKeyOrchestrationDefaultResources      PutSettingParamsKey = "orchestration.default_resources"
+	PutSettingParamsKeyOrchestrationDefaultVolumeGib      PutSettingParamsKey = "orchestration.default_volume_gib"
+	PutSettingParamsKeyOrchestrationDefaultWebApiExposure PutSettingParamsKey = "orchestration.default_web_api_exposure"
+	PutSettingParamsKeyOrchestrationDefaultWebUiExposure  PutSettingParamsKey = "orchestration.default_web_ui_exposure"
+	PutSettingParamsKeyOrchestrationPrivateBaseDomain     PutSettingParamsKey = "orchestration.private_base_domain"
+	PutSettingParamsKeyOrchestrationPrivateEndpoints      PutSettingParamsKey = "orchestration.private_endpoints"
+	PutSettingParamsKeyOrchestrationPublicBaseDomain      PutSettingParamsKey = "orchestration.public_base_domain"
+	PutSettingParamsKeyOrchestrationPublicEndpoints       PutSettingParamsKey = "orchestration.public_endpoints"
+	PutSettingParamsKeyOrchestrationTools                 PutSettingParamsKey = "orchestration.tools"
+	PutSettingParamsKeyPricingPriceListSync               PutSettingParamsKey = "pricing.price_list_sync"
+	PutSettingParamsKeyReportsIdleCpuMillicores           PutSettingParamsKey = "reports.idle_cpu_millicores"
+	PutSettingParamsKeySecretsPathPrefix                  PutSettingParamsKey = "secrets.path_prefix"
+	PutSettingParamsKeyTeamsEphemeralMaxDays              PutSettingParamsKey = "teams.ephemeral_max_days"
+	PutSettingParamsKeyWorkOrdersNotificationChannelId    PutSettingParamsKey = "work_orders.notification_channel_id"
+	PutSettingParamsKeyWorkOrdersSlaWarningHours          PutSettingParamsKey = "work_orders.sla_warning_hours"
 )
 
 // Valid indicates whether the value is a known member of the PutSettingParamsKey enum.
 func (e PutSettingParamsKey) Valid() bool {
 	switch e {
-	case ApiCorsOrigins:
+	case PutSettingParamsKeyApiCorsOrigins:
 		return true
-	case ApiIdempotencyKeyTtlSeconds:
+	case PutSettingParamsKeyApiIdempotencyKeyTtlSeconds:
 		return true
-	case BillingTagActivationAcknowledged:
+	case PutSettingParamsKeyBillingTagActivationAcknowledged:
 		return true
-	case BillingVarianceAlertPct:
+	case PutSettingParamsKeyBillingVarianceAlertPct:
 		return true
-	case CollabAllowedSourceCidrs:
+	case PutSettingParamsKeyCollabAllowedSourceCidrs:
 		return true
-	case CollabContentScan:
+	case PutSettingParamsKeyCollabContentScan:
 		return true
-	case CollabDeniedSpikeThreshold:
+	case PutSettingParamsKeyCollabDeniedSpikeThreshold:
 		return true
-	case CollabMaxBodyMb:
+	case PutSettingParamsKeyCollabMaxBodyMb:
 		return true
-	case CollabSessionTtlMinutes:
+	case PutSettingParamsKeyCollabSessionTtlMinutes:
 		return true
-	case EgressDeniedSpikeThreshold:
+	case PutSettingParamsKeyEgressDeniedSpikeThreshold:
 		return true
-	case GatewayReservationTtlSeconds:
+	case PutSettingParamsKeyFederationAllowedAudiences:
 		return true
-	case ModelsDefaultModelId:
+	case PutSettingParamsKeyGatewayMcpPlacementDefault:
 		return true
-	case ModelsDefaultTeamAccess:
+	case PutSettingParamsKeyGatewayReservationTtlSeconds:
 		return true
-	case ModelsDefaultTeamModels:
+	case PutSettingParamsKeyMcpAllowedImageRegistries:
 		return true
-	case ModelsServiceAccess:
+	case PutSettingParamsKeyMcpCorporateDomains:
 		return true
-	case OrchestrationDefaultLimit:
+	case PutSettingParamsKeyMcpDefaultAgentMode:
 		return true
-	case OrchestrationDefaultResources:
+	case PutSettingParamsKeyMcpEnabled:
 		return true
-	case OrchestrationDefaultVolumeGib:
+	case PutSettingParamsKeyMcpEventsRetentionMonths:
 		return true
-	case OrchestrationDefaultWebApiExposure:
+	case PutSettingParamsKeyMcpHostDenyList:
 		return true
-	case OrchestrationDefaultWebUiExposure:
+	case PutSettingParamsKeyMcpImageSignaturePolicy:
 		return true
-	case OrchestrationPrivateBaseDomain:
+	case PutSettingParamsKeyMcpLimits:
 		return true
-	case OrchestrationPrivateEndpoints:
+	case PutSettingParamsKeyMcpQueryCaptureMaxDays:
 		return true
-	case OrchestrationPublicBaseDomain:
+	case PutSettingParamsKeyMcpRefreshIntervalMinutes:
 		return true
-	case OrchestrationPublicEndpoints:
+	case PutSettingParamsKeyMcpSearchLimitMax:
 		return true
-	case OrchestrationTools:
+	case PutSettingParamsKeyMcpTeamServerApproval:
 		return true
-	case PricingPriceListSync:
+	case PutSettingParamsKeyModelsDefaultModelId:
 		return true
-	case ReportsIdleCpuMillicores:
+	case PutSettingParamsKeyModelsDefaultTeamAccess:
 		return true
-	case SecretsPathPrefix:
+	case PutSettingParamsKeyModelsDefaultTeamModels:
 		return true
-	case TeamsEphemeralMaxDays:
+	case PutSettingParamsKeyModelsServiceAccess:
 		return true
-	case WorkOrdersNotificationChannelId:
+	case PutSettingParamsKeyOrchestrationDefaultLimit:
 		return true
-	case WorkOrdersSlaWarningHours:
+	case PutSettingParamsKeyOrchestrationDefaultResources:
+		return true
+	case PutSettingParamsKeyOrchestrationDefaultVolumeGib:
+		return true
+	case PutSettingParamsKeyOrchestrationDefaultWebApiExposure:
+		return true
+	case PutSettingParamsKeyOrchestrationDefaultWebUiExposure:
+		return true
+	case PutSettingParamsKeyOrchestrationPrivateBaseDomain:
+		return true
+	case PutSettingParamsKeyOrchestrationPrivateEndpoints:
+		return true
+	case PutSettingParamsKeyOrchestrationPublicBaseDomain:
+		return true
+	case PutSettingParamsKeyOrchestrationPublicEndpoints:
+		return true
+	case PutSettingParamsKeyOrchestrationTools:
+		return true
+	case PutSettingParamsKeyPricingPriceListSync:
+		return true
+	case PutSettingParamsKeyReportsIdleCpuMillicores:
+		return true
+	case PutSettingParamsKeySecretsPathPrefix:
+		return true
+	case PutSettingParamsKeyTeamsEphemeralMaxDays:
+		return true
+	case PutSettingParamsKeyWorkOrdersNotificationChannelId:
+		return true
+	case PutSettingParamsKeyWorkOrdersSlaWarningHours:
 		return true
 	default:
 		return false
@@ -5289,6 +6870,231 @@ const (
 func (e ListAgentTemplatesParamsCapability) Valid() bool {
 	switch e {
 	case ListAgentTemplatesParamsCapabilityPaperclip:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListMcpEventsParamsOutcome.
+const (
+	ListMcpEventsParamsOutcomeCancelled           ListMcpEventsParamsOutcome = "cancelled"
+	ListMcpEventsParamsOutcomeOk                  ListMcpEventsParamsOutcome = "ok"
+	ListMcpEventsParamsOutcomeProtocolError       ListMcpEventsParamsOutcome = "protocol_error"
+	ListMcpEventsParamsOutcomeRefused             ListMcpEventsParamsOutcome = "refused"
+	ListMcpEventsParamsOutcomeTimeout             ListMcpEventsParamsOutcome = "timeout"
+	ListMcpEventsParamsOutcomeToolError           ListMcpEventsParamsOutcome = "tool_error"
+	ListMcpEventsParamsOutcomeUpstreamUnavailable ListMcpEventsParamsOutcome = "upstream_unavailable"
+)
+
+// Valid indicates whether the value is a known member of the ListMcpEventsParamsOutcome enum.
+func (e ListMcpEventsParamsOutcome) Valid() bool {
+	switch e {
+	case ListMcpEventsParamsOutcomeCancelled:
+		return true
+	case ListMcpEventsParamsOutcomeOk:
+		return true
+	case ListMcpEventsParamsOutcomeProtocolError:
+		return true
+	case ListMcpEventsParamsOutcomeRefused:
+		return true
+	case ListMcpEventsParamsOutcomeTimeout:
+		return true
+	case ListMcpEventsParamsOutcomeToolError:
+		return true
+	case ListMcpEventsParamsOutcomeUpstreamUnavailable:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListMcpReviewsParamsKind.
+const (
+	ListMcpReviewsParamsKindPrimitive ListMcpReviewsParamsKind = "primitive"
+	ListMcpReviewsParamsKindServer    ListMcpReviewsParamsKind = "server"
+)
+
+// Valid indicates whether the value is a known member of the ListMcpReviewsParamsKind enum.
+func (e ListMcpReviewsParamsKind) Valid() bool {
+	switch e {
+	case ListMcpReviewsParamsKindPrimitive:
+		return true
+	case ListMcpReviewsParamsKindServer:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListMcpReviewsParamsRiskTier.
+const (
+	ListMcpReviewsParamsRiskTierElevated ListMcpReviewsParamsRiskTier = "elevated"
+	ListMcpReviewsParamsRiskTierHigh     ListMcpReviewsParamsRiskTier = "high"
+	ListMcpReviewsParamsRiskTierLow      ListMcpReviewsParamsRiskTier = "low"
+)
+
+// Valid indicates whether the value is a known member of the ListMcpReviewsParamsRiskTier enum.
+func (e ListMcpReviewsParamsRiskTier) Valid() bool {
+	switch e {
+	case ListMcpReviewsParamsRiskTierElevated:
+		return true
+	case ListMcpReviewsParamsRiskTierHigh:
+		return true
+	case ListMcpReviewsParamsRiskTierLow:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListMcpReviewsParamsApprover.
+const (
+	ListMcpReviewsParamsApproverSecurity  ListMcpReviewsParamsApprover = "security"
+	ListMcpReviewsParamsApproverTeamAdmin ListMcpReviewsParamsApprover = "team_admin"
+)
+
+// Valid indicates whether the value is a known member of the ListMcpReviewsParamsApprover enum.
+func (e ListMcpReviewsParamsApprover) Valid() bool {
+	switch e {
+	case ListMcpReviewsParamsApproverSecurity:
+		return true
+	case ListMcpReviewsParamsApproverTeamAdmin:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListMcpServersParamsScope.
+const (
+	ListMcpServersParamsScopeAll        ListMcpServersParamsScope = "all"
+	ListMcpServersParamsScopeEnterprise ListMcpServersParamsScope = "enterprise"
+	ListMcpServersParamsScopeTeam       ListMcpServersParamsScope = "team"
+)
+
+// Valid indicates whether the value is a known member of the ListMcpServersParamsScope enum.
+func (e ListMcpServersParamsScope) Valid() bool {
+	switch e {
+	case ListMcpServersParamsScopeAll:
+		return true
+	case ListMcpServersParamsScopeEnterprise:
+		return true
+	case ListMcpServersParamsScopeTeam:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListMcpServersParamsReviewStatus.
+const (
+	ListMcpServersParamsReviewStatusApproved      ListMcpServersParamsReviewStatus = "approved"
+	ListMcpServersParamsReviewStatusDraft         ListMcpServersParamsReviewStatus = "draft"
+	ListMcpServersParamsReviewStatusPendingReview ListMcpServersParamsReviewStatus = "pending_review"
+	ListMcpServersParamsReviewStatusRejected      ListMcpServersParamsReviewStatus = "rejected"
+	ListMcpServersParamsReviewStatusSuspended     ListMcpServersParamsReviewStatus = "suspended"
+)
+
+// Valid indicates whether the value is a known member of the ListMcpServersParamsReviewStatus enum.
+func (e ListMcpServersParamsReviewStatus) Valid() bool {
+	switch e {
+	case ListMcpServersParamsReviewStatusApproved:
+		return true
+	case ListMcpServersParamsReviewStatusDraft:
+		return true
+	case ListMcpServersParamsReviewStatusPendingReview:
+		return true
+	case ListMcpServersParamsReviewStatusRejected:
+		return true
+	case ListMcpServersParamsReviewStatusSuspended:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListMcpServersParamsRiskTier.
+const (
+	ListMcpServersParamsRiskTierElevated ListMcpServersParamsRiskTier = "elevated"
+	ListMcpServersParamsRiskTierHigh     ListMcpServersParamsRiskTier = "high"
+	ListMcpServersParamsRiskTierLow      ListMcpServersParamsRiskTier = "low"
+)
+
+// Valid indicates whether the value is a known member of the ListMcpServersParamsRiskTier enum.
+func (e ListMcpServersParamsRiskTier) Valid() bool {
+	switch e {
+	case ListMcpServersParamsRiskTierElevated:
+		return true
+	case ListMcpServersParamsRiskTierHigh:
+		return true
+	case ListMcpServersParamsRiskTierLow:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListMcpServersParamsLocation.
+const (
+	ListMcpServersParamsLocationCorporate   ListMcpServersParamsLocation = "corporate"
+	ListMcpServersParamsLocationExternal    ListMcpServersParamsLocation = "external"
+	ListMcpServersParamsLocationInNamespace ListMcpServersParamsLocation = "in_namespace"
+)
+
+// Valid indicates whether the value is a known member of the ListMcpServersParamsLocation enum.
+func (e ListMcpServersParamsLocation) Valid() bool {
+	switch e {
+	case ListMcpServersParamsLocationCorporate:
+		return true
+	case ListMcpServersParamsLocationExternal:
+		return true
+	case ListMcpServersParamsLocationInNamespace:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListMcpPrimitivesParamsKind.
+const (
+	ListMcpPrimitivesParamsKindPrompt           ListMcpPrimitivesParamsKind = "prompt"
+	ListMcpPrimitivesParamsKindResource         ListMcpPrimitivesParamsKind = "resource"
+	ListMcpPrimitivesParamsKindResourceTemplate ListMcpPrimitivesParamsKind = "resource_template"
+	ListMcpPrimitivesParamsKindTool             ListMcpPrimitivesParamsKind = "tool"
+)
+
+// Valid indicates whether the value is a known member of the ListMcpPrimitivesParamsKind enum.
+func (e ListMcpPrimitivesParamsKind) Valid() bool {
+	switch e {
+	case ListMcpPrimitivesParamsKindPrompt:
+		return true
+	case ListMcpPrimitivesParamsKindResource:
+		return true
+	case ListMcpPrimitivesParamsKindResourceTemplate:
+		return true
+	case ListMcpPrimitivesParamsKindTool:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListMcpPrimitivesParamsStatus.
+const (
+	ListMcpPrimitivesParamsStatusApproved      ListMcpPrimitivesParamsStatus = "approved"
+	ListMcpPrimitivesParamsStatusBlocked       ListMcpPrimitivesParamsStatus = "blocked"
+	ListMcpPrimitivesParamsStatusPendingReview ListMcpPrimitivesParamsStatus = "pending_review"
+)
+
+// Valid indicates whether the value is a known member of the ListMcpPrimitivesParamsStatus enum.
+func (e ListMcpPrimitivesParamsStatus) Valid() bool {
+	switch e {
+	case ListMcpPrimitivesParamsStatusApproved:
+		return true
+	case ListMcpPrimitivesParamsStatusBlocked:
+		return true
+	case ListMcpPrimitivesParamsStatusPendingReview:
 		return true
 	default:
 		return false
@@ -5316,6 +7122,78 @@ func (e GetInferenceReportParamsRange) Valid() bool {
 	case GetInferenceReportParamsRangeN7d:
 		return true
 	case GetInferenceReportParamsRangeN90d:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetMcpUsageReportParamsGroupBy.
+const (
+	GetMcpUsageReportParamsGroupByAgent     GetMcpUsageReportParamsGroupBy = "agent"
+	GetMcpUsageReportParamsGroupByDay       GetMcpUsageReportParamsGroupBy = "day"
+	GetMcpUsageReportParamsGroupByPrimitive GetMcpUsageReportParamsGroupBy = "primitive"
+	GetMcpUsageReportParamsGroupByServer    GetMcpUsageReportParamsGroupBy = "server"
+	GetMcpUsageReportParamsGroupByTeam      GetMcpUsageReportParamsGroupBy = "team"
+)
+
+// Valid indicates whether the value is a known member of the GetMcpUsageReportParamsGroupBy enum.
+func (e GetMcpUsageReportParamsGroupBy) Valid() bool {
+	switch e {
+	case GetMcpUsageReportParamsGroupByAgent:
+		return true
+	case GetMcpUsageReportParamsGroupByDay:
+		return true
+	case GetMcpUsageReportParamsGroupByPrimitive:
+		return true
+	case GetMcpUsageReportParamsGroupByServer:
+		return true
+	case GetMcpUsageReportParamsGroupByTeam:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetMcpUsageReportParamsView.
+const (
+	GetMcpUsageReportParamsViewAdoption  GetMcpUsageReportParamsView = "adoption"
+	GetMcpUsageReportParamsViewDiscovery GetMcpUsageReportParamsView = "discovery"
+	GetMcpUsageReportParamsViewRefusals  GetMcpUsageReportParamsView = "refusals"
+	GetMcpUsageReportParamsViewUnused    GetMcpUsageReportParamsView = "unused"
+	GetMcpUsageReportParamsViewUsage     GetMcpUsageReportParamsView = "usage"
+)
+
+// Valid indicates whether the value is a known member of the GetMcpUsageReportParamsView enum.
+func (e GetMcpUsageReportParamsView) Valid() bool {
+	switch e {
+	case GetMcpUsageReportParamsViewAdoption:
+		return true
+	case GetMcpUsageReportParamsViewDiscovery:
+		return true
+	case GetMcpUsageReportParamsViewRefusals:
+		return true
+	case GetMcpUsageReportParamsViewUnused:
+		return true
+	case GetMcpUsageReportParamsViewUsage:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetMcpUsageReportParamsWindow.
+const (
+	GetMcpUsageReportParamsWindowN30 GetMcpUsageReportParamsWindow = 30
+	GetMcpUsageReportParamsWindowN90 GetMcpUsageReportParamsWindow = 90
+)
+
+// Valid indicates whether the value is a known member of the GetMcpUsageReportParamsWindow enum.
+func (e GetMcpUsageReportParamsWindow) Valid() bool {
+	switch e {
+	case GetMcpUsageReportParamsWindowN30:
+		return true
+	case GetMcpUsageReportParamsWindowN90:
 		return true
 	default:
 		return false
@@ -5535,6 +7413,105 @@ func (e ListCollaborationLinksParamsLinkState) Valid() bool {
 	}
 }
 
+// Defines values for ListTeamMcpEventsParamsOutcome.
+const (
+	ListTeamMcpEventsParamsOutcomeCancelled           ListTeamMcpEventsParamsOutcome = "cancelled"
+	ListTeamMcpEventsParamsOutcomeOk                  ListTeamMcpEventsParamsOutcome = "ok"
+	ListTeamMcpEventsParamsOutcomeProtocolError       ListTeamMcpEventsParamsOutcome = "protocol_error"
+	ListTeamMcpEventsParamsOutcomeRefused             ListTeamMcpEventsParamsOutcome = "refused"
+	ListTeamMcpEventsParamsOutcomeTimeout             ListTeamMcpEventsParamsOutcome = "timeout"
+	ListTeamMcpEventsParamsOutcomeToolError           ListTeamMcpEventsParamsOutcome = "tool_error"
+	ListTeamMcpEventsParamsOutcomeUpstreamUnavailable ListTeamMcpEventsParamsOutcome = "upstream_unavailable"
+)
+
+// Valid indicates whether the value is a known member of the ListTeamMcpEventsParamsOutcome enum.
+func (e ListTeamMcpEventsParamsOutcome) Valid() bool {
+	switch e {
+	case ListTeamMcpEventsParamsOutcomeCancelled:
+		return true
+	case ListTeamMcpEventsParamsOutcomeOk:
+		return true
+	case ListTeamMcpEventsParamsOutcomeProtocolError:
+		return true
+	case ListTeamMcpEventsParamsOutcomeRefused:
+		return true
+	case ListTeamMcpEventsParamsOutcomeTimeout:
+		return true
+	case ListTeamMcpEventsParamsOutcomeToolError:
+		return true
+	case ListTeamMcpEventsParamsOutcomeUpstreamUnavailable:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListTeamMcpServersParamsState.
+const (
+	ListTeamMcpServersParamsStateOff     ListTeamMcpServersParamsState = "off"
+	ListTeamMcpServersParamsStateOn      ListTeamMcpServersParamsState = "on"
+	ListTeamMcpServersParamsStatePending ListTeamMcpServersParamsState = "pending"
+)
+
+// Valid indicates whether the value is a known member of the ListTeamMcpServersParamsState enum.
+func (e ListTeamMcpServersParamsState) Valid() bool {
+	switch e {
+	case ListTeamMcpServersParamsStateOff:
+		return true
+	case ListTeamMcpServersParamsStateOn:
+		return true
+	case ListTeamMcpServersParamsStatePending:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListTeamMcpPrimitivesParamsKind.
+const (
+	ListTeamMcpPrimitivesParamsKindPrompt           ListTeamMcpPrimitivesParamsKind = "prompt"
+	ListTeamMcpPrimitivesParamsKindResource         ListTeamMcpPrimitivesParamsKind = "resource"
+	ListTeamMcpPrimitivesParamsKindResourceTemplate ListTeamMcpPrimitivesParamsKind = "resource_template"
+	ListTeamMcpPrimitivesParamsKindTool             ListTeamMcpPrimitivesParamsKind = "tool"
+)
+
+// Valid indicates whether the value is a known member of the ListTeamMcpPrimitivesParamsKind enum.
+func (e ListTeamMcpPrimitivesParamsKind) Valid() bool {
+	switch e {
+	case ListTeamMcpPrimitivesParamsKindPrompt:
+		return true
+	case ListTeamMcpPrimitivesParamsKindResource:
+		return true
+	case ListTeamMcpPrimitivesParamsKindResourceTemplate:
+		return true
+	case ListTeamMcpPrimitivesParamsKindTool:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ListTeamMcpPrimitivesParamsStatus.
+const (
+	ListTeamMcpPrimitivesParamsStatusApproved      ListTeamMcpPrimitivesParamsStatus = "approved"
+	ListTeamMcpPrimitivesParamsStatusBlocked       ListTeamMcpPrimitivesParamsStatus = "blocked"
+	ListTeamMcpPrimitivesParamsStatusPendingReview ListTeamMcpPrimitivesParamsStatus = "pending_review"
+)
+
+// Valid indicates whether the value is a known member of the ListTeamMcpPrimitivesParamsStatus enum.
+func (e ListTeamMcpPrimitivesParamsStatus) Valid() bool {
+	switch e {
+	case ListTeamMcpPrimitivesParamsStatusApproved:
+		return true
+	case ListTeamMcpPrimitivesParamsStatusBlocked:
+		return true
+	case ListTeamMcpPrimitivesParamsStatusPendingReview:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for ListTeamModelEndpointsParamsRelation.
 const (
 	ListTeamModelEndpointsParamsRelationAvailable ListTeamModelEndpointsParamsRelation = "available"
@@ -5577,6 +7554,72 @@ func (e GetTeamInferenceReportParamsRange) Valid() bool {
 	case GetTeamInferenceReportParamsRangeN7d:
 		return true
 	case GetTeamInferenceReportParamsRangeN90d:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetTeamMcpUsageReportParamsGroupBy.
+const (
+	GetTeamMcpUsageReportParamsGroupByAgent     GetTeamMcpUsageReportParamsGroupBy = "agent"
+	GetTeamMcpUsageReportParamsGroupByDay       GetTeamMcpUsageReportParamsGroupBy = "day"
+	GetTeamMcpUsageReportParamsGroupByPrimitive GetTeamMcpUsageReportParamsGroupBy = "primitive"
+	GetTeamMcpUsageReportParamsGroupByServer    GetTeamMcpUsageReportParamsGroupBy = "server"
+)
+
+// Valid indicates whether the value is a known member of the GetTeamMcpUsageReportParamsGroupBy enum.
+func (e GetTeamMcpUsageReportParamsGroupBy) Valid() bool {
+	switch e {
+	case GetTeamMcpUsageReportParamsGroupByAgent:
+		return true
+	case GetTeamMcpUsageReportParamsGroupByDay:
+		return true
+	case GetTeamMcpUsageReportParamsGroupByPrimitive:
+		return true
+	case GetTeamMcpUsageReportParamsGroupByServer:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetTeamMcpUsageReportParamsView.
+const (
+	GetTeamMcpUsageReportParamsViewDiscovery GetTeamMcpUsageReportParamsView = "discovery"
+	GetTeamMcpUsageReportParamsViewRefusals  GetTeamMcpUsageReportParamsView = "refusals"
+	GetTeamMcpUsageReportParamsViewUnused    GetTeamMcpUsageReportParamsView = "unused"
+	GetTeamMcpUsageReportParamsViewUsage     GetTeamMcpUsageReportParamsView = "usage"
+)
+
+// Valid indicates whether the value is a known member of the GetTeamMcpUsageReportParamsView enum.
+func (e GetTeamMcpUsageReportParamsView) Valid() bool {
+	switch e {
+	case GetTeamMcpUsageReportParamsViewDiscovery:
+		return true
+	case GetTeamMcpUsageReportParamsViewRefusals:
+		return true
+	case GetTeamMcpUsageReportParamsViewUnused:
+		return true
+	case GetTeamMcpUsageReportParamsViewUsage:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for GetTeamMcpUsageReportParamsWindow.
+const (
+	GetTeamMcpUsageReportParamsWindowN30 GetTeamMcpUsageReportParamsWindow = 30
+	GetTeamMcpUsageReportParamsWindowN90 GetTeamMcpUsageReportParamsWindow = 90
+)
+
+// Valid indicates whether the value is a known member of the GetTeamMcpUsageReportParamsWindow enum.
+func (e GetTeamMcpUsageReportParamsWindow) Valid() bool {
+	switch e {
+	case GetTeamMcpUsageReportParamsWindowN30:
+		return true
+	case GetTeamMcpUsageReportParamsWindowN90:
 		return true
 	default:
 		return false
@@ -5808,6 +7851,9 @@ type Agent struct {
 	// Image Null on the orchestration agent for callers who are not service admins
 	Image *ImageRef `json:"image"`
 
+	// Mcp v1.6.0 MCP access of an agent or pool
+	Mcp *AgentMcp `json:"mcp,omitempty"`
+
 	// ModelId Deprecated: models.defaultModelId
 	// Deprecated: this property has been marked as deprecated upstream, but no `x-deprecated-reason` was set
 	ModelId *string `json:"modelId,omitempty"`
@@ -5909,6 +7955,44 @@ type AgentList struct {
 	// NextToken Absent on the last page
 	NextToken *string `json:"nextToken,omitempty"`
 }
+
+// AgentMcp v1.6.0 MCP access of an agent or pool
+type AgentMcp struct {
+	Access AgentMcpAccess  `json:"access"`
+	Blocks *[]McpBlockRule `json:"blocks,omitempty"`
+
+	// EffectiveServers Ids of the servers the agent reaches
+	EffectiveServers *[]string `json:"effectiveServers,omitempty"`
+
+	// Env The AFS_MCP_* names
+	Env       *[]string    `json:"env,omitempty"`
+	Mode      AgentMcpMode `json:"mode"`
+	ServerIds *[]string    `json:"serverIds,omitempty"`
+}
+
+// AgentMcpAccess defines model for AgentMcp.Access.
+type AgentMcpAccess string
+
+// AgentMcpMode defines model for AgentMcp.Mode.
+type AgentMcpMode string
+
+// AgentMcpInput v1.6.0 MCP access of an agent or pool
+type AgentMcpInput struct {
+	Access *AgentMcpInputAccess `json:"access,omitempty"`
+	Blocks *[]McpBlockRule      `json:"blocks,omitempty"`
+
+	// Mode Defaults to mcp.default_agent_mode
+	Mode *AgentMcpInputMode `json:"mode,omitempty"`
+
+	// ServerIds With access selected; each must be on for the team (400 mcp_server_not_enabled_for_team)
+	ServerIds *[]string `json:"serverIds,omitempty"`
+}
+
+// AgentMcpInputAccess defines model for AgentMcpInput.Access.
+type AgentMcpInputAccess string
+
+// AgentMcpInputMode Defaults to mcp.default_agent_mode
+type AgentMcpInputMode string
 
 // AgentModels Which models an agent may call and its default
 type AgentModels struct {
@@ -6390,6 +8474,9 @@ type CreateAgentRequest struct {
 	// Image Container image pinned by digest
 	Image ImageRef `json:"image"`
 
+	// Mcp v1.6.0 MCP access of an agent or pool
+	Mcp *AgentMcpInput `json:"mcp,omitempty"`
+
 	// ModelId Deprecated: models.defaultModelId
 	// Deprecated: this property has been marked as deprecated upstream, but no `x-deprecated-reason` was set
 	ModelId *string           `json:"modelId,omitempty"`
@@ -6490,6 +8577,55 @@ type CreateLogDestinationRequest struct {
 // CreateLogDestinationRequestKind defines model for CreateLogDestinationRequest.Kind.
 type CreateLogDestinationRequestKind string
 
+// CreateMcpServerRequest An enterprise server; created draft
+type CreateMcpServerRequest struct {
+	AllowSampling *bool                          `json:"allowSampling,omitempty"`
+	AuthHeader    *string                        `json:"authHeader,omitempty"`
+	AuthKind      CreateMcpServerRequestAuthKind `json:"authKind"`
+
+	// CaBundle PEM certificates for a corporate host
+	CaBundle           *string                                  `json:"caBundle,omitempty"`
+	CredentialMode     *CreateMcpServerRequestCredentialMode    `json:"credentialMode,omitempty"`
+	DataClassification CreateMcpServerRequestDataClassification `json:"dataClassification"`
+	DisplayName        string                                   `json:"displayName"`
+	DocUrl             *string                                  `json:"docUrl,omitempty"`
+	DriftPolicy        *CreateMcpServerRequestDriftPolicy       `json:"driftPolicy,omitempty"`
+
+	// Federation workload_federation only (PRD §9)
+	Federation *McpFederation `json:"federation,omitempty"`
+
+	// Hosted A server AFS runs in the team namespace behind afs-mcp-bridge (PRD §10.2)
+	Hosted *McpHostedSpec `json:"hosted,omitempty"`
+
+	// Limits Per-server limits; members left out take mcp.limits
+	Limits           *McpLimits                      `json:"limits,omitempty"`
+	Location         CreateMcpServerRequestLocation  `json:"location"`
+	Owner            *string                         `json:"owner,omitempty"`
+	Purpose          *string                         `json:"purpose,omitempty"`
+	Slug             string                          `json:"slug"`
+	Transport        CreateMcpServerRequestTransport `json:"transport"`
+	TrustAnnotations *bool                           `json:"trustAnnotations,omitempty"`
+	Url              *string                         `json:"url,omitempty"`
+}
+
+// CreateMcpServerRequestAuthKind defines model for CreateMcpServerRequest.AuthKind.
+type CreateMcpServerRequestAuthKind string
+
+// CreateMcpServerRequestCredentialMode defines model for CreateMcpServerRequest.CredentialMode.
+type CreateMcpServerRequestCredentialMode string
+
+// CreateMcpServerRequestDataClassification defines model for CreateMcpServerRequest.DataClassification.
+type CreateMcpServerRequestDataClassification string
+
+// CreateMcpServerRequestDriftPolicy defines model for CreateMcpServerRequest.DriftPolicy.
+type CreateMcpServerRequestDriftPolicy string
+
+// CreateMcpServerRequestLocation defines model for CreateMcpServerRequest.Location.
+type CreateMcpServerRequestLocation string
+
+// CreateMcpServerRequestTransport defines model for CreateMcpServerRequest.Transport.
+type CreateMcpServerRequestTransport string
+
 // CreateModelEndpointRequest A service endpoint; created off (enabled false)
 type CreateModelEndpointRequest struct {
 	// AuthHeader Header name, required when authKind is header
@@ -6585,6 +8721,9 @@ type CreatePoolRequest struct {
 
 	// Image Container image pinned by digest
 	Image ImageRef `json:"image"`
+
+	// Mcp v1.6.0 MCP access of an agent or pool
+	Mcp *AgentMcpInput `json:"mcp,omitempty"`
 
 	// ModelId Deprecated: models.defaultModelId
 	// Deprecated: this property has been marked as deprecated upstream, but no `x-deprecated-reason` was set
@@ -6707,6 +8846,45 @@ type CreateSwarmTemplateRequestKind string
 
 // CreateSwarmTemplateRequestTeardownRule defines model for CreateSwarmTemplateRequest.TeardownRule.
 type CreateSwarmTemplateRequestTeardownRule string
+
+// CreateTeamMcpServerRequest A team server; needs the team's mayAddMcpServers (403 team_servers_not_allowed); created draft
+type CreateTeamMcpServerRequest struct {
+	AuthHeader *string                            `json:"authHeader,omitempty"`
+	AuthKind   CreateTeamMcpServerRequestAuthKind `json:"authKind"`
+
+	// CaBundle PEM certificates for a corporate host
+	CaBundle           *string                                      `json:"caBundle,omitempty"`
+	DataClassification CreateTeamMcpServerRequestDataClassification `json:"dataClassification"`
+	DisplayName        string                                       `json:"displayName"`
+	DocUrl             *string                                      `json:"docUrl,omitempty"`
+
+	// Federation workload_federation only (PRD §9)
+	Federation *McpFederation `json:"federation,omitempty"`
+
+	// Hosted A server AFS runs in the team namespace behind afs-mcp-bridge (PRD §10.2)
+	Hosted *McpHostedSpec `json:"hosted,omitempty"`
+
+	// Limits Per-server limits; members left out take mcp.limits
+	Limits    *McpLimits                          `json:"limits,omitempty"`
+	Location  CreateTeamMcpServerRequestLocation  `json:"location"`
+	Owner     string                              `json:"owner"`
+	Purpose   string                              `json:"purpose"`
+	Slug      string                              `json:"slug"`
+	Transport CreateTeamMcpServerRequestTransport `json:"transport"`
+	Url       *string                             `json:"url,omitempty"`
+}
+
+// CreateTeamMcpServerRequestAuthKind defines model for CreateTeamMcpServerRequest.AuthKind.
+type CreateTeamMcpServerRequestAuthKind string
+
+// CreateTeamMcpServerRequestDataClassification defines model for CreateTeamMcpServerRequest.DataClassification.
+type CreateTeamMcpServerRequestDataClassification string
+
+// CreateTeamMcpServerRequestLocation defines model for CreateTeamMcpServerRequest.Location.
+type CreateTeamMcpServerRequestLocation string
+
+// CreateTeamMcpServerRequestTransport defines model for CreateTeamMcpServerRequest.Transport.
+type CreateTeamMcpServerRequestTransport string
 
 // CreateTeamModelEndpointRequest A team-declared endpoint (needs mayAddModelEndpoints). The provider is derived from the host; a host of a disabled provider is refused (provider_disabled). Created off
 type CreateTeamModelEndpointRequest struct {
@@ -6919,6 +9097,61 @@ type DeliveryStatus struct {
 	LastFailureAt   *Timestamp `json:"lastFailureAt,omitempty"`
 	LastTestId      *string    `json:"lastTestId,omitempty"`
 }
+
+// EffectiveMcp From afs.mcp_admission (CD-51)
+type EffectiveMcp struct {
+	Access EffectiveMcpAccess `json:"access"`
+
+	// Env The AFS_MCP_* variable names the agent gets
+	Env         []string                `json:"env"`
+	Mode        EffectiveMcpMode        `json:"mode"`
+	Servers     []EffectiveMcpServer    `json:"servers"`
+	SubjectId   string                  `json:"subjectId"`
+	SubjectKind EffectiveMcpSubjectKind `json:"subjectKind"`
+}
+
+// EffectiveMcpAccess defines model for EffectiveMcp.Access.
+type EffectiveMcpAccess string
+
+// EffectiveMcpMode defines model for EffectiveMcp.Mode.
+type EffectiveMcpMode string
+
+// EffectiveMcpSubjectKind defines model for EffectiveMcp.SubjectKind.
+type EffectiveMcpSubjectKind string
+
+// EffectiveMcpPrimitive defines model for EffectiveMcpPrimitive.
+type EffectiveMcpPrimitive struct {
+	Allowed            bool                        `json:"allowed"`
+	Kind               EffectiveMcpPrimitiveKind   `json:"kind"`
+	Level              *EffectiveMcpPrimitiveLevel `json:"level"`
+	Name               string                      `json:"name"`
+	RateLimitPerMinute *int                        `json:"rateLimitPerMinute,omitempty"`
+	Reason             *string                     `json:"reason"`
+}
+
+// EffectiveMcpPrimitiveKind defines model for EffectiveMcpPrimitive.Kind.
+type EffectiveMcpPrimitiveKind string
+
+// EffectiveMcpPrimitiveLevel defines model for EffectiveMcpPrimitive.Level.
+type EffectiveMcpPrimitiveLevel string
+
+// EffectiveMcpServer defines model for EffectiveMcpServer.
+type EffectiveMcpServer struct {
+	Mode       EffectiveMcpServerMode  `json:"mode"`
+	Primitives []EffectiveMcpPrimitive `json:"primitives"`
+	Scope      EffectiveMcpServerScope `json:"scope"`
+	ServerId   string                  `json:"serverId"`
+	Slug       string                  `json:"slug"`
+
+	// Url The gateway path agents use, /mcp/<slug>
+	Url string `json:"url"`
+}
+
+// EffectiveMcpServerMode defines model for EffectiveMcpServer.Mode.
+type EffectiveMcpServerMode string
+
+// EffectiveMcpServerScope defines model for EffectiveMcpServer.Scope.
+type EffectiveMcpServerScope string
 
 // EndpointFederation What AFS stores and what the cloud admins must trust (§11.1)
 type EndpointFederation struct {
@@ -7181,12 +9414,15 @@ type ErrorDetails struct {
 	// Model v1.5.0, a model named by the reason
 	Model *string `json:"model,omitempty"`
 
-	// Reason idempotency_mismatch, idempotency_in_progress, team_suspended, not_implemented and others. v1.5.0 adds slug_taken, slug_reserved, slug_invalid, base_url_not_https, provider_disabled, no_fallback_model, endpoint_base_url_placeholder, needs_service_admin, team_endpoints_not_allowed, endpoint_enabled, endpoint_credential_path, agent_routes_team and agents_default_route_allowed
+	// Reason idempotency_mismatch, idempotency_in_progress, team_suspended, not_implemented and others. v1.5.0 adds slug_taken, slug_reserved, slug_invalid, base_url_not_https, provider_disabled, no_fallback_model, endpoint_base_url_placeholder, needs_service_admin, team_endpoints_not_allowed, endpoint_enabled, endpoint_credential_path, agent_routes_team and agents_default_route_allowed. v1.6.0 adds url_not_https, host_denied, image_not_pinned, image_unsigned, registry_not_allowed, auth_kind_unsupported, service_account_required, audience_not_allowed, audience_reserved, capture_window_too_long, mcp_server_not_enabled_for_team, invalid_policy_rule, team_servers_not_allowed, approval_not_permitted_by_policy, not_team_server, server_in_use, server_not_published, server_not_approved, team_gateway_required, invalid_review_transition, federated_identity_limit, governed_by_mcp_server and capture_active
 	Reason             *string `json:"reason,omitempty"`
 	RequiredPermission *string `json:"requiredPermission,omitempty"`
 
 	// Route v1.5.0, a route slug named by the reason
-	Route        *string   `json:"route,omitempty"`
+	Route *string `json:"route,omitempty"`
+
+	// ServerId v1.6.0, an MCP server named by the reason (for example governed_by_mcp_server)
+	ServerId     *string   `json:"serverId,omitempty"`
 	UnownedRepos *[]string `json:"unownedRepos,omitempty"`
 }
 
@@ -7236,14 +9472,17 @@ type ExternalSystem struct {
 	DocsUrl    *string                   `json:"docsUrl,omitempty"`
 	Enabled    bool                      `json:"enabled"`
 	Endpoints  []string                  `json:"endpoints"`
-	Id         *string                   `json:"id,omitempty"`
-	Name       string                    `json:"name"`
-	Owner      *string                   `json:"owner,omitempty"`
-	Purpose    *string                   `json:"purpose,omitempty"`
-	Scope      *ExternalSystemScope      `json:"scope,omitempty"`
-	Slug       string                    `json:"slug"`
-	TeamState  *ExternalSystemTeamState  `json:"teamState,omitempty"`
-	Unmetered  *bool                     `json:"unmetered,omitempty"`
+
+	// GovernedBy v1.6.0, category mcp only; the MCP server whose host covers this system. It cannot be granted then (409 governed_by_mcp_server)
+	GovernedBy *string                  `json:"governedBy,omitempty"`
+	Id         *string                  `json:"id,omitempty"`
+	Name       string                   `json:"name"`
+	Owner      *string                  `json:"owner,omitempty"`
+	Purpose    *string                  `json:"purpose,omitempty"`
+	Scope      *ExternalSystemScope     `json:"scope,omitempty"`
+	Slug       string                   `json:"slug"`
+	TeamState  *ExternalSystemTeamState `json:"teamState,omitempty"`
+	Unmetered  *bool                    `json:"unmetered,omitempty"`
 
 	// UpdatedAt RFC 3339 UTC with Z
 	UpdatedAt *Timestamp `json:"updatedAt,omitempty"`
@@ -7273,6 +9512,32 @@ type ExternalSystemList struct {
 // ExternalSystemState defines model for ExternalSystemState.
 type ExternalSystemState struct {
 	Enabled bool `json:"enabled"`
+}
+
+// FederatedIdentity defines model for FederatedIdentity.
+type FederatedIdentity struct {
+	Audience string `json:"audience"`
+
+	// CreatedAt RFC 3339 UTC with Z
+	CreatedAt         Timestamp `json:"createdAt"`
+	CreatedBy         string    `json:"createdBy"`
+	EnvVar            string    `json:"envVar"`
+	ExpirationSeconds int       `json:"expirationSeconds"`
+	FilePath          string    `json:"filePath"`
+
+	// Issuer The cluster OIDC issuer, for the target IdP's trust setup
+	Issuer string `json:"issuer"`
+	Name   string `json:"name"`
+
+	// Subject system:serviceaccount:afs-t-<slug>:<service account>
+	Subject string `json:"subject"`
+	Version int    `json:"version"`
+}
+
+// FederatedIdentityList defines model for FederatedIdentityList.
+type FederatedIdentityList struct {
+	Items     []FederatedIdentity `json:"items"`
+	NextToken *string             `json:"nextToken,omitempty"`
 }
 
 // FieldError defines model for FieldError.
@@ -7350,6 +9615,15 @@ type IdentityProviderList struct {
 
 // ImageRef Container image pinned by digest
 type ImageRef = string
+
+// ImportMcpServerManifestRequest defines model for ImportMcpServerManifestRequest.
+type ImportMcpServerManifestRequest struct {
+	// Manifest An MCP Registry server.json (preview format). Pre-fills a draft; never counts as approval
+	Manifest map[string]interface{} `json:"manifest"`
+
+	// Slug Overrides the slug derived from the manifest name
+	Slug *string `json:"slug,omitempty"`
+}
 
 // ImportProviderStatementRequest A provider's monthly statement. A text/csv body (columns teamId,model,amountUsd,tokens) takes period and source as query parameters
 type ImportProviderStatementRequest struct {
@@ -7549,6 +9823,488 @@ type LogDestinationList struct {
 
 	// NextToken Absent on the last page
 	NextToken *string `json:"nextToken,omitempty"`
+}
+
+// McpAdoption defines model for McpAdoption.
+type McpAdoption struct {
+	Agents int `json:"agents"`
+	Teams  int `json:"teams"`
+}
+
+// McpBlockRule An agent-level rule: exactly one of name and class
+type McpBlockRule struct {
+	Class    *McpBlockRuleClass `json:"class,omitempty"`
+	Effect   McpBlockRuleEffect `json:"effect"`
+	Name     *string            `json:"name,omitempty"`
+	ServerId string             `json:"serverId"`
+}
+
+// McpBlockRuleClass defines model for McpBlockRule.Class.
+type McpBlockRuleClass string
+
+// McpBlockRuleEffect defines model for McpBlockRule.Effect.
+type McpBlockRuleEffect string
+
+// McpCheck defines model for McpCheck.
+type McpCheck struct {
+	// CheckedAt RFC 3339 UTC with Z
+	CheckedAt Timestamp `json:"checkedAt"`
+	Detail    *string   `json:"detail,omitempty"`
+
+	// Name reachability, tls, protocol_version, host_policy, inventory, description_injection, image_signature, image_digest, image_scan
+	Name    string          `json:"name"`
+	Outcome McpCheckOutcome `json:"outcome"`
+}
+
+// McpCheckOutcome defines model for McpCheck.Outcome.
+type McpCheckOutcome string
+
+// McpCredential Credential metadata only; never a value
+type McpCredential struct {
+	ExpiresAt *Timestamp         `json:"expiresAt,omitempty"`
+	Kind      *McpCredentialKind `json:"kind,omitempty"`
+	RotatedAt *Timestamp         `json:"rotatedAt,omitempty"`
+
+	// Scope _shared or the team id
+	Scope  string             `json:"scope"`
+	Scopes []string           `json:"scopes"`
+	State  McpCredentialState `json:"state"`
+
+	// Subject oauth_user: the service account that connected
+	Subject *string `json:"subject,omitempty"`
+}
+
+// McpCredentialKind defines model for McpCredential.Kind.
+type McpCredentialKind string
+
+// McpCredentialState defines model for McpCredential.State.
+type McpCredentialState string
+
+// McpCredentialRequest Either value, or clientId and clientSecret. Written to Secrets Manager; the database keeps the ARN
+type McpCredentialRequest struct {
+	ClientId *string `json:"clientId,omitempty"`
+
+	// ClientSecret An OAuth client secret; never returned
+	ClientSecret *string `json:"clientSecret,omitempty"`
+
+	// Value A static credential; never returned
+	Value *string `json:"value,omitempty"`
+}
+
+// McpDecision defines model for McpDecision.
+type McpDecision struct {
+	Allowed bool              `json:"allowed"`
+	Level   *McpDecisionLevel `json:"level"`
+	Reason  *string           `json:"reason"`
+}
+
+// McpDecisionLevel defines model for McpDecision.Level.
+type McpDecisionLevel string
+
+// McpEvent One MCP request through the gateway (database contract §7.5.5). Never holds arguments or results
+type McpEvent struct {
+	AgentId *string `json:"agentId,omitempty"`
+
+	// ArgsSha256 Only when the server has argument hashing on
+	ArgsSha256 *string `json:"argsSha256,omitempty"`
+
+	// At RFC 3339 UTC with Z
+	At          Timestamp `json:"at"`
+	AuthKind    *string   `json:"authKind,omitempty"`
+	Digest      *string   `json:"digest,omitempty"`
+	GatewayMs   *int      `json:"gatewayMs,omitempty"`
+	HttpStatus  *int      `json:"httpStatus,omitempty"`
+	Id          int       `json:"id"`
+	JsonrpcCode *int      `json:"jsonrpcCode,omitempty"`
+
+	// Method JSON-RPC method, for example tools/call
+	Method             string          `json:"method"`
+	Name               *string         `json:"name,omitempty"`
+	Outcome            McpEventOutcome `json:"outcome"`
+	PoolId             *string         `json:"poolId,omitempty"`
+	PrimitiveId        *string         `json:"primitiveId,omitempty"`
+	ProtocolDownstream *string         `json:"protocolDownstream,omitempty"`
+	ProtocolUpstream   *string         `json:"protocolUpstream,omitempty"`
+
+	// QueryText Only inside a query capture window (CD-50)
+	QueryText     *string             `json:"queryText,omitempty"`
+	Reason        *string             `json:"reason,omitempty"`
+	RequestBytes  *int                `json:"requestBytes,omitempty"`
+	RequestId     string              `json:"requestId"`
+	ResponseBytes *int                `json:"responseBytes,omitempty"`
+	SearchHit     *bool               `json:"searchHit,omitempty"`
+	SearchResults *[]string           `json:"searchResults,omitempty"`
+	ServerId      *string             `json:"serverId,omitempty"`
+	ServerKind    *McpEventServerKind `json:"serverKind,omitempty"`
+	TeamId        string              `json:"teamId"`
+	UpstreamMs    *int                `json:"upstreamMs,omitempty"`
+	WorkerPod     *string             `json:"workerPod,omitempty"`
+}
+
+// McpEventOutcome defines model for McpEvent.Outcome.
+type McpEventOutcome string
+
+// McpEventServerKind defines model for McpEvent.ServerKind.
+type McpEventServerKind string
+
+// McpEventList defines model for McpEventList.
+type McpEventList struct {
+	Items     []McpEvent `json:"items"`
+	NextToken *string    `json:"nextToken,omitempty"`
+}
+
+// McpFederation workload_federation only (PRD §9)
+type McpFederation struct {
+	Audience string `json:"audience"`
+
+	// Issuer The issuer the upstream trusts (the cluster OIDC issuer or the IdP)
+	Issuer string `json:"issuer"`
+
+	// SubjectTemplate For example system:serviceaccount:afs-t-{teamSlug}:afs-gateway
+	SubjectTemplate *string `json:"subjectTemplate,omitempty"`
+	TokenEndpoint   string  `json:"tokenEndpoint"`
+}
+
+// McpFieldDiff defines model for McpFieldDiff.
+type McpFieldDiff struct {
+	After  interface{} `json:"after,omitempty"`
+	Before interface{} `json:"before,omitempty"`
+	Field  string      `json:"field"`
+}
+
+// McpHostedSpec A server AFS runs in the team namespace behind afs-mcp-bridge (PRD §10.2)
+type McpHostedSpec struct {
+	Args        *[]string `json:"args,omitempty"`
+	EgressHosts *[]string `json:"egressHosts,omitempty"`
+
+	// EnvNames Names only; values are secret references delivered to the pod
+	EnvNames *[]string `json:"envNames,omitempty"`
+
+	// ImageDigest Pinned by digest (400 image_not_pinned); the registry must be in mcp.allowed_image_registries
+	ImageDigest  string                     `json:"imageDigest"`
+	InstanceMode *McpHostedSpecInstanceMode `json:"instanceMode,omitempty"`
+	NeedsAws     *bool                      `json:"needsAws,omitempty"`
+	Resources    *struct {
+		Cpu    *string `json:"cpu,omitempty"`
+		Memory *string `json:"memory,omitempty"`
+	} `json:"resources,omitempty"`
+}
+
+// McpHostedSpecInstanceMode defines model for McpHostedSpec.InstanceMode.
+type McpHostedSpecInstanceMode string
+
+// McpLimits Per-server limits; members left out take mcp.limits
+type McpLimits struct {
+	ConcurrentPerAgent *int `json:"concurrentPerAgent,omitempty"`
+	RequestBytes       *int `json:"requestBytes,omitempty"`
+	ResponseBytes      *int `json:"responseBytes,omitempty"`
+	TimeoutSeconds     *int `json:"timeoutSeconds,omitempty"`
+}
+
+// McpOAuthStart defines model for McpOAuthStart.
+type McpOAuthStart struct {
+	AuthorizationUrl string `json:"authorizationUrl"`
+
+	// ExpiresAt RFC 3339 UTC with Z
+	ExpiresAt Timestamp `json:"expiresAt"`
+
+	// State Opaque, single use
+	State string `json:"state"`
+}
+
+// McpPolicy defines model for McpPolicy.
+type McpPolicy struct {
+	AllowSampling    *bool                 `json:"allowSampling,omitempty"`
+	DriftPolicy      *McpPolicyDriftPolicy `json:"driftPolicy,omitempty"`
+	Level            McpPolicyLevel        `json:"level"`
+	Rules            []McpPolicyRule       `json:"rules"`
+	ServerId         string                `json:"serverId"`
+	TeamId           *string               `json:"teamId"`
+	TrustAnnotations *bool                 `json:"trustAnnotations,omitempty"`
+	Version          int                   `json:"version"`
+}
+
+// McpPolicyDriftPolicy defines model for McpPolicy.DriftPolicy.
+type McpPolicyDriftPolicy string
+
+// McpPolicyLevel defines model for McpPolicy.Level.
+type McpPolicyLevel string
+
+// McpPolicyRule Exactly one of name and class (400 invalid_policy_rule)
+type McpPolicyRule struct {
+	Class  *McpPolicyRuleClass `json:"class,omitempty"`
+	Effect McpPolicyRuleEffect `json:"effect"`
+
+	// Name An exact primitive name or a glob (* matches any run)
+	Name               *string `json:"name,omitempty"`
+	RateLimitPerMinute *int    `json:"rateLimitPerMinute,omitempty"`
+}
+
+// McpPolicyRuleClass defines model for McpPolicyRule.Class.
+type McpPolicyRuleClass string
+
+// McpPolicyRuleEffect defines model for McpPolicyRule.Effect.
+type McpPolicyRuleEffect string
+
+// McpPrimitive defines model for McpPrimitive.
+type McpPrimitive struct {
+	// Annotations As the server declared them (readOnlyHint, destructiveHint, openWorldHint, idempotentHint)
+	Annotations    *map[string]interface{} `json:"annotations,omitempty"`
+	ApprovedDigest *string                 `json:"approvedDigest"`
+	Change         *McpPrimitiveChangeKind `json:"change,omitempty"`
+	Decision       *McpDecision            `json:"decision,omitempty"`
+
+	// Digest RFC 8785 canonical JSON, sha256
+	Digest string `json:"digest"`
+
+	// FirstSeen RFC 3339 UTC with Z
+	FirstSeen Timestamp        `json:"firstSeen"`
+	Id        string           `json:"id"`
+	Kind      McpPrimitiveKind `json:"kind"`
+
+	// LastSeen RFC 3339 UTC with Z
+	LastSeen Timestamp          `json:"lastSeen"`
+	Name     string             `json:"name"`
+	ServerId string             `json:"serverId"`
+	Status   McpPrimitiveStatus `json:"status"`
+	Title    *string            `json:"title,omitempty"`
+}
+
+// McpPrimitiveChangeKind defines model for McpPrimitive.change.
+type McpPrimitiveChangeKind string
+
+// McpPrimitiveKind defines model for McpPrimitive.Kind.
+type McpPrimitiveKind string
+
+// McpPrimitiveStatus defines model for McpPrimitive.Status.
+type McpPrimitiveStatus string
+
+// McpPrimitiveChange defines model for McpPrimitiveChange.
+type McpPrimitiveChange struct {
+	// ApprovedDefinition null for a new primitive
+	ApprovedDefinition *map[string]interface{} `json:"approvedDefinition"`
+	Checks             []McpCheck              `json:"checks"`
+
+	// CrossesRiskLine A new destructive tool or a new host: a team server's change then needs security
+	CrossesRiskLine   bool                   `json:"crossesRiskLine"`
+	Diff              []McpFieldDiff         `json:"diff"`
+	PendingDefinition map[string]interface{} `json:"pendingDefinition"`
+	Primitive         *McpPrimitive          `json:"primitive,omitempty"`
+}
+
+// McpPrimitiveDecision defines model for McpPrimitiveDecision.
+type McpPrimitiveDecision struct {
+	Decision    McpPrimitiveDecisionDecision `json:"decision"`
+	PrimitiveId string                       `json:"primitiveId"`
+}
+
+// McpPrimitiveDecisionDecision defines model for McpPrimitiveDecision.Decision.
+type McpPrimitiveDecisionDecision string
+
+// McpPrimitiveList defines model for McpPrimitiveList.
+type McpPrimitiveList struct {
+	Items     []McpPrimitive `json:"items"`
+	NextToken *string        `json:"nextToken,omitempty"`
+}
+
+// McpQueryCapture defines model for McpQueryCapture.
+type McpQueryCapture struct {
+	Id     string `json:"id"`
+	Reason string `json:"reason"`
+
+	// StartedAt RFC 3339 UTC with Z
+	StartedAt Timestamp  `json:"startedAt"`
+	StartedBy string     `json:"startedBy"`
+	StoppedAt *Timestamp `json:"stoppedAt"`
+	StoppedBy *string    `json:"stoppedBy,omitempty"`
+
+	// Until RFC 3339 UTC with Z
+	Until Timestamp `json:"until"`
+}
+
+// McpQueryCaptureState The open window, or null
+type McpQueryCaptureState struct {
+	Capture *McpQueryCapture `json:"capture"`
+}
+
+// McpReasonRequest defines model for McpReasonRequest.
+type McpReasonRequest struct {
+	Reason string `json:"reason"`
+}
+
+// McpReviewItem defines model for McpReviewItem.
+type McpReviewItem struct {
+	Approver    McpReviewItemApprover  `json:"approver"`
+	Kind        McpReviewItemKind      `json:"kind"`
+	Name        *string                `json:"name,omitempty"`
+	PrimitiveId *string                `json:"primitiveId,omitempty"`
+	RiskReasons *[]string              `json:"riskReasons,omitempty"`
+	RiskTier    *McpReviewItemRiskTier `json:"riskTier,omitempty"`
+	ServerId    string                 `json:"serverId"`
+
+	// Since RFC 3339 UTC with Z
+	Since  Timestamp `json:"since"`
+	Slug   string    `json:"slug"`
+	TeamId *string   `json:"teamId"`
+}
+
+// McpReviewItemApprover defines model for McpReviewItem.Approver.
+type McpReviewItemApprover string
+
+// McpReviewItemKind defines model for McpReviewItem.Kind.
+type McpReviewItemKind string
+
+// McpReviewItemRiskTier defines model for McpReviewItem.RiskTier.
+type McpReviewItemRiskTier string
+
+// McpReviewList defines model for McpReviewList.
+type McpReviewList struct {
+	Items     []McpReviewItem `json:"items"`
+	NextToken *string         `json:"nextToken,omitempty"`
+}
+
+// McpReviewNoteRequest An optional note
+type McpReviewNoteRequest struct {
+	Note *string `json:"note,omitempty"`
+}
+
+// McpServer An MCP server of the catalog. Never holds a credential value (credentialState only)
+type McpServer struct {
+	Adoption      *McpAdoption `json:"adoption,omitempty"`
+	AllowSampling *bool        `json:"allowSampling,omitempty"`
+
+	// Approver Who decides the pending review, from mcp.team_server_approval
+	Approver   *McpServerApprover `json:"approver,omitempty"`
+	AuthHeader *string            `json:"authHeader,omitempty"`
+	AuthKind   McpServerAuthKind  `json:"authKind"`
+	Checks     *[]McpCheck        `json:"checks,omitempty"`
+
+	// CreatedAt RFC 3339 UTC with Z
+	CreatedAt          Timestamp                   `json:"createdAt"`
+	CreatedBy          *string                     `json:"createdBy,omitempty"`
+	CredentialMode     *McpServerCredentialMode    `json:"credentialMode,omitempty"`
+	CredentialState    McpServerCredentialState    `json:"credentialState"`
+	DataClassification McpServerDataClassification `json:"dataClassification"`
+	DefaultForNewTeams *bool                       `json:"defaultForNewTeams,omitempty"`
+	DisplayName        string                      `json:"displayName"`
+	DocUrl             *string                     `json:"docUrl,omitempty"`
+	DriftPolicy        McpServerDriftPolicy        `json:"driftPolicy"`
+	Federation         *McpFederation              `json:"federation,omitempty"`
+	Hosted             *McpHostedSpec              `json:"hosted,omitempty"`
+	Id                 *string                     `json:"id,omitempty"`
+
+	// Limits Per-server limits; members left out take mcp.limits
+	Limits          *McpLimits            `json:"limits,omitempty"`
+	Location        McpServerLocation     `json:"location"`
+	Owner           *string               `json:"owner,omitempty"`
+	ProtocolVersion *string               `json:"protocolVersion,omitempty"`
+	Published       bool                  `json:"published"`
+	Purpose         *string               `json:"purpose,omitempty"`
+	ReviewStatus    McpServerReviewStatus `json:"reviewStatus"`
+	RiskReasons     *[]string             `json:"riskReasons,omitempty"`
+	RiskTier        *McpServerRiskTier    `json:"riskTier,omitempty"`
+	Scope           McpServerScope        `json:"scope"`
+
+	// Slug The route /mcp/<slug> and the prefix of its tool names; afs is reserved
+	Slug            string  `json:"slug"`
+	SuspendedReason *string `json:"suspendedReason,omitempty"`
+
+	// TeamId null for an enterprise server
+	TeamId           *string            `json:"teamId"`
+	Transport        McpServerTransport `json:"transport"`
+	TrustAnnotations *bool              `json:"trustAnnotations,omitempty"`
+
+	// UpdatedAt RFC 3339 UTC with Z
+	UpdatedAt Timestamp `json:"updatedAt"`
+	Url       *string   `json:"url,omitempty"`
+	Version   *int      `json:"version,omitempty"`
+}
+
+// McpServerApprover Who decides the pending review, from mcp.team_server_approval
+type McpServerApprover string
+
+// McpServerAuthKind defines model for McpServer.AuthKind.
+type McpServerAuthKind string
+
+// McpServerCredentialMode defines model for McpServer.CredentialMode.
+type McpServerCredentialMode string
+
+// McpServerCredentialState defines model for McpServer.CredentialState.
+type McpServerCredentialState string
+
+// McpServerDataClassification defines model for McpServer.DataClassification.
+type McpServerDataClassification string
+
+// McpServerDriftPolicy defines model for McpServer.DriftPolicy.
+type McpServerDriftPolicy string
+
+// McpServerLocation defines model for McpServer.Location.
+type McpServerLocation string
+
+// McpServerReviewStatus defines model for McpServer.ReviewStatus.
+type McpServerReviewStatus string
+
+// McpServerRiskTier defines model for McpServer.RiskTier.
+type McpServerRiskTier string
+
+// McpServerScope defines model for McpServer.Scope.
+type McpServerScope string
+
+// McpServerTransport defines model for McpServer.Transport.
+type McpServerTransport string
+
+// McpServerList defines model for McpServerList.
+type McpServerList struct {
+	Items     []McpServer `json:"items"`
+	NextToken *string     `json:"nextToken,omitempty"`
+}
+
+// McpServerReviewRequest defines model for McpServerReviewRequest.
+type McpServerReviewRequest struct {
+	Note       string                  `json:"note"`
+	Primitives *[]McpPrimitiveDecision `json:"primitives,omitempty"`
+}
+
+// McpUsageReport defines model for McpUsageReport.
+type McpUsageReport struct {
+	// From RFC 3339 UTC with Z
+	From    Timestamp             `json:"from"`
+	GroupBy McpUsageReportGroupBy `json:"groupBy"`
+	Rows    []McpUsageRow         `json:"rows"`
+
+	// To RFC 3339 UTC with Z
+	To         Timestamp          `json:"to"`
+	View       McpUsageReportView `json:"view"`
+	WindowDays *int               `json:"windowDays,omitempty"`
+}
+
+// McpUsageReportGroupBy defines model for McpUsageReport.GroupBy.
+type McpUsageReportGroupBy string
+
+// McpUsageReportView defines model for McpUsageReport.View.
+type McpUsageReportView string
+
+// McpUsageRow defines model for McpUsageRow.
+type McpUsageRow struct {
+	// Agents adoption view
+	Agents     *int       `json:"agents,omitempty"`
+	Calls      int        `json:"calls"`
+	Errors     int        `json:"errors"`
+	Key        string     `json:"key"`
+	Label      string     `json:"label"`
+	LastUsedAt *Timestamp `json:"lastUsedAt,omitempty"`
+	P50Ms      *int       `json:"p50Ms,omitempty"`
+	P95Ms      *int       `json:"p95Ms,omitempty"`
+	Refusals   int        `json:"refusals"`
+
+	// SearchHitRate discovery view, 0 to 1
+	SearchHitRate *float32 `json:"searchHitRate,omitempty"`
+
+	// Searches discovery view
+	Searches *int `json:"searches,omitempty"`
+
+	// Teams adoption view
+	Teams *int `json:"teams,omitempty"`
 }
 
 // Me defines model for Me.
@@ -8010,6 +10766,9 @@ type Pool struct {
 	// Image Container image pinned by digest
 	Image ImageRef `json:"image"`
 
+	// Mcp v1.6.0 MCP access of an agent or pool
+	Mcp *AgentMcp `json:"mcp,omitempty"`
+
 	// ModelId Deprecated: models.defaultModelId
 	// Deprecated: this property has been marked as deprecated upstream, but no `x-deprecated-reason` was set
 	ModelId *string `json:"modelId,omitempty"`
@@ -8245,6 +11004,26 @@ type PutEndpointModelsRequest struct {
 	Models []EndpointModelInput `json:"models"`
 }
 
+// PutFederatedIdentityRequest At most 10 per agent or pool (409 federated_identity_limit)
+type PutFederatedIdentityRequest struct {
+	// Audience Must match federation.allowed_audiences (400 audience_not_allowed); sts.amazonaws.com and afs-gateway are reserved
+	Audience          string  `json:"audience"`
+	EnvVar            *string `json:"envVar,omitempty"`
+	ExpirationSeconds *int    `json:"expirationSeconds,omitempty"`
+	FilePath          *string `json:"filePath,omitempty"`
+}
+
+// PutMcpPolicyRequest The service rules replace the stored ones
+type PutMcpPolicyRequest struct {
+	AllowSampling    *bool                           `json:"allowSampling,omitempty"`
+	DriftPolicy      *PutMcpPolicyRequestDriftPolicy `json:"driftPolicy,omitempty"`
+	Rules            []McpPolicyRule                 `json:"rules"`
+	TrustAnnotations *bool                           `json:"trustAnnotations,omitempty"`
+}
+
+// PutMcpPolicyRequestDriftPolicy defines model for PutMcpPolicyRequest.DriftPolicy.
+type PutMcpPolicyRequestDriftPolicy string
+
 // PutNamespaceConfigValueRequest defines model for PutNamespaceConfigValueRequest.
 type PutNamespaceConfigValueRequest struct {
 	Value string `json:"value"`
@@ -8320,12 +11099,35 @@ type PutTeamEndpointModelsRequest struct {
 
 // PutTeamGatewaySettingsRequest Members sent replace stored ones (service admins only, teams_guardrail_guard). Routes are served only by team gateways
 type PutTeamGatewaySettingsRequest struct {
-	Deployment           *PutTeamGatewaySettingsRequestDeployment `json:"deployment,omitempty"`
-	MayAddModelEndpoints *bool                                    `json:"mayAddModelEndpoints,omitempty"`
+	Deployment *PutTeamGatewaySettingsRequestDeployment `json:"deployment,omitempty"`
+
+	// MayAddMcpServers v1.6.0
+	MayAddMcpServers     *bool `json:"mayAddMcpServers,omitempty"`
+	MayAddModelEndpoints *bool `json:"mayAddModelEndpoints,omitempty"`
+
+	// McpPlacement v1.6.0
+	McpPlacement *PutTeamGatewaySettingsRequestMcpPlacement `json:"mcpPlacement,omitempty"`
 }
 
 // PutTeamGatewaySettingsRequestDeployment defines model for PutTeamGatewaySettingsRequest.Deployment.
 type PutTeamGatewaySettingsRequestDeployment string
+
+// PutTeamGatewaySettingsRequestMcpPlacement v1.6.0
+type PutTeamGatewaySettingsRequestMcpPlacement string
+
+// PutTeamMcpPolicyRequest The team rules replace the stored ones
+type PutTeamMcpPolicyRequest struct {
+	Rules []McpPolicyRule `json:"rules"`
+}
+
+// PutTeamMcpServerRequest An enterprise server must be published (409 server_not_published); 409 team_gateway_required while the team gateway is shared
+type PutTeamMcpServerRequest struct {
+	Enabled bool                         `json:"enabled"`
+	Mode    *PutTeamMcpServerRequestMode `json:"mode,omitempty"`
+}
+
+// PutTeamMcpServerRequestMode defines model for PutTeamMcpServerRequest.Mode.
+type PutTeamMcpServerRequestMode string
 
 // PutTeamModelEndpointsRequest Replaces the team's opt-in list. Selecting an extra-terms endpoint or one of a provider with teamSelection service_admin, or deselecting one a service admin selected, needs a service admin (403 needs_service_admin)
 type PutTeamModelEndpointsRequest struct {
@@ -8851,6 +11653,13 @@ type StageList struct {
 	NextToken *string `json:"nextToken,omitempty"`
 }
 
+// StartMcpQueryCaptureRequest defines model for StartMcpQueryCaptureRequest.
+type StartMcpQueryCaptureRequest struct {
+	// Days At most mcp.query_capture_max_days (400 capture_window_too_long)
+	Days   int    `json:"days"`
+	Reason string `json:"reason"`
+}
+
 // Status Reconcile status of a desired-state resource (contract §1.1)
 type Status struct {
 	Conditions         []Condition `json:"conditions"`
@@ -9166,9 +11975,15 @@ type TeamGatewaySettings struct {
 	GatewayState *TeamGatewaySettingsGatewayState `json:"gatewayState,omitempty"`
 
 	// GatewayUrl The opaque AFS_GATEWAY_URL agents of the team receive
-	GatewayUrl           *string `json:"gatewayUrl,omitempty"`
-	MayAddModelEndpoints bool    `json:"mayAddModelEndpoints"`
-	TeamId               string  `json:"teamId"`
+	GatewayUrl *string `json:"gatewayUrl,omitempty"`
+
+	// MayAddMcpServers v1.6.0; team-admins may register team MCP servers
+	MayAddMcpServers     *bool `json:"mayAddMcpServers,omitempty"`
+	MayAddModelEndpoints bool  `json:"mayAddModelEndpoints"`
+
+	// McpPlacement v1.6.0; MCP with the model routes or in its own gateway Deployment (default gateway.mcp.placement_default)
+	McpPlacement *TeamGatewaySettingsMcpPlacement `json:"mcpPlacement,omitempty"`
+	TeamId       string                           `json:"teamId"`
 
 	// Version The team's version
 	Version *int `json:"version,omitempty"`
@@ -9180,12 +11995,47 @@ type TeamGatewaySettingsDeployment string
 // TeamGatewaySettingsGatewayState shared until the reconciler has rendered the team gateway
 type TeamGatewaySettingsGatewayState string
 
+// TeamGatewaySettingsMcpPlacement v1.6.0; MCP with the model routes or in its own gateway Deployment (default gateway.mcp.placement_default)
+type TeamGatewaySettingsMcpPlacement string
+
 // TeamList A page of Team resources
 type TeamList struct {
 	Items []Team `json:"items"`
 
 	// NextToken Absent on the last page
 	NextToken *string `json:"nextToken,omitempty"`
+}
+
+// TeamMcpServer A server as one team sees it: the switch and mode for enterprise servers, or a team server
+type TeamMcpServer struct {
+	Credential      *McpCredential                `json:"credential,omitempty"`
+	Enabled         bool                          `json:"enabled"`
+	FederationState *TeamMcpServerFederationState `json:"federationState,omitempty"`
+	Managed         TeamMcpServerManaged          `json:"managed"`
+	Mode            TeamMcpServerMode             `json:"mode"`
+
+	// Server An MCP server of the catalog. Never holds a credential value (credentialState only)
+	Server    McpServer          `json:"server"`
+	State     TeamMcpServerState `json:"state"`
+	UpdatedAt *Timestamp         `json:"updatedAt,omitempty"`
+}
+
+// TeamMcpServerFederationState defines model for TeamMcpServer.FederationState.
+type TeamMcpServerFederationState string
+
+// TeamMcpServerManaged defines model for TeamMcpServer.Managed.
+type TeamMcpServerManaged string
+
+// TeamMcpServerMode defines model for TeamMcpServer.Mode.
+type TeamMcpServerMode string
+
+// TeamMcpServerState defines model for TeamMcpServer.State.
+type TeamMcpServerState string
+
+// TeamMcpServerList defines model for TeamMcpServerList.
+type TeamMcpServerList struct {
+	Items     []TeamMcpServer `json:"items"`
+	NextToken *string         `json:"nextToken,omitempty"`
 }
 
 // TeamModelEndpoint A route as the team sees it (screens 61, 66)
@@ -9393,6 +12243,9 @@ type UpdateAgentRequest struct {
 	// Image Container image pinned by digest
 	Image *ImageRef `json:"image,omitempty"`
 
+	// Mcp v1.6.0 MCP access of an agent or pool
+	Mcp *AgentMcpInput `json:"mcp,omitempty"`
+
 	// ModelId Deprecated: models.defaultModelId
 	// Deprecated: this property has been marked as deprecated upstream, but no `x-deprecated-reason` was set
 	ModelId *string           `json:"modelId,omitempty"`
@@ -9481,6 +12334,55 @@ type UpdateLogDestinationRequest struct {
 	SecretId *string                 `json:"secretId,omitempty"`
 }
 
+// UpdateMcpServerRequest Members sent replace stored ones; a change of url, hosted.imageDigest, location, transport, authKind or federation returns an approved server to pending_review
+type UpdateMcpServerRequest struct {
+	AllowSampling *bool                           `json:"allowSampling,omitempty"`
+	AuthHeader    *string                         `json:"authHeader,omitempty"`
+	AuthKind      *UpdateMcpServerRequestAuthKind `json:"authKind,omitempty"`
+
+	// CaBundle PEM certificates for a corporate host
+	CaBundle           *string                                   `json:"caBundle,omitempty"`
+	CredentialMode     *UpdateMcpServerRequestCredentialMode     `json:"credentialMode,omitempty"`
+	DataClassification *UpdateMcpServerRequestDataClassification `json:"dataClassification,omitempty"`
+	DefaultForNewTeams *bool                                     `json:"defaultForNewTeams,omitempty"`
+	DisplayName        *string                                   `json:"displayName,omitempty"`
+	DocUrl             *string                                   `json:"docUrl,omitempty"`
+	DriftPolicy        *UpdateMcpServerRequestDriftPolicy        `json:"driftPolicy,omitempty"`
+
+	// Federation workload_federation only (PRD §9)
+	Federation *McpFederation `json:"federation,omitempty"`
+
+	// Hosted A server AFS runs in the team namespace behind afs-mcp-bridge (PRD §10.2)
+	Hosted *McpHostedSpec `json:"hosted,omitempty"`
+
+	// Limits Per-server limits; members left out take mcp.limits
+	Limits           *McpLimits                       `json:"limits,omitempty"`
+	Location         *UpdateMcpServerRequestLocation  `json:"location,omitempty"`
+	Owner            *string                          `json:"owner,omitempty"`
+	Purpose          *string                          `json:"purpose,omitempty"`
+	Transport        *UpdateMcpServerRequestTransport `json:"transport,omitempty"`
+	TrustAnnotations *bool                            `json:"trustAnnotations,omitempty"`
+	Url              *string                          `json:"url,omitempty"`
+}
+
+// UpdateMcpServerRequestAuthKind defines model for UpdateMcpServerRequest.AuthKind.
+type UpdateMcpServerRequestAuthKind string
+
+// UpdateMcpServerRequestCredentialMode defines model for UpdateMcpServerRequest.CredentialMode.
+type UpdateMcpServerRequestCredentialMode string
+
+// UpdateMcpServerRequestDataClassification defines model for UpdateMcpServerRequest.DataClassification.
+type UpdateMcpServerRequestDataClassification string
+
+// UpdateMcpServerRequestDriftPolicy defines model for UpdateMcpServerRequest.DriftPolicy.
+type UpdateMcpServerRequestDriftPolicy string
+
+// UpdateMcpServerRequestLocation defines model for UpdateMcpServerRequest.Location.
+type UpdateMcpServerRequestLocation string
+
+// UpdateMcpServerRequestTransport defines model for UpdateMcpServerRequest.Transport.
+type UpdateMcpServerRequestTransport string
+
 // UpdateMemberRequest defines model for UpdateMemberRequest.
 type UpdateMemberRequest struct {
 	Role UpdateMemberRequestRole `json:"role"`
@@ -9558,6 +12460,9 @@ type UpdatePoolRequest struct {
 	// Image Container image pinned by digest
 	Image *ImageRef `json:"image,omitempty"`
 
+	// Mcp v1.6.0 MCP access of an agent or pool
+	Mcp *AgentMcpInput `json:"mcp,omitempty"`
+
 	// ModelId Deprecated: models.defaultModelId
 	// Deprecated: this property has been marked as deprecated upstream, but no `x-deprecated-reason` was set
 	ModelId        *string                        `json:"modelId,omitempty"`
@@ -9618,6 +12523,44 @@ type UpdateSwarmTemplateRequest struct {
 
 // UpdateSwarmTemplateRequestTeardownRule defines model for UpdateSwarmTemplateRequest.TeardownRule.
 type UpdateSwarmTemplateRequestTeardownRule string
+
+// UpdateTeamMcpServerRequest Team servers only (403 not_team_server); a change of url, image, location or auth returns it to pending_review
+type UpdateTeamMcpServerRequest struct {
+	AuthHeader *string                             `json:"authHeader,omitempty"`
+	AuthKind   *UpdateTeamMcpServerRequestAuthKind `json:"authKind,omitempty"`
+
+	// CaBundle PEM certificates for a corporate host
+	CaBundle           *string                                       `json:"caBundle,omitempty"`
+	DataClassification *UpdateTeamMcpServerRequestDataClassification `json:"dataClassification,omitempty"`
+	DisplayName        *string                                       `json:"displayName,omitempty"`
+	DocUrl             *string                                       `json:"docUrl,omitempty"`
+
+	// Federation workload_federation only (PRD §9)
+	Federation *McpFederation `json:"federation,omitempty"`
+
+	// Hosted A server AFS runs in the team namespace behind afs-mcp-bridge (PRD §10.2)
+	Hosted *McpHostedSpec `json:"hosted,omitempty"`
+
+	// Limits Per-server limits; members left out take mcp.limits
+	Limits    *McpLimits                           `json:"limits,omitempty"`
+	Location  *UpdateTeamMcpServerRequestLocation  `json:"location,omitempty"`
+	Owner     *string                              `json:"owner,omitempty"`
+	Purpose   *string                              `json:"purpose,omitempty"`
+	Transport *UpdateTeamMcpServerRequestTransport `json:"transport,omitempty"`
+	Url       *string                              `json:"url,omitempty"`
+}
+
+// UpdateTeamMcpServerRequestAuthKind defines model for UpdateTeamMcpServerRequest.AuthKind.
+type UpdateTeamMcpServerRequestAuthKind string
+
+// UpdateTeamMcpServerRequestDataClassification defines model for UpdateTeamMcpServerRequest.DataClassification.
+type UpdateTeamMcpServerRequestDataClassification string
+
+// UpdateTeamMcpServerRequestLocation defines model for UpdateTeamMcpServerRequest.Location.
+type UpdateTeamMcpServerRequestLocation string
+
+// UpdateTeamMcpServerRequestTransport defines model for UpdateTeamMcpServerRequest.Transport.
+type UpdateTeamMcpServerRequestTransport string
 
 // UpdateTeamModelEndpointRequest Members sent replace stored ones; slug cannot change
 type UpdateTeamModelEndpointRequest struct {
@@ -10754,6 +13697,293 @@ type CreateImportParams struct {
 	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
 }
 
+// ListMcpEventsParams defines parameters for ListMcpEvents.
+type ListMcpEventsParams struct {
+	From       *From                       `form:"from,omitempty" json:"from,omitempty"`
+	To         *To                         `form:"to,omitempty" json:"to,omitempty"`
+	TeamId     *string                     `form:"teamId,omitempty" json:"teamId,omitempty"`
+	AgentId    *string                     `form:"agentId,omitempty" json:"agentId,omitempty"`
+	PoolId     *string                     `form:"poolId,omitempty" json:"poolId,omitempty"`
+	ServerId   *string                     `form:"serverId,omitempty" json:"serverId,omitempty"`
+	Method     *string                     `form:"method,omitempty" json:"method,omitempty"`
+	Name       *string                     `form:"name,omitempty" json:"name,omitempty"`
+	Outcome    *ListMcpEventsParamsOutcome `form:"outcome,omitempty" json:"outcome,omitempty"`
+	Reason     *string                     `form:"reason,omitempty" json:"reason,omitempty"`
+	MaxResults *MaxResults                 `form:"maxResults,omitempty" json:"maxResults,omitempty"`
+
+	// NextToken Opaque token from the previous page; expires after 24 hours
+	NextToken *NextToken `form:"nextToken,omitempty" json:"nextToken,omitempty"`
+
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// ListMcpEventsParamsOutcome defines parameters for ListMcpEvents.
+type ListMcpEventsParamsOutcome string
+
+// CompleteMcpOAuthConnectParams defines parameters for CompleteMcpOAuthConnect.
+type CompleteMcpOAuthConnectParams struct {
+	Code  *string `form:"code,omitempty" json:"code,omitempty"`
+	State *string `form:"state,omitempty" json:"state,omitempty"`
+
+	// Iss RFC 9207 issuer
+	Iss *string `form:"iss,omitempty" json:"iss,omitempty"`
+
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// ListMcpReviewsParams defines parameters for ListMcpReviews.
+type ListMcpReviewsParams struct {
+	Kind       *ListMcpReviewsParamsKind     `form:"kind,omitempty" json:"kind,omitempty"`
+	RiskTier   *ListMcpReviewsParamsRiskTier `form:"riskTier,omitempty" json:"riskTier,omitempty"`
+	TeamId     *string                       `form:"teamId,omitempty" json:"teamId,omitempty"`
+	Approver   *ListMcpReviewsParamsApprover `form:"approver,omitempty" json:"approver,omitempty"`
+	MaxResults *MaxResults                   `form:"maxResults,omitempty" json:"maxResults,omitempty"`
+
+	// NextToken Opaque token from the previous page; expires after 24 hours
+	NextToken *NextToken `form:"nextToken,omitempty" json:"nextToken,omitempty"`
+
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// ListMcpReviewsParamsKind defines parameters for ListMcpReviews.
+type ListMcpReviewsParamsKind string
+
+// ListMcpReviewsParamsRiskTier defines parameters for ListMcpReviews.
+type ListMcpReviewsParamsRiskTier string
+
+// ListMcpReviewsParamsApprover defines parameters for ListMcpReviews.
+type ListMcpReviewsParamsApprover string
+
+// ListMcpServersParams defines parameters for ListMcpServers.
+type ListMcpServersParams struct {
+	Scope        *ListMcpServersParamsScope        `form:"scope,omitempty" json:"scope,omitempty"`
+	ReviewStatus *ListMcpServersParamsReviewStatus `form:"reviewStatus,omitempty" json:"reviewStatus,omitempty"`
+	RiskTier     *ListMcpServersParamsRiskTier     `form:"riskTier,omitempty" json:"riskTier,omitempty"`
+	TeamId       *string                           `form:"teamId,omitempty" json:"teamId,omitempty"`
+	Location     *ListMcpServersParamsLocation     `form:"location,omitempty" json:"location,omitempty"`
+	MaxResults   *MaxResults                       `form:"maxResults,omitempty" json:"maxResults,omitempty"`
+
+	// NextToken Opaque token from the previous page; expires after 24 hours
+	NextToken *NextToken `form:"nextToken,omitempty" json:"nextToken,omitempty"`
+
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// ListMcpServersParamsScope defines parameters for ListMcpServers.
+type ListMcpServersParamsScope string
+
+// ListMcpServersParamsReviewStatus defines parameters for ListMcpServers.
+type ListMcpServersParamsReviewStatus string
+
+// ListMcpServersParamsRiskTier defines parameters for ListMcpServers.
+type ListMcpServersParamsRiskTier string
+
+// ListMcpServersParamsLocation defines parameters for ListMcpServers.
+type ListMcpServersParamsLocation string
+
+// CreateMcpServerParams defines parameters for CreateMcpServer.
+type CreateMcpServerParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// DeleteMcpServerParams defines parameters for DeleteMcpServer.
+type DeleteMcpServerParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch The resource's ETag ("<version>"). Missing → 428; stale → 412
+	IfMatch IfMatch `json:"If-Match"`
+}
+
+// GetMcpServerParams defines parameters for GetMcpServer.
+type GetMcpServerParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// UpdateMcpServerParams defines parameters for UpdateMcpServer.
+type UpdateMcpServerParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch The resource's ETag ("<version>"). Missing → 428; stale → 412
+	IfMatch IfMatch `json:"If-Match"`
+}
+
+// PutMcpServerCredentialParams defines parameters for PutMcpServerCredential.
+type PutMcpServerCredentialParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch Required when the resource exists (428 otherwise); omit when the PUT creates it
+	IfMatch *IfMatchPut `json:"If-Match,omitempty"`
+}
+
+// PutMcpPolicyParams defines parameters for PutMcpPolicy.
+type PutMcpPolicyParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch Required when the resource exists (428 otherwise); omit when the PUT creates it
+	IfMatch *IfMatchPut `json:"If-Match,omitempty"`
+}
+
+// ListMcpPrimitivesParams defines parameters for ListMcpPrimitives.
+type ListMcpPrimitivesParams struct {
+	Kind       *ListMcpPrimitivesParamsKind   `form:"kind,omitempty" json:"kind,omitempty"`
+	Status     *ListMcpPrimitivesParamsStatus `form:"status,omitempty" json:"status,omitempty"`
+	MaxResults *MaxResults                    `form:"maxResults,omitempty" json:"maxResults,omitempty"`
+
+	// NextToken Opaque token from the previous page; expires after 24 hours
+	NextToken *NextToken `form:"nextToken,omitempty" json:"nextToken,omitempty"`
+
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// ListMcpPrimitivesParamsKind defines parameters for ListMcpPrimitives.
+type ListMcpPrimitivesParamsKind string
+
+// ListMcpPrimitivesParamsStatus defines parameters for ListMcpPrimitives.
+type ListMcpPrimitivesParamsStatus string
+
+// GetMcpPrimitiveChangeParams defines parameters for GetMcpPrimitiveChange.
+type GetMcpPrimitiveChangeParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// ApproveMcpPrimitiveParams defines parameters for ApproveMcpPrimitive.
+type ApproveMcpPrimitiveParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// RejectMcpPrimitiveParams defines parameters for RejectMcpPrimitive.
+type RejectMcpPrimitiveParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// ApproveMcpServerParams defines parameters for ApproveMcpServer.
+type ApproveMcpServerParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// PublishMcpServerParams defines parameters for PublishMcpServer.
+type PublishMcpServerParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// RefreshMcpInventoryParams defines parameters for RefreshMcpInventory.
+type RefreshMcpInventoryParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// RejectMcpServerParams defines parameters for RejectMcpServer.
+type RejectMcpServerParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// RequestMcpServerChangesParams defines parameters for RequestMcpServerChanges.
+type RequestMcpServerChangesParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// ResumeMcpServerParams defines parameters for ResumeMcpServer.
+type ResumeMcpServerParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// RetireMcpServerParams defines parameters for RetireMcpServer.
+type RetireMcpServerParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// SuspendMcpServerParams defines parameters for SuspendMcpServer.
+type SuspendMcpServerParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// ImportMcpServerManifestParams defines parameters for ImportMcpServerManifest.
+type ImportMcpServerManifestParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// GetMcpQueryCaptureParams defines parameters for GetMcpQueryCapture.
+type GetMcpQueryCaptureParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// StartMcpQueryCaptureParams defines parameters for StartMcpQueryCapture.
+type StartMcpQueryCaptureParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// StopMcpQueryCaptureParams defines parameters for StopMcpQueryCapture.
+type StopMcpQueryCaptureParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
 // GetMeParams defines parameters for GetMe.
 type GetMeParams struct {
 	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
@@ -10802,6 +14032,29 @@ type GetInferenceReportParams struct {
 
 // GetInferenceReportParamsRange defines parameters for GetInferenceReport.
 type GetInferenceReportParamsRange string
+
+// GetMcpUsageReportParams defines parameters for GetMcpUsageReport.
+type GetMcpUsageReportParams struct {
+	From    *From                           `form:"from,omitempty" json:"from,omitempty"`
+	To      *To                             `form:"to,omitempty" json:"to,omitempty"`
+	GroupBy *GetMcpUsageReportParamsGroupBy `form:"groupBy,omitempty" json:"groupBy,omitempty"`
+	View    *GetMcpUsageReportParamsView    `form:"view,omitempty" json:"view,omitempty"`
+
+	// Window Days, for view unused
+	Window *GetMcpUsageReportParamsWindow `form:"window,omitempty" json:"window,omitempty"`
+
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// GetMcpUsageReportParamsGroupBy defines parameters for GetMcpUsageReport.
+type GetMcpUsageReportParamsGroupBy string
+
+// GetMcpUsageReportParamsView defines parameters for GetMcpUsageReport.
+type GetMcpUsageReportParamsView string
+
+// GetMcpUsageReportParamsWindow defines parameters for GetMcpUsageReport.
+type GetMcpUsageReportParamsWindow int
 
 // GetServiceReportParams defines parameters for GetServiceReport.
 type GetServiceReportParams struct {
@@ -11012,6 +14265,30 @@ type SetAgentExternalSystemStateParams struct {
 	IfMatch *IfMatchPut `json:"If-Match,omitempty"`
 }
 
+// ListAgentFederatedIdentitiesParams defines parameters for ListAgentFederatedIdentities.
+type ListAgentFederatedIdentitiesParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// DeleteAgentFederatedIdentityParams defines parameters for DeleteAgentFederatedIdentity.
+type DeleteAgentFederatedIdentityParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch The resource's ETag ("<version>"). Missing → 428; stale → 412
+	IfMatch IfMatch `json:"If-Match"`
+}
+
+// PutAgentFederatedIdentityParams defines parameters for PutAgentFederatedIdentity.
+type PutAgentFederatedIdentityParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch Required when the resource exists (428 otherwise); omit when the PUT creates it
+	IfMatch *IfMatchPut `json:"If-Match,omitempty"`
+}
+
 // ListAgentIdentitiesParams defines parameters for ListAgentIdentities.
 type ListAgentIdentitiesParams struct {
 	MaxResults *MaxResults `form:"maxResults,omitempty" json:"maxResults,omitempty"`
@@ -11039,6 +14316,12 @@ type DeleteAgentIdentityParams struct {
 
 	// IfMatch The resource's ETag ("<version>"). Missing → 428; stale → 412
 	IfMatch IfMatch `json:"If-Match"`
+}
+
+// GetEffectiveAgentMcpParams defines parameters for GetEffectiveAgentMcp.
+type GetEffectiveAgentMcpParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
 }
 
 // GetAgentReportParams defines parameters for GetAgentReport.
@@ -11448,6 +14731,204 @@ type UpdateLogDestinationParams struct {
 	IfMatch IfMatch `json:"If-Match"`
 }
 
+// ListTeamMcpEventsParams defines parameters for ListTeamMcpEvents.
+type ListTeamMcpEventsParams struct {
+	From       *From                           `form:"from,omitempty" json:"from,omitempty"`
+	To         *To                             `form:"to,omitempty" json:"to,omitempty"`
+	AgentId    *string                         `form:"agentId,omitempty" json:"agentId,omitempty"`
+	PoolId     *string                         `form:"poolId,omitempty" json:"poolId,omitempty"`
+	ServerId   *string                         `form:"serverId,omitempty" json:"serverId,omitempty"`
+	Method     *string                         `form:"method,omitempty" json:"method,omitempty"`
+	Name       *string                         `form:"name,omitempty" json:"name,omitempty"`
+	Outcome    *ListTeamMcpEventsParamsOutcome `form:"outcome,omitempty" json:"outcome,omitempty"`
+	Reason     *string                         `form:"reason,omitempty" json:"reason,omitempty"`
+	MaxResults *MaxResults                     `form:"maxResults,omitempty" json:"maxResults,omitempty"`
+
+	// NextToken Opaque token from the previous page; expires after 24 hours
+	NextToken *NextToken `form:"nextToken,omitempty" json:"nextToken,omitempty"`
+
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// ListTeamMcpEventsParamsOutcome defines parameters for ListTeamMcpEvents.
+type ListTeamMcpEventsParamsOutcome string
+
+// ListTeamMcpServersParams defines parameters for ListTeamMcpServers.
+type ListTeamMcpServersParams struct {
+	State      *ListTeamMcpServersParamsState `form:"state,omitempty" json:"state,omitempty"`
+	MaxResults *MaxResults                    `form:"maxResults,omitempty" json:"maxResults,omitempty"`
+
+	// NextToken Opaque token from the previous page; expires after 24 hours
+	NextToken *NextToken `form:"nextToken,omitempty" json:"nextToken,omitempty"`
+
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// ListTeamMcpServersParamsState defines parameters for ListTeamMcpServers.
+type ListTeamMcpServersParamsState string
+
+// CreateTeamMcpServerParams defines parameters for CreateTeamMcpServer.
+type CreateTeamMcpServerParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// DeleteTeamMcpServerParams defines parameters for DeleteTeamMcpServer.
+type DeleteTeamMcpServerParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch The resource's ETag ("<version>"). Missing → 428; stale → 412
+	IfMatch IfMatch `json:"If-Match"`
+}
+
+// GetTeamMcpServerParams defines parameters for GetTeamMcpServer.
+type GetTeamMcpServerParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// UpdateTeamMcpServerParams defines parameters for UpdateTeamMcpServer.
+type UpdateTeamMcpServerParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch The resource's ETag ("<version>"). Missing → 428; stale → 412
+	IfMatch IfMatch `json:"If-Match"`
+}
+
+// PutTeamMcpServerParams defines parameters for PutTeamMcpServer.
+type PutTeamMcpServerParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch Required when the resource exists (428 otherwise); omit when the PUT creates it
+	IfMatch *IfMatchPut `json:"If-Match,omitempty"`
+}
+
+// PutTeamMcpServerCredentialParams defines parameters for PutTeamMcpServerCredential.
+type PutTeamMcpServerCredentialParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch Required when the resource exists (428 otherwise); omit when the PUT creates it
+	IfMatch *IfMatchPut `json:"If-Match,omitempty"`
+}
+
+// TestMcpFederationParams defines parameters for TestMcpFederation.
+type TestMcpFederationParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// DisconnectMcpOAuthParams defines parameters for DisconnectMcpOAuth.
+type DisconnectMcpOAuthParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// StartMcpOAuthConnectParams defines parameters for StartMcpOAuthConnect.
+type StartMcpOAuthConnectParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// PutTeamMcpPolicyParams defines parameters for PutTeamMcpPolicy.
+type PutTeamMcpPolicyParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch Required when the resource exists (428 otherwise); omit when the PUT creates it
+	IfMatch *IfMatchPut `json:"If-Match,omitempty"`
+}
+
+// ListTeamMcpPrimitivesParams defines parameters for ListTeamMcpPrimitives.
+type ListTeamMcpPrimitivesParams struct {
+	Kind       *ListTeamMcpPrimitivesParamsKind   `form:"kind,omitempty" json:"kind,omitempty"`
+	Status     *ListTeamMcpPrimitivesParamsStatus `form:"status,omitempty" json:"status,omitempty"`
+	MaxResults *MaxResults                        `form:"maxResults,omitempty" json:"maxResults,omitempty"`
+
+	// NextToken Opaque token from the previous page; expires after 24 hours
+	NextToken *NextToken `form:"nextToken,omitempty" json:"nextToken,omitempty"`
+
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// ListTeamMcpPrimitivesParamsKind defines parameters for ListTeamMcpPrimitives.
+type ListTeamMcpPrimitivesParamsKind string
+
+// ListTeamMcpPrimitivesParamsStatus defines parameters for ListTeamMcpPrimitives.
+type ListTeamMcpPrimitivesParamsStatus string
+
+// ApproveTeamMcpPrimitiveParams defines parameters for ApproveTeamMcpPrimitive.
+type ApproveTeamMcpPrimitiveParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// RejectTeamMcpPrimitiveParams defines parameters for RejectTeamMcpPrimitive.
+type RejectTeamMcpPrimitiveParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// ApproveTeamMcpServerParams defines parameters for ApproveTeamMcpServer.
+type ApproveTeamMcpServerParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// RefreshTeamMcpInventoryParams defines parameters for RefreshTeamMcpInventory.
+type RefreshTeamMcpInventoryParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// RejectTeamMcpServerParams defines parameters for RejectTeamMcpServer.
+type RejectTeamMcpServerParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
+// SubmitMcpServerForReviewParams defines parameters for SubmitMcpServerForReview.
+type SubmitMcpServerForReviewParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IdempotencyKey Scoped to the caller; kept for api.idempotency_key_ttl_seconds. A repeat replays the stored response
+	IdempotencyKey *IdempotencyKey `json:"Idempotency-Key,omitempty"`
+}
+
 // ListMembersParams defines parameters for ListMembers.
 type ListMembersParams struct {
 	MaxResults *MaxResults `form:"maxResults,omitempty" json:"maxResults,omitempty"`
@@ -11740,6 +15221,30 @@ type PutPoolExternalSystemParams struct {
 	IfMatch *IfMatchPut `json:"If-Match,omitempty"`
 }
 
+// ListPoolFederatedIdentitiesParams defines parameters for ListPoolFederatedIdentities.
+type ListPoolFederatedIdentitiesParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// DeletePoolFederatedIdentityParams defines parameters for DeletePoolFederatedIdentity.
+type DeletePoolFederatedIdentityParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch The resource's ETag ("<version>"). Missing → 428; stale → 412
+	IfMatch IfMatch `json:"If-Match"`
+}
+
+// PutPoolFederatedIdentityParams defines parameters for PutPoolFederatedIdentity.
+type PutPoolFederatedIdentityParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+
+	// IfMatch Required when the resource exists (428 otherwise); omit when the PUT creates it
+	IfMatch *IfMatchPut `json:"If-Match,omitempty"`
+}
+
 // ListPoolHandoffsParams defines parameters for ListPoolHandoffs.
 type ListPoolHandoffsParams struct {
 	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
@@ -11753,6 +15258,12 @@ type PutPoolHandoffsParams struct {
 
 	// IfMatch Required when the resource exists (428 otherwise); omit when the PUT creates it
 	IfMatch *IfMatchPut `json:"If-Match,omitempty"`
+}
+
+// GetEffectivePoolMcpParams defines parameters for GetEffectivePoolMcp.
+type GetEffectivePoolMcpParams struct {
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
 }
 
 // ListPoolRoleLinksParams defines parameters for ListPoolRoleLinks.
@@ -11908,6 +15419,29 @@ type GetTeamInferenceReportParams struct {
 
 // GetTeamInferenceReportParamsRange defines parameters for GetTeamInferenceReport.
 type GetTeamInferenceReportParamsRange string
+
+// GetTeamMcpUsageReportParams defines parameters for GetTeamMcpUsageReport.
+type GetTeamMcpUsageReportParams struct {
+	From    *From                               `form:"from,omitempty" json:"from,omitempty"`
+	To      *To                                 `form:"to,omitempty" json:"to,omitempty"`
+	GroupBy *GetTeamMcpUsageReportParamsGroupBy `form:"groupBy,omitempty" json:"groupBy,omitempty"`
+	View    *GetTeamMcpUsageReportParamsView    `form:"view,omitempty" json:"view,omitempty"`
+
+	// Window Days, for view unused
+	Window *GetTeamMcpUsageReportParamsWindow `form:"window,omitempty" json:"window,omitempty"`
+
+	// XRequestId Client request id (1–64 printable characters); a longer or invalid one is replaced
+	XRequestId *XRequestId `json:"X-Request-Id,omitempty"`
+}
+
+// GetTeamMcpUsageReportParamsGroupBy defines parameters for GetTeamMcpUsageReport.
+type GetTeamMcpUsageReportParamsGroupBy string
+
+// GetTeamMcpUsageReportParamsView defines parameters for GetTeamMcpUsageReport.
+type GetTeamMcpUsageReportParamsView string
+
+// GetTeamMcpUsageReportParamsWindow defines parameters for GetTeamMcpUsageReport.
+type GetTeamMcpUsageReportParamsWindow int
 
 // GetTeamReportParams defines parameters for GetTeamReport.
 type GetTeamReportParams struct {
@@ -12324,6 +15858,51 @@ type CreateExportJSONRequestBody = CreateExportRequest
 // CreateImportJSONRequestBody defines body for CreateImport for application/json ContentType.
 type CreateImportJSONRequestBody = ImportRequest
 
+// CreateMcpServerJSONRequestBody defines body for CreateMcpServer for application/json ContentType.
+type CreateMcpServerJSONRequestBody = CreateMcpServerRequest
+
+// UpdateMcpServerJSONRequestBody defines body for UpdateMcpServer for application/json ContentType.
+type UpdateMcpServerJSONRequestBody = UpdateMcpServerRequest
+
+// PutMcpServerCredentialJSONRequestBody defines body for PutMcpServerCredential for application/json ContentType.
+type PutMcpServerCredentialJSONRequestBody = McpCredentialRequest
+
+// PutMcpPolicyJSONRequestBody defines body for PutMcpPolicy for application/json ContentType.
+type PutMcpPolicyJSONRequestBody = PutMcpPolicyRequest
+
+// ApproveMcpPrimitiveJSONRequestBody defines body for ApproveMcpPrimitive for application/json ContentType.
+type ApproveMcpPrimitiveJSONRequestBody = McpReviewNoteRequest
+
+// RejectMcpPrimitiveJSONRequestBody defines body for RejectMcpPrimitive for application/json ContentType.
+type RejectMcpPrimitiveJSONRequestBody = McpReviewNoteRequest
+
+// ApproveMcpServerJSONRequestBody defines body for ApproveMcpServer for application/json ContentType.
+type ApproveMcpServerJSONRequestBody = McpServerReviewRequest
+
+// PublishMcpServerJSONRequestBody defines body for PublishMcpServer for application/json ContentType.
+type PublishMcpServerJSONRequestBody = McpReviewNoteRequest
+
+// RejectMcpServerJSONRequestBody defines body for RejectMcpServer for application/json ContentType.
+type RejectMcpServerJSONRequestBody = McpServerReviewRequest
+
+// RequestMcpServerChangesJSONRequestBody defines body for RequestMcpServerChanges for application/json ContentType.
+type RequestMcpServerChangesJSONRequestBody = McpServerReviewRequest
+
+// ResumeMcpServerJSONRequestBody defines body for ResumeMcpServer for application/json ContentType.
+type ResumeMcpServerJSONRequestBody = McpReasonRequest
+
+// RetireMcpServerJSONRequestBody defines body for RetireMcpServer for application/json ContentType.
+type RetireMcpServerJSONRequestBody = McpReviewNoteRequest
+
+// SuspendMcpServerJSONRequestBody defines body for SuspendMcpServer for application/json ContentType.
+type SuspendMcpServerJSONRequestBody = McpReasonRequest
+
+// ImportMcpServerManifestJSONRequestBody defines body for ImportMcpServerManifest for application/json ContentType.
+type ImportMcpServerManifestJSONRequestBody = ImportMcpServerManifestRequest
+
+// StartMcpQueryCaptureJSONRequestBody defines body for StartMcpQueryCapture for application/json ContentType.
+type StartMcpQueryCaptureJSONRequestBody = StartMcpQueryCaptureRequest
+
 // CreateTeamJSONRequestBody defines body for CreateTeam for application/json ContentType.
 type CreateTeamJSONRequestBody = CreateTeamRequest
 
@@ -12341,6 +15920,9 @@ type PutAgentConfigValueJSONRequestBody = PutConfigValueRequest
 
 // SetAgentExternalSystemStateJSONRequestBody defines body for SetAgentExternalSystemState for application/json ContentType.
 type SetAgentExternalSystemStateJSONRequestBody = ExternalSystemState
+
+// PutAgentFederatedIdentityJSONRequestBody defines body for PutAgentFederatedIdentity for application/json ContentType.
+type PutAgentFederatedIdentityJSONRequestBody = PutFederatedIdentityRequest
 
 // CreateAgentIdentityJSONRequestBody defines body for CreateAgentIdentity for application/json ContentType.
 type CreateAgentIdentityJSONRequestBody = CreateAgentIdentityRequest
@@ -12385,6 +15967,33 @@ type CreateLogDestinationJSONRequestBody = CreateLogDestinationRequest
 
 // UpdateLogDestinationJSONRequestBody defines body for UpdateLogDestination for application/json ContentType.
 type UpdateLogDestinationJSONRequestBody = UpdateLogDestinationRequest
+
+// CreateTeamMcpServerJSONRequestBody defines body for CreateTeamMcpServer for application/json ContentType.
+type CreateTeamMcpServerJSONRequestBody = CreateTeamMcpServerRequest
+
+// UpdateTeamMcpServerJSONRequestBody defines body for UpdateTeamMcpServer for application/json ContentType.
+type UpdateTeamMcpServerJSONRequestBody = UpdateTeamMcpServerRequest
+
+// PutTeamMcpServerJSONRequestBody defines body for PutTeamMcpServer for application/json ContentType.
+type PutTeamMcpServerJSONRequestBody = PutTeamMcpServerRequest
+
+// PutTeamMcpServerCredentialJSONRequestBody defines body for PutTeamMcpServerCredential for application/json ContentType.
+type PutTeamMcpServerCredentialJSONRequestBody = McpCredentialRequest
+
+// PutTeamMcpPolicyJSONRequestBody defines body for PutTeamMcpPolicy for application/json ContentType.
+type PutTeamMcpPolicyJSONRequestBody = PutTeamMcpPolicyRequest
+
+// ApproveTeamMcpPrimitiveJSONRequestBody defines body for ApproveTeamMcpPrimitive for application/json ContentType.
+type ApproveTeamMcpPrimitiveJSONRequestBody = McpReviewNoteRequest
+
+// RejectTeamMcpPrimitiveJSONRequestBody defines body for RejectTeamMcpPrimitive for application/json ContentType.
+type RejectTeamMcpPrimitiveJSONRequestBody = McpReviewNoteRequest
+
+// ApproveTeamMcpServerJSONRequestBody defines body for ApproveTeamMcpServer for application/json ContentType.
+type ApproveTeamMcpServerJSONRequestBody = McpServerReviewRequest
+
+// RejectTeamMcpServerJSONRequestBody defines body for RejectTeamMcpServer for application/json ContentType.
+type RejectTeamMcpServerJSONRequestBody = McpServerReviewRequest
 
 // AddMemberJSONRequestBody defines body for AddMember for application/json ContentType.
 type AddMemberJSONRequestBody = AddMemberRequest
@@ -12433,6 +16042,9 @@ type PutPoolConfigValueJSONRequestBody = PutConfigValueRequest
 
 // PutPoolExternalSystemJSONRequestBody defines body for PutPoolExternalSystem for application/json ContentType.
 type PutPoolExternalSystemJSONRequestBody = ExternalSystemState
+
+// PutPoolFederatedIdentityJSONRequestBody defines body for PutPoolFederatedIdentity for application/json ContentType.
+type PutPoolFederatedIdentityJSONRequestBody = PutFederatedIdentityRequest
 
 // PutPoolHandoffsJSONRequestBody defines body for PutPoolHandoffs for application/json ContentType.
 type PutPoolHandoffsJSONRequestBody = PutPoolHandoffsRequest

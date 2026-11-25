@@ -1,0 +1,8 @@
+Field              Value
+Name               azure-prod
+Audience           api://AzureADTokenExchange
+ExpirationSeconds  3600
+FilePath           /var/run/secrets/afs/federation/azure-prod/token
+EnvVar             AFS_FEDERATED_TOKEN_FILE_AZURE_PROD
+Subject            system:serviceaccount:afs-t-payments:agt-reviewer
+Version            1

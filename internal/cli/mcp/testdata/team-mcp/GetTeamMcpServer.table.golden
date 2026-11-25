@@ -1,0 +1,9 @@
+Field       Value
+Id          mcp_01JD2Q3R4S5T6V7W8X9Y0Z0001
+Slug        github
+Managed     enterprise
+State       on
+Mode        read_only
+Review      approved
+Credential  set
+Federation  -

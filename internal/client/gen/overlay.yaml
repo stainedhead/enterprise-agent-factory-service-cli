@@ -11,3 +11,11 @@ actions:
     update:
       x-go-name: WebApiExposure
       x-go-type-name: CreateTeamRequestOrchestrationFlatWebApiExposure
+  # Contract 1.6 has McpPrimitive.change (an inline enum) next to the McpPrimitiveChange schema.
+  - target: $.components.schemas.McpPrimitive.properties.change
+    update:
+      x-go-type-name: McpPrimitiveChangeKind
+  # A nullable integer enum (30, 90, null) has no Go enum type; read it as a plain pointer.
+  - target: $.components.schemas.McpUsageReport.properties.windowDays
+    update:
+      x-go-type: int

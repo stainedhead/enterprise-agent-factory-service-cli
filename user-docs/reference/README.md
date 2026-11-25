@@ -12,6 +12,7 @@ Generated from `afs help` by `make docs`; do not edit by hand.
 | [collaboration](collaboration.md) |  |
 | [completion](completion.md) | Print a shell completion script. |
 | [configure](configure.md) | Create and edit profiles in ~/.afs/config. |
+| [mcp-servers](mcp-servers.md) | Govern the MCP server catalog: register, review, approve, suspend and capture search queries. |
 | [members](members.md) | Manage team members and role bindings. |
 | [model-endpoints](model-endpoints.md) |  |
 | [models](models.md) | List and manage models and their prices. |

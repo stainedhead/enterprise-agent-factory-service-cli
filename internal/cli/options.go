@@ -140,8 +140,10 @@ func DeriveOptions(op *spec.Operation, ov *Override) []Option {
 				// A body member named like a global option (report schedule "query") gets a -json suffix.
 				o.Flag += "-json"
 			}
-			if f.Schema.Ref == "SecretValue" {
+			if f.Schema.Ref == "SecretValue" || (f.WriteOnly && f.Name == "value") {
 				o.Flag, o.Sensitive, o.Kind = "--secret-value", true, String
+			} else if f.WriteOnly && secretMembers[f.Name] {
+				o.Sensitive, o.Kind = true, String
 			}
 			out = append(out, o)
 		}
@@ -185,3 +187,7 @@ func DeriveOptions(op *spec.Operation, ov *Override) []Option {
 	}
 	return out
 }
+
+// secretMembers are write-only body members, other than a credential's value, that hold a secret (an MCP server's
+// OAuth client secret): like --secret-value they are read only from file://, fileb://, - or a no-echo prompt.
+var secretMembers = map[string]bool{"clientSecret": true}

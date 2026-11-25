@@ -17,13 +17,16 @@ OPERATIONS
        create-stage                   Create stage
        delete-config-value            Delete pool config value
        delete-pool                    Delete pool
+       delete-pool-federated-identity Delete pool federated identity
        delete-role-link               Delete pool role link
        delete-stage                   Delete stage
        describe-pool                  Get pool
+       get-effective-pool-mcp         Get effective pool MCP
        get-pool-status                Get pool status
        list-config-values             List pool config values
        list-external-systems          List pool external systems
        list-handoffs                  List pool handoffs
+       list-pool-federated-identities List pool federated identities
        list-pools                     List pools
        list-role-links                List pool role links
        list-secret-bindings           List pool secret bindings
@@ -32,6 +35,7 @@ OPERATIONS
        put-config-value               Put pool config value
        put-external-system            Put pool external system
        put-handoffs                   Put pool handoffs
+       put-pool-federated-identity    Put pool federated identity
        put-secret-bindings            Put pool secret bindings
        resume-pool                    Resume pool
        scale-pool                     Scale pool
@@ -64,6 +68,8 @@ OPTIONS
        --description (string)
        --image (string) (required)
           Container image pinned by digest
+       --mcp (JSON)
+          v1.6.0 MCP access of an agent or pool
        --model-id (string)
           Deprecated: use --default-model-id (and --models to choose the set) instead.
        --models (list)
@@ -325,6 +331,55 @@ EXAMPLES
 
 ```
 
+## delete-pool-federated-identity
+
+```text
+AFS POOLS DELETE-POOL-FEDERATED-IDENTITY
+
+NAME
+       pools delete-pool-federated-identity
+
+DESCRIPTION
+       Delete pool federated identity
+
+       Required permission: agent-federated-identities:write
+
+SYNOPSIS
+       afs pools delete-pool-federated-identity [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --pool-id (string) (required)
+       --name (string) (required)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       Remove a federated identity
+
+       afs pools delete-pool-federated-identity --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --pool-id pool_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name vault
+
+```
+
 ## delete-role-link
 
 ```text
@@ -465,6 +520,58 @@ EXAMPLES
        Show a pool (desired workers, state, phase)
 
        afs pools describe-pool --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --pool-id pool_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
+```
+
+## get-effective-pool-mcp
+
+```text
+AFS POOLS GET-EFFECTIVE-POOL-MCP
+
+NAME
+       pools get-effective-pool-mcp
+
+DESCRIPTION
+       Get effective pool MCP
+
+       The servers the pool reaches through the team gateway after the service, team and pool narrowing, and the AFS_MCP_* variable names it gets.
+
+       Required permission: team-mcp-servers:read
+
+SYNOPSIS
+       afs pools get-effective-pool-mcp [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --pool-id (string) (required)
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       Show the MCP servers it reaches
+
+       afs pools get-effective-pool-mcp --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --pool-id pool_01JD2Q3R4S5T6V7W8X9Y0Z0001
+
+       Show the variable names it gets
+
+       afs pools get-effective-pool-mcp --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --pool-id pool_01JD2Q3R4S5T6V7W8X9Y0Z0001 --query env --output text
 
 ```
 
@@ -649,6 +756,52 @@ EXAMPLES
        Show where a pool hands work to
 
        afs pools list-handoffs --team-id team_01J9ZQ3ABCDEFGHJKMNPQRSTVW --pool-id pool_01J9ZQ3ABCDEFGHJKMNPQRSTVW
+
+```
+
+## list-pool-federated-identities
+
+```text
+AFS POOLS LIST-POOL-FEDERATED-IDENTITIES
+
+NAME
+       pools list-pool-federated-identities
+
+DESCRIPTION
+       List pool federated identities
+
+       Required permission: pools:read
+
+SYNOPSIS
+       afs pools list-pool-federated-identities [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --pool-id (string) (required)
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       List its federated identities
+
+       afs pools list-pool-federated-identities --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --pool-id pool_01JD2Q3R4S5T6V7W8X9Y0Z0001
 
 ```
 
@@ -1038,6 +1191,63 @@ EXAMPLES
 
 ```
 
+## put-pool-federated-identity
+
+```text
+AFS POOLS PUT-POOL-FEDERATED-IDENTITY
+
+NAME
+       pools put-pool-federated-identity
+
+DESCRIPTION
+       Put pool federated identity
+
+       A federated identity projects a Kubernetes service account token with the audience into the pod (filePath, envVar), for an external system that trusts the cluster's issuer. The response names the issuer and subject to trust; no secret is stored.
+
+       Required permission: agent-federated-identities:write
+
+SYNOPSIS
+       afs pools put-pool-federated-identity [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --pool-id (string) (required)
+       --name (string) (required)
+       --audience (string) (required)
+          Must match federation.allowed_audiences (400 audience_not_allowed); sts.amazonaws.com and afs-gateway are reserved
+       --env-var (string)
+       --expiration-seconds (integer)
+          Range: 600 to 86400
+       --file-path (string)
+       --if-match (string)
+          Apply only if the resource is at this version (safe update).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       Project a token for an external system's STS
+
+       afs pools put-pool-federated-identity --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --pool-id pool_01JD2Q3R4S5T6V7W8X9Y0Z0001 --name vault --audience vault.corp.example --expiration-seconds 3600
+
+```
+
 ## put-secret-bindings
 
 ```text
@@ -1216,6 +1426,8 @@ OPTIONS
        --description (string)
        --image (string)
           Container image pinned by digest
+       --mcp (JSON)
+          v1.6.0 MCP access of an agent or pool
        --model-id (string)
           Deprecated: use --default-model-id (and --models to choose the set) instead.
        --models (list)

@@ -1,5 +1,29 @@
 # Changelog
 
+## v1.3.0 - 2026-11-25
+
+Governed MCP servers (API contract v1.6.0). Spec: `specs/261125-mcp-gateway/` (or `specs/archive/261125-mcp-gateway/`
+once archived). Guide: `user-docs/mcp-servers.md`.
+
+### Added
+- `afs mcp-servers` service, 24 commands: the catalog (`list-`, `create-`, `describe-`, `update-`, `delete-mcp-server`,
+  `import-mcp-server-manifest`, `put-mcp-server-credential`, `put-mcp-policy`, `refresh-mcp-inventory`), review
+  (`list-mcp-reviews`, `list-mcp-primitives`, `get-mcp-primitive-change`, `approve-`/`reject-mcp-primitive`,
+  `approve-`/`reject-mcp-server`, `request-mcp-server-changes`, `publish-`, `suspend-`, `resume-`, `retire-mcp-server`)
+  and query capture (`get-`, `start-`, `stop-mcp-query-capture`).
+- 18 `afs teams` commands for a team's servers: switches, the team's own servers and their review, credentials,
+  policies, OAuth connect and disconnect, `test-mcp-federation`.
+- `afs agents` and `afs pools`: `get-effective-*-mcp` and federated identities (`list-`, `put-`, `delete-`); `--mcp` on
+  create and update.
+- `afs audit list-mcp-events` and `list-team-mcp-events`; `afs reports get-mcp-usage-report` and
+  `get-team-mcp-usage-report`.
+- `--client-secret` is read like `--secret-value`: from a file, standard input or a no-echo prompt only.
+- Hints for the 23 new error reasons; milestones M15 and M16.
+
+### Changed
+- Contract snapshot re-pinned to `-restapi` ef92a4c (v1.6.0, 276 operations, 273 commands); `afs --version` prints
+  `contract/1.6`.
+
 ## v1.2.0 - 2026-11-25
 
 Model endpoint gateway (API contract v1.5.0, section 4.13). Spec: `specs/261125-model-endpoint-gateway/` (or

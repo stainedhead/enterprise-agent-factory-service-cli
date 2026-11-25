@@ -18,7 +18,12 @@ OPTIONS
           Team id; taken from the path only
        --deployment (string)
           Possible values: shared, per_namespace
+       --may-add-mcp-servers (boolean)
+          v1.6.0
        --may-add-model-endpoints (boolean)
+       --mcp-placement (string)
+          v1.6.0
+          Possible values: combined, separate
        --if-match (string)
           Apply only if the resource is at this version (safe update).
 
