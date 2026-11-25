@@ -1,0 +1,3 @@
+Provid…  Name      Enabled  TeamSel…  Routes  Teams  DirectS…  Fallback  Version
+bedrock  Amazon …  true     team_ad…  1       12     0         -         1
+azure    Azure     false    service…  1       0      0         -         1

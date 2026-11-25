@@ -1,0 +1,13 @@
+Field          Value
+Id             mep_01JD2Q3R4S5T6V7W8X9Y0Z0001
+Slug           openai-prod
+Provider       openai
+Location       external
+Pricing        per_token
+Enabled        false
+ProviderState  on
+Health         Unknown
+Credential     per_team
+Teams          0
+Team           -
+Version        1

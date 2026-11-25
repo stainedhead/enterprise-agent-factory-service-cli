@@ -1,0 +1,2 @@
+Model     Enabled  Callable  Price      InputUsd…  OutputUs…  Context  MaxOutput
+qwen3-c…  true     true      not_requ…  -          -          131072   8192

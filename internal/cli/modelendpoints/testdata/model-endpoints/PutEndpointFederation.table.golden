@@ -1,0 +1,9 @@
+Field             Value
+Team              team_01JD2Q3R4S5T6V7W8X9Y0Z0001
+Kind              azure
+Status            pending
+ExpectedIssuer    https://oidc.eks.us-east-1.amazonaws.com/id/EXAMPLE
+ExpectedSubject   system:serviceaccount:afs-t-payments:afs-gateway
+ExpectedAudience  api://AzureADTokenExchange
+ExpectedRoleArn   -
+Version           1

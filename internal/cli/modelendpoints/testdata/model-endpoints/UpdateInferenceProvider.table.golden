@@ -1,0 +1,10 @@
+Field          Value
+Provider       azure
+Name           Azure
+Enabled        true
+TeamSelection  service_admin
+Routes         1
+Teams          0
+DirectSystems  0
+Fallback       -
+Version        2

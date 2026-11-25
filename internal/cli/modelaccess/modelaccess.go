@@ -23,9 +23,17 @@ const DefaultModelDesc = "The model the runtime starts with; it must be one of t
 // DeprecatedModelID is the help text and warning of --model-id.
 const DeprecatedModelID = "use --default-model-id (and --models to choose the set) instead."
 
+// RoutesDesc is the help text of --routes (v1.5.0).
+const RoutesDesc = "Model routes the agent may call: the word all (every route of the team, now and later) or one or more route slugs (a fixed selection). Folded into models.routeAccess and models.routes."
+
+// DefaultRouteDesc is the help text of --default-route (v1.5.0).
+const DefaultRouteDesc = "The route of the default model; --default-model-id then names the route's model. Or give --default-model-id <route>/<model> alone."
+
 // Options are the local options the model override adds.
 var Options = []cli.Option{
 	{Flag: "--default-model-id", In: "local", Kind: cli.String, Desc: DefaultModelDesc},
+	{Flag: "--routes", In: "local", Kind: cli.List, Elem: "string", Desc: RoutesDesc},
+	{Flag: "--default-route", In: "local", Kind: cli.String, Desc: DefaultRouteDesc},
 }
 
 // Override returns the override that gives an operation with a models member (create and update of agents
@@ -74,6 +82,15 @@ func Build(p *cli.Parsed, parts *cli.RequestParts) error {
 		b, _ := json.Marshal(p.Value("default-model-id"))
 		obj.Set("defaultModelId", b)
 	}
+	if p.Has("routes") {
+		if err := routesFromWords(p.Values["routes"], obj); err != nil {
+			return err
+		}
+	}
+	if p.Has("default-route") {
+		b, _ := json.Marshal(p.Value("default-route"))
+		obj.Set("defaultRoute", b)
+	}
 	if obj.Len() > 0 {
 		b, _ := json.Marshal(obj)
 		parts.Body.Set("models", b)
@@ -103,4 +120,27 @@ func fromWords(words []string) (*cli.Object, error) {
 	ids, _ := json.Marshal(words)
 	obj.Set("modelIds", ids)
 	return obj, nil
+}
+
+// routesFromWords reads the words of --routes into obj: all, or a list of route slugs (v1.5.0).
+func routesFromWords(words []string, obj *cli.Object) error {
+	if len(words) == 0 {
+		return errors.New("--routes takes the word all or at least one route slug")
+	}
+	for _, w := range words {
+		if w == All {
+			if len(words) > 1 {
+				return fmt.Errorf("--routes %s cannot be combined with route slugs", All)
+			}
+			obj.Set("routeAccess", json.RawMessage(`"all"`))
+			return nil
+		}
+		if w == "" {
+			return errors.New("--routes: a route slug cannot be empty")
+		}
+	}
+	obj.Set("routeAccess", json.RawMessage(`"selected"`))
+	b, _ := json.Marshal(words)
+	obj.Set("routes", b)
+	return nil
 }

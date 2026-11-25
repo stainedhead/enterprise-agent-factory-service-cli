@@ -1,0 +1,3 @@
+Model      Enabled  Callable  Price     InputUsd…  OutputUs…  Context  MaxOutput
+gpt-4.1    true     true      approved  2.00       8.00       1047576  32768
+gpt-4.1-…  true     false     none      -          -          -        32768

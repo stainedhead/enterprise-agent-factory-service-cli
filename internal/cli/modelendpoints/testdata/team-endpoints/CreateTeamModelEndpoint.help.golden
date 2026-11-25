@@ -1,0 +1,72 @@
+AFS MODEL-ENDPOINTS CREATE-TEAM-MODEL-ENDPOINT
+
+NAME
+       model-endpoints create-team-model-endpoint
+
+DESCRIPTION
+       Create team model endpoint
+
+       Needs the team's mayAddModelEndpoints (team_endpoints_not_allowed otherwise; a service admin sets it with afs teams put-team-gateway-settings). The endpoint is created switched off.
+
+       Required permission: model-endpoints:write
+
+SYNOPSIS
+       afs model-endpoints create-team-model-endpoint [options]
+
+OPTIONS
+       --team-id (string) (required)
+          Team id; taken from the path only
+       --auth-header (string)
+          Header name, required when authKind is header
+       --auth-kind (string) (required)
+          Possible values: none, bearer, header, azure_federated, google_federated
+       --base-url (string) (required)
+          https for external and corporate; in_namespace may be http://<service>.<namespace>.svc:<port>
+       --ca-bundle (string or JSON)
+          PEM bundle of the CA that signs the endpoint's certificate, as text or file://PATH (not a secret).
+       --description (string)
+       --display-name (string) (required)
+       --location (string) (required)
+          Possible values: external, corporate, in_namespace
+       --max-body-mib (integer)
+          Range: 1 to 100
+       --metrics-port (integer)
+          Range: 1 to 65535
+       --models (JSON)
+          The endpoint's models as JSON or file://PATH: [{"modelName":…, "maxOutputTokens":…, "contextTokens":…, "enabled":…}]; a team endpoint's per_token models also carry "price".
+       --owner (string) (required)
+       --pricing-mode (string) (required)
+          Possible values: per_token, capacity, free
+       --protocols (list) (required)
+          Protocols the endpoint speaks: openai_chat always; openai_responses and openai_embeddings add those paths (space-separated).
+       --purpose (string) (required)
+       --slug (string) (required)
+          Unique in the team and not a service slug
+       --timeout-seconds (integer)
+          Range: 5 to 3600
+       --idempotency-key (string)
+          Idempotency key (default: a new ULID per invocation).
+
+GLOBAL OPTIONS
+       --profile                Use a specific profile from ~/.afs/config.
+       --endpoint-url           Override the API endpoint URL.
+       --output                 Output format: json, yaml, table, text or csv.
+       --query                  JMESPath query applied to the result before rendering.
+       --no-paginate            Return only the first page of results.
+       --max-items              Stop after this many items and print NextToken.
+       --page-size              Items per request (maxResults), 1 to 100.
+       --starting-token         Resume from a NextToken printed by --max-items.
+       --cli-input-json         Read parameters from a JSON document or file://path.
+       --generate-cli-skeleton  Print a JSON skeleton of the input and make no call.
+       --debug                  Write a redacted request log to stderr.
+       --no-cli-pager           Do not send output through a pager.
+       --color                  Colored output: on, off or auto.
+       --cli-connect-timeout    Connect timeout in seconds (0 for none; default 30).
+       --cli-read-timeout       Read timeout in seconds (0 for none; default 60).
+       --version                Print the afs version and exit.
+
+EXAMPLES
+       Declare a vLLM server in the team's namespace
+
+       afs model-endpoints create-team-model-endpoint --team-id team_01JD2Q3R4S5T6V7W8X9Y0Z0001 --slug coder-vllm --display-name "Coder vLLM" --base-url http://vllm.afs-t-payments.svc:8000/v1 --protocols openai_chat --location in_namespace --pricing-mode capacity --auth-kind none --owner payments-platform --purpose "Code completion for the payments agents" --models file://coder-models.json
+
