@@ -101,10 +101,10 @@ func TestCreateModelEndpointBody(t *testing.T) {
 
 func versioned(get string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		switch {
-		case r.Method == "GET":
+		switch r.Method {
+		case "GET":
 			clitest.Reply(w, 200, get)
-		case r.Method == "DELETE":
+		case "DELETE":
 			w.WriteHeader(204)
 		default:
 			clitest.Reply(w, 200, `{"id":"`+ep+`","version":5}`)

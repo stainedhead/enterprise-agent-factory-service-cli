@@ -18,5 +18,5 @@ Legend: [x] done, [ ] open.
 
 ## Docs and release
 
-- [ ] T9 `make docs`, user-docs, CHANGELOG 1.2.0, README, AGENTS.md, CLI PRD (FR-015)
+- [x] T9 `make docs`, user-docs, CHANGELOG 1.2.0, README, AGENTS.md, CLI PRD (FR-015)
 - [ ] T10 Code and design review, final gate, PR, CI green, merge

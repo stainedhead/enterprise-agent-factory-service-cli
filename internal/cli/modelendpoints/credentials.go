@@ -21,7 +21,8 @@ var federationColumns = []output.Column{
 }
 
 // credentialNote is said on every credential write (MEG-CLI-3).
-const credentialNote = "The value is read from file://PATH, fileb://PATH or - (standard input), or asked for without echo when it is omitted on a terminal; it is never a plain argument, and the API never returns it (only its state and last rotation). The credential's version is not returned, so no If-Match is sent unless --if-match is given."
+const credentialNote = //nolint:gosec // G101: help text about credentials, not a credential
+"The value is read from file://PATH, fileb://PATH or - (standard input), or asked for without echo when it is omitted on a terminal; it is never a plain argument, and the API never returns it (only its state and last rotation). The credential's version is not returned, so no If-Match is sent unless --if-match is given."
 
 func registerCredentials(r *cli.Registry) {
 	r.Override(cli.Override{Op: "PutModelEndpointCredential", Columns: CredentialColumns,
