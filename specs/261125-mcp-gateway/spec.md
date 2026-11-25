@@ -3,7 +3,7 @@
 **Feature:** mcp-gateway · **Created:** 2026-11-25 · **Release:** v1.3.0
 **Source PRD:** root `mcp-gateway-PRD.md` (decisions answered by J, 2026-11-25). **Contract:** API contract v1.6.0
 (55 new operations, 54 of them CLI commands), OpenAPI at `-restapi` `ef92a4c82e028e812d9f485287ebe26d5605375a`.
-Cross-repo spec: root `specs/261125-mcp-gateway/`.
+Cross-repo design: the root PRD and the root contracts; `-restapi` `specs/261125-mcp-gateway/`.
 
 ## 1. Executive Summary
 
